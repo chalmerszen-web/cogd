@@ -1,0 +1,2 @@
+#define AGENT_WAKE_MODEL_NAME "@AGENT_WAKE_MODEL@"
+#define AGENT_WAKE_WORD "@wake_word@"

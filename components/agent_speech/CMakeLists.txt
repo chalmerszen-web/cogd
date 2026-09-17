@@ -1,0 +1,37 @@
+get_filename_component(agent_root "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+set(sr "${agent_root}/third_party/esp-sr")
+set(AGENT_WAKE_MODEL "wn9s_hilexin")
+set(wake_word "嗨乐鑫")
+option(AGENT_KEYWORD_VERIFY "Fixed feature check for Hilexin raw hits" ON)
+set(agent_keyword_sources)
+set(agent_keyword_includes)
+if(AGENT_KEYWORD_VERIFY)
+  set(agent_keyword_includes "${CMAKE_CURRENT_LIST_DIR}/keyword")
+  set(agent_keyword_sources "${agent_keyword_includes}/gate.c" "${agent_keyword_includes}/templates.c")
+endif()
+if(NOT EXISTS "${sr}/lib/esp32c3/libwakenet.a")
+  message(FATAL_ERROR "Pinned ESP-SR dependency missing; restore third_party/esp-sr")
+endif()
+idf_component_register(SRCS "speech_backend.c" "${sr}/src/model_path.c" "${sr}/src/esp_sr_debug.c" ${agent_keyword_sources}
+  INCLUDE_DIRS "." "${CMAKE_CURRENT_BINARY_DIR}" "${sr}/include/esp32c3" "${sr}/src/include" "${agent_root}/third_party/cjson" ${agent_keyword_includes}
+  REQUIRES esp_partition spiffs esp_timer espressif__esp-dsp espressif__dl_fft
+  PRIV_REQUIRES spi_flash)
+configure_file("${CMAKE_CURRENT_LIST_DIR}/wake_model_config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wake_model_config.h" @ONLY)
+set(model "${CMAKE_CURRENT_BINARY_DIR}/wake_model.bin")
+execute_process(COMMAND ${PYTHON} "${agent_root}/tools/pack_wake_model.py" "${sr}" "${model}" "${AGENT_WAKE_MODEL}"
+  COMMAND_ERROR_IS_FATAL ANY)
+target_add_binary_data(${COMPONENT_LIB} "${model}" BINARY)
+set_source_files_properties(speech_backend.c PROPERTIES COMPILE_OPTIONS "-std=c11" COMPILE_DEFINITIONS "asm=__asm__")
+if(AGENT_KEYWORD_VERIFY)
+  target_compile_definitions(${COMPONENT_LIB} PUBLIC AGENT_KEYWORD_VERIFY=1)
+  set_source_files_properties(${agent_keyword_sources} PROPERTIES COMPILE_OPTIONS "-std=c11;-Wall;-Wextra;-Werror")
+endif()
+foreach(name wakenet dl_lib c_speech_features esp_audio_processor hufzip)
+  add_prebuilt_library(agent_${name} "${sr}/lib/esp32c3/lib${name}.a")
+endforeach()
+idf_component_get_property(dsp espressif__esp-dsp COMPONENT_LIB)
+idf_component_get_property(fft espressif__dl_fft COMPONENT_LIB)
+target_link_libraries(${COMPONENT_LIB} INTERFACE "-Wl,--start-group"
+  "$<TARGET_FILE:${COMPONENT_LIB}>" "$<TARGET_FILE:${dsp}>" "$<TARGET_FILE:${fft}>"
+  agent_wakenet agent_dl_lib agent_c_speech_features agent_esp_audio_processor agent_hufzip
+  "-Wl,--end-group")

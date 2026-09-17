@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "device.display.set",
+  "oneOf": [
+    {"type":"object","properties":{"mode":{"const":"off"}},"required":["mode"],"additionalProperties":false},
+    {"type":"object","properties":{"mode":{"const":"fill"},"foreground":{"type":"integer","minimum":0,"maximum":65535}},"required":["mode"],"additionalProperties":false},
+    {"type":"object","properties":{"mode":{"const":"clock"},"utc_offset_minutes":{"type":"integer","minimum":-720,"maximum":840,"default":480},"foreground":{"type":"integer","minimum":0,"maximum":65535,"default":65535},"background":{"type":"integer","minimum":0,"maximum":65535,"default":0}},"required":["mode"],"additionalProperties":false}
+  ],
+  "$comment": "The runtime also rejects equal foreground/background in clock mode. Set is asynchronous; inspect display status. Current board defaults to off after reboot."
+}

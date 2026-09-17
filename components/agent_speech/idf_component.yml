@@ -1,0 +1,3 @@
+dependencies:
+  espressif/esp-dsp: "==1.8.0"
+  espressif/dl_fft: "==0.6.0"

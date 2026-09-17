@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:esp-hi:audio-score:1",
+  "title": "ESP-Hi score",
+  "description": "Mono score at 24 kHz; total duration must not exceed 30 seconds, checked by firmware.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["bpm", "wave", "notes"],
+  "properties": {
+    "bpm": {"type": "integer", "minimum": 40, "maximum": 240},
+    "wave": {"enum": ["sine", "triangle"]},
+    "notes": {
+      "type": "array", "minItems": 1, "maxItems": 64,
+      "items": {
+        "type": "array", "minItems": 2, "maxItems": 2, "items": false,
+        "description": "[MIDI pitch, sixteenth-note ticks]; pitch zero is a rest.",
+        "prefixItems": [
+          {"anyOf": [{"const": 0}, {"type": "integer", "minimum": 36, "maximum": 96}]},
+          {"type": "integer", "minimum": 1, "maximum": 16}
+        ]
+      }
+    }
+  }
+}

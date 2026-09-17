@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:esp-hi-agent:device-plan:1",
+  "title": "Bounded local device plan",
+  "type": "object",
+  "required": ["steps"],
+  "additionalProperties": false,
+  "properties": {
+    "steps": {"type": "array", "minItems": 1, "maxItems": 32, "items": {"$ref": "#/$defs/step"}},
+    "scores": {"type": "array", "maxItems": 2, "items": {"$ref": "audio-score.schema.json"}},
+    "repeat": {"type": "integer", "minimum": 1, "maximum": 8, "default": 1},
+    "timeout_ms": {"$ref": "#/$defs/timeout", "default": 60000}
+  },
+  "$defs": {
+    "timeout": {"type": "integer", "minimum": 1, "maximum": 60000},
+    "pin": {"type": "integer", "minimum": 0, "maximum": 21},
+    "bit": {"type": "integer", "minimum": 0, "maximum": 1},
+    "color": {"type": "integer", "minimum": 0, "maximum": 255},
+    "on_timeout": {"enum": ["abort", "continue"], "default": "abort"},
+    "step": {"oneOf": [
+      {"type": "object", "required": ["op", "r", "g", "b"], "additionalProperties": false, "properties": {"op": {"const": "light"}, "r": {"$ref": "#/$defs/color"}, "g": {"$ref": "#/$defs/color"}, "b": {"$ref": "#/$defs/color"}}},
+      {"type": "object", "required": ["op", "ms"], "additionalProperties": false, "properties": {"op": {"const": "wait"}, "ms": {"$ref": "#/$defs/timeout"}}},
+      {"type": "object", "required": ["op", "score"], "additionalProperties": false, "properties": {"op": {"const": "play_score"}, "score": {"type": "integer", "minimum": 0, "maximum": 1}, "wait": {"type": "boolean", "default": true}}},
+      {"type": "object", "required": ["op", "enabled"], "additionalProperties": false, "properties": {"op": {"const": "mic"}, "enabled": {"type": "boolean"}}},
+      {"type": "object", "required": ["op", "ms"], "additionalProperties": false, "properties": {"op": {"const": "capture"}, "ms": {"type": "integer", "minimum": 100, "maximum": 10000}}},
+      {"type": "object", "required": ["op"], "additionalProperties": false, "properties": {"op": {"const": "replay"}, "wait": {"type": "boolean", "default": true}}},
+      {"type": "object", "required": ["op", "resource", "timeout_ms"], "additionalProperties": false, "properties": {"op": {"const": "await"}, "resource": {"enum": ["speaker", "capture"]}, "timeout_ms": {"$ref": "#/$defs/timeout"}, "on_timeout": {"$ref": "#/$defs/on_timeout"}}},
+      {"type": "object", "required": ["op", "above", "timeout_ms"], "additionalProperties": false, "properties": {"op": {"const": "wait_level"}, "above": {"type": "integer", "minimum": 1, "maximum": 32767}, "timeout_ms": {"$ref": "#/$defs/timeout"}, "on_timeout": {"$ref": "#/$defs/on_timeout"}}},
+      {"type": "object", "required": ["op", "pin"], "additionalProperties": false, "properties": {"op": {"const": "gpio_read"}, "pin": {"$ref": "#/$defs/pin"}}},
+      {"type": "object", "required": ["op", "pin", "value"], "additionalProperties": false, "properties": {"op": {"const": "gpio_write"}, "pin": {"$ref": "#/$defs/pin"}, "value": {"$ref": "#/$defs/bit"}}},
+      {"type": "object", "required": ["op", "pin", "hz", "duty"], "additionalProperties": false, "properties": {"op": {"const": "pwm"}, "pin": {"$ref": "#/$defs/pin"}, "hz": {"type": "integer", "minimum": 10, "maximum": 5000}, "duty": {"type": "integer", "minimum": 0, "maximum": 1000}}},
+      {"type": "object", "required": ["op", "pin", "value", "timeout_ms"], "additionalProperties": false, "properties": {"op": {"const": "wait_gpio"}, "pin": {"$ref": "#/$defs/pin"}, "value": {"$ref": "#/$defs/bit"}, "timeout_ms": {"$ref": "#/$defs/timeout"}, "on_timeout": {"$ref": "#/$defs/on_timeout"}}}
+    ]}
+  },
+  "$comment": "Firmware additionally enforces a 4096-byte serialized plan, score existence, score duration, board capabilities, all resource claims, joined asynchronous sound, microphone prerequisites across repeats and the total duration budget. Generic GPIO schema ranges do not grant hardware access. Capture waits for completion and reserves up to 10 seconds for erase preparation; replay requires a committed clip or prior capture."
+}

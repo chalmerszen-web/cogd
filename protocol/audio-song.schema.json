@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:esp-hi:audio-song:1",
+  "title": "Bounded four-voice song",
+  "type": "object", "additionalProperties": false,
+  "required": ["v", "bpm", "patterns", "sequence"],
+  "properties": {
+    "v": {"const": 1},
+    "bpm": {"type": "integer", "minimum": 60, "maximum": 180},
+    "patterns": {"type": "array", "minItems": 1, "maxItems": 16, "items": {
+      "type": "array", "minItems": 1, "maxItems": 32, "items": {"$ref": "#/$defs/note"}}},
+    "sequence": {"type": "array", "minItems": 1, "maxItems": 32, "items": {"$ref": "#/$defs/segment"}}
+  },
+  "$defs": {
+    "part": {"type": "integer", "minimum": -1, "maximum": 15},
+    "gain": {"type": "integer", "minimum": 1, "maximum": 127},
+    "note": {"type": "array", "minItems": 4, "maxItems": 4, "items": false,
+      "description": "[pitch,ticks,velocity,gate_percent]",
+      "prefixItems": [
+        {"anyOf": [{"const": 0}, {"type": "integer", "minimum": 36, "maximum": 96}]},
+        {"type": "integer", "minimum": 1, "maximum": 32},
+        {"type": "integer", "minimum": 0, "maximum": 127},
+        {"type": "integer", "minimum": 0, "maximum": 100}
+      ],
+      "if": {"prefixItems": [{"const": 0}]},
+      "else": {"prefixItems": [{}, {}, {"minimum": 1}, {"minimum": 1}]}},
+    "segment": {"type": "array", "minItems": 5, "maxItems": 5, "items": false,
+      "description": "[lead,bass,arpeggio,drums,gain]; -1 is silent",
+      "prefixItems": [{"$ref": "#/$defs/part"}, {"$ref": "#/$defs/part"},
+                      {"$ref": "#/$defs/part"}, {"$ref": "#/$defs/part"}, {"$ref": "#/$defs/gain"}]}
+  },
+  "$comment": "Firmware additionally rejects wholly silent songs, duplicate keys, missing pattern references, >128 total notes, >32 ticks per pattern, >75 seconds total, >4096 serialized bytes, and drum patterns with pitched notes other than 36,38,42. Each sequence row lasts 32 sixteenth ticks, including trailing silence. Only rests may have zero velocity or gate."
+}

@@ -1,0 +1,8 @@
+menu "ESP-Hi Agent"
+config AGENT_AUDIO
+    bool "Speaker scores and microphone levels"
+    default y
+    help
+        Enable the C11 audio plugin for this board. Disabled builds contain no
+        audio tools, audio worker, score synthesizer or audio DMA allocations.
+endmenu

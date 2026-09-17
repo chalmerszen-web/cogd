@@ -1,0 +1,17 @@
+build*/
+.toolchains/
+_ref/
+.venv/
+.local/
+artifacts/
+managed_components/
+sdkconfig
+sdkconfig.old
+__pycache__/
+*.pyc
+*.pem
+*.key
+*.db
+.env
+.env.*
+!.env.example

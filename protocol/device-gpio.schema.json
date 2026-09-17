@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:esp-hi-agent:device-gpio:1",
+  "title": "Direct GPIO tool arguments",
+  "description": "Get accepts only pin. Set accepts pin and a mode-specific value. Consult capabilities; direct changes persist, plans restore them. Device allows two PWM channels.",
+  "oneOf": [
+    {"type":"object","properties":{"pin":{"$ref":"#/$defs/pin"}},"required":["pin"],"additionalProperties":false},
+    {"type":"object","properties":{"pin":{"$ref":"#/$defs/pin"},"mode":{"const":"input"}},"required":["pin","mode"],"additionalProperties":false},
+    {"type":"object","properties":{"pin":{"$ref":"#/$defs/pin"},"mode":{"const":"output"},"value":{"type":"integer","minimum":0,"maximum":1}},"required":["pin","mode","value"],"additionalProperties":false},
+    {"type":"object","properties":{"pin":{"$ref":"#/$defs/pin"},"mode":{"const":"pwm"},"hz":{"type":"integer","minimum":10,"maximum":5000},"duty":{"type":"integer","minimum":0,"maximum":1000}},"required":["pin","mode","hz","duty"],"additionalProperties":false}
+  ],
+  "$defs": {"pin":{"type":"integer","minimum":0,"maximum":21}}
+}

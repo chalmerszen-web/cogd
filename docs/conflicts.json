@@ -1,0 +1,37 @@
+[
+  {
+    "id": "USB_BODY_PIN_REUSE",
+    "status": "CONFLICT",
+    "pins": [
+      18,
+      19
+    ],
+    "evidence": "Reference config.h uses BR=18 and FR=19; these are the active native USB pins.",
+    "m0_resolution": "Body code excluded from all M0 sources and component dependencies; USB pins reserved."
+  },
+  {
+    "id": "LCD_CONTROLLER",
+    "status": "CONFLICT",
+    "evidence": "ST7789 config macro; actual esp_hi.cc passes an ST7735-named custom register table to an ILI9341 API.",
+    "m0_resolution": "LCD excluded; actual controller needs BOM/FPC/schematic evidence.",
+    "current_resolution": "0.6.1 uses the actual pinned register profile, gap(0,24), mirror(false,true), swap_xy. Exact fitted chip and visible output remain separately unverified."
+  },
+  {
+    "id": "PCB_REVISION",
+    "status": "UNKNOWN",
+    "evidence": "USB ROM data cannot identify PCB revision.",
+    "m0_resolution": "Do not infer V1.0/V1.1/V1.2."
+  },
+  {
+    "id": "SCHEMATIC_NETS",
+    "status": "UNKNOWN",
+    "evidence": "No local EDA/netlist/BOM supplied; original report records inaccessible hardware page.",
+    "m0_resolution": "Record nets and electrical details as unknown; no EDA modifications."
+  },
+  {
+    "id": "REFERENCE_USB_CONFIG",
+    "status": "CONFLICT",
+    "evidence": "Reference defaults include mutually inconsistent USB console / console-none settings.",
+    "m0_resolution": "Project explicitly selects USB Serial/JTAG and no secondary console."
+  }
+]

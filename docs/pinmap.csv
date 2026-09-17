@@ -1,0 +1,20 @@
+signal,GPIO,MCU_function,schematic_net,PCB_destination,firmware_definition,status,evidence
+USB_D-,18,USB_D-,UNKNOWN,UNKNOWN,native USB Serial JTAG,CONFIRMED,ROM USB probe and live COM5
+USB_D+,19,USB_D+,UNKNOWN,UNKNOWN,native USB Serial JTAG,CONFIRMED,ROM USB probe and live COM5
+RGB,8,RMT output,UNKNOWN,4 LEDs,ESP_HI_LED_GPIO,CONFIRMED,BSP plus user observed four red LEDs
+BOOT,9,GPIO input,UNKNOWN,UNKNOWN,BOOT_BUTTON_GPIO,BSP_ONLY,reference config.h
+MOVE_WAKE,0,GPIO input,UNKNOWN,UNKNOWN,MOVE_WAKE_BUTTON_GPIO,BSP_ONLY,reference config.h
+AUDIO_WAKE,1,GPIO input,UNKNOWN,UNKNOWN,AUDIO_WAKE_BUTTON_GPIO,BSP_ONLY,reference config.h
+MIC,2,ADC1 channel 2,UNKNOWN,UNKNOWN,MIC_CHANNEL,CONFIRMED_CAPTURE,live ADC start/read/stop; analog circuit unverified
+SPEAKER_P,6,PDM,UNKNOWN,UNKNOWN,PDM_P,CONFIRMED_OPERATION,BSP mapping plus live melody and user listening
+SPEAKER_N,7,inverted PDM,UNKNOWN,UNKNOWN,PDM_N,CONFIRMED_OPERATION,BSP mapping plus live melody and user listening
+PA_ENABLE,3,GPIO output,UNKNOWN,UNKNOWN,PA,CONFIRMED_OPERATION,live playback/stop; amplifier model unverified
+LCD_MOSI,4,SPI MOSI,UNKNOWN,UNKNOWN,DISPLAY_MOSI_PIN,BSP_PROFILE,config.h plus esp_hi.cc; LCD dynamic owner 5
+LCD_CLK,5,SPI clock,UNKNOWN,UNKNOWN,DISPLAY_CLK_PIN,BSP_PROFILE,config.h plus esp_hi.cc; LCD dynamic owner 5
+LCD_DC,10,GPIO output,UNKNOWN,UNKNOWN,DISPLAY_DC_PIN,BSP_PROFILE,config.h plus esp_hi.cc; LCD dynamic owner 5
+LCD_CS,NC,UNKNOWN,UNKNOWN,UNKNOWN,DISPLAY_CS_PIN,UNKNOWN,reference says NC; schematic unavailable
+LCD_RESET,NC,UNKNOWN,UNKNOWN,UNKNOWN,DISPLAY_RST_PIN,UNKNOWN,reference says NC; schematic unavailable
+BODY_FL,21,servo reference,UNKNOWN,UNKNOWN,FL_GPIO_NUM,GPIO_EXPOSED,0.6 general GPIO; no servo driver
+BODY_FR,19,shared with USB D+,UNKNOWN,UNKNOWN,FR_GPIO_NUM,CONFLICT,USB pin reuse in reference body definitions
+BODY_BL,20,servo reference,UNKNOWN,UNKNOWN,BL_GPIO_NUM,GPIO_EXPOSED,0.6 general GPIO; no servo driver
+BODY_BR,18,shared with USB D-,UNKNOWN,UNKNOWN,BR_GPIO_NUM,CONFLICT,USB pin reuse in reference body definitions

@@ -1,0 +1,2 @@
+# Preserve exact bytes for pinned dependency hashes and cross-platform checkouts.
+* -text

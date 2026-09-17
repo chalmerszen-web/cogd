@@ -1,0 +1,4 @@
+# Test-only Windows WASAPI output capture, isolated from IDF and music runtimes.
+# python -m venv .local/loopback-python
+# .local/loopback-python/Scripts/python -m pip install -r tools/requirements-loopback.txt
+SoundCard==0.4.6

@@ -1,0 +1,88 @@
+{
+  "schema": "agent.hardware.facts/1",
+  "observed_date": "2026-09-16",
+  "chip": {
+    "family": "ESP32-C3",
+    "package": "QFN32",
+    "revision": "v0.4",
+    "crystal_mhz": 40,
+    "status": "CONFIRMED_ROM"
+  },
+  "flash": {
+    "size_bytes": 4194304,
+    "vendor": "XMC",
+    "jedec_manufacturer": "0x20",
+    "jedec_device": "0x4016",
+    "status": "CONFIRMED_ROM"
+  },
+  "usb": {
+    "port": "COM5",
+    "vid": "303A",
+    "pid": "1001",
+    "pins": {
+      "d_minus": 18,
+      "d_plus": 19
+    },
+    "status": "CONFIRMED_LIVE"
+  },
+  "led": {
+    "gpio": 8,
+    "count": 4,
+    "type": "WS2812",
+    "status": "CONFIRMED_USER_OBSERVATION",
+    "observation": "All four LEDs red after real DeepSeek tool call."
+  },
+  "pcb_revision": null,
+  "schematic_nets": null,
+  "power": {
+    "regulator_part": null,
+    "maximum_load_ma": null,
+    "audio_supply": null,
+    "decoupling": null
+  },
+  "microphone": {
+    "gpio": 2,
+    "adc_channel": 2,
+    "sample_rate": 16000,
+    "status": "CONFIRMED_CAPTURE",
+    "model": null,
+    "bias": null,
+    "preamp": null,
+    "filter": null
+  },
+  "speaker": {
+    "pdm_gpio": [
+      6,
+      7
+    ],
+    "pa_gpio": 3,
+    "sample_rate": 24000,
+    "status": "CONFIRMED_USER_OBSERVATION",
+    "observation": "Melody normal and volume appropriate at volume 20.",
+    "amplifier_part": null,
+    "impedance_ohm": null
+  },
+  "lcd": {
+    "width": 160,
+    "height": 80,
+    "controller": null,
+    "status": "BSP_PROFILE_IMPLEMENTED",
+    "mosi": 4,
+    "sclk": 5,
+    "dc": 10,
+    "cs": null,
+    "reset": null,
+    "miso": null,
+    "backlight": null,
+    "spi_hz": 8000000,
+    "spi_mode": 0,
+    "profile": "esp_hi_st7735_bsp",
+    "visual_verified": false,
+    "controller_verified": false
+  },
+  "reference": {
+    "repository": "https://github.com/78/xiaozhi-esp32",
+    "commit": "ac6deed3d8e75348475364bf40ad953c6cd48054"
+  },
+  "original_flash_sha256": "27689ECCB1E895413641FD35AA6A593D4545EBFD86F1C345D92C18531A009FAA"
+}
