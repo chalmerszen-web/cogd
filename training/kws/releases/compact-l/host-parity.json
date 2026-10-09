@@ -1,0 +1,39 @@
+{
+  "float_streaming": {
+    "parameters": 6673,
+    "frames": 256,
+    "batch": 2,
+    "max_abs_error": 5.587935447692871e-09
+  },
+  "frontend_sine_checks": [
+    {
+      "hz": 250,
+      "peak_band": 2,
+      "log2_error_q8": -0.5619247308422928
+    },
+    {
+      "hz": 1000,
+      "peak_band": 12,
+      "log2_error_q8": -1.3269230011692343
+    },
+    {
+      "hz": 4000,
+      "peak_band": 30,
+      "log2_error_q8": -1.5648291110856007
+    }
+  ],
+  "integer_frames": 4096,
+  "integer_values": 1085440,
+  "torch_conv1d_integer_parity": true,
+  "pcm_frames": 512,
+  "pcm_sha256": "7c0540e48dbf7a9b11de273754a1b8693efb4f1ae13e92e3ccecff009cb4aebb",
+  "workspace": 9448,
+  "host_frame_us_p99": 19.866999999999994,
+  "host_frame_us_max": 207.9,
+  "model_json_sha256": "9a0b785559536b45c9688b19553518f488b34596524606d5a05814cd18f4c0e8",
+  "host_library_sha256": "a67a8e68168d58c353254aec858b5b18b62c25f89946d90b8313930fdae7a49d",
+  "trace_sha256": "53ae6487660bc77ddaa7d2ed33f6b155ee15a03499b5fb5b502a7691410b5722",
+  "trained": true,
+  "model_name": "xiaoyan_ds_tcn24_v1",
+  "passed": true
+}

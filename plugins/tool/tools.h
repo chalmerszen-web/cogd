@@ -22,6 +22,9 @@ typedef struct {
     agent_err_t (*summary_get)(void *,char *,size_t);
     agent_err_t (*summary_set)(void *,const char *,uint64_t);
     uint64_t (*now_ms)(void *ctx);
+    /* Optional cooperative wait for local asynchronous control jobs. */
+    void (*wait_ms)(unsigned);
+    bool (*cancelled)(void *ctx);
     void *ctx;
     agent_control_t *control;
     const char *hardware_prompt;
@@ -35,6 +38,12 @@ typedef struct {
 typedef struct { const char *name, *wire_name; } agent_tool_description_t;
 extern const agent_tool_description_t agent_tool_descriptions[AGENT_TOOL_COUNT];
 agent_err_t agent_tools_write(void *,agent_write_fn,void *);
+/* Voice-only planning metadata. Direct/USB tool schemas remain unchanged. */
+agent_err_t agent_tools_voice_write(void *,agent_write_fn,void *);
+/* Atomically strip boolean final_batch before validation/invocation. Only the
+ * last call may set true; false/absent retain planning. Scratch is caller-owned,
+ * at least sizeof(reply->arguments)+5 bytes, and must not alias reply. */
+agent_err_t agent_tools_voice_hint(agent_llm_reply_t *,char *,size_t,bool *);
 const agent_tool_description_t *agent_tool_find(const char *name);
 agent_err_t agent_tools_validate(const agent_llm_reply_t *reply);
 /* Validate without effects and describe rejection for a model repair turn. */

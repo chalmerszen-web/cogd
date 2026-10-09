@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 static unsigned plays, volumes, microphones;
@@ -16,8 +17,53 @@ static agent_err_t microphone(void *ctx, bool enabled)
 static agent_err_t status(void *ctx, char *out, size_t n)
 { (void)ctx; return snprintf(out, n, "{\"accepted\":true}") < (int)n ? AGENT_OK : AGENT_ERR_LIMIT; }
 
+static unsigned crossings(const int16_t *pcm,unsigned begin,unsigned end)
+{
+    unsigned count=0;
+    for(unsigned i=begin+1;i<end;++i)count+=pcm[i-1]<=0 && pcm[i]>0;
+    return count;
+}
+static void cues(void)
+{
+    int16_t whole[4800],parts[4800];
+    for(unsigned rate=16000;rate<=24000;rate+=8000)for(unsigned finish=0;finish<2;++finish) {
+        agent_cue_t c={.rate=rate,.finish=finish};
+        unsigned length=rate*(finish?18:16)/100;
+        assert(agent_cue_render(&c,whole,4800,80)==length);
+        assert(c.sample==length && !whole[0]);
+        assert(!agent_cue_render(&c,whole,4800,80));
+        assert(abs(whole[length-1])<10);
+        for(unsigned i=0;i<length;++i)assert(abs(whole[i])<=8192);
+        if(!finish) {
+            unsigned count=crossings(whole,rate/50,rate*12/100);
+            assert(count>=131 && count<=133); /* 1320Hz over100ms at both rates. */
+        } else {
+            unsigned early=crossings(whole,rate*3/100,rate*6/100);
+            unsigned late=crossings(whole,rate*12/100,rate*15/100);
+            assert(early>=57 && early<=60 && late>=36 && late<=39);
+        }
+        c=(agent_cue_t){.rate=rate,.finish=finish};
+        unsigned at=0,seed=31;
+        while(at<length) {
+            assert(!agent_cue_render(&c,parts+at,0,80) && c.sample==at);
+            seed=seed*1664525u+1013904223u;
+            size_t chunk=1+seed%240;
+            at+=(unsigned)agent_cue_render(&c,parts+at,chunk,UINT32_MAX);
+        }
+        assert(!memcmp(whole,parts,length*sizeof(*whole)));
+        c=(agent_cue_t){.rate=rate,.finish=finish};
+        assert(agent_cue_render(&c,parts,4800,0)==length);
+        for(unsigned i=0;i<length;++i)assert(!parts[i]);
+    }
+    agent_cue_t c={.rate=0};
+    assert(!agent_cue_render(&c,whole,4800,80));
+    c.rate=48000;assert(!agent_cue_render(&c,whole,4800,80));
+    assert(!agent_cue_render(NULL,whole,4800,80));
+}
+
 int main(void)
 {
+    cues();
     const char *score_json = "{\"bpm\":120,\"wave\":\"sine\",\"notes\":[[69,4],[0,2],[72,2]]}";
     agent_score_t score;
     assert(!agent_score_parse(score_json, &score));

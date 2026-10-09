@@ -10,11 +10,57 @@ static void feed(agent_confirmation_t *c,bool voice,unsigned score,unsigned lead
         assert(!agent_confirmation_score(c,score));
     assert(!agent_confirmation_feed(c,voice));
 }
+static void confirmed_silence(void)
+{
+    agent_confirmation_t c,saved;
+    assert(agent_confirmation_set_silence(NULL,800)==AGENT_ERR_ARGUMENT);
+    for(unsigned lead=0;lead<=1;++lead) {
+        assert(!agent_confirmation_init(&c,1000,4000,10000));saved=c;
+        assert(agent_confirmation_set_silence(&c,800)==AGENT_ERR_BUSY);
+        assert(!memcmp(&c,&saved,sizeof(c)));
+        for(unsigned ms=0;ms<200;ms+=20)feed(&c,true,16384,lead);
+        assert(c.confirmed);saved=c;
+        const unsigned invalid[]={0,399,801,2001};
+        for(unsigned i=0;i<sizeof(invalid)/sizeof(invalid[0]);++i) {
+            assert(agent_confirmation_set_silence(&c,invalid[i])==AGENT_ERR_ARGUMENT);
+            assert(!memcmp(&c,&saved,sizeof(c)));
+        }
+        assert(!agent_confirmation_set_silence(&c,800));
+        unsigned scores=c.frames;
+        /* A 600-ms natural pause followed by a syllable is retained. Lowering
+         * the end timer changes neither admission nor the source-time history. */
+        for(unsigned ms=0;ms<600;ms+=20)feed(&c,false,0,lead);
+        assert(c.endpoint.state==AGENT_EP_SPEECH);
+        for(unsigned ms=0;ms<200;ms+=20)feed(&c,true,0,lead);
+        for(unsigned ms=0;ms<780;ms+=20)feed(&c,false,0,lead);
+        assert(c.endpoint.state==AGENT_EP_SPEECH && c.endpoint.quiet_ms==780);
+        feed(&c,false,0,lead);
+        assert(c.endpoint.state==AGENT_EP_DONE && c.endpoint.elapsed_ms==1800);
+        assert(c.frames==scores && c.endpoint.quiet_ms==800);
+        saved=c;assert(agent_confirmation_set_silence(&c,1000)==AGENT_ERR_BUSY);
+        assert(!memcmp(&c,&saved,sizeof(c)));
+    }
+    /* Retiming is not a new silence period or a new admission decision. */
+    assert(!agent_confirmation_init(&c,1000,4000,10000));
+    for(unsigned ms=0;ms<200;ms+=20)feed(&c,true,16384,0);
+    for(unsigned ms=0;ms<600;ms+=20)feed(&c,false,0,0);
+    saved=c;assert(!agent_confirmation_set_silence(&c,800));
+    assert(c.endpoint.quiet_ms==saved.endpoint.quiet_ms && c.endpoint.elapsed_ms==saved.endpoint.elapsed_ms);
+    for(unsigned ms=0;ms<200;ms+=20)feed(&c,false,0,0);
+    assert(c.endpoint.state==AGENT_EP_DONE && c.endpoint.elapsed_ms==1000);
+    assert(!agent_confirmation_init(&c,1000,4000,10000));
+    agent_confirmation_cancel(&c);saved=c;
+    assert(agent_confirmation_set_silence(&c,800)==AGENT_ERR_CANCELLED);
+    assert(!memcmp(&c,&saved,sizeof(c)));
+}
 int main(void)
 {
+    confirmed_silence();
     agent_confirmation_t c,saved;
     assert(agent_confirmation_init(NULL,1000,4000,10000)==AGENT_ERR_ARGUMENT);
     assert(!agent_confirmation_init(&c,1000,4000,10000)); saved=c;
+    assert(agent_confirmation_finish(NULL)==AGENT_ERR_ARGUMENT);
+    assert(agent_confirmation_finish(&c)==AGENT_ERR_BUSY && !memcmp(&c,&saved,sizeof(c)));
     assert(agent_confirmation_feed(&c,true)==AGENT_ERR_BUSY && !memcmp(&c,&saved,sizeof(c)));
     assert(agent_confirmation_score(&c,32769)==AGENT_ERR_ARGUMENT && !memcmp(&c,&saved,sizeof(c)));
     /* A score from144ms must not confirm the earlier140ms classical frame. */
@@ -28,6 +74,8 @@ int main(void)
     assert(!agent_confirmation_score(&c,q[9]));
     assert(!agent_confirmation_feed(&c,true) && c.confirmed && c.confirmed_ms==160);
     assert(agent_confirmation_score(&c,32768)==AGENT_ERR_BUSY);
+    saved=c;assert(!agent_confirmation_finish(&c) && c.endpoint.state==AGENT_EP_DONE);
+    assert(c.endpoint.elapsed_ms==saved.endpoint.elapsed_ms && c.confirmed);
     for(unsigned lead=0;lead<=1;++lead) {
         /* Neural-only positives neither latch nor create a success result. */
         assert(!agent_confirmation_init(&c,1000,4000,10000));
@@ -58,6 +106,7 @@ int main(void)
     assert(!agent_confirmation_init(&c,1000,4000,10000));
     feed(&c,true,32768,0); agent_confirmation_cancel(&c); saved=c;
     assert(agent_confirmation_feed(&c,true)==AGENT_ERR_CANCELLED);
+    assert(agent_confirmation_finish(&c)==AGENT_ERR_CANCELLED && !memcmp(&c,&saved,sizeof(c)));
     assert(agent_confirmation_score(&c,32768)==AGENT_ERR_CANCELLED && !memcmp(&c,&saved,sizeof(c)));
     assert(!agent_confirmation_init(&c,1000,4000,10000));
     for(unsigned i=0;i<3;++i) assert(!agent_confirmation_score(&c,32768));

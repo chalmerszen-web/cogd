@@ -125,8 +125,67 @@ static void pwm_restore_tests(void)
     two_pwm_channels=false; effects=0; memset(pins,0,sizeof(pins));
 }
 
+static uint64_t status_clock;
+static unsigned cancel_at;
+static bool turn_cancelled,freeze_status_clock;
+static uint64_t status_now(void *ctx) { (void)ctx;return freeze_status_clock?0:status_clock; }
+static bool status_cancelled(void *ctx) { (void)ctx;return turn_cancelled; }
+static void status_pause(unsigned ms)
+{
+    assert(ms && ms<=25);status_clock+=ms;
+    if(cancel_at && status_clock>=cancel_at)turn_cancelled=true;
+    agent_control_tick(&control,status_clock);
+}
+static void status_wait_tests(void)
+{
+    const agent_tool_ops_t ops={.control=&control,.now_ms=status_now,
+        .wait_ms=status_pause,.cancelled=status_cancelled};
+    char output[512];
+    agent_resources_init(&resources);agent_control_init(&control,&backend);
+    effects=0;driver_error=AGENT_OK;status_clock=0;cancel_at=0;turn_cancelled=false;
+    submit("{\"steps\":[{\"op\":\"light\",\"r\":0,\"g\":0,\"b\":255},{\"op\":\"wait\",\"ms\":5000},{\"op\":\"light\",\"r\":0,\"g\":255,\"b\":0},{\"op\":\"wait\",\"ms\":5000},{\"op\":\"light\",\"r\":0,\"g\":0,\"b\":255}]}");
+    assert(!agent_tool_invoke(&ops,"device_control_status","{}",output,sizeof(output)));
+    assert(status_clock>=10000 && status_clock<15000 && effects==4);
+    assert(strstr(output,"\"state\":\"done\"") && strstr(output,"\"active\":false"));
+    assert(strstr(output,"\"light\":{\"r\":1,\"g\":2,\"b\":3}"));
+    ended(AGENT_PLAN_DONE);
+    status_clock=0;
+    submit("{\"steps\":[{\"op\":\"wait\",\"ms\":30000}],\"timeout_ms\":40000}");
+    assert(!agent_tool_invoke(&ops,"device.control.status","{\"wait_ms\":0}",output,sizeof(output)));
+    assert(!status_clock && strstr(output,"\"active\":true"));
+    assert(!agent_tool_invoke(&ops,"device_control_status","{}",output,sizeof(output)));
+    assert(status_clock==15000 && strstr(output,"\"active\":true"));
+    assert(!agent_tool_invoke(&ops,"device_control_status","{\"wait_ms\":37}",output,sizeof(output)));
+    assert(status_clock==15037);
+    const char *bad[]={"{\"wait_ms\":15001}","{\"wait_ms\":-1}","{\"wait_ms\":true}",
+        "{\"wait_ms\":1.5}","{\"wait_ms\":0,\"extra\":0}","{\"wait_ms\":0,\"wait_ms\":1}"};
+    for(unsigned i=0;i<sizeof(bad)/sizeof(*bad);++i)
+        assert(agent_tool_invoke(&ops,"device_control_status",bad[i],output,sizeof(output))!=AGENT_OK);
+    assert(status_clock==15037);
+    cancel_at=15087;
+    assert(agent_tool_invoke(&ops,"device_control_status","{}",output,sizeof(output))==AGENT_ERR_CANCELLED);
+    assert(status_clock==cancel_at && atomic_load(&control.active));
+    agent_control_cancel(&control);agent_control_tick(&control,status_clock);ended(AGENT_PLAN_CANCELLED);
+    cancel_at=0;turn_cancelled=false;status_clock=0;
+    submit("{\"steps\":[{\"op\":\"wait\",\"ms\":30000}],\"timeout_ms\":40000}");
+    freeze_status_clock=true;
+    assert(!agent_tool_invoke(&ops,"device_control_status","{}",output,sizeof(output)));
+    assert(status_clock==15000 && strstr(output,"\"active\":true"));
+    freeze_status_clock=false;
+    agent_control_cancel(&control);agent_control_tick(&control,status_clock);ended(AGENT_PLAN_CANCELLED);
+    status_clock=0;
+    submit("{\"steps\":[{\"op\":\"wait\",\"ms\":1000}],\"timeout_ms\":1000}");
+    agent_tool_ops_t immediate=ops;immediate.wait_ms=NULL;
+    assert(!agent_tool_invoke(&immediate,"device_control_status","{}",output,sizeof(output)) && !status_clock);
+    agent_control_cancel(&control);
+    assert(!agent_tool_invoke(&ops,"device_control_status","{}",output,sizeof(output)));
+    assert(strstr(output,"\"state\":\"cancelled\""));
+    puts("control status: timed sequence completion, bounded pending, immediate read, precise wait, cancellation and stalled clock PASS");
+}
+
 int main(void)
 {
+    status_wait_tests();
     direct_gpio_tests();
     pwm_restore_tests();
     agent_resources_init(&resources); agent_control_init(&control,&backend);

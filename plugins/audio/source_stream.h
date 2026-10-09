@@ -11,6 +11,8 @@ typedef struct {
     agent_voice_t voice;
     agent_biquad_t notch;
     tonal_filter_t tonal;
+    agent_biquad_t energy_highpass;
+    bool fast_guard; /* Set by the owner before the first captured sample. */
     uint32_t clean_sum;
     source_bound_t bound;
     uint8_t *records;
@@ -32,4 +34,7 @@ agent_err_t source_stream_read(const uint8_t *,size_t,unsigned published_samples
  * frame in source order. The clean-energy veto applies ONLY after an actual
  * original neural confirmation; first confirmation and source bounds ignore it. */
 agent_err_t source_stream_confirm(agent_confirmation_t *,const uint8_t *,unsigned published_samples,unsigned noise,source_frame_t *);
+/* Lightweight local endpoint for streamed input: spectral voice plus frozen
+ * room-level and tonal-energy guards. No neural confirmation is implied. */
+agent_err_t source_stream_endpoint(agent_endpoint_t *,const uint8_t *,unsigned published_samples,unsigned noise,source_frame_t *);
 #endif

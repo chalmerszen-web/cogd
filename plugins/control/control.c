@@ -280,10 +280,18 @@ agent_err_t agent_control_status(agent_control_t *c,char *out,size_t cap)
     if(!c || !out || !cap) return AGENT_ERR_ARGUMENT;
     static const char *const states[]={"idle","accepted","running","done","cancelled","failed"};
     agent_json_writer_t w; agent_json_writer_init(&w,out,cap);
-    agent_json_printf(&w,"{\"job\":%u,\"state\":\"%s\",\"active\":%s,\"step\":%u,\"steps\":%u,\"cycles\":%u,\"last_pin\":%u,\"last_value\":%u,\"error\":\"%s\"}",
+    agent_json_printf(&w,"{\"job\":%u,\"state\":\"%s\",\"active\":%s,\"step\":%u,\"steps\":%u,\"cycles\":%u,\"last_pin\":%u,\"last_value\":%u,\"error\":\"%s\"",
         atomic_load(&c->job),states[atomic_load(&c->status)],atomic_load(&c->active)?"true":"false",
         atomic_load(&c->step),atomic_load(&c->total_steps),atomic_load(&c->cycles),
         atomic_load(&c->last_pin),atomic_load(&c->last_value),agent_err_name(atomic_load(&c->error)));
+    /* Plans restore outputs on exit. Report the live color so a completed
+     * final step cannot be mistaken for a persistent hardware state. */
+    if(c->backend.light_get) {
+        uint8_t rgb[3];agent_err_t error=c->backend.light_get(c->backend.ctx,rgb);
+        if(!error)agent_json_printf(&w,",\"light\":{\"r\":%u,\"g\":%u,\"b\":%u}",rgb[0],rgb[1],rgb[2]);
+        else agent_json_printf(&w,",\"light_error\":\"%s\"",agent_err_name(error));
+    }
+    agent_json_raw(&w,"}");
     return w.error;
 }
 

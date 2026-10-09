@@ -1,6 +1,6 @@
 # Current Agent architecture
 
-The current firmware is 0.6.1-lcd on the 0.6.0-upgrade baseline, plugin ABI major 5. Project-owned
+The project uses plugin ABI major 5. Project-owned
 firmware is C11. `core/` provides the static registry, typed operations,
 lifecycle, events, error contract and resource limits. It contains no ESP-IDF
 or FreeRTOS includes. Board/SDK details stay in `platform/` and `boards/`.
@@ -11,6 +11,24 @@ USB runs the main command loop. One network worker owns each conversation and
 context mutation, admitted through a single-entry queue. Status and cancel use
 local/atomic state. Background synchronization yields to conversation admission.
 A work mutex also protects provisioning and temporary workspace reuse.
+
+The executor's transient messages, reply and SSE live in caller-owned
+`agent_engine_workspace_t` (29836 bytes on C3), separately from its unchanged
+24577-byte request buffer. The engine retains configuration, turn identity,
+circuit state and binding pointers outside those borrowable bytes. A caller
+may use contiguous `agent_engine_storage_t` (54416 bytes) or bind disjoint
+blocks with `agent_engine_bind_parts`. Both move the context serialization
+alias. Active answer/progress sinks or locked history selection reject a
+rebind; a detached engine rejects new turns before effects.
+
+Default builds still use static contiguous storage. The opt-in text-candidate
+build uses a 28216-byte capture arena and allocates its bounded24KiB IMA cache
+in pages as PCM arrives. After all borrowers join, restoration allocates state
+and request buffers separately, each below32KiB; partial failure frees both.
+Legacy capture explicitly requests its full contiguous arena before borrowing
+it. No input, history or request capacity changes with storage ownership.
+See `docs/VOICE_SPLIT_WORKSPACE_REPORT.md` for the experimental resource and
+device results; ordinary interaction and whole-flow acceptance remain open.
 
 The LLM executor persists a user event, selects complete-turn history, builds a
 request, validates each complete tool batch, executes through typed operations,

@@ -179,6 +179,12 @@ bool esp_hi_speech_wake(int16_t *pcm)
 #endif
 }
 bool esp_hi_speech_vad(int16_t *pcm) { return vad && vad_process(vad,pcm,16000,20)==VAD_SPEECH; }
+bool esp_hi_speech_vad_fast(void)
+{
+    if(!vad)return false;
+    vad_destroy(vad);vad=vad_create(VAD_MODE_2);
+    return vad!=NULL;
+}
 bool esp_hi_speech_threshold(unsigned value)
 { return state && value>=threshold_minimum && value<=950 && wake->set_det_threshold(state,(float)value/1000,1)==1; }
 const char *esp_hi_speech_word(void) { return AGENT_WAKE_WORD; }

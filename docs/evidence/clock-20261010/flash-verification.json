@@ -1,0 +1,52 @@
+{
+  "directory": "C:\\Users\\PC\\Documents\\ChatGPT\\cogd\\backups\\kws-clock-20261009-201447",
+  "backup_sha256": "04a58b386dca67465e8c02af456480e2e90b1ed6d3ca983499ab231099f342c1",
+  "old_application_sha256": "f71e756a74dc3004e6c7cd191a4fce4175a35ffa1a737bcc97bbff35e8d8b61a",
+  "new_application_sha256": "917c869e62681c1c0f2197a69311c2233fdffcb086c887ee48a21acbe04a000d",
+  "new_application_bytes": 1532000,
+  "application_budget": 1540096,
+  "protocol_diagnostic": false,
+  "kws_cross_diagnostic": false,
+  "partitions": {
+    "nvs": {
+      "type": 1,
+      "subtype": 2,
+      "offset": 36864,
+      "size": 24576,
+      "flags": 0
+    },
+    "phy_init": {
+      "type": 1,
+      "subtype": 1,
+      "offset": 61440,
+      "size": 4096,
+      "flags": 0
+    },
+    "factory": {
+      "type": 0,
+      "subtype": 0,
+      "offset": 65536,
+      "size": 1572864,
+      "flags": 0
+    },
+    "ctx": {
+      "type": 1,
+      "subtype": 64,
+      "offset": 1638400,
+      "size": 2097152,
+      "flags": 0
+    },
+    "clip": {
+      "type": 1,
+      "subtype": 65,
+      "offset": 3735552,
+      "size": 458752,
+      "flags": 0
+    }
+  },
+  "backup_device_verified": true,
+  "installed": true,
+  "application_verified": true,
+  "data_partitions_unchanged": true,
+  "after_sha256": "07f86436a1c8802e575c28f5b059bca74e7b346229267356ff9ae36d6b9ef9f6"
+}

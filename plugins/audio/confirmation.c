@@ -43,3 +43,18 @@ agent_err_t agent_confirmation_feed(agent_confirmation_t *c,bool speech)
 }
 void agent_confirmation_cancel(agent_confirmation_t *c)
 { if(c) agent_endpoint_cancel(&c->endpoint); }
+agent_err_t agent_confirmation_set_silence(agent_confirmation_t *c,unsigned end)
+{
+    if(!c || end<400 || end>2000 || end%AGENT_VAD_FRAME_MS)return AGENT_ERR_ARGUMENT;
+    if(c->endpoint.state==AGENT_EP_CANCELLED)return AGENT_ERR_CANCELLED;
+    if(!c->confirmed || c->endpoint.state>=AGENT_EP_DONE)return AGENT_ERR_BUSY;
+    c->endpoint.end_ms=end;return AGENT_OK;
+}
+agent_err_t agent_confirmation_finish(agent_confirmation_t *c)
+{
+    if(!c)return AGENT_ERR_ARGUMENT;
+    if(c->endpoint.state==AGENT_EP_CANCELLED)return AGENT_ERR_CANCELLED;
+    if(!c->confirmed)return AGENT_ERR_BUSY;
+    if(c->endpoint.state<AGENT_EP_DONE)c->endpoint.state=AGENT_EP_DONE;
+    return AGENT_OK;
+}

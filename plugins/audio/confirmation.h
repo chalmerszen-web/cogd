@@ -17,4 +17,9 @@ agent_err_t agent_confirmation_score(agent_confirmation_t *,unsigned probability
  * After joint confirmation, classical decisions need no further neural work. */
 agent_err_t agent_confirmation_feed(agent_confirmation_t *,bool classical_speech);
 void agent_confirmation_cancel(agent_confirmation_t *);
+/* Change only the confirmed utterance's end silence. Waiting/noise admission
+ * retain their original deadlines; already accumulated silence is preserved. */
+agent_err_t agent_confirmation_set_silence(agent_confirmation_t *,unsigned end_ms);
+/* A final ASR sentence may end only an already locally confirmed utterance. */
+agent_err_t agent_confirmation_finish(agent_confirmation_t *);
 #endif

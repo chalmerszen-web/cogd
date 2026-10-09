@@ -1,0 +1,1 @@
+#define SOC_RSA_MAX_BIT_LEN 3072

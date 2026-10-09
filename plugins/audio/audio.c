@@ -124,6 +124,24 @@ uint32_t agent_audio_phase_step(unsigned midi)
 { return midi>=36 && midi<=96?phase_steps[midi-36]:0; }
 int32_t agent_audio_sine(uint32_t phase) { return wave_sample(phase,AGENT_WAVE_SINE); }
 
+size_t agent_cue_render(agent_cue_t *c,int16_t *pcm,size_t capacity,unsigned volume)
+{
+    if(!c || !pcm || (c->rate!=16000 && c->rate!=24000))return 0;
+    unsigned length=c->rate*(c->finish?18u:16u)/100,attack=c->rate/100;
+    if(c->sample>=length)return 0;
+    size_t count=length-c->sample;if(count>capacity)count=capacity;
+    if(volume>80)volume=80;
+    for(size_t i=0;i<count;++i,++c->sample) {
+        unsigned n=c->sample,hz=c->finish?2300-1400*n/length:1320;
+        c->phase+=(uint32_t)(((uint64_t)hz<<32)/c->rate);
+        int32_t value=agent_audio_sine(c->phase);
+        value=value*(int32_t)(n<attack?n:attack)/(int32_t)attack;
+        value=value*(int32_t)(length-n)/(int32_t)length;
+        pcm[i]=(int16_t)(value*(int32_t)volume/(c->finish?320:960));
+    }
+    return count;
+}
+
 size_t agent_synth_render(agent_synth_t *s, int16_t *pcm, size_t capacity, unsigned volume)
 {
     if (!s || !s->score || !pcm || volume > 100) return 0;

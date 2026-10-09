@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.22)
+project(agent_public_mpi_test C)
+get_filename_component(AGENT_ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+set(TF_SOURCE "${AGENT_ROOT}/.toolchains/esp-idf/components/mbedtls/mbedtls/tf-psa-crypto")
+set(ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+set(ENABLE_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(GEN_FILES OFF CACHE BOOL "" FORCE)
+set(TF_PSA_CRYPTO_USER_CONFIG_FILE "${CMAKE_CURRENT_LIST_DIR}/crypto_config.h" CACHE FILEPATH "" FORCE)
+add_compile_options(-O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer)
+add_link_options(-fsanitize=address,undefined)
+add_subdirectory("${TF_SOURCE}" tf-psa-crypto)
+target_include_directories(builtin BEFORE PRIVATE
+  "${AGENT_ROOT}/.toolchains/esp-idf/components/mbedtls/port/include" "${CMAKE_CURRENT_LIST_DIR}")
+# Simulate the hardware entry with a counted software oracle. Compile the
+# exact pinned source and real public dispatcher; use32-bit limbs like C3.
+get_target_property(builtin_dir builtin SOURCE_DIR)
+set_property(SOURCE "${builtin_dir}/src/bignum.c" DIRECTORY "${builtin_dir}"
+  APPEND PROPERTY COMPILE_DEFINITIONS MBEDTLS_MPI_EXP_MOD_ALT MBEDTLS_MPI_EXP_MOD_ALT_FALLBACK)
+include("${AGENT_ROOT}/cmake/tls_public_mpi.cmake")
+agent_configure_public_mpi(builtin)
+add_executable(public_mpi harness.c "${AGENT_ROOT}/platform/espidf/tls_public_mpi.c")
+target_include_directories(public_mpi PRIVATE "${CMAKE_CURRENT_LIST_DIR}")
+target_compile_options(public_mpi PRIVATE -Wall -Wextra -Werror)
+target_compile_features(public_mpi PRIVATE c_std_11)
+target_link_options(public_mpi PRIVATE -Wl,--wrap=agent_tls_public_mpi_software)
+target_link_libraries(public_mpi PRIVATE tfpsacrypto)

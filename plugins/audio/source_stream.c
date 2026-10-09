@@ -22,6 +22,7 @@ agent_err_t source_stream_feed(source_stream_t *s,int16_t sample)
     int16_t original=agent_voice_reject_cue(&s->notch,agent_voice_filter(&s->voice,sample));
     s->filtered[s->used++]=original;
     int32_t clean=tonal_filter_sample(&s->tonal,original);
+    if(s->fast_guard)clean=tonal_highpass_sample(&s->energy_highpass,(int16_t)clean);
     s->clean_sum+=(uint32_t)(clean<0?-clean:clean);
     if(s->used<SOURCE_FRAME_SAMPLES)return AGENT_OK;
     /* Match original order: classifier first, then mean level. The first two
@@ -35,6 +36,15 @@ agent_err_t source_stream_feed(source_stream_t *s,int16_t sample)
         (uint8_t)clean_level,(uint8_t)(clean_level>>8),spectral?1u:0u,0xa6};
     if(s->frames==SOURCE_FRAME_COUNT)return AGENT_ERR_LIMIT;
     memcpy(s->records+s->frames*SOURCE_RECORD_BYTES,data,sizeof(data));++s->frames;s->used=0;s->clean_sum=0;
+#if AGENT_CAPTURE_PROBE
+    /* A labelled diagnostic retains the real tail beyond a shadow endpoint.
+     * Keep all metadata through8s; normal and classic acquisition are unchanged. */
+    if(s->fast_guard) {
+        s->bound.elapsed_ms=s->frames*20;
+        if(s->frames==400)s->bound.target_samples=128000;
+        return AGENT_OK;
+    }
+#endif
     return source_bound_feed(&s->bound,level);
 }
 agent_err_t source_stream_read(const uint8_t *records,size_t bytes,unsigned published,unsigned frame,source_frame_t *out)
@@ -61,4 +71,25 @@ agent_err_t source_stream_confirm(agent_confirmation_t *c,const uint8_t *records
         (!c->confirmed || frame.clean_level>threshold));
     if(!error)*out=frame;
     return error;
+}
+agent_err_t source_stream_endpoint(agent_endpoint_t *endpoint,const uint8_t *records,unsigned published,unsigned noise,source_frame_t *out)
+{
+    if(!endpoint || !out || noise>32768)return AGENT_ERR_ARGUMENT;
+    if(endpoint->state>=AGENT_EP_DONE)return AGENT_ERR_BUSY;
+    source_frame_t frame;
+    agent_err_t error=source_stream_read(records,SOURCE_METADATA_BYTES,published,endpoint->elapsed_ms/20,&frame);
+    if(error)return error;
+    /* Retain the strict onset/current-strong guard. A lower threshold alone
+     * admitted measured radio noise (250..300 with noise159). Weak frames may
+     * now support two strong frames inside an admitted utterance; they never
+     * reset silence by themselves or admit a turn. Support also expires320ms
+     * after a strict continuation and cannot renew itself. This preserves a fragmented
+     * quiet syllable without accepting an indefinite weak-only noise tail. */
+    unsigned threshold=noise*2;
+    if(threshold<240)threshold=240;
+    unsigned weak=noise*3/2;if(weak<240)weak=240;
+    agent_endpoint_feed_supported(endpoint,
+        frame.spectral && frame.level>threshold && frame.clean_level>threshold,
+        frame.spectral && frame.level>weak && frame.clean_level>weak);
+    *out=frame;return AGENT_OK;
 }

@@ -1,0 +1,20 @@
+title = "ESP-HI publication checks"
+
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Reviewed SAPI report SHA-256 values in the compact-l release manifest"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)training/kws/releases/compact-l/manifest\.json$''']
+regexTarget = "line"
+regexes = ['''"sapi-(baseline|candidate)\.json": "[a-f0-9]{64}"''']
+
+[[allowlists]]
+description = "Reviewed file hashes: WASAPI recorder and SAPI diagnostic report names"
+targetRules = ["generic-api-key"]
+condition = "AND"
+paths = ['''(^|/)artifacts/.*\.json$''']
+regexTarget = "line"
+regexes = ['''"([^"\r\n]*/)?(record_wasapi\.py|sapi-(baseline|candidate)\.json)":\s*"[a-f0-9]{64}"''']

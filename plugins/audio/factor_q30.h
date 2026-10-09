@@ -1,4 +1,4 @@
-/* Exact numerator factoring for the seven pinned symmetric Q30 biquads.
+/* Exact numerator factoring for the pinned symmetric Q30 biquads.
  * Preconditions from the existing filters: c[0]==c[2], all input/state
  * magnitudes <= 2^25 and |c[i]| <= 2^31. Pair/difference fit int32_t;
  * every original and factored partial sum is below 2^59 in magnitude. */

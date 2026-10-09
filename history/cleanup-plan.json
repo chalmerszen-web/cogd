@@ -1,0 +1,50 @@
+{
+  "status": "preview_only",
+  "targets": [
+    {
+      "relative": ".local",
+      "files": 3190,
+      "bytes": 81923094
+    },
+    {
+      "relative": ".toolchains/tools/dist",
+      "files": 9,
+      "bytes": 1080201058
+    },
+    {
+      "relative": "build-agent",
+      "files": 1614,
+      "bytes": 229372381
+    },
+    {
+      "relative": "build-agent-noaudio",
+      "files": 1535,
+      "bytes": 212864960
+    },
+    {
+      "relative": "build-host",
+      "files": 118,
+      "bytes": 35114394
+    },
+    {
+      "relative": "build-host-noaudio",
+      "files": 66,
+      "bytes": 19168918
+    },
+    {
+      "relative": "build-history",
+      "files": 7333,
+      "bytes": 722233171
+    },
+    {
+      "relative": "artifacts",
+      "files": 10888,
+      "bytes": 1463327595
+    },
+    {
+      "relative": "tools/__pycache__",
+      "files": 5,
+      "bytes": 36890
+    }
+  ]
+}

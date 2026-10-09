@@ -4,10 +4,16 @@ _ref/
 .venv/
 .local/
 artifacts/
+outputs/
+/firmware/*
+!/firmware/latest/
+context-archives/
+backups/
 managed_components/
 sdkconfig
 sdkconfig.old
 __pycache__/
+.pytest_cache/
 *.pyc
 *.pem
 *.key

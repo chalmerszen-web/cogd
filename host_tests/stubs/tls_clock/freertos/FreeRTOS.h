@@ -1,0 +1,7 @@
+#ifndef TEST_TLS_CLOCK_RTOS_H
+#define TEST_TLS_CLOCK_RTOS_H
+typedef void *TaskHandle_t;
+#define CONFIG_FREERTOS_GENERATE_RUN_TIME_STATS 1
+#define CONFIG_FREERTOS_RUN_TIME_STATS_USING_ESP_TIMER 1
+#define pdFALSE 0
+#endif

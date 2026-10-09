@@ -1,0 +1,1206 @@
+{
+  "method": "local SenseVoice INT8 automatic screening; not human listening",
+  "language_setting": "zh",
+  "clips": [
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-000-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 22400,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.5999999642372131,
+        0.8399999737739563,
+        1.2599999904632568
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-001-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 23040,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.47999998927116394,
+        0.6599999666213989,
+        1.3199999332427979
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-002-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小爷。",
+      "asr_language": "<|zh|>",
+      "samples": 26880,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "爷",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.29999998211860657,
+        0.5999999642372131,
+        0.8999999761581421,
+        1.1399999856948853,
+        1.559999942779541
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-003-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 27520,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.23999999463558197,
+        0.41999998688697815,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.0199999809265137,
+        1.6200000047683716
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-004-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 16000,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.29999998211860657,
+        0.47999998927116394,
+        0.6599999666213989,
+        0.8399999737739563
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-005-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小圆。",
+      "asr_language": "<|zh|>",
+      "samples": 15360,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "圆",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.23999999463558197,
+        0.35999998450279236,
+        0.5399999618530273,
+        0.8399999737739563
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-006-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小圆。",
+      "asr_language": "<|zh|>",
+      "samples": 21120,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "圆",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.5399999618530273,
+        0.7799999713897705,
+        1.1999999284744263
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-007-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小妍。",
+      "asr_language": "<|zh|>",
+      "samples": 30720,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "妍",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.29999998211860657,
+        0.5399999618530273,
+        0.7799999713897705,
+        1.0199999809265137,
+        1.7999999523162842
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-000-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小妍。",
+      "asr_language": "<|zh|>",
+      "samples": 21760,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "妍",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.41999998688697815,
+        0.5999999642372131,
+        0.8399999737739563,
+        1.2599999904632568
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-001-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 24320,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.23999999463558197,
+        0.41999998688697815,
+        0.7199999690055847,
+        0.8999999761581421,
+        1.3799999952316284
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-002-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 24320,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.23999999463558197,
+        0.47999998927116394,
+        0.8399999737739563,
+        1.0799999237060547,
+        1.3199999332427979
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-003-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 19840,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.6599999666213989,
+        0.8999999761581421,
+        1.0799999237060547
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-004-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 35840,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.23999999463558197,
+        0.41999998688697815,
+        0.8399999737739563,
+        1.1999999284744263,
+        1.5,
+        2.0999999046325684
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-005-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 19840,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.1399999856948853
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-006-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小圆。",
+      "asr_language": "<|zh|>",
+      "samples": 12800,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "圆",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.47999998927116394,
+        0.5999999642372131
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-007-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 32000,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.23999999463558197,
+        0.47999998927116394,
+        0.7199999690055847,
+        0.9599999785423279,
+        1.1999999284744263,
+        1.8600000143051147
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-000-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 19200,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.5399999618530273,
+        0.7799999713897705,
+        1.0799999237060547
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-001-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小爷。",
+      "asr_language": "<|zh|>",
+      "samples": 32000,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "爷",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.35999998450279236,
+        0.7199999690055847,
+        1.0799999237060547,
+        1.3799999952316284,
+        1.8600000143051147
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-002-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小燕。",
+      "asr_language": "<|zh|>",
+      "samples": 23040,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "燕",
+        "。"
+      ],
+      "timestamps": [
+        0.23999999463558197,
+        0.41999998688697815,
+        0.5399999618530273,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.3199999332427979
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-003-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 22400,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.23999999463558197,
+        0.41999998688697815,
+        0.5999999642372131,
+        0.7799999713897705,
+        1.2599999904632568
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-004-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 20480,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.41999998688697815,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.1399999856948853
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-005-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 25600,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.23999999463558197,
+        0.41999998688697815,
+        0.5999999642372131,
+        0.7799999713897705,
+        0.9599999785423279,
+        1.5
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-006-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 33920,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.8399999737739563,
+        1.0199999809265137,
+        1.1999999284744263,
+        1.3799999952316284,
+        1.559999942779541,
+        1.9799998998641968
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-007-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 26240,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.29999998211860657,
+        0.47999998927116394,
+        0.5999999642372131,
+        0.7199999690055847,
+        0.8999999761581421,
+        1.5
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-000-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 29440,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.17999999225139618,
+        0.41999998688697815,
+        0.5999999642372131,
+        0.8399999737739563,
+        1.0199999809265137,
+        1.7400000095367432
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-001-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小爷。",
+      "asr_language": "<|zh|>",
+      "samples": 17920,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "爷",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.29999998211860657,
+        0.47999998927116394,
+        0.6599999666213989,
+        0.8999999761581421
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-002-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小妍。",
+      "asr_language": "<|zh|>",
+      "samples": 26240,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "妍",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.29999998211860657,
+        0.5999999642372131,
+        0.8399999737739563,
+        1.0799999237060547,
+        1.5
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-003-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 15360,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.23999999463558197,
+        0.41999998688697815,
+        0.5399999618530273,
+        0.7199999690055847
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-004-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小雅。",
+      "asr_language": "<|zh|>",
+      "samples": 51200,
+      "receptive_field_exceeded": true,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "雅",
+        "。"
+      ],
+      "timestamps": [
+        0.29999998211860657,
+        0.6599999666213989,
+        1.1399999856948853,
+        1.7999999523162842,
+        2.0999999046325684,
+        3.059999942779541
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-005-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 19840,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.35999998450279236,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.1399999856948853
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-006-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 22400,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.17999999225139618,
+        0.35999998450279236,
+        0.47999998927116394,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.2599999904632568
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-007-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 18560,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.23999999463558197,
+        0.41999998688697815,
+        0.5399999618530273,
+        0.7199999690055847,
+        1.0199999809265137
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-000-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 16640,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.29999998211860657,
+        0.41999998688697815,
+        0.5999999642372131,
+        0.8999999761581421
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-001-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小言。",
+      "asr_language": "<|zh|>",
+      "samples": 22400,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "言",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.23999999463558197,
+        0.47999998927116394,
+        0.6599999666213989,
+        1.2599999904632568
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-002-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 24960,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.47999998927116394,
+        0.8399999737739563,
+        1.0799999237060547,
+        1.4399999380111694
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-003-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 30080,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.29999998211860657,
+        0.47999998927116394,
+        0.6599999666213989,
+        0.8999999761581421,
+        1.1399999856948853,
+        1.7400000095367432
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-004-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 19840,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.23999999463558197,
+        0.41999998688697815,
+        0.5399999618530273,
+        0.7199999690055847,
+        1.1399999856948853
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-005-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 16000,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.29999998211860657,
+        0.47999998927116394,
+        0.5999999642372131,
+        0.8999999761581421
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-006-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 28800,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.29999998211860657,
+        0.47999998927116394,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.0799999237060547,
+        1.6799999475479126
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoxiao-1-007-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 20480,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.23999999463558197,
+        0.41999998688697815,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.1399999856948853
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-000-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 14080,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.23999999463558197,
+        0.35999998450279236,
+        0.5399999618530273,
+        0.7199999690055847
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-001-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 39680,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.29999998211860657,
+        0.6599999666213989,
+        1.0199999809265137,
+        1.5,
+        1.7999999523162842,
+        2.3399999141693115
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-002-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 19200,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.11999999731779099,
+        0.23999999463558197,
+        0.35999998450279236,
+        0.5399999618530273,
+        0.7199999690055847,
+        1.0799999237060547
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-003-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 16000,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.0,
+        0.11999999731779099,
+        0.29999998211860657,
+        0.41999998688697815,
+        0.5999999642372131,
+        0.8999999761581421
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-004-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小妍。",
+      "asr_language": "<|zh|>",
+      "samples": 23040,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "妍",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.23999999463558197,
+        0.47999998927116394,
+        0.7199999690055847,
+        0.9599999785423279,
+        1.3199999332427979
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-005-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 24320,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.23999999463558197,
+        0.41999998688697815,
+        0.5999999642372131,
+        0.7799999713897705,
+        0.9599999785423279,
+        1.3799999952316284
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-006-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 21120,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.05999999865889549,
+        0.17999999225139618,
+        0.29999998211860657,
+        0.41999998688697815,
+        0.5999999642372131,
+        1.1999999284744263
+      ]
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxia-1-007-compact2",
+      "expected_language": "zh",
+      "expected_text": "你好，小言",
+      "asr_text": "你好，小严。",
+      "asr_language": "<|zh|>",
+      "samples": 28160,
+      "receptive_field_exceeded": false,
+      "tokens": [
+        "你",
+        "好",
+        "，",
+        "小",
+        "严",
+        "。"
+      ],
+      "timestamps": [
+        0.23999999463558197,
+        0.41999998688697815,
+        0.6599999666213989,
+        0.8399999737739563,
+        1.0799999237060547,
+        1.6200000047683716
+      ]
+    }
+  ]
+}

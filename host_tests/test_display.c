@@ -40,6 +40,9 @@ int main(void)
     assert(agent_display_time(1735689600,-720,hms,zone) && !strcmp(hms,"12:00:00") && !strcmp(zone,"UTC-12:00"));
     assert(agent_display_time(1735775999,345,hms,zone) && !strcmp(hms,"05:44:59") && !strcmp(zone,"UTC+05:45"));
     assert(agent_display_time(INT64_MAX,840,hms,zone));
+    assert(agent_display_time(1735747199,480,hms,zone) && !strcmp(hms,"23:59:59"));
+    assert(agent_display_time(1735747200,480,hms,zone) && !strcmp(hms,"00:00:00"));
+    assert(agent_display_time(1735704000,480,hms,zone) && !strcmp(hms,"12:00:00"));
     assert(!agent_display_time(0,480,hms,zone) && !strcmp(hms,"--:--:--"));
     assert(!agent_display_time(1735689600,841,hms,zone));
     struct { uint8_t before,row[320],after; } image={.before=0xa5,.after=0x5a};
@@ -54,10 +57,24 @@ int main(void)
         assert(image.before==0xa5 && image.after==0x5a);
         for(unsigned x=0;x<160;++x) {
             assert(image.row[2*x]==image.row[2*x+1]);
-            if(image.row[2*x]) {assert((y>=12 && y<19) || (y>=32 && y<53));++ink;}
+            if(image.row[2*x]) {
+                assert((x>=7 && x<152 && y>=16 && y<51) ||
+                       (x>=134 && x<156 && y>=62 && y<76));++ink;
+            }
         }
     }
-    assert(ink>600 && ink<2000);
+    assert(ink>1000 && ink<3500);
+    /* A seconds-only change must not alter the main HH:MM or any margins. */
+    unsigned changed=0;uint8_t other[320];
+    for(unsigned y=0;y<80;++y) {
+        agent_display_row(&c,"23:59:58",zone,y,image.row);
+        agent_display_row(&c,"23:59:59",zone,y,other);
+        for(unsigned x=0;x<160;++x) if(memcmp(image.row+2*x,other+2*x,2)) {
+            assert(x>=134 && x<156 && y>=62 && y<76);++changed;
+        }
+        assert(image.before==0xa5 && image.after==0x5a);
+    }
+    assert(changed>0);
     agent_resources_t resources;agent_resources_init(&resources);uint32_t added;
     uint32_t pins=AGENT_PIN(4)|AGENT_PIN(5)|AGENT_PIN(10);
     assert(!agent_resources_claim(&resources,AGENT_OWNER_DISPLAY,pins,&added) && added==pins);

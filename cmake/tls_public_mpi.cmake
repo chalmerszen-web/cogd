@@ -1,0 +1,13 @@
+function(agent_configure_public_mpi builtin_target)
+  get_target_property(agent_builtin_dir ${builtin_target} SOURCE_DIR)
+  set(agent_bignum "${agent_builtin_dir}/src/bignum.c")
+  file(READ "${agent_bignum}" agent_bignum_text)
+  string(REPLACE "\r\n" "\n" agent_bignum_text "${agent_bignum_text}")
+  string(SHA256 agent_bignum_hash "${agent_bignum_text}")
+  if(NOT agent_bignum_hash STREQUAL "105c77822dfb98f97e7795d8b4fce0f34782efbd8a88c2cb9c52ba78fa0b2fd3")
+    message(FATAL_ERROR "Review the pinned public MPI dispatch before changing the crypto source")
+  endif()
+  get_filename_component(agent_mpi_root "${CMAKE_CURRENT_FUNCTION_LIST_DIR}/.." ABSOLUTE)
+  set_property(SOURCE "${agent_bignum}" DIRECTORY "${agent_builtin_dir}"
+    APPEND PROPERTY COMPILE_OPTIONS "-include" "${agent_mpi_root}/platform/espidf/tls_public_mpi_config.h")
+endfunction()

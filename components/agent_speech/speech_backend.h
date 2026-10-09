@@ -2,6 +2,23 @@
 #define ESP_HI_SPEECH_BACKEND_H
 #include <stdbool.h>
 #include <stdint.h>
+#include <stddef.h>
+#ifdef AGENT_KWS_C11
+/* Audio owner passes its current listening gate; acoustic history advances
+ * while closed, but ignored hits must not consume the detector's cooldown. */
+bool esp_hi_speech_wake_armed(int16_t *pcm,bool armed);
+bool esp_hi_kws_profile(char *out,size_t capacity);
+void esp_hi_kws_profile_reset(void); /* Only reset while listening is off. */
+#ifdef AGENT_KEYWORD_PCM
+typedef struct {
+    uint64_t sample_end;
+    int16_t score_q8,scores_q8[2],heads_q8[3];
+    int error;
+} esp_hi_kws_input_t;
+/* Audio owner reads directly after its own inference; no concurrent access. */
+void esp_hi_kws_input(esp_hi_kws_input_t *out);
+#endif
+#endif
 bool esp_hi_speech_open(void);
 void esp_hi_speech_close(void);
 /* Release keyword state after a hit; VAD remains available for the utterance. */
@@ -9,6 +26,9 @@ void esp_hi_speech_disarm(void);
 unsigned esp_hi_speech_chunk(void);
 bool esp_hi_speech_wake(int16_t *pcm);
 bool esp_hi_speech_vad(int16_t *pcm); /* 320 samples / 20 ms at 16 kHz */
+/* Audio owner only, before source frames: replace the initial mode3 detector
+ * with mode2 for fast capture. A new listening cycle restores mode3. */
+bool esp_hi_speech_vad_fast(void);
 unsigned esp_hi_speech_heap(void);
 bool esp_hi_speech_threshold(unsigned permille); /* Audio worker only. */
 const char *esp_hi_speech_word(void);

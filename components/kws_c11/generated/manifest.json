@@ -1,0 +1,19 @@
+{
+  "seed": 20260921,
+  "trained": false,
+  "counts": {
+    "weights": 6384,
+    "folded_biases": 145,
+    "train_parameters": 6673,
+    "history_bytes": 3056,
+    "receptive_frames": 127,
+    "acoustic_receptive_ms": 2048,
+    "folded_weight_bias_bytes": 6964
+  },
+  "sha256": {
+    "fft_config.inc": "bb77bbf318a316db852b854a34ce1de7eb1df072d49228928075be7f76499702",
+    "probe.c": "8fdb8b48cef220e898b4722136137e83ea58e0cc2479473e1a0bd5ad44ac25af",
+    "probe.json": "839a1ed4f69ab4a1c98a2857dabacff0978df0d0081c196bbc2a178341d45fdc",
+    "tables.c": "abbcf804c893a09db753f1f857a57d7342277e2d63ebde38ce1aebac5efb7946"
+  }
+}

@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.22)
+set(IDF_TARGET esp32c3 CACHE STRING "Target")
+set(PROJECT_VER "0.11.207-vad-modes")
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+idf_build_set_property(MINIMAL_BUILD ON)
+project(esp_hi_agent)

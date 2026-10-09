@@ -27,8 +27,9 @@ static agent_err_t set(void *ctx,const uint8_t rgb[3])
 #if AGENT_ENABLE_AUDIO
 static agent_audio_state_t sound;
 static agent_err_t inspect_error;
+static unsigned inspections;
 static agent_err_t inspect(void *ctx,agent_audio_state_t *out)
-{ (void)ctx; *out=sound; return inspect_error; }
+{ (void)ctx; ++inspections;*out=sound; return inspect_error; }
 static agent_err_t stop(void *ctx)
 {
     (void)ctx; sound.playing=false; ++effects;
@@ -55,6 +56,12 @@ int main(void)
     agent_resources_init(&resources); agent_devices_init(&devices,&backend,NULL);
     const uint8_t rgb[]={9,8,7};
     uint32_t added; unsigned owner;
+#if AGENT_ENABLE_AUDIO
+    inspect_error=AGENT_ERR_BUSY;
+    for(unsigned i=0;i<100;++i)agent_devices_poll(&devices);
+    assert(!inspections && !devices.held);
+    inspect_error=AGENT_OK;
+#endif
 
     /* Pre-effect contention must still reject without a partial action. */
     assert(!atomic_flag_test_and_set(&devices.guard));
@@ -77,6 +84,9 @@ int main(void)
     assert(!agent_resources_owner(&resources,8,&owner) && owner==AGENT_OWNER_DIRECT);
     assert(agent_resources_claim(&resources,AGENT_OWNER_PLAN,light_mask,&added)==AGENT_ERR_BUSY);
     released(1); released(1); /* Reap is idempotent and never repeats the driver. */
+#if AGENT_ENABLE_AUDIO
+    assert(!inspections); /* Light-only cleanup is independent of audio. */
+#endif
 
     /* Cleanup contention does not replace a real driver failure. */
     driver_error=AGENT_ERR_TOOL;
@@ -105,16 +115,22 @@ int main(void)
     atomic_flag_clear(&resources.guard); hold_cleanup=false; released(3);
     inspect_error=AGENT_ERR_BUSY;
     assert(!agent_devices_light_set(&devices,rgb) && effects==4);
-    assert(devices.held==light_mask);
+    assert(!devices.held);
     inspect_error=AGENT_OK; released(4);
     inspect_error=AGENT_ERR_TIMEOUT;
-    assert(agent_devices_light_set(&devices,rgb)==AGENT_ERR_TIMEOUT && effects==5);
-    assert(devices.held==light_mask);
+    assert(!agent_devices_light_set(&devices,rgb) && effects==5);
+    assert(!devices.held);
     inspect_error=AGENT_OK; released(5);
+    /* A real outstanding audio lease still requires status before cleanup. */
+    assert(!agent_resources_claim(&resources,AGENT_OWNER_DIRECT,backend.speaker_mask,&added));
+    devices.held=added;inspect_error=AGENT_ERR_TIMEOUT;
+    assert(agent_devices_light_set(&devices,rgb)==AGENT_ERR_TIMEOUT && effects==6);
+    assert(devices.held==(light_mask|backend.speaker_mask));
+    inspect_error=AGENT_OK;released(6);
     /* Audio preflight status contention still prevents the stop call. */
     inspect_error=AGENT_ERR_BUSY;
-    assert(devices.audio.stop(devices.audio.ctx)==AGENT_ERR_BUSY && effects==5);
-    inspect_error=AGENT_OK; released(5);
+    assert(devices.audio.stop(devices.audio.ctx)==AGENT_ERR_BUSY && effects==6);
+    inspect_error=AGENT_OK; released(6);
 #endif
     puts("devices: admission isolation, accepted effects, deferred ownership, original failures and hard cleanup errors passed");
 }

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "errors": [],
+  "host_trigger": "GO\\n",
+  "expected_text": "我要变成一个时钟，24小时制，显示时、分，右下角小字显示秒。",
+  "original_application_sha256": "5a1e82db96bea8072f44415c1c747d0050c7f6785aa7d49e49e9bb66cb35946b",
+  "request_exact_match": true,
+  "flash_unchanged": true,
+  "flash_sha256": "d3b0f7e6ecdc4a58c8d3cd70eb517b11d1ece19cfacc99b8261a5169b3805f63",
+  "restored_version": "0.12.0-rc2"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "artifacts/voice-fast/wake-compact-runtime-ux288/seed",
+  "files": {
+    "first.c": "286166f16a624c2989a88364bc165bdaa2fa0b579d12b4cf18d95607455a5091",
+    "second.c": "1d6097c4c3fa6eca540dd460682b98468e8003195bb55522b8b3640d0b26cc99",
+    "verifier.c": "1b5ac3abc6ab40c656aab3dd8de60e3fe7073aa676c3d31f50a5bdeedfa418c1",
+    "kws_verified_seed.inc": "89af1070cbe3a72e1e37f402442f1bec056bb554d7d2cd5cee8082aa066e9361",
+    "kws_verified_seed.json": "3695e6ba076809a125f40f2fdaac19233f98718e299081b67f689bcf8451ad13"
+  },
+  "note": "Existing frozen weights and silence state, copied byte-for-byte. No training or threshold changes."
+}

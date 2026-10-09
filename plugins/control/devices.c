@@ -6,7 +6,10 @@ static agent_err_t reap(agent_devices_t *d)
 {
     uint32_t needed=0;
 #if AGENT_ENABLE_AUDIO
-    if(d->backend.audio && d->backend.audio->inspect) {
+    /* Polling empty or light-only leases must not take the audio driver's
+     * lock while holding the shared direct-device admission guard. */
+    if((d->clip_job || (d->held&(d->backend.speaker_mask|d->backend.mic_mask|AGENT_RES_CLIP))) &&
+       d->backend.audio && d->backend.audio->inspect) {
         agent_audio_state_t state;
         agent_err_t e=d->backend.audio->inspect(d->backend.audio->ctx,&state); if(e) return e;
         if(state.playing) needed|=d->backend.speaker_mask|(d->clip_job?AGENT_RES_CLIP:0);

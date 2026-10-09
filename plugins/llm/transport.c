@@ -1,4 +1,5 @@
 #include "transport.h"
+#include <string.h>
 
 typedef struct {
     agent_write_fn write;
@@ -43,4 +44,31 @@ agent_err_t agent_http_write_body(const agent_http_request_t *request, agent_wri
     agent_err_t error = request->produce ? request->produce(request->body_ctx, part, &w) :
         part(&w, request->body, request->length);
     return error ? error : w.error ? w.error : w.used == request->length ? AGENT_OK : AGENT_ERR_PROTOCOL;
+}
+
+typedef struct { agent_write_fn write; void *ctx; char *data; size_t used,capacity; } buffered_t;
+static agent_err_t buffered_part(void *ctx,const char *data,size_t length)
+{
+    buffered_t *b=ctx;
+    while(length) {
+        /* Large producer slices already have stable storage for this
+         * synchronous write. Keep their <=4096-byte framing instead of
+         * copying and splitting them into extra small TLS records. */
+        if(!b->used && length>=b->capacity) return b->write(b->ctx,data,length);
+        size_t n=b->capacity-b->used;if(n>length) n=length;
+        memcpy(b->data+b->used,data,n);b->used+=n;data+=n;length-=n;
+        if(b->used==b->capacity) {
+            agent_err_t e=b->write(b->ctx,b->data,b->used);if(e) return e;
+            b->used=0;
+        }
+    }
+    return AGENT_OK;
+}
+agent_err_t agent_http_write_buffered(const agent_http_request_t *r,agent_write_fn write,void *ctx,char *scratch,size_t capacity)
+{
+    if(!write || !scratch || !capacity) return AGENT_ERR_ARGUMENT;
+    buffered_t b={.write=write,.ctx=ctx,.data=scratch,.capacity=capacity};
+    agent_err_t e=agent_http_write_body(r,buffered_part,&b);
+    if(!e && r->cancelled && atomic_load(r->cancelled)) e=AGENT_ERR_CANCELLED;
+    return e?e:b.used?write(ctx,scratch,b.used):AGENT_OK;
 }

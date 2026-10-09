@@ -13,3 +13,9 @@ int16_t tonal_filter_sample(tonal_filter_t *s,int16_t value)
     for(unsigned i=0;i<2;++i)value=notch(&s->tones[i],tone_coefficients[i],value);
     return value;
 }
+int16_t tonal_highpass_sample(agent_biquad_t *s,int16_t value)
+{
+    /* RBJ high-pass, 16kHz, Q=sqrt(1/2), normalized and rounded to Q30. */
+    static const int32_t c[5]={987913515,-1975827030,987913515,-1968955450,908956787};
+    return notch(s,c,value);
+}

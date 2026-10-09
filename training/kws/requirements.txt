@@ -1,0 +1,4 @@
+# CPU wheels: install torch separately with the command in README.md.
+numpy==1.26.4
+PyYAML==6.0.2
+pytest==8.3.5

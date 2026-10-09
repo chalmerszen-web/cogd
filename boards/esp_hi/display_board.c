@@ -5,6 +5,7 @@
 #include "driver/spi_master.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_timer.h"
+#include "soc/gpio_reg.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/semphr.h"
 #include <string.h>
@@ -20,8 +21,9 @@ static const panel_command_t panel_init[]={
     {0xe0,16,{0x0f,0x10,0x03,0x03,0x07,0x02,0x00,0x02,0x07,0x0c,0x13,0x38,0x0a,0x0e,0x03,0x10}},
     {0xe1,16,{0x10,0x0b,0x04,0x04,0x10,0x03,0x00,0x03,0x03,0x09,0x17,0x33,0x0b,0x0c,0x06,0x10}},
     {0x35,1,{0x00}},{0x3a,1,{0x05}},
-    /* BSP: mirror X=false,Y=true,swap XY=true; vendor BGR bit retained. */
-    {0x36,1,{0xa8}},{0x20,0,{0}},{0x29,0,{0}}
+    /* Camera-calibrated upright with USB at top: reverse both BSP axes.
+     * Keep row/column exchange and the vendor BGR bit. */
+    {0x36,1,{0x68}},{0x20,0,{0}},{0x29,0,{0}}
 };
 enum { PANEL_OFF, PANEL_RESET, PANEL_SLEEP, PANEL_READY };
 static struct {
@@ -40,9 +42,23 @@ static struct {
 static StaticSemaphore_t lock_storage;
 static atomic_bool cancelled;
 
+static esp_err_t data(const void *bytes,size_t size)
+{
+    esp_err_t e=gpio_set_level(GPIO_NUM_10,1);
+    return e?e:esp_lcd_panel_io_tx_param(lcd.io,-1,bytes,size);
+}
 static esp_err_t command(uint8_t value,const void *data,size_t size)
 {
-    return esp_lcd_panel_io_tx_param(lcd.io,value,data,size);
+    /* This board profile has no software CS. IDF 6.1 releases DC after every
+     * transaction; keep it driven between the command and parameter chunks.
+     * The display lock serializes this board-owned DC with its SPI writes. */
+    esp_err_t e=gpio_set_level(GPIO_NUM_10,0);
+    if(!e) e=esp_lcd_panel_io_tx_param(lcd.io,value,NULL,0);
+    if(!e && size) {
+        e=gpio_set_level(GPIO_NUM_10,1);
+        if(!e) e=esp_lcd_panel_io_tx_param(lcd.io,-1,data,size);
+    }
+    return e;
 }
 static esp_err_t start(void)
 {
@@ -50,8 +66,10 @@ static esp_err_t start(void)
         .quadwp_io_num=-1,.quadhd_io_num=-1,.max_transfer_sz=64};
     esp_err_t e=spi_bus_initialize(SPI2_HOST,&bus,SPI_DMA_DISABLED);if(e) return e;
     lcd.bus=true;
+    gpio_config_t dc={.pin_bit_mask=1ULL<<10,.mode=GPIO_MODE_INPUT_OUTPUT};
+    e=gpio_set_level(GPIO_NUM_10,0);if(!e) e=gpio_config(&dc);if(e) return e;
     esp_lcd_panel_io_spi_config_t device={.pclk_hz=8000000,.spi_mode=0,
-        .cs_gpio_num=-1,.dc_gpio_num=10,.trans_queue_depth=1,.lcd_cmd_bits=8,.lcd_param_bits=8};
+        .cs_gpio_num=-1,.dc_gpio_num=-1,.trans_queue_depth=1,.lcd_cmd_bits=8,.lcd_param_bits=8};
     e=esp_lcd_new_panel_io_spi(SPI2_HOST,&device,&lcd.io);
     if(!e) e=command(0x01,NULL,0);
     return e;
@@ -106,10 +124,13 @@ static agent_err_t status(void *ctx,char *out,size_t cap)
         "\"job\":%u,\"rendered_job\":%u,\"frames\":%u,\"time_valid\":%s,\"time\":\"%s\","
         "\"utc_offset_minutes\":%d,\"foreground\":%u,\"background\":%u,\"max_tick_us\":%u,"
         "\"error\":\"%s\",\"sdk_error\":%d,\"width\":160,\"height\":80,\"profile\":\"esp_hi_st7735_bsp\","
-        "\"transport\":\"esp_lcd_spi\",\"controller_verified\":false,\"visual_verified\":false}",modes[lcd.config.mode],
+        "\"transport\":\"esp_lcd_spi_held_dc\",\"dc_output_enabled\":%s,\"dc_level\":%d,"
+        "\"layout\":\"hhmm_large_ss_bottom_right\",\"hour_format\":24,"
+        "\"controller_verified\":false,\"visual_verified\":false}",modes[lcd.config.mode],
         lcd.phase==PANEL_READY&&!lcd.failed?"true":"false",lcd.pending?"true":"false",lcd.claimed?"true":"false",
         lcd.job,lcd.rendered_job,lcd.frames,lcd.time_valid?"true":"false",lcd.hms,lcd.config.utc_offset,
-        lcd.config.foreground,lcd.config.background,lcd.max_tick_us,agent_err_name(lcd.error),(int)lcd.sdk_error);
+        lcd.config.foreground,lcd.config.background,lcd.max_tick_us,agent_err_name(lcd.error),(int)lcd.sdk_error,
+        (REG_READ(GPIO_ENABLE_REG)&(1u<<10))?"true":"false",gpio_get_level(GPIO_NUM_10));
     xSemaphoreGive(lcd.lock);return w.error;
 }
 const agent_display_ops_t esp_hi_display_ops={set,status,NULL};
@@ -130,14 +151,16 @@ void esp_hi_display_cancel(void)
 }
 static esp_err_t row(unsigned y)
 {
-    uint8_t x[]={0,0,0,159},v[]={0,(uint8_t)(y+24),0,(uint8_t)(y+24)};
+    /* Center the 160x80 glass in 162x132 GRAM (Board Manager ESP-HI gap). */
+    uint8_t x[]={0,1,0,160},v[]={0,(uint8_t)(y+26),0,(uint8_t)(y+26)};
     agent_display_row(&lcd.config,lcd.hms,lcd.zone,y,lcd.pixels);
     esp_err_t e=command(0x2a,x,sizeof(x));
     if(!e) e=command(0x2b,v,sizeof(v));
+    if(!e) e=command(0x2c,NULL,0);
     /* Poll small chunks: queued transfers stall when long Flash history reads
-     * delay the SPI ISR. Panel IO still owns DC and half-duplex bus sequencing. */
+     * delay the SPI ISR. DC remains high through all five pixel chunks. */
     for(size_t offset=0;!e && offset<sizeof(lcd.pixels);offset+=64)
-        e=esp_lcd_panel_io_tx_param(lcd.io,offset?-1:0x2c,lcd.pixels+offset,64);
+        e=data(lcd.pixels+offset,64);
     return e;
 }
 void esp_hi_display_tick(uint64_t now)

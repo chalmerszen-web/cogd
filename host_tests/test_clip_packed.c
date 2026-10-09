@@ -62,8 +62,35 @@ static void verify(const int16_t *expected,size_t n)
         assert(!agent_clip_read(&reboot,at,output,take) && !memcmp(output,expected+at,take*2));
     }
 }
+static void provisional_eof_checks(void)
+{
+    /* The final short input is readable before its header/whole CRC pass.
+     * A successful upload therefore cannot stand in for durable validation. */
+    for(unsigned fault=0;fault<4;++fault) {
+        for(unsigned i=0;i<1643;++i)input[i]=(int16_t)((i%90)*16);
+        begin(200);assert(!agent_clip_write(&clip,input,1643));assert(!agent_clip_flush(&clip));
+        size_t samples,bytes;agent_clip_progress(&clip,&samples,&bytes);
+        assert(samples==1643 && clip.writing && !clip.ready);
+        agent_clip_t reader={.flash=ops,.packed=true,.packed_version=clip.packed_version};
+        for(size_t at=0;at<samples;) {
+            size_t n=samples-at;if(n>256)n=256;
+            assert(!agent_clip_read_pending(&reader,samples,bytes,at,output,n));
+            assert(!memcmp(output,input+at,n*2));at+=n;
+        }
+        agent_clip_t reboot;assert(agent_clip_open(&reboot,&ops)==AGENT_ERR_NOT_FOUND);
+        if(fault==1)memory[32+bytes-2]^=1;
+        if(fault==2)read_budget=0;
+        if(fault==3)write_budget=0;
+        const agent_err_t expected[]={AGENT_OK,AGENT_ERR_CORRUPT,AGENT_ERR_CANCELLED,AGENT_ERR_STORAGE};
+        assert(agent_clip_finish(&clip)==expected[fault] && clip.ready==!fault);
+        read_budget=write_budget=-1;
+        if(!fault)verify(input,1643);
+        else assert(agent_clip_open(&reboot,&ops)==AGENT_ERR_NOT_FOUND);
+    }
+}
 int main(void)
 {
+    provisional_eof_checks();
     /* A previously committed version2 record still opens and decodes exactly. */
     memset(memory,255,sizeof(memory));memory[32]=255;memory[33]=memory[34]=0;
     memset(memory+35,63,127);header(2,128,130);

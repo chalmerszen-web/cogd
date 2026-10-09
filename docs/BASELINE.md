@@ -1,6 +1,8 @@
+> 2026-09-19 整理说明：旧录音、实验数据、日志、Flash 备份和旧二进制已列入用户要求的清理范围；自动删除被审批拦截，待执行根目录的清理入口。实际结果见 history/cleanup-result.json。清理后下文旧 artifacts 路径仅记录历史来源。完整源码在 [history](../history/README.md)，当前安装包在 firmware/latest；历史测试结论及未完成验收不变。
+
 # 升级基线记录：0.6.0-upgrade
 
-当前固件已增加 0.6.1-lcd，见 [屏幕时钟报告](LCD_CLOCK_REPORT.md)。本页保留 0.6.0 的原始验收与可回滚镜像记录。
+当前固件为 0.6.2-repair，见 [修复报告](LCD_FIX_REPORT.md)。本页保留 0.6.0 的原始验收记录；可重编译源码位于 history。
 
 2026-09-15 已安装到 COM5 的 ESP-HI / ESP32-C3 revision v0.4。用户接受同板1000次对比后，采用调优B的语音链路并保留精简Agent的GPIO和内存改进。本项目称为升级版，不代表Espressif官方发布或认证。
 

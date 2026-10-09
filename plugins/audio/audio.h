@@ -61,4 +61,7 @@ void agent_mic_meter_feed(agent_mic_meter_t *meter, uint16_t raw);
 uint32_t agent_mic_meter_rms(const agent_mic_meter_t *meter);
 uint32_t agent_audio_phase_step(unsigned midi);
 int32_t agent_audio_sine(uint32_t phase);
+/* Wake160ms / completion180ms; initialize the state once, then render chunks. */
+typedef struct { uint32_t phase; unsigned sample,rate; bool finish; } agent_cue_t;
+size_t agent_cue_render(agent_cue_t *cue,int16_t *pcm,size_t capacity,unsigned volume);
 #endif

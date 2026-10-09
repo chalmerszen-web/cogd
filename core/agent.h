@@ -11,7 +11,7 @@ _Static_assert(__STDC_VERSION__ == 201112L, "Project firmware must compile as C1
 #define AGENT_ABI_MAJOR 5
 #define AGENT_INPUT_MAX 2048u
 #define AGENT_REQUEST_MAX 24576u
-#define AGENT_HTTP_REQUEST_MAX (160u * 1024u)
+#define AGENT_HTTP_REQUEST_MAX (352u * 1024u) /* Streamed context or 10-second WAV; not a RAM buffer. */
 #define AGENT_STREAM_MAX 6144u
 #define AGENT_ARGS_MAX 4096u
 #define AGENT_ANSWER_MAX 8192u

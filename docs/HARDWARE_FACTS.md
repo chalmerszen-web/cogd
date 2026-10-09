@@ -12,7 +12,7 @@
 | BOOT / buttons | GPIO9 / GPIO0 / GPIO1 | BSP; M2 exposes input-only GPIO reads/waits |
 | Microphone | GPIO2 / ADC1 CH2, nominal 16 kHz | M1 live sampling and on/off tests; analog parts unverified |
 | Speaker | PDM GPIO6/7, PA GPIO3, nominal 24 kHz | M1 playback; user confirmed normal melody and suitable volume |
-| LCD | MOSI4 / SCLK5 / DC10, CS/RST NC, 160x80 | Pinned BSP register profile implemented in 0.6.1; visible pixels pending |
+| LCD | MOSI4 / SCLK5 / DC10, no software CS/RST, 160x80 | 0.12.4-clock: original camera images confirm upright HH:MM and changing seconds at bottom right, including after software reboot; fitted controller ID still unverified |
 | Body | GPIO18/19/20/21 | BSP; excluded from firmware |
 | PCB revision / BOM | UNKNOWN | Cannot infer from USB identifiers |
 | LCD controller | CONFLICT / UNCONFIRMED | ST7789 macro conflicts with ST7735-named custom table passed to ILI9341 API; fitted chip not read back |

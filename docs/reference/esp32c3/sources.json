@@ -1,0 +1,152 @@
+{
+  "retrieved_date": "2026-10-10",
+  "idf": "v6.1",
+  "references": [
+    {
+      "file": "esp32-c3_datasheet_en.pdf",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-c3_datasheet_en.pdf",
+      "resolved_url": "https://documentation.espressif.com/esp32-c3_datasheet_en.pdf",
+      "bytes": 900158,
+      "sha256": "833fc000b4b3c3d39c496fcbd597fed5806956503ce7390b19cc8ae82f19f968",
+      "status": "OK",
+      "title": "esp32-c3_datasheet_en.pdf"
+    },
+    {
+      "file": "esp32-c3_technical_reference_manual_en.pdf",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-c3_technical_reference_manual_en.pdf",
+      "resolved_url": "https://documentation.espressif.com/esp32-c3_technical_reference_manual_en.pdf",
+      "bytes": 9623028,
+      "sha256": "90ef825653e7a2657dc1bb294041aace9f9b69da87d775c2f1b5bd11eb317423",
+      "status": "OK",
+      "title": "esp32-c3_technical_reference_manual_en.pdf"
+    },
+    {
+      "file": "gpio.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/gpio.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/gpio.html",
+      "bytes": 200261,
+      "sha256": "f6bfd07b98a02c5151c54be4eb4cd1900be71c6dd359ab79f73445b115481cfa",
+      "status": "OK",
+      "title": "GPIO &amp; RTC GPIO - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "ledc.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/ledc.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/ledc.html",
+      "bytes": 196262,
+      "sha256": "3c27aaf627fbe9e47062e2b8d089f0a05b40d72e75a944ad524f621da09049fe",
+      "status": "OK",
+      "title": "LED Control (LEDC) - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "rmt.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/rmt.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/rmt.html",
+      "bytes": 318012,
+      "sha256": "3517a82870af7b22c9bf22abc89ee4dc850a7b64d7f87d32305d3fad871b277b",
+      "status": "OK",
+      "title": "Remote Control Transceiver (RMT) - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "i2s.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/i2s.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/i2s.html",
+      "bytes": 505210,
+      "sha256": "816bfc39f58438c968f318369cd58fa2684eeb5f11986ce06875b04478996d10",
+      "status": "OK",
+      "title": "Inter-IC Sound (I2S) - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "adc_continuous.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/adc_continuous.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/adc_continuous.html",
+      "bytes": 279,
+      "sha256": "1a89aaa96d921b30f68d3e02a1c1843039784f06c6ed303572392576732b1609",
+      "status": "OK",
+      "title": "adc_continuous.html"
+    },
+    {
+      "file": "spi_master.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/spi_master.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/spi_master.html",
+      "bytes": 233254,
+      "sha256": "1dac06563107cbcf9c4afa63a92a8a7ed9938d01998f316268c3efbef478d05b",
+      "status": "OK",
+      "title": "SPI Master Driver - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "lcd.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/lcd/index.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/lcd/index.html",
+      "bytes": 119058,
+      "sha256": "ec891baa9d5c906fedd06768ddb8248318e214c26b69d0d30fc72f8f52d4d21e",
+      "status": "OK",
+      "title": "LCD - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "usb_serial_jtag.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/usb_serial_jtag.html",
+      "status": "FAILED",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "file": "usb_console.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-guides/usb-serial-jtag-console.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-guides/usb-serial-jtag-console.html",
+      "bytes": 31599,
+      "sha256": "49c9b87b62750d055514ca11b8be2f1fff2e418df7101905d583cccd7663ec4d",
+      "status": "OK",
+      "title": "USB Serial/JTAG Controller Console - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "system_time.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/system/system_time.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/system/system_time.html",
+      "bytes": 91310,
+      "sha256": "a428272e58110844146c10d01f9ae43d001070933042bd39c376c3167d8ef4e5",
+      "status": "OK",
+      "title": "System Time - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "esp_timer.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/system/esp_timer.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/system/esp_timer.html",
+      "bytes": 117853,
+      "sha256": "feae384e4a73b2ff314639f77317d173018de058af93b448b3e1c185ce20c4ed",
+      "status": "OK",
+      "title": "ESP Timer (High Resolution Timer) - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "nvs_flash.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/storage/nvs_flash.html",
+      "resolved_url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/storage/nvs_flash.html",
+      "bytes": 275846,
+      "sha256": "8c24985d6dc5880ebf3d2c4fb56202f9a02ef8123e9824cc51fa0ad569a4c423",
+      "status": "OK",
+      "title": "Non-Volatile Storage Library - ESP32-C3 -  &mdash; ESP-IDF Programming Guide v6.1 documentation"
+    },
+    {
+      "file": "adc_continuous_api.html",
+      "url": "https://docs.espressif.com/projects/esp-idf/en/v6.1/esp32c3/api-reference/peripherals/adc/adc_continuous.html",
+      "status": "OK",
+      "bytes": 134936,
+      "sha256": "4888a0245a05f2cbd82fb5a2be5f2fd069261820d7d6557424a789de294b4a74"
+    },
+    {
+      "file": "usb_serial_jtag.h",
+      "url": "https://raw.githubusercontent.com/espressif/esp-idf/v6.1/components/esp_driver_usb_serial_jtag/include/driver/usb_serial_jtag.h",
+      "status": "OK",
+      "bytes": 3920,
+      "sha256": "d61d95e0e01f6f93580f9faee4c8ea968e3d516037f32c1aedbc588d8170b310"
+    },
+    {
+      "file": "ST7735S_V1.1_20111121.pdf",
+      "url": "https://files.waveshare.com/upload/e/e2/ST7735S_V1.1_20111121.pdf",
+      "bytes": 2629323,
+      "sha256": "37b93f0ef6d5ac0bafe76868e048b67dce682d92fb9bf5a7ca8d8070a45fcc94",
+      "status": "OK",
+      "title": "Sitronix ST7735S v1.1 datasheet; hosted by Waveshare",
+      "note": "Profile reference only; actual panel controller remains unverified."
+    }
+  ]
+}

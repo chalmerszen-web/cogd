@@ -62,11 +62,15 @@ static agent_err_t pin_set(void *ctx,unsigned pin,const agent_pin_state_t *next)
             error=ledc_stop(LEDC_LOW_SPEED_MODE,(ledc_channel_t)i,0); if(error) return AGENT_ERR_TOOL;
             pwm_pin[i]=-1;
         }
-        error=gpio_reset_pin((gpio_num_t)pin);
+        /* gpio_reset_pin enables a pull-up. On this no-CS LCD profile an
+         * unintended SCLK rising edge can shift every subsequent byte.
+         * gpio_config below selects GPIO mode and disables interrupts itself. */
+        if(pin!=5) error=gpio_reset_pin((gpio_num_t)pin);
         if(!error && next->mode==AGENT_GPIO_WRITE) error=gpio_set_level((gpio_num_t)pin,next->value);
         gpio_config_t config={.pin_bit_mask=1ULL<<pin,
             .mode=next->mode==AGENT_GPIO_READ?GPIO_MODE_INPUT:GPIO_MODE_INPUT_OUTPUT,
-            .pull_up_en=next->mode==AGENT_GPIO_READ && modes(pin)==AGENT_GPIO_READ?GPIO_PULLUP_ENABLE:GPIO_PULLUP_DISABLE};
+            .pull_up_en=next->mode==AGENT_GPIO_READ && modes(pin)==AGENT_GPIO_READ?GPIO_PULLUP_ENABLE:GPIO_PULLUP_DISABLE,
+            .pull_down_en=pin==5 && next->mode==AGENT_GPIO_READ?GPIO_PULLDOWN_ENABLE:GPIO_PULLDOWN_DISABLE};
         if(!error) error=gpio_config(&config);
     } else return AGENT_ERR_ARGUMENT;
     if(!error) state[pin]=*next;

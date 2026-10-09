@@ -68,11 +68,14 @@ static bool ink(const char *text,unsigned count,unsigned scale,unsigned x,unsign
 }
 void agent_display_row(const agent_display_config_t *c,const char hms[9],const char zone[10],unsigned y,uint8_t row[320])
 {
+    (void)zone;
     for(unsigned x=0;x<AGENT_DISPLAY_WIDTH;++x) {
         bool on=c->mode==AGENT_DISPLAY_FILL;
         if(c->mode==AGENT_DISPLAY_CLOCK && y<AGENT_DISPLAY_HEIGHT) {
-            if(x>=8 && y>=32) on=ink(hms,8,3,x-8,y-32);
-            if(x>=53 && y>=12 && y<19) on=ink(zone,9,1,x-53,y-12);
+            /* 145x35 HH:MM, centered; 22x14 seconds, four pixels from edges.
+             * Both regions use the same immutable frame-time snapshot. */
+            if(x>=7 && y>=16) on=ink(hms,5,5,x-7,y-16);
+            if(x>=134 && y>=62) on=ink(hms+6,2,2,x-134,y-62);
         }
         uint16_t rgb=on?c->foreground:c->background;
         row[2*x]=(uint8_t)(rgb>>8);row[2*x+1]=(uint8_t)rgb;

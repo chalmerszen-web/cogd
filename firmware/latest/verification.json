@@ -1,0 +1,77 @@
+{
+  "firmware": "0.12.4-clock",
+  "ready_for_user_test": true,
+  "application_sha256": "917c869e62681c1c0f2197a69311c2233fdffcb086c887ee48a21acbe04a000d",
+  "application_verified": true,
+  "data_partitions_unchanged": true,
+  "usb_request_exact_match": true,
+  "request_flash_unchanged": true,
+  "host_tests_passed": 4,
+  "device_clock_test_passed": true,
+  "automatic_boot_and_reboot_clock": true,
+  "context_statistics_unchanged": true,
+  "dc_output_enabled_between_transfers": true,
+  "sclk_input_idle_pulldown": true,
+  "visual_observation": {
+    "firmware": "0.12.4-clock",
+    "confirmed": true,
+    "status": "PASS",
+    "acceptance_scope": "Requested USB-to-Codex clock workflow and visible clock layout only; unrelated voice quality is not reaccepted.",
+    "observer": "assistant visual inspection of original Insta360 Link JPEGs",
+    "human_claim": false,
+    "orientation": "upright with USB connector at top",
+    "large_hhmm": true,
+    "seconds_small_bottom_right": true,
+    "seconds_advance_visible": true,
+    "software_reboot_visible": true,
+    "frames": [
+      {
+        "file": "device-test-0.12.4/boot.jpg",
+        "hhmm": "04:16",
+        "seconds": "09"
+      },
+      {
+        "file": "device-test-0.12.4/sample-0.jpg",
+        "hhmm": "04:16",
+        "seconds": "11"
+      },
+      {
+        "file": "device-test-0.12.4/sample-1.jpg",
+        "hhmm": "04:16",
+        "seconds": "13"
+      },
+      {
+        "file": "device-test-0.12.4/sample-2.jpg",
+        "hhmm": "04:16",
+        "seconds": "15"
+      },
+      {
+        "file": "device-test-0.12.4/sample-3.jpg",
+        "hhmm": "04:16",
+        "seconds": "17"
+      },
+      {
+        "file": "device-test-0.12.4/sample-4.jpg",
+        "hhmm": "04:16",
+        "seconds": "19"
+      },
+      {
+        "file": "device-test-0.12.4/sample-5.jpg",
+        "hhmm": "04:16",
+        "seconds": "21"
+      },
+      {
+        "file": "device-test-0.12.4/reboot.jpg",
+        "hhmm": "04:16",
+        "seconds": "29"
+      }
+    ],
+    "limitations": [
+      "The fitted LCD controller ID is not read back.",
+      "Cold power cycle was physically confirmed for 0.12.3; 0.12.4 changes only orientation and window and was verified after flash and software reboot.",
+      "A fixed green highlight remains in camera views including display-off; suspected reflection, not established as a pixel defect."
+    ]
+  },
+  "serial_closed": true,
+  "backup_directory": "C:\\Users\\PC\\Documents\\ChatGPT\\cogd\\backups\\kws-clock-20261009-201447"
+}

@@ -133,17 +133,44 @@ agent_err_t agent_json_write_bytes(void *ctx,const char *data,size_t length)
     agent_json_writer_t *w=ctx; append(w,data,length); return w->error;
 }
 
+static size_t escaped(unsigned char ch,char out[6])
+{
+    if(ch=='"' || ch=='\\') {out[0]='\\';out[1]=(char)ch;return 2;}
+    if(ch<0x20) {
+        static const char hex[]="0123456789abcdef";
+        memcpy(out,"\\u00",4);out[4]=hex[ch>>4];out[5]=hex[ch&15];return 6;
+    }
+    return 0;
+}
+
 void agent_json_quote(agent_json_writer_t *writer, const char *text)
 {
     if (!text || !agent_utf8_valid(text, strlen(text))) { writer->error = AGENT_ERR_JSON; return; }
     append(writer, "\"", 1);
     for (const unsigned char *p = (const unsigned char *)text; *p && !writer->error; ++p) {
-        char escape[7];
-        if (*p == '"' || *p == '\\') { escape[0] = '\\'; escape[1] = (char)*p; append(writer, escape, 2); }
-        else if (*p < 0x20) { snprintf(escape, sizeof(escape), "\\u%04x", *p); append(writer, escape, 6); }
+        char escape[6];size_t n=escaped(*p,escape);
+        if(n)append(writer,escape,n);
         else append(writer, (const char *)p, 1);
     }
     append(writer, "\"", 1);
+}
+
+agent_err_t agent_json_write_quote(const char *text,agent_write_fn write,void *ctx)
+{
+    if(!write)return AGENT_ERR_ARGUMENT;
+    if(!text || !agent_utf8_valid(text,strlen(text)))return AGENT_ERR_JSON;
+    agent_err_t error=write(ctx,"\"",1);
+    while(!error && *text) {
+        char escape[6];size_t n=escaped((unsigned char)*text,escape);
+        if(n) {error=write(ctx,escape,n);++text;}
+        else {
+            const char *start=text;
+            do {++text;} while(*text && (unsigned char)*text>=0x20 &&
+                *text!='"' && *text!='\\' && (size_t)(text-start)<4096);
+            error=write(ctx,start,(size_t)(text-start));
+        }
+    }
+    return error?error:write(ctx,"\"",1);
 }
 
 void agent_json_printf(agent_json_writer_t *writer, const char *format, ...)

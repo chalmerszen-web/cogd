@@ -1,0 +1,2 @@
+# Optional diagnostic build only; normal firmware leaves hooks disabled.
+CONFIG_HEAP_USE_HOOKS=y

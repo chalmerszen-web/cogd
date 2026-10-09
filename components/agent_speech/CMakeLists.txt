@@ -1,5 +1,26 @@
 get_filename_component(agent_root "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
 set(sr "${agent_root}/third_party/esp-sr")
+option(AGENT_KWS_C11 "Dedicated C11 KWS backend (probe unless trained model selected)" OFF)
+option(AGENT_KWS_STABLE_WAKE "Require128ms consecutive C11 keyword confirmation" OFF)
+option(AGENT_KEYWORD_PCM "Bounded USB export of actual C3 keyword input (diagnostic only)" OFF)
+if(AGENT_KWS_C11)
+  idf_component_register(SRCS "speech_kws.c" INCLUDE_DIRS "."
+    PRIV_INCLUDE_DIRS "${sr}/include/esp32c3"
+    REQUIRES kws_c11 esp_timer heap)
+  if(CONFIG_AGENT_AUDIO)
+    target_compile_definitions(${COMPONENT_LIB} PUBLIC AGENT_KWS_C11=1)
+    if(AGENT_KEYWORD_PCM)
+      target_compile_definitions(${COMPONENT_LIB} PUBLIC AGENT_KEYWORD_PCM=1)
+    endif()
+    if(AGENT_KWS_STABLE_WAKE)
+      target_compile_definitions(${COMPONENT_LIB} PUBLIC AGENT_KWS_STABLE_WAKE=1)
+    endif()
+  endif()
+  target_compile_options(${COMPONENT_LIB} PRIVATE -std=c11 -Wall -Wextra -Werror -fstack-usage)
+  add_prebuilt_library(agent_esp_audio_processor "${sr}/lib/esp32c3/libesp_audio_processor.a")
+  target_link_libraries(${COMPONENT_LIB} INTERFACE agent_esp_audio_processor)
+  return()
+endif()
 set(AGENT_WAKE_MODEL "wn9s_hilexin")
 set(wake_word "嗨乐鑫")
 option(AGENT_KEYWORD_VERIFY "Fixed feature check for Hilexin raw hits" ON)
@@ -14,7 +35,9 @@ if(NOT EXISTS "${sr}/lib/esp32c3/libwakenet.a")
 endif()
 idf_component_register(SRCS "speech_backend.c" "${sr}/src/model_path.c" "${sr}/src/esp_sr_debug.c" ${agent_keyword_sources}
   INCLUDE_DIRS "." "${CMAKE_CURRENT_BINARY_DIR}" "${sr}/include/esp32c3" "${sr}/src/include" "${agent_root}/third_party/cjson" ${agent_keyword_includes}
-  REQUIRES esp_partition spiffs esp_timer espressif__esp-dsp espressif__dl_fft
+  # IDF expands requirements before project cache options are visible. The
+  # unused archive has no referenced symbols and adds no runtime storage.
+  REQUIRES kws_c11 esp_partition spiffs esp_timer espressif__esp-dsp espressif__dl_fft
   PRIV_REQUIRES spi_flash)
 configure_file("${CMAKE_CURRENT_LIST_DIR}/wake_model_config.h.in" "${CMAKE_CURRENT_BINARY_DIR}/wake_model_config.h" @ONLY)
 set(model "${CMAKE_CURRENT_BINARY_DIR}/wake_model.bin")

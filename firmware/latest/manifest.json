@@ -1,0 +1,31 @@
+{
+  "firmware": "0.12.4-clock",
+  "phase": "clock",
+  "chip": "esp32c3",
+  "app_offset": 65536,
+  "accepted": true,
+  "acceptance_scope": "USB device request to Codex and visible clock only",
+  "release_status": "clock_validated",
+  "files": {
+    "esp_hi_agent.bin": {
+      "bytes": 1532000,
+      "sha256": "917c869e62681c1c0f2197a69311c2233fdffcb086c887ee48a21acbe04a000d"
+    },
+    "partition-table.bin": {
+      "bytes": 3072,
+      "sha256": "03135fff90b8a4983a4a7a758018626dc296756ac79578e5df9c7b8eb64b3179"
+    }
+  },
+  "source_sha256": "c91208b5ac092a83c3323f3c5b8b4d6f674664ce079137dc21676d05aa37ceb9",
+  "source_files_verified": 898,
+  "build_command": "tools/build_clock.ps1",
+  "idf_commit": "fff9895c82d744c7237be8847347bdd1b07c6643",
+  "history_budget_bytes": 204800,
+  "evidence": "docs/CLOCK_LCD_REPAIR_REPORT.md",
+  "limitations": [
+    "Physical LCD controller identity remains unverified.",
+    "No external RTC; cold boot needs time synchronization.",
+    "Existing voice quality limitations are unchanged.",
+    "No autonomous persistent USB-to-Codex bridge installed."
+  ]
+}

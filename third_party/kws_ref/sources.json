@@ -1,0 +1,10 @@
+{
+  "repository": "https://github.com/google-research/google-research",
+  "commit": "5b09c22d73a9d35eb6c5d2a99b95677a45053466",
+  "license": "Apache-2.0",
+  "purpose": "Architecture reference only; not linked or imported",
+  "files": {
+    "ds_tc_resnet.py": "f8a5af369aeb5f786d9714e47c89a2516e0b318fdb194839efce7554d7b71025",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  }
+}

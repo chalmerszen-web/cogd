@@ -11,6 +11,9 @@ def main():
     parser.add_argument('--port',default='COM5')
     parser.add_argument('--cloud',action='store_true')
     parser.add_argument('--cloud-only',action='store_true')
+    parser.add_argument('--version',default='0.6.3-context')
+    parser.add_argument('--wake-model',default='wn9s_hilexin')
+    parser.add_argument('--trained-kws',action='store_true',help='Require a trained C11 model rather than the untrained probe')
     args=parser.parse_args()
     args.cloud=args.cloud or args.cloud_only
     if args.output.exists():parser.error('Output must be new')
@@ -63,8 +66,18 @@ def main():
                                 if expected:assert expected in line,(text,line)
                                 else:assert not line.startswith('@error'),(text,line)
                                 if chat:
+                                    # A status query can legitimately return the
+                                    # earlier job this harness intentionally
+                                    # cancelled. It is not a failed new tool call.
+                                    known_cancelled={obj.get('job') for previous in report['commands'][:-1]
+                                        for obj in previous.get('objects',[])
+                                        if obj.get('state')=='cancelled' and obj.get('error')=='cancelled'}
                                     for tool in row['tools']:
-                                        assert isinstance(tool['payload'],dict) and tool['payload'].get('error') in (None,'','ok'),tool
+                                        payload=tool['payload']
+                                        historical=(isinstance(payload,dict) and tool['name']=='device_control_status'
+                                            and payload.get('state')=='cancelled' and payload.get('error')=='cancelled'
+                                            and payload.get('job') in known_cancelled)
+                                        assert isinstance(payload,dict) and (payload.get('error') in (None,'','ok') or historical),tool
                                     for name in required_tools:
                                         assert any(t['name']==name and isinstance(t['payload'],dict) and t['payload'].get('error') in (None,'','ok') for t in row['tools']),name
                                 return row['objects'][-1] if row['objects'] else row
@@ -90,7 +103,7 @@ def main():
             report['context_before']=command('agent context stats',query=True)
             initial_audio=command('agent audio status',query=True)
             initial_light=command('agent light get',query=True)
-            assert report['before']['version']=='0.6.0-upgrade' and not report['before']['busy']
+            assert report['before']['version']==args.version and not report['before']['busy']
             command('agent wake off');command('agent mic off')
             if not args.cloud_only:
                 command('agent control capabilities',query=True)
@@ -126,13 +139,23 @@ def main():
                 command('agent audio volume '+str(initial_audio['volume']))
                 command('agent wake on')
                 wake=poll('agent wake status',lambda x:x.get('enabled',False) and x.get('state')=='listening' and x.get('error')=='ok')
-                assert wake['model']=='wn9s_hilexin' and 'keyword' in wake and 'verify' in wake
+                assert wake['model']==args.wake_model and 'verify' in wake
+                if args.wake_model=='wn9s_hilexin': assert 'keyword' in wake
+                else:
+                    assert 'keyword' not in wake
+                    assert ('untrained' not in wake['word'])==args.trained_kws
+                    profile=command('agent kws profile',query=True)
+                    assert profile['trained']==args.trained_kws
                 time.sleep(.3);command('agent wake off')
                 poll('agent wake status',lambda x:not x.get('enabled',False))
             if args.cloud:
-                command('agent chat 请先查询设备能力，只操作GPIO10：设高、读取确认，再恢复input。不要操作其他引脚或音频。',chat=True,required_tools=('device_gpio_set','device_gpio_get'))
+                command('agent wake on')
+                poll('agent wake status',lambda x:x.get('state')=='listening' and x.get('error')=='ok')
+                command('agent chat 这是直接GPIO工具回归：请按顺序调用device_gpio_set把GPIO10设为output且value为1，调用device_gpio_get确认，再调用device_gpio_set恢复input。不要使用device_control_run或其他引脚、灯光、音频。',chat=True,required_tools=('device_gpio_set','device_gpio_get'))
+                poll('agent wake status',lambda x:x.get('state')=='listening' and x.get('error')=='ok')
                 assert gpio(10)['mode']=='input'
                 command('agent chat --no-stream 请查询能力，提交仅GPIO10输出高和灯光3,2,1、等待100毫秒的短定时计划，然后查询计划状态。不要操作其他引脚或音频。',chat=True,required_tools=('device_control_run',))
+                poll('agent wake status',lambda x:x.get('state')=='listening' and x.get('error')=='ok')
                 poll('agent control status',lambda x:not x.get('active',False))
                 assert gpio(10)['mode']=='input'
             report['complete']=True

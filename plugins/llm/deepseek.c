@@ -35,13 +35,34 @@ agent_err_t agent_messages_raw(agent_messages_t *messages, const char *json)
     return AGENT_OK;
 }
 
+static agent_err_t message_fields(const char *role,const char *content,const char *call_id,
+                                 agent_write_fn write,void *ctx)
+{
+    agent_err_t error=write(ctx,"\"role\":",7);
+    if(!error)error=agent_json_write_quote(role,write,ctx);
+    if(!error)error=write(ctx,",\"content\":",11);
+    if(!error)error=agent_json_write_quote(content,write,ctx);
+    if(!error && call_id) {
+        error=write(ctx,",\"tool_call_id\":",16);
+        if(!error)error=agent_json_write_quote(call_id,write,ctx);
+    }
+    return error;
+}
+
+agent_err_t agent_message_write(const char *role,const char *content,const char *call_id,
+                               agent_write_fn write,void *ctx)
+{
+    if(!write)return AGENT_ERR_ARGUMENT;
+    agent_err_t error=write(ctx,"{",1);
+    if(!error)error=message_fields(role,content,call_id,write,ctx);
+    return error?error:write(ctx,"}",1);
+}
+
 agent_err_t agent_messages_add(agent_messages_t *messages, const char *role, const char *content, const char *call_id)
 {
     agent_json_writer_t w;
     start_message(messages, &w);
-    agent_json_raw(&w, "\"role\":"); agent_json_quote(&w, role);
-    agent_json_raw(&w, ",\"content\":"); agent_json_quote(&w, content);
-    if (call_id) { agent_json_raw(&w, ",\"tool_call_id\":"); agent_json_quote(&w, call_id); }
+    if(!w.error)w.error=message_fields(role,content,call_id,agent_json_write_bytes,&w);
     return end_message(messages, &w);
 }
 
@@ -70,8 +91,8 @@ agent_err_t agent_messages_assistant(agent_messages_t *messages, const agent_llm
     return end_message(messages, &w);
 }
 
-agent_err_t agent_deepseek_compose(bool stream,agent_body_fn messages,void *messages_ctx,
-                                  agent_body_fn tools,void *tools_ctx,agent_write_fn write,void *write_ctx)
+static agent_err_t compose(bool stream,agent_body_fn messages,void *messages_ctx,
+                           agent_body_fn tools,void *tools_ctx,agent_write_fn write,void *write_ctx,bool final)
 {
     if (!messages || !write) return AGENT_ERR_ARGUMENT;
     char prefix[192];
@@ -88,7 +109,20 @@ agent_err_t agent_deepseek_compose(bool stream,agent_body_fn messages,void *mess
     if (!error) error = messages(messages_ctx, write, write_ctx);
     if (!error && tools) error = write(write_ctx, ",\"tools\":", 9);
     if (!error && tools) error = tools(tools_ctx, write, write_ctx);
+    if (!error && final) error = write(write_ctx, ",\"tool_choice\":\"none\"", 21);
     return error ? error : write(write_ctx, "}", 1);
+}
+
+agent_err_t agent_deepseek_compose(bool stream,agent_body_fn messages,void *messages_ctx,
+                                  agent_body_fn tools,void *tools_ctx,agent_write_fn write,void *write_ctx)
+{
+    return compose(stream,messages,messages_ctx,tools,tools_ctx,write,write_ctx,false);
+}
+
+agent_err_t agent_deepseek_compose_final(bool stream,agent_body_fn messages,void *messages_ctx,
+                                        agent_write_fn write,void *write_ctx)
+{
+    return compose(stream,messages,messages_ctx,NULL,NULL,write,write_ctx,true);
 }
 
 static agent_err_t message_value(void *ctx, agent_write_fn write, void *write_ctx)

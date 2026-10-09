@@ -1,3 +1,5 @@
+> 2026-09-19 整理说明：旧录音、实验数据、日志、Flash 备份和旧二进制已列入用户要求的清理范围；自动删除被审批拦截，待执行根目录的清理入口。实际结果见 history/cleanup-result.json。清理后下文旧 artifacts 路径仅记录历史来源。完整源码在 [history](../history/README.md)，当前安装包在 firmware/latest；历史测试结论及未完成验收不变。
+
 # Local PCM clip storage
 
 All fields are little endian. The clip partition remains 448 KiB at 0x390000.

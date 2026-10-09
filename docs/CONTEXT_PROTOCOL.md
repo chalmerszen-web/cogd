@@ -18,6 +18,10 @@ Compaction first checks that retained records plus a new snapshot fit. It erases
 
 The snapshot stores Lamport time, pull cursor, local ACK sequence/record watermark, mode, exact seen ranges and mutable-key winners including tombstones. M2 adds optional history-budget and summary fields; old snapshots still load with defaults. Retention keeps all unacknowledged events and recent complete turns; CLOUD keeps one cached turn after compaction, LOCAL/HYBRID up to 128. LOCAL disables sync without discarding pending records. A full retry log returns `full` when retention prevents reclamation.
 
+0.6.3 adds an explicit LOCAL maintenance exception for records already exported to the user's computer. `tools/archive_context.py --apply` reads and CRC-checks the context partition, writes every event and a SHA-256 manifest to `context-archives/`, flushes and verifies the archive, then submits the matching generation and record boundary over USB. An existing verified archive may be supplied with `--archive <directory>`. Close the serial terminal before running this script. No cloud upload or recording capture occurs.
+
+The USB command is `agent context archive {"generation":G,"through_record":R}`. It is not an LLM tool. The snapshot's optional `archived_record` field is independent of cloud ACK and defaults to zero for old snapshots. Compaction can reclaim exported records through R while retaining the recent 128 complete turns, memory/tombstone winners, the summary and its available source turn. All records after R remain protected. A stale generation, locked prompt or non-LOCAL mode is rejected; a previously committed archive boundary is idempotent. The archive watermark and replacement bank commit together; interrupted rotation keeps the old bank valid. This operation is not automatic history eviction: unexported pending records continue to block reclamation when full. Older archived conversations remain on the computer and are no longer available to on-device search.
+
 ## Merge and sync
 
 Exact sorted disjoint sequence ranges provide bounded deduplication for remote peers, including out-of-order arrivals. Exhausting remote peer/range/key capacity reports `full`. A newly received remote event updates `lamport = max(local, remote) + 1`; replaying a duplicate does not advance it.
@@ -39,5 +43,12 @@ DIRECT selects a contiguous suffix of complete turn records from at most 128 des
 `agent.context.search` accepts `query` (1–128 UTF-8 bytes), `before` (optional exclusive WAL sequence) and `limit` (1–3). Query is an exact event ID or phrase (ASCII case-insensitive; other UTF-8 bytes exact). It searches all retained events, including history outside the descriptor window, returning newest-first excerpts of at most 240 bytes with event IDs and `record_seq`. It is not semantic embedding search; reclaimed acknowledged history cannot be found.
 
 Search and summary source scans have a ten-second deadline, checked with cancellation between records. They do not share the two-second budget of immediate device tools: a CRC-checked scan of a nearly full 1 MiB bank took 3.062 seconds on the actual C3. A timeout/error never becomes a successful tool result.
+
+0.11.30 preserves the 240-byte excerpt limit while including a paired answer
+when a user message matched: `user: ...` followed by `assistant: ...`. The latter
+is the last nonempty assistant text before another user message; tool payloads
+and later questions are excluded. Both portions truncate on UTF-8 boundaries.
+This fixes repeated questions crowding out their answers in recent search hits.
+Exact phrase matching, ordering, pagination, event IDs and retained data are unchanged.
 
 `summary` events contain `text` (1–1536 UTF-8 bytes) and `through_seq`. Local creation verifies that this sequence identifies a completed local turn. Snapshot state keeps summary text, source device/sequence and winner identity. The deterministic winner order is `(lamport, device_id, device_seq)`. Summaries enter prompts as labeled assistant history with provenance; the LLM may call get/set tools but no automatic background summarizer is installed. Original pending events remain retained.

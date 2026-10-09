@@ -117,14 +117,15 @@ static const char *const schemas[AGENT_TOOL_COUNT] = {
     "{\"type\":\"function\",\"function\":{\"name\":\"agent_context_summary_get\","
     "\"description\":\"Read the durable historical summary and its source boundary. A summary can omit details; search source events to verify.\"," EMPTY_SCHEMA "}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"agent_context_summary_set\","
-    "\"description\":\"Save a concise summary of known earlier dialogue, including decisions, user preferences and unfinished work. Do not invent facts. At most 1536 UTF-8 bytes. through_seq=0 covers through this device's latest completed turn.\","
+    "\"description\":\"Save durable user facts/decisions/work; preserve other user facts, omit hardware status/capabilities. Do not rewrite unchanged facts. Aim <256 characters; max1536 UTF-8 bytes. No invented facts. through_seq: omit/0 for latest completed turn.\","
     "\"parameters\":{\"type\":\"object\",\"properties\":{\"text\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":1536},"
     "\"through_seq\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":9007199254740991}},\"required\":[\"text\"],\"additionalProperties\":false}}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"device_control_capabilities\","
     "\"description\":\"Discover GPIO modes and resource owners before a plan. Owner 0=free,1=system,2=direct tool,3=plan,4=storage,5=LCD. Never infer spare GPIO.\"," EMPTY_SCHEMA "}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"device_control_validate\",\"description\":\"Check a plan without effects. " PLAN_DESCRIPTION "\"," PLAN_SCHEMA "}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"device_control_run\",\"description\":\"Validate and start a plan asynchronously. Returns accepted job, not completion; poll control status. " PLAN_DESCRIPTION "\"," PLAN_SCHEMA "}}",
-    "{\"type\":\"function\",\"function\":{\"name\":\"device_control_status\",\"description\":\"Read job state, step, completed repeats and error. active=true during cleanup means resources remain held.\"," EMPTY_SCHEMA "}}",
+    "{\"type\":\"function\",\"function\":{\"name\":\"device_control_status\",\"description\":\"Read job state, step, completed repeats and error. Waits locally up to 15000ms by default for an active job; use wait_ms=0 for an immediate check. active=true still means unfinished, including cleanup. Do not rapidly repeat status calls.\","
+    "\"parameters\":{\"type\":\"object\",\"properties\":{\"wait_ms\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":15000}},\"additionalProperties\":false}}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"device_control_cancel\",\"description\":\"Request cancellation and restoration of the active local action plan. Check status for completion.\"," EMPTY_SCHEMA "}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"device_gpio_get\",\"description\":\"Read an exposed pin level, mode and PWM configuration. Query capabilities first. Busy during a control plan.\","
     "\"parameters\":{\"type\":\"object\",\"properties\":{\"pin\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":21}},\"required\":[\"pin\"],\"additionalProperties\":false}}}",
@@ -143,16 +144,74 @@ static const char *const schemas[AGENT_TOOL_COUNT] = {
     "\"background\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":65535}},\"required\":[\"mode\"],\"additionalProperties\":false}}}"
 };
 
-agent_err_t agent_tools_write(void *ctx,agent_write_fn write,void *write_ctx)
+static agent_err_t write_tools(bool voice,agent_write_fn write,void *write_ctx)
 {
-    (void)ctx;
     if(!write) return AGENT_ERR_ARGUMENT;
     agent_err_t error=write(write_ctx,"[",1);
     for(unsigned i=0;!error && i<AGENT_TOOL_COUNT;++i) {
         if(i) error=write(write_ctx,",",1);
-        if(!error) error=write(write_ctx,schemas[i],strlen(schemas[i]));
+        if(!error && voice) {
+            /* These immutable schemas all start parameters with properties.
+             * Insert one optional control field without a DOM/heap allocation. */
+            static const char key[]="\"properties\":{";
+            const char *at=strstr(schemas[i],key);
+            if(!at)return AGENT_ERR_CONFIG;
+            at+=sizeof(key)-1;
+            error=write(write_ctx,schemas[i],(size_t)(at-schemas[i]));
+            static const char hint[]="\"final_batch\":{\"type\":\"boolean\"}";
+            if(!error)error=write(write_ctx,hint,sizeof(hint)-1);
+            if(!error && *at!='}')error=write(write_ctx,",",1);
+            if(!error)error=write(write_ctx,at,strlen(at));
+        } else if(!error) error=write(write_ctx,schemas[i],strlen(schemas[i]));
     }
     return error?error:write(write_ctx,"]",1);
+}
+agent_err_t agent_tools_write(void *ctx,agent_write_fn write,void *write_ctx)
+{ (void)ctx;return write_tools(false,write,write_ctx); }
+agent_err_t agent_tools_voice_write(void *ctx,agent_write_fn write,void *write_ctx)
+{ (void)ctx;return write_tools(true,write,write_ctx); }
+
+agent_err_t agent_tools_voice_hint(agent_llm_reply_t *reply,char *scratch,size_t capacity,bool *last)
+{
+    if(!reply || !scratch || !last || !reply->done || !reply->call_count ||
+       reply->call_count>AGENT_TOOLS_MAX || capacity<sizeof(reply->arguments)+5)return AGENT_ERR_ARGUMENT;
+    if(reply->args_used>sizeof(reply->arguments))return AGENT_ERR_PROTOCOL;
+    *last=false;bool hinted=false;size_t used=0;
+    unsigned offsets[AGENT_TOOLS_MAX];
+    for(unsigned i=0;i<reply->call_count;++i) {
+        if(reply->calls[i].offset>=reply->args_used)return AGENT_ERR_PROTOCOL;
+        const char *original=agent_call_arguments(reply,i);
+        if(!memchr(original,0,reply->args_used-reply->calls[i].offset))return AGENT_ERR_PROTOCOL;
+        cJSON *root=agent_json_parse(original,strlen(original));
+        if(!root)return AGENT_ERR_JSON;
+        if(!cJSON_IsObject(root)) {cJSON_Delete(root);return AGENT_ERR_ARGUMENT;}
+        const cJSON *value=cJSON_GetObjectItemCaseSensitive(root,"final_batch");
+        if(value && (!cJSON_IsBool(value) || (cJSON_IsTrue(value) && i+1!=reply->call_count))) {
+            cJSON_Delete(root);return AGENT_ERR_ARGUMENT;
+        }
+        if(value) {
+            hinted=cJSON_IsTrue(value);
+            cJSON_DeleteItemFromObjectCaseSensitive(root,"final_batch");
+            if(!cJSON_PrintPreallocated(root,scratch+used,(int)(capacity-used),false)) {
+                cJSON_Delete(root);return AGENT_ERR_LIMIT;
+            }
+        } else {
+            size_t n=strlen(original)+1;
+            if(n>capacity-used) {cJSON_Delete(root);return AGENT_ERR_LIMIT;}
+            memcpy(scratch+used,original,n);
+        }
+        cJSON_Delete(root);
+        size_t bytes=strlen(scratch+used)+1;
+        if(bytes>sizeof(reply->arguments)-used)return AGENT_ERR_LIMIT;
+        offsets[i]=(unsigned)used;used+=bytes;
+    }
+    /* No mutation of the original call arguments until the whole batch is valid. */
+    memcpy(reply->arguments,scratch,used);reply->args_used=(unsigned)used;
+    for(unsigned i=0;i<reply->call_count;++i) {
+        reply->calls[i].offset=offsets[i];
+        reply->calls[i].length=(i+1<reply->call_count?offsets[i+1]:used)-offsets[i]-1;
+    }
+    *last=hinted;return AGENT_OK;
 }
 
 static int find_tool(const char *name)
@@ -170,6 +229,7 @@ const agent_tool_description_t *agent_tool_find(const char *name)
 
 typedef union {
     uint8_t rgb[3];
+    unsigned wait_ms;
     agent_display_config_t display;
     struct { unsigned pin; agent_pin_state_t state; } gpio;
     struct { char query[129]; uint64_t before; unsigned limit; } search;
@@ -182,7 +242,7 @@ typedef union {
 #endif
 } tool_arguments_t;
 
-static agent_err_t validate(int index, const char *arguments, tool_arguments_t *args)
+static agent_err_t validate(int index, const char *arguments, tool_arguments_t *args,char *detail,size_t capacity)
 {
     if (index < 0) return AGENT_ERR_TOOL;
     if (!arguments || strlen(arguments) > AGENT_ARGS_MAX) return AGENT_ERR_LIMIT;
@@ -198,6 +258,12 @@ static agent_err_t validate(int index, const char *arguments, tool_arguments_t *
     if (!cJSON_IsObject(root)) goto done;
     unsigned count = 0;
     for (const cJSON *item = root->child; item; item = item->next) ++count;
+    if(index==TOOL_PLAN_STATUS) {
+        const cJSON *wait=cJSON_GetObjectItemCaseSensitive(root,"wait_ms");
+        uint64_t value=15000;
+        if(count!=(unsigned)(wait!=NULL) || (wait && !agent_json_uint(wait,15000,&value))) goto done;
+        args->wait_ms=(unsigned)value;error=AGENT_OK;goto done;
+    }
     if(index==TOOL_GPIO_GET || index==TOOL_GPIO_SET) {
         uint64_t pin,value,hz;
         if(!agent_json_uint(cJSON_GetObjectItemCaseSensitive(root,"pin"),21,&pin)) goto done;
@@ -235,7 +301,12 @@ static agent_err_t validate(int index, const char *arguments, tool_arguments_t *
     if(index==TOOL_SUMMARY_SET) {
         const char *text=agent_json_string(root,"text");
         const cJSON *through=cJSON_GetObjectItemCaseSensitive(root,"through_seq");
-        if(!text || !*text || strlen(text)>AGENT_SUMMARY_MAX || count!=1u+(through!=NULL)) goto done;
+        if(detail && capacity)snprintf(detail,capacity,"Use nonempty text (<=1536 UTF-8 bytes); only optional through_seq, an integer 0..9007199254740991. Omit it or use 0 for latest completed turn.");
+        if(!text || !*text || count!=1u+(through!=NULL)) goto done;
+        if(strlen(text)>AGENT_SUMMARY_MAX) {
+            if(detail && capacity)snprintf(detail,capacity,"text is %u UTF-8 bytes; limit %u. Shorten durable user facts; omit hardware status/capabilities.",(unsigned)strlen(text),AGENT_SUMMARY_MAX);
+            goto done;
+        }
         args->summary.through=0;
         if(through && !agent_json_uint(through,AGENT_SEQ_MAX,&args->summary.through)) goto done;
         strcpy(args->summary.text,text); error=AGENT_OK; goto done;
@@ -274,7 +345,7 @@ agent_err_t agent_tools_validate(const agent_llm_reply_t *reply)
     }
     for (unsigned i = 0; i < reply->call_count; ++i) {
         tool_arguments_t args;
-        agent_err_t error = validate(find_tool(reply->calls[i].name), agent_call_arguments(reply, i), &args);
+        agent_err_t error = validate(find_tool(reply->calls[i].name), agent_call_arguments(reply, i), &args,NULL,0);
         if (error) return error;
     }
     return AGENT_OK;
@@ -287,7 +358,7 @@ agent_err_t agent_tool_check(const char *name,const char *arguments,char *detail
 #if AGENT_ENABLE_AUDIO
     if(index==TOOL_SONG) return agent_song_parse_detail(arguments,&args.song,detail,capacity);
 #endif
-    return validate(index,arguments,&args);
+    return validate(index,arguments,&args,detail,capacity);
 }
 
 agent_err_t agent_tool_invoke(const agent_tool_ops_t *ops, const char *name, const char *arguments,
@@ -296,7 +367,7 @@ agent_err_t agent_tool_invoke(const agent_tool_ops_t *ops, const char *name, con
     if(!ops || !output || !capacity) return AGENT_ERR_ARGUMENT;
     int index = find_tool(name);
     tool_arguments_t args = {0};
-    agent_err_t error = validate(index, arguments, &args);
+    agent_err_t error = validate(index, arguments, &args,NULL,0);
     if (error) return error;
     uint64_t start = ops->now_ms ? ops->now_ms(ops->ctx) : 0;
     switch (index) {
@@ -344,6 +415,17 @@ agent_err_t agent_tool_invoke(const agent_tool_ops_t *ops, const char *name, con
         } else {
             if(index==TOOL_PLAN_RUN) error=agent_control_submit(ops->control,&args.plan);
             if(index==TOOL_PLAN_CANCEL) agent_control_cancel(ops->control);
+            if(index==TOOL_PLAN_STATUS && ops->wait_ms) {
+                unsigned job=atomic_load(&ops->control->job);
+                for(unsigned waited=0;;) {
+                    if(ops->cancelled && ops->cancelled(ops->ctx)) {error=AGENT_ERR_CANCELLED;break;}
+                    if(!atomic_load(&ops->control->active) || atomic_load(&ops->control->job)!=job ||
+                       waited>=args.wait_ms || (ops->now_ms && ops->now_ms(ops->ctx)-start>=args.wait_ms)) break;
+                    unsigned delay=args.wait_ms-waited;
+                    if(delay>25)delay=25;
+                    ops->wait_ms(delay);waited+=delay;
+                }
+            }
             if(!error) error=agent_control_status(ops->control,output,capacity);
         }
         break;
@@ -365,6 +447,7 @@ agent_err_t agent_tool_invoke(const agent_tool_ops_t *ops, const char *name, con
     default: return AGENT_ERR_TOOL;
     }
     unsigned budget=(index==TOOL_SEARCH || index==TOOL_SUMMARY_SET)?AGENT_CONTEXT_SCAN_MS:2000;
+    if(index==TOOL_PLAN_STATUS)budget+=args.wait_ms;
     if (!error && ops->now_ms && ops->now_ms(ops->ctx) - start > budget) return AGENT_ERR_TIMEOUT;
     if (!error && (index == TOOL_LIGHT_GET || index == TOOL_LIGHT_SET)) {
         int size = snprintf(output, capacity, "{\"ok\":true,\"r\":%u,\"g\":%u,\"b\":%u}", args.rgb[0], args.rgb[1], args.rgb[2]);

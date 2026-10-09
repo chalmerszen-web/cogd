@@ -1,3 +1,5 @@
+> 2026-09-19 整理说明：旧录音、实验数据、日志、Flash 备份和旧二进制已列入用户要求的清理范围；自动删除被审批拦截，待执行根目录的清理入口。实际结果见 history/cleanup-result.json。清理后下文旧 artifacts 路径仅记录历史来源。完整源码在 [history](../history/README.md)，当前安装包在 firmware/latest；历史测试结论及未完成验收不变。
+
 > 历史阶段记录：安装状态和产物路径描述当时的结果。2026-09-15 已采纳调优语音链路并清理旧中间材料；当前入口见 [BASELINE.md](BASELINE.md) 与 [CLEANUP_REPORT.md](CLEANUP_REPORT.md)。1000次正式证据完整保留，其数据不等于合并版的新1000次测试。
 
 # ESP-HI 同板 1000 次语音对照实验

@@ -1,0 +1,404 @@
+{
+  "ek": {
+    "old": {
+      "threshold_q8": 268,
+      "languages": {
+        "zh": {
+          "total": 45,
+          "hits": 44,
+          "misses": 1,
+          "recall": 0.9777777777777777,
+          "source_groups": {
+            "kokoro-v1-zf_xiaoxiao": {
+              "total": 21,
+              "hits": 21,
+              "early_clips": 0,
+              "recall": 1.0
+            },
+            "kokoro-v1-zm_yunxia": {
+              "total": 24,
+              "hits": 23,
+              "early_clips": 0,
+              "recall": 0.9583333333333334
+            }
+          },
+          "latency_ms_p50": 86.0,
+          "latency_ms_p95": 91.0,
+          "latency_ms_max": 96.0
+        },
+        "yue": {
+          "total": 33,
+          "hits": 33,
+          "misses": 0,
+          "recall": 1.0,
+          "source_groups": {
+            "kokoro-v1-zf_xiaoxiao": {
+              "total": 12,
+              "hits": 12,
+              "early_clips": 0,
+              "recall": 1.0
+            },
+            "kokoro-v1-zm_yunxia": {
+              "total": 21,
+              "hits": 21,
+              "early_clips": 0,
+              "recall": 1.0
+            }
+          },
+          "latency_ms_p50": 93.5,
+          "latency_ms_p95": 135.1,
+          "latency_ms_max": 215.0
+        }
+      },
+      "negative_clips": 636,
+      "negative_events": 4,
+      "negative_triggered_clips": 4,
+      "premature_events": 0,
+      "acceptance": "Frozen endpoint uncertainty lower bound through upper bound +800ms; latency relative to upper bound",
+      "negative_groups": {
+        "hard_negative": {
+          "total": 92,
+          "triggered": 3
+        },
+        "natural_negative": {
+          "total": 388,
+          "triggered": 1
+        },
+        "paired_negative": {
+          "total": 156,
+          "triggered": 0
+        }
+      },
+      "partial_word_triggers": 0,
+      "partial_word_total": 11,
+      "device": {
+        "threshold_q8": 268,
+        "languages": {
+          "zh": {
+            "total": 8,
+            "hits": 8,
+            "misses": 0,
+            "recall": 1.0,
+            "source_groups": {
+              "kokoro-v1-zf_xiaoxiao": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              },
+              "kokoro-v1-zm_yunxia": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              }
+            },
+            "latency_ms_p50": 47.0,
+            "latency_ms_p95": 79.0,
+            "latency_ms_max": 79.0
+          },
+          "yue": {
+            "total": 8,
+            "hits": 8,
+            "misses": 0,
+            "recall": 1.0,
+            "source_groups": {
+              "kokoro-v1-zf_xiaoxiao": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              },
+              "kokoro-v1-zm_yunxia": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              }
+            },
+            "latency_ms_p50": 71.0,
+            "latency_ms_p95": 184.72499999999997,
+            "latency_ms_max": 215.0
+          }
+        },
+        "negative_clips": 72,
+        "negative_events": 0,
+        "negative_triggered_clips": 0,
+        "premature_events": 0,
+        "acceptance": "Frozen endpoint uncertainty lower bound through upper bound +800ms; latency relative to upper bound",
+        "negative_groups": {
+          "natural_negative": {
+            "total": 28,
+            "triggered": 0
+          },
+          "hard_negative": {
+            "total": 12,
+            "triggered": 0
+          },
+          "paired_negative": {
+            "total": 32,
+            "triggered": 0
+          }
+        },
+        "partial_word_triggers": 0,
+        "partial_word_total": 3
+      }
+    },
+    "compact": {
+      "threshold_q8": 268,
+      "languages": {
+        "zh": {
+          "total": 16,
+          "hits": 15,
+          "misses": 1,
+          "recall": 0.9375,
+          "source_groups": {
+            "kokoro-v1-zf_xiaoxiao": {
+              "total": 8,
+              "hits": 8,
+              "early_clips": 0,
+              "recall": 1.0
+            },
+            "kokoro-v1-zm_yunxia": {
+              "total": 8,
+              "hits": 7,
+              "early_clips": 0,
+              "recall": 0.875
+            }
+          },
+          "latency_ms_p50": 67.0,
+          "latency_ms_p95": 115.39999999999999,
+          "latency_ms_max": 121.0
+        },
+        "yue": {
+          "total": 0,
+          "hits": 0,
+          "misses": 0,
+          "recall": null,
+          "source_groups": {},
+          "latency_ms_p50": null,
+          "latency_ms_p95": null,
+          "latency_ms_max": null
+        }
+      },
+      "negative_clips": 0,
+      "negative_events": 0,
+      "negative_triggered_clips": 0,
+      "premature_events": 0,
+      "acceptance": "Frozen endpoint uncertainty lower bound through upper bound +800ms; latency relative to upper bound",
+      "negative_groups": {},
+      "partial_word_triggers": 0,
+      "partial_word_total": 0
+    },
+    "library_sha256": "c36ef5d30cfd049319beb4ef222352cbd323d2f789b995c641ce0f1a02cbee42"
+  },
+  "el": {
+    "old": {
+      "threshold_q8": 268,
+      "languages": {
+        "zh": {
+          "total": 45,
+          "hits": 45,
+          "misses": 0,
+          "recall": 1.0,
+          "source_groups": {
+            "kokoro-v1-zf_xiaoxiao": {
+              "total": 21,
+              "hits": 21,
+              "early_clips": 0,
+              "recall": 1.0
+            },
+            "kokoro-v1-zm_yunxia": {
+              "total": 24,
+              "hits": 24,
+              "early_clips": 0,
+              "recall": 1.0
+            }
+          },
+          "latency_ms_p50": 86.0,
+          "latency_ms_p95": 94.99999999999999,
+          "latency_ms_max": 160.0
+        },
+        "yue": {
+          "total": 33,
+          "hits": 33,
+          "misses": 0,
+          "recall": 1.0,
+          "source_groups": {
+            "kokoro-v1-zf_xiaoxiao": {
+              "total": 12,
+              "hits": 12,
+              "early_clips": 0,
+              "recall": 1.0
+            },
+            "kokoro-v1-zm_yunxia": {
+              "total": 21,
+              "hits": 21,
+              "early_clips": 0,
+              "recall": 1.0
+            }
+          },
+          "latency_ms_p50": 93.5,
+          "latency_ms_p95": 135.1,
+          "latency_ms_max": 151.0
+        }
+      },
+      "negative_clips": 636,
+      "negative_events": 5,
+      "negative_triggered_clips": 5,
+      "premature_events": 0,
+      "acceptance": "Frozen endpoint uncertainty lower bound through upper bound +800ms; latency relative to upper bound",
+      "negative_groups": {
+        "hard_negative": {
+          "total": 92,
+          "triggered": 3
+        },
+        "natural_negative": {
+          "total": 388,
+          "triggered": 2
+        },
+        "paired_negative": {
+          "total": 156,
+          "triggered": 0
+        }
+      },
+      "partial_word_triggers": 0,
+      "partial_word_total": 11,
+      "device": {
+        "threshold_q8": 268,
+        "languages": {
+          "zh": {
+            "total": 8,
+            "hits": 8,
+            "misses": 0,
+            "recall": 1.0,
+            "source_groups": {
+              "kokoro-v1-zf_xiaoxiao": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              },
+              "kokoro-v1-zm_yunxia": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              }
+            },
+            "latency_ms_p50": 47.0,
+            "latency_ms_p95": 79.0,
+            "latency_ms_max": 79.0
+          },
+          "yue": {
+            "total": 8,
+            "hits": 8,
+            "misses": 0,
+            "recall": 1.0,
+            "source_groups": {
+              "kokoro-v1-zf_xiaoxiao": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              },
+              "kokoro-v1-zm_yunxia": {
+                "total": 4,
+                "hits": 4,
+                "early_clips": 0,
+                "recall": 1.0
+              }
+            },
+            "latency_ms_p50": 53.75,
+            "latency_ms_p95": 131.92499999999998,
+            "latency_ms_max": 151.0
+          }
+        },
+        "negative_clips": 72,
+        "negative_events": 0,
+        "negative_triggered_clips": 0,
+        "premature_events": 0,
+        "acceptance": "Frozen endpoint uncertainty lower bound through upper bound +800ms; latency relative to upper bound",
+        "negative_groups": {
+          "natural_negative": {
+            "total": 28,
+            "triggered": 0
+          },
+          "hard_negative": {
+            "total": 12,
+            "triggered": 0
+          },
+          "paired_negative": {
+            "total": 32,
+            "triggered": 0
+          }
+        },
+        "partial_word_triggers": 0,
+        "partial_word_total": 3
+      }
+    },
+    "compact": {
+      "threshold_q8": 268,
+      "languages": {
+        "zh": {
+          "total": 16,
+          "hits": 15,
+          "misses": 1,
+          "recall": 0.9375,
+          "source_groups": {
+            "kokoro-v1-zf_xiaoxiao": {
+              "total": 8,
+              "hits": 8,
+              "early_clips": 0,
+              "recall": 1.0
+            },
+            "kokoro-v1-zm_yunxia": {
+              "total": 8,
+              "hits": 7,
+              "early_clips": 0,
+              "recall": 0.875
+            }
+          },
+          "latency_ms_p50": 67.0,
+          "latency_ms_p95": 106.69999999999999,
+          "latency_ms_max": 113.0
+        },
+        "yue": {
+          "total": 0,
+          "hits": 0,
+          "misses": 0,
+          "recall": null,
+          "source_groups": {},
+          "latency_ms_p50": null,
+          "latency_ms_p95": null,
+          "latency_ms_max": null
+        }
+      },
+      "negative_clips": 0,
+      "negative_events": 0,
+      "negative_triggered_clips": 0,
+      "premature_events": 0,
+      "acceptance": "Frozen endpoint uncertainty lower bound through upper bound +800ms; latency relative to upper bound",
+      "negative_groups": {},
+      "partial_word_triggers": 0,
+      "partial_word_total": 0
+    },
+    "library_sha256": "a67a8e68168d58c353254aec858b5b18b62c25f89946d90b8313930fdae7a49d"
+  },
+  "complete": true,
+  "gates": {
+    "old_language_nonregression": true,
+    "device_language_nonregression": true,
+    "old_false_nonregression": false,
+    "device_false_nonregression": true,
+    "partial_nonregression": true,
+    "timing_nonregression": true,
+    "compact_nonregression": true
+  },
+  "host_nonregression": false,
+  "threshold_per_mille": 740,
+  "threshold_retuned": false,
+  "source_sha256": "9c682abe0b81cd4b0166947c893303dcdfa25ab5b0204bfc39211825361c6ef9",
+  "data_sha256": "0dd1ee8d697f1d38f36ba451caa6d676e7c10e34ec580695676bbe76ab8926b6",
+  "limitation": "Development source groups; no new independent human acceptance. SAPI excluded from training and checkpoint selection."
+}

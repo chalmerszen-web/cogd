@@ -1,0 +1,14 @@
+{
+  "request_id": "clock-20261010-01",
+  "source": "request-run/request.json",
+  "target_thread": "01a121f1-cd9b-77f0-ad1b-39859a4d6b2b",
+  "result": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"threadId\":\"01a121f1-cd9b-77f0-ad1b-39859a4d6b2b\"}"
+      }
+    ],
+    "isError": false
+  }
+}

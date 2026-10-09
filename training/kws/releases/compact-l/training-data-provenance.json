@@ -1,0 +1,534 @@
+{
+  "complete": true,
+  "seed": 202609221,
+  "base": "/mnt/c/Users/PC/Documents/ChatGPT/cogd/artifacts/kws-phase5/features-weak-logmel",
+  "sources": [
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaobei-1-000-compact2",
+      "source_group": "kokoro-v1-zf_xiaobei",
+      "split": "train",
+      "pcm_sha256": "190048a6300647bbf9b145d727aa4c00693b17d1f87fed49137dd0be2d7ea1ea",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 320,
+      "speech_end_low_sample": 17920,
+      "speech_end_high_sample": 18400,
+      "endpoint_peak_rms": 4527.99340561026,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaobei-1-003-compact2",
+      "source_group": "kokoro-v1-zf_xiaobei",
+      "split": "train",
+      "pcm_sha256": "43296a1b655b5144fe482ce28d5876f8f1565a37928546f4b11568e8dcb892cb",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5600,
+      "speech_end_low_sample": 21920,
+      "speech_end_high_sample": 22240,
+      "endpoint_peak_rms": 7293.1589507736635,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaobei-1-004-compact2",
+      "source_group": "kokoro-v1-zf_xiaobei",
+      "split": "train",
+      "pcm_sha256": "07d8a674ca3838959be5de931648800d692749e51d62446f4f3296665d404580",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 160,
+      "speech_end_low_sample": 15200,
+      "speech_end_high_sample": 15360,
+      "endpoint_peak_rms": 6037.60663001077,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaobei-1-007-compact2",
+      "source_group": "kokoro-v1-zf_xiaobei",
+      "split": "train",
+      "pcm_sha256": "3cb75cf5b913426b1f755396fb24be3fc331056dd19a9c858e6e514c683d7f6f",
+      "transcript": "你好，小妍。",
+      "speech_start_sample": 1760,
+      "speech_end_low_sample": 22560,
+      "speech_end_high_sample": 22720,
+      "endpoint_peak_rms": 3397.380032834125,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunjian-1-000-compact2",
+      "source_group": "kokoro-v1-zm_yunjian",
+      "split": "train",
+      "pcm_sha256": "bf15c8ba7350b614bb55b22e5ab232b0530735350b86b89206e9e828af328e20",
+      "transcript": "你好，小妍。",
+      "speech_start_sample": 1280,
+      "speech_end_low_sample": 20320,
+      "speech_end_high_sample": 20640,
+      "endpoint_peak_rms": 6514.990047478967,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunjian-1-001-compact2",
+      "source_group": "kokoro-v1-zm_yunjian",
+      "split": "train",
+      "pcm_sha256": "705c448e3ca9db119d6c1f18ea0460859e8bf08b2d75600862edcf895343351f",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 1440,
+      "speech_end_low_sample": 20160,
+      "speech_end_high_sample": 20480,
+      "endpoint_peak_rms": 6969.2721844716325,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunjian-1-002-compact2",
+      "source_group": "kokoro-v1-zm_yunjian",
+      "split": "train",
+      "pcm_sha256": "0ea232ef0b82b63ab3fba4d332948ee3d63a254749f9ad57727ba986f066c7cc",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 640,
+      "speech_end_low_sample": 23200,
+      "speech_end_high_sample": 23520,
+      "endpoint_peak_rms": 7461.1142042425545,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunjian-1-003-compact2",
+      "source_group": "kokoro-v1-zm_yunjian",
+      "split": "train",
+      "pcm_sha256": "6dc446ed6978a6d5333499f887272e5f35f2213c9deceb9019d066214e5f832a",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 480,
+      "speech_end_low_sample": 18720,
+      "speech_end_high_sample": 18880,
+      "endpoint_peak_rms": 6528.788658702317,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunjian-1-004-compact2",
+      "source_group": "kokoro-v1-zm_yunjian",
+      "split": "train",
+      "pcm_sha256": "6c5f1461344facb5480162cb9741c51be02e7b5acd080eb18a85bfa74c04e1d5",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 3680,
+      "speech_end_low_sample": 31040,
+      "speech_end_high_sample": 31520,
+      "endpoint_peak_rms": 5140.231508648224,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunjian-1-005-compact2",
+      "source_group": "kokoro-v1-zm_yunjian",
+      "split": "train",
+      "pcm_sha256": "096e36244648695abb2a46fb492e3558ee32841a9fba224386f7b494d482ee1e",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 640,
+      "speech_end_low_sample": 18880,
+      "speech_end_high_sample": 19200,
+      "endpoint_peak_rms": 6426.787776564588,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunjian-1-007-compact2",
+      "source_group": "kokoro-v1-zm_yunjian",
+      "split": "train",
+      "pcm_sha256": "af043f23a4c55fb538887ee32cdae29e34048e372036a0547d1a58faea166c9b",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5440,
+      "speech_end_low_sample": 25440,
+      "speech_end_high_sample": 25760,
+      "endpoint_peak_rms": 6920.976771291029,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoni-1-000-compact2",
+      "source_group": "kokoro-v1-zf_xiaoni",
+      "split": "train",
+      "pcm_sha256": "a4d058a97f9177cb043c1feca76bbcb87cbe9353149db65724a3c0b9d820f281",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 960,
+      "speech_end_low_sample": 17920,
+      "speech_end_high_sample": 18080,
+      "endpoint_peak_rms": 5058.274026286042,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoni-1-003-compact2",
+      "source_group": "kokoro-v1-zf_xiaoni",
+      "split": "train",
+      "pcm_sha256": "09ebc181d91cec4009025f50b516f1381c7429ea936dc0c4fc83d882f55dbd06",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 1920,
+      "speech_end_low_sample": 18880,
+      "speech_end_high_sample": 19040,
+      "endpoint_peak_rms": 15930.91802616064,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoni-1-004-compact2",
+      "source_group": "kokoro-v1-zf_xiaoni",
+      "split": "train",
+      "pcm_sha256": "09c676dd2cfcb7b72fcee9c103ae8e1add7153c603aeefeb25368571ac324a22",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 800,
+      "speech_end_low_sample": 18400,
+      "speech_end_high_sample": 18880,
+      "endpoint_peak_rms": 6411.205760716934,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoni-1-005-compact2",
+      "source_group": "kokoro-v1-zf_xiaoni",
+      "split": "train",
+      "pcm_sha256": "90510b2c68962be33d32d522231a850001573d5362b6ef2fe4e1f1f1833f089d",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5440,
+      "speech_end_low_sample": 19680,
+      "speech_end_high_sample": 20000,
+      "endpoint_peak_rms": 11235.557049496923,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoni-1-006-compact2",
+      "source_group": "kokoro-v1-zf_xiaoni",
+      "split": "train",
+      "pcm_sha256": "37d02c9b4c8b124c112c7cd3e0ce3ac99d2acef32dd1193335f40124e7ebb03d",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 320,
+      "speech_end_low_sample": 29760,
+      "speech_end_high_sample": 30240,
+      "endpoint_peak_rms": 7101.154662271481,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoni-1-007-compact2",
+      "source_group": "kokoro-v1-zf_xiaoni",
+      "split": "train",
+      "pcm_sha256": "98985ffc7ed61d3afca86b1b62929aa012d401f9bd903514f962445e8396ed22",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5760,
+      "speech_end_low_sample": 19680,
+      "speech_end_high_sample": 20160,
+      "endpoint_peak_rms": 9714.703456938354,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxi-1-000-compact2",
+      "source_group": "kokoro-v1-zm_yunxi",
+      "split": "train",
+      "pcm_sha256": "b77098d4cbfac1997357d35e8174c5b7a5e459fa519fa47f6bebad0e21d6d8a6",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 4000,
+      "speech_end_low_sample": 22560,
+      "speech_end_high_sample": 22880,
+      "endpoint_peak_rms": 14484.015313009719,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxi-1-002-compact2",
+      "source_group": "kokoro-v1-zm_yunxi",
+      "split": "train",
+      "pcm_sha256": "fb3a385be2dd54d1d40c671ff695e88052afc79458f3cc63eefa0c81251c5b63",
+      "transcript": "你好，小妍。",
+      "speech_start_sample": 1760,
+      "speech_end_low_sample": 24480,
+      "speech_end_high_sample": 24800,
+      "endpoint_peak_rms": 9336.746746726078,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxi-1-003-compact2",
+      "source_group": "kokoro-v1-zm_yunxi",
+      "split": "train",
+      "pcm_sha256": "e983ef0e3dad3e7eedfe70273a24d5aa0fe66269568aae8203d14225560ba461",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 960,
+      "speech_end_low_sample": 13920,
+      "speech_end_high_sample": 14240,
+      "endpoint_peak_rms": 9729.60918986472,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxi-1-005-compact2",
+      "source_group": "kokoro-v1-zm_yunxi",
+      "split": "train",
+      "pcm_sha256": "6609a539f1b692aade49faa22c4090f92980f12c0a4a990f70000626f8885c4e",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 480,
+      "speech_end_low_sample": 18720,
+      "speech_end_high_sample": 19040,
+      "endpoint_peak_rms": 9829.937465785324,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxi-1-006-compact2",
+      "source_group": "kokoro-v1-zm_yunxi",
+      "split": "train",
+      "pcm_sha256": "58d5915500a6069b30f7ec3111232fe81638f23116601244d218545756831026",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 4480,
+      "speech_end_low_sample": 17600,
+      "speech_end_high_sample": 18080,
+      "endpoint_peak_rms": 9259.145792809399,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxi-1-007-compact2",
+      "source_group": "kokoro-v1-zm_yunxi",
+      "split": "train",
+      "pcm_sha256": "5f28c77f3db81ac604ed7073e08be436ab818fcd8543bac40fb7d2e7f5a037dc",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 2080,
+      "speech_end_low_sample": 15680,
+      "speech_end_high_sample": 16000,
+      "endpoint_peak_rms": 11430.797152320567,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-000-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "24e19c909373aa9b7ab2316d1c15601d05e8ac2767d83cf37c1a4d8ebc01406d",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 480,
+      "speech_end_low_sample": 14880,
+      "speech_end_high_sample": 15200,
+      "endpoint_peak_rms": 10402.681668685243,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-001-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "9929972c3f529209f94807427c0febb07b6724a702d5f0b6eaca7200bb3dbce0",
+      "transcript": "你好，小言。",
+      "speech_start_sample": 640,
+      "speech_end_low_sample": 15360,
+      "speech_end_high_sample": 15680,
+      "endpoint_peak_rms": 8665.718955675287,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-002-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "c16ce7b3257ee2114a9da0b027384b3ec44dafefc5f9a65dedea01192b8d7136",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 320,
+      "speech_end_low_sample": 24000,
+      "speech_end_high_sample": 24320,
+      "endpoint_peak_rms": 9987.303884182156,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-003-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "962b333b5ed5c414db0e090faa615933bf9ef81ac5fefca3be1c3e73bcf69133",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5600,
+      "speech_end_low_sample": 24160,
+      "speech_end_high_sample": 24480,
+      "endpoint_peak_rms": 7730.716416914412,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-004-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "d5a3f75126218477c16d30fcdf1c7004018f70165af398a128c1ce680373c866",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 2240,
+      "speech_end_low_sample": 15520,
+      "speech_end_high_sample": 15840,
+      "endpoint_peak_rms": 11596.043962543865,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-005-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "045a61b50b16679e9758403350e49f9d9ea329cef2c9f9c22f4c70d3c37a623a",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 1600,
+      "speech_end_low_sample": 14880,
+      "speech_end_high_sample": 15040,
+      "endpoint_peak_rms": 10517.83217831745,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-006-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "6b7f0670e5a65d69a55435320821b2aa4684c237f242ae3dc67872889bb1f8e3",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5440,
+      "speech_end_low_sample": 23520,
+      "speech_end_high_sample": 23680,
+      "endpoint_peak_rms": 8785.353353380273,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zf_xiaoxiao-1-007-compact2",
+      "source_group": "kokoro-v1-zf_xiaoxiao",
+      "split": "validation",
+      "pcm_sha256": "66221a34d7e11b1b31c5e8bc630350a7c58cac90dca6d9e522a92259fbca30cf",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 1600,
+      "speech_end_low_sample": 18880,
+      "speech_end_high_sample": 19040,
+      "endpoint_peak_rms": 7849.8775754784865,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-000-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "3dcac8d3787a85fa8a5030205ad674880709673b11a280c9e82d12616b3941a2",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 320,
+      "speech_end_low_sample": 12160,
+      "speech_end_high_sample": 12480,
+      "endpoint_peak_rms": 11184.81936320386,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-001-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "9a14f5b7575b282c913594bf75f3085b1a7512ff57d9ebb6e846231163c5011d",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5280,
+      "speech_end_low_sample": 37600,
+      "speech_end_high_sample": 37920,
+      "endpoint_peak_rms": 7939.553007332969,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-002-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "3066d13235eee245456977c57166fae40d5da12d1009691598d2d0f2e7544df2",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 1600,
+      "speech_end_low_sample": 16800,
+      "speech_end_high_sample": 17120,
+      "endpoint_peak_rms": 8693.086832003348,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-003-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "232cc05adb9d0e9afce83720fafb8fff18201f448e82344fcc6a9cecdbcc6226",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 320,
+      "speech_end_low_sample": 14240,
+      "speech_end_high_sample": 14560,
+      "endpoint_peak_rms": 8226.52161343116,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-004-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "3d667d61b0b4a759679340e900d23f3c335e59bede27112bdd00901d1ea04653",
+      "transcript": "你好，小妍。",
+      "speech_start_sample": 1280,
+      "speech_end_low_sample": 21280,
+      "speech_end_high_sample": 21600,
+      "endpoint_peak_rms": 6619.08307046754,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-005-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "c4782fbcd3d9e074251aa2976bf17bd0117abb3d70b9616ff674ae737a8b820e",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5120,
+      "speech_end_low_sample": 19040,
+      "speech_end_high_sample": 19360,
+      "endpoint_peak_rms": 9166.749533299686,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-006-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "168e5fdde4490246e16e5571b8e1cb2ae5d676a7640f8194e14cd9f1e0d6c8e4",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 640,
+      "speech_end_low_sample": 13440,
+      "speech_end_high_sample": 13760,
+      "endpoint_peak_rms": 7950.127780419633,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    },
+    {
+      "clip_id": "compact-dataset-zh-zm_yunxia-1-007-compact2",
+      "source_group": "kokoro-v1-zm_yunxia",
+      "split": "validation",
+      "pcm_sha256": "2e4c9b4aab95e1df796a1e8b9f2ac42884d304d348b8aca19e8ef86568cf0f3b",
+      "transcript": "你好，小严。",
+      "speech_start_sample": 5440,
+      "speech_end_low_sample": 22720,
+      "speech_end_high_sample": 23040,
+      "endpoint_peak_rms": 5014.780948605831,
+      "endpoint_method": "sustained_energy_30_40db_interval_v1"
+    }
+  ],
+  "rejected": [
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-001-compact2",
+      "reason": "uncertain_end_over_80ms"
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-002-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小爷。"
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-005-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小圆。"
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaobei-1-006-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小圆。"
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunjian-1-006-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小圆。"
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-001-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小爷。"
+    },
+    {
+      "clip_id": "dataset-zh-zf_xiaoni-1-002-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小燕。"
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-001-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小爷。"
+    },
+    {
+      "clip_id": "dataset-zh-zm_yunxi-1-004-compact2",
+      "reason": "asr_not_complete_target",
+      "transcript": "你好，小雅。"
+    }
+  ],
+  "examples": {
+    "train": 621,
+    "validation": 16
+  },
+  "old_prefix_unchanged": true,
+  "new_validation": "Existing validation source groups only; SAPI material excluded from training/selection.",
+  "source_sha256": "1b8ae9392804c50fdcfffc0d3720e00d601061d3616c86ae94c417c4c41305e7",
+  "audit_sha256": "1dd344a48978ca5b4bca3093ffa6e3619772713d33f5229f12510fbfe23c120a",
+  "split_sha256": {
+    "train": "3f598df2468a34a8b6a3f29d7bf6db15c1fa0d32ed0813a2d209ed9c482ab675",
+    "validation": "0dd1ee8d697f1d38f36ba451caa6d676e7c10e34ec580695676bbe76ab8926b6",
+    "test": "267034be23dfdaa2cedf26dbf44407b338570f65000b2418146c3bff1125b103"
+  }
+}

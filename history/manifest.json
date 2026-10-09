@@ -1,0 +1,110 @@
+{
+  "format": 1,
+  "idf_version": "v6.1",
+  "idf_commit": "fff9895c82d744c7237be8847347bdd1b07c6643",
+  "versions": {
+    "0.6.0-upgrade": {
+      "source": {
+        "bytes": 4006805,
+        "sha256": "76a7443fb19bdb0f552fb9eaa075e7ef8c8769fb3fabafa88acc265e0f01136d"
+      },
+      "config": {
+        "bytes": 77292,
+        "sha256": "33d462baac3fbbdd5a66bf538c8f6a830befe00051fedaf30bd74cd8fb91bcfc"
+      },
+      "original_app_sha256": "41d50cc5e50b487cb47e6ba5dd85553f70000ba34d5c236921c286d8823d5bf5",
+      "original_app_bytes": 1447584,
+      "build_options": {
+        "AGENT_MIC_OVERSAMPLE": "ON",
+        "AGENT_MIC_ATTEN_DB": "12",
+        "AGENT_KEYWORD_VERIFY": "ON",
+        "AGENT_BACKGROUND_VERIFY": "ON",
+        "AGENT_PACKED_CLIP": "ON"
+      },
+      "rebuild_verified": true
+    },
+    "0.6.1-lcd": {
+      "source": {
+        "bytes": 4031147,
+        "sha256": "08177fb1e927b58c11a9ca7e8b884a1a5790df827a0792765d26e46012879a61"
+      },
+      "config": {
+        "bytes": 77292,
+        "sha256": "33d462baac3fbbdd5a66bf538c8f6a830befe00051fedaf30bd74cd8fb91bcfc"
+      },
+      "original_app_sha256": "c2fdad71ff43dc4b73e48ab743164f2124d49982662328be966147aea459fb3e",
+      "original_app_bytes": 1479184,
+      "build_options": {
+        "AGENT_MIC_OVERSAMPLE": "ON",
+        "AGENT_MIC_ATTEN_DB": "12",
+        "AGENT_KEYWORD_VERIFY": "ON",
+        "AGENT_BACKGROUND_VERIFY": "ON",
+        "AGENT_PACKED_CLIP": "ON"
+      },
+      "rebuild_verified": true
+    },
+    "0.6.2-repair": {
+      "source": {
+        "bytes": 4045392,
+        "sha256": "51e4faf71184827631e15f42a50a073a34b84fa1b42d88724696e72019d9cf64"
+      },
+      "config": {
+        "bytes": 77688,
+        "sha256": "588e5e8d316896906abb8b6c7751f31ff3418197059745062f88bfd0e54f716d"
+      },
+      "original_app_sha256": "e763177cf7a5625219465bf8a10ff9712ae477163c0f5c6646f6c7ca454ff3b9",
+      "original_app_bytes": 1486432,
+      "build_options": {
+        "AGENT_MIC_OVERSAMPLE": "ON",
+        "AGENT_MIC_ATTEN_DB": "12",
+        "AGENT_KEYWORD_VERIFY": "ON",
+        "AGENT_BACKGROUND_VERIFY": "ON",
+        "AGENT_PACKED_CLIP": "ON"
+      },
+      "rebuild_verified": true
+    },
+    "0.6.3-context": {
+      "source": {
+        "bytes": 4064666,
+        "sha256": "99242ff2bbcb2130efa20e1f186a7f2323926cd922ac5951b23ec807eaa93c69"
+      },
+      "config": {
+        "bytes": 77688,
+        "sha256": "588e5e8d316896906abb8b6c7751f31ff3418197059745062f88bfd0e54f716d"
+      },
+      "original_app_sha256": "3999e26330fb7ea49b7bb32dbbaa3ab3bae0662263176d11b9480e734f4ff263",
+      "original_app_bytes": 1487664,
+      "build_options": {
+        "AGENT_MIC_OVERSAMPLE": "ON",
+        "AGENT_MIC_ATTEN_DB": "12",
+        "AGENT_KEYWORD_VERIFY": "ON",
+        "AGENT_BACKGROUND_VERIFY": "ON",
+        "AGENT_PACKED_CLIP": "ON"
+      },
+      "rebuild_verified": true,
+      "current_source_build_verified": true,
+      "device_app_readback_verified": true,
+      "rebuild_verified_at": "2026-09-21T04:49:30.395257+08:00",
+      "rebuild_evidence": "docs/WAKE_XIAOYAN_PHASE0_REPORT.md"
+    }
+  },
+  "legacy": {
+    "0.5.0-accepted-source.zip": {
+      "bytes": 474357,
+      "sha256": "888646330456acca698738589bb1f8d8dd28ffb121f7fabb0af9ce17031e278c"
+    },
+    "0.5.1-lean-source.zip": {
+      "bytes": 458417,
+      "sha256": "fff05a99ecdf0259340fc8bcd46542e19874e4677e5149dc224f1bcdff6c5a71"
+    },
+    "benchmark-code.zip": {
+      "bytes": 60554,
+      "sha256": "e518266a73bd53baf0189898dcd830eac4516b521c9833b712e097479d4bf1e8"
+    },
+    "experiment-code.zip": {
+      "bytes": 260534,
+      "sha256": "e5a97a757987da75519987b8776d2a087e45be929dbecba6a81d50164e451c9c"
+    }
+  },
+  "legacy_note": "Earlier experimental archives were already partial before this cleanup. Preserved as source references; use complete 0.6.x snapshots for supported rebuild/rollback."
+}
