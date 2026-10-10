@@ -1,0 +1,4241 @@
+PROTEL NETLIST 2.0
+[
+DESIGNATOR
+U1
+FOOTPRINT
+QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm
+PARTTYPE
+ESP32-C3FH4X
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+ESP32-C3FH4X
+PCB Layer
+Default
+Name
+ESP32-C3FH4X
+Designator
+U1
+Symbol
+ESP32-C3FH4X
+Manufacturer Part
+ESP32-C3FH4X
+BOM
+yes
+Unique ID
+ggeSCHU1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+Y1
+FOOTPRINT
+EPSON_FA20H
+PARTTYPE
+FA-20H 40.0000MF10Z-K3
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+FA-20H 40.0000MF10Z-K3
+PCB Layer
+Default
+Name
+40MHz CL10pF +/-10ppm
+Designator
+Y1
+Symbol
+40MHz CL10pF +/-10ppm
+Manufacturer Part
+FA-20H 40.0000MF10Z-K3
+BOM
+yes
+Unique ID
+ggeSCHY1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C1
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C1
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C2
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C2
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C3
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C3
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C4
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C4
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC4
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C5
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10nF
+PCB Layer
+Default
+Name
+10nF
+Designator
+C5
+Symbol
+10nF
+BOM
+yes
+Unique ID
+ggeSCHC5
+Description
+
+
+*
+]
+[
+DESIGNATOR
+L1
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.0nH >=500mA
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+2.0nH >=500mA
+PCB Layer
+Default
+Name
+2.0nH >=500mA
+Designator
+L1
+Symbol
+2.0nH >=500mA
+BOM
+yes
+Unique ID
+ggeSCHL1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C6
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10uF 10V X5R
+PCB Layer
+Default
+Name
+10uF 10V X5R
+Designator
+C6
+Symbol
+10uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC6
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C7
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C7
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC7
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C8
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C8
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC8
+Description
+
+
+*
+]
+[
+DESIGNATOR
+L2
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+24nH
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+24nH
+PCB Layer
+Default
+Name
+24nH
+Designator
+L2
+Symbol
+24nH
+BOM
+yes
+Unique ID
+ggeSCHL2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C9
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+15pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+15pF C0G
+PCB Layer
+Default
+Name
+15pF C0G
+Designator
+C9
+Symbol
+15pF C0G
+BOM
+yes
+Unique ID
+ggeSCHC9
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C10
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+15pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+15pF C0G
+PCB Layer
+Default
+Name
+15pF C0G
+Designator
+C10
+Symbol
+15pF C0G
+BOM
+yes
+Unique ID
+ggeSCHC10
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R1
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k
+PCB Layer
+Default
+Name
+10k
+Designator
+R1
+Symbol
+10k
+BOM
+yes
+Unique ID
+ggeSCHR1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C11
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C11
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC11
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R2
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k
+PCB Layer
+Default
+Name
+10k
+Designator
+R2
+Symbol
+10k
+BOM
+yes
+Unique ID
+ggeSCHR2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R3
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k
+PCB Layer
+Default
+Name
+10k
+Designator
+R3
+Symbol
+10k
+BOM
+yes
+Unique ID
+ggeSCHR3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R4
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100k
+PCB Layer
+Default
+Name
+100k
+Designator
+R4
+Symbol
+100k
+BOM
+yes
+Unique ID
+ggeSCHR4
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R7
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+0R RF tuning link
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+0R RF tuning link
+PCB Layer
+Default
+Name
+0R RF tuning link
+Designator
+R7
+Symbol
+0R RF tuning link
+BOM
+yes
+Unique ID
+ggeSCHR7
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C12
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+DNP RF tuning
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+DNP RF tuning
+PCB Layer
+Default
+Name
+DNP RF tuning
+Designator
+C12
+Symbol
+DNP RF tuning
+BOM
+no
+Unique ID
+ggeSCHC12
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C13
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+DNP RF tuning
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+DNP RF tuning
+PCB Layer
+Default
+Name
+DNP RF tuning
+Designator
+C13
+Symbol
+DNP RF tuning
+BOM
+no
+Unique ID
+ggeSCHC13
+Description
+
+
+*
+]
+[
+DESIGNATOR
+J6
+FOOTPRINT
+U.FL_Hirose_U.FL-R-SMT-1_Vertical
+PARTTYPE
+U.FL-R-SMT-1(10)
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+U.FL-R-SMT-1(10)
+PCB Layer
+Default
+Name
+External 2.4GHz antenna
+Designator
+J6
+Symbol
+External 2.4GHz antenna
+Manufacturer Part
+U.FL-R-SMT-1(10)
+BOM
+yes
+Unique ID
+ggeSCHJ6
+Description
+
+
+*
+]
+[
+DESIGNATOR
+J1
+FOOTPRINT
+GCT_USB4110_GF_A
+PARTTYPE
+USB4110-GF-A
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+USB4110-GF-A
+PCB Layer
+Default
+Name
+USB-C USB2 all-SMT
+Designator
+J1
+Symbol
+USB-C USB2 all-SMT
+Manufacturer Part
+USB4110-GF-A
+BOM
+yes
+Unique ID
+ggeSCHJ1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+D1
+FOOTPRINT
+SOT-23-6
+PARTTYPE
+USBLC6-2SC6
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+USBLC6-2SC6
+PCB Layer
+Default
+Name
+USB ESD
+Designator
+D1
+Symbol
+USB ESD
+Manufacturer Part
+USBLC6-2SC6
+BOM
+yes
+Unique ID
+ggeSCHD1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+U2
+FOOTPRINT
+TSOT-23-6
+PARTTYPE
+AP63200WU-7
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+AP63200WU-7
+PCB Layer
+Default
+Name
+3.392V buck 2A
+Designator
+U2
+Symbol
+3.392V buck 2A
+Manufacturer Part
+AP63200WU-7
+BOM
+yes
+Unique ID
+ggeSCHU2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R8
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+5.1k 1%
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+5.1k 1%
+PCB Layer
+Default
+Name
+5.1k 1%
+Designator
+R8
+Symbol
+5.1k 1%
+BOM
+yes
+Unique ID
+ggeSCHR8
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R9
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+5.1k 1%
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+5.1k 1%
+PCB Layer
+Default
+Name
+5.1k 1%
+Designator
+R9
+Symbol
+5.1k 1%
+BOM
+yes
+Unique ID
+ggeSCHR9
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R10
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+22R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+22R
+PCB Layer
+Default
+Name
+22R
+Designator
+R10
+Symbol
+22R
+BOM
+yes
+Unique ID
+ggeSCHR10
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R11
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+22R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+22R
+PCB Layer
+Default
+Name
+22R
+Designator
+R11
+Symbol
+22R
+BOM
+yes
+Unique ID
+ggeSCHR11
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R32
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+32.4k 0.1%
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+32.4k 0.1%
+PCB Layer
+Default
+Name
+32.4k 0.1%
+Designator
+R32
+Symbol
+32.4k 0.1%
+BOM
+yes
+Unique ID
+ggeSCHR32
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R33
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k 0.1%
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k 0.1%
+PCB Layer
+Default
+Name
+10k 0.1%
+Designator
+R33
+Symbol
+10k 0.1%
+BOM
+yes
+Unique ID
+ggeSCHR33
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C14
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10uF 10V X5R
+PCB Layer
+Default
+Name
+10uF 10V X5R
+Designator
+C14
+Symbol
+10uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC14
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C15
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C15
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC15
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C16
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C16
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC16
+Description
+
+
+*
+]
+[
+DESIGNATOR
+L3
+FOOTPRINT
+L_Coilcraft_XxL4030
+PARTTYPE
+XAL4030-472MEC
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+XAL4030-472MEC
+PCB Layer
+Default
+Name
+4.7uH Isat4.6A
+Designator
+L3
+Symbol
+4.7uH Isat4.6A
+Manufacturer Part
+XAL4030-472MEC
+BOM
+yes
+Unique ID
+ggeSCHL3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C17
+FOOTPRINT
+R_0805_2012Metric
+PARTTYPE
+22uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+22uF 10V X5R
+PCB Layer
+Default
+Name
+22uF 10V X5R
+Designator
+C17
+Symbol
+22uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC17
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C18
+FOOTPRINT
+R_0805_2012Metric
+PARTTYPE
+22uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+22uF 10V X5R
+PCB Layer
+Default
+Name
+22uF 10V X5R
+Designator
+C18
+Symbol
+22uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC18
+Description
+
+
+*
+]
+[
+DESIGNATOR
+J2
+FOOTPRINT
+Molex_52435_2471
+PARTTYPE
+52435-2471
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+52435-2471
+PCB Layer
+Default
+Name
+LCD top-contact FPC24 0.5mm
+Designator
+J2
+Symbol
+LCD top-contact FPC24 0.5mm
+Manufacturer Part
+52435-2471
+BOM
+yes
+Unique ID
+ggeSCHJ2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+U5
+FOOTPRINT
+VSSOP-8_2.3x2mm_P0.5mm
+PARTTYPE
+SN74LVC3G17DCUR
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+SN74LVC3G17DCUR
+PCB Layer
+Default
+Name
+3-channel LCD buffer
+Designator
+U5
+Symbol
+3-channel LCD buffer
+Manufacturer Part
+SN74LVC3G17DCUR
+BOM
+yes
+Unique ID
+ggeSCHU5
+Description
+
+
+*
+]
+[
+DESIGNATOR
+U6
+FOOTPRINT
+SOT-23-5
+PARTTYPE
+TLV70030DDCR
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+TLV70030DDCR
+PCB Layer
+Default
+Name
+3.0V LCD LDO
+Designator
+U6
+Symbol
+3.0V LCD LDO
+Manufacturer Part
+TLV70030DDCR
+BOM
+yes
+Unique ID
+ggeSCHU6
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C19
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C19
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC19
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C20
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C20
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC20
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C21
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C21
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC21
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C22
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C22
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC22
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R12
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+47k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+47k
+PCB Layer
+Default
+Name
+47k
+Designator
+R12
+Symbol
+47k
+BOM
+yes
+Unique ID
+ggeSCHR12
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R13
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k
+PCB Layer
+Default
+Name
+10k
+Designator
+R13
+Symbol
+10k
+BOM
+yes
+Unique ID
+ggeSCHR13
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C23
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C23
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC23
+Description
+
+
+*
+]
+[
+DESIGNATOR
+D2
+FOOTPRINT
+D_SOD-323
+PARTTYPE
+BAT54WS
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+BAT54WS
+PCB Layer
+Default
+Name
+Reset clamp
+Designator
+D2
+Symbol
+Reset clamp
+Manufacturer Part
+BAT54WS
+BOM
+yes
+Unique ID
+ggeSCHD2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R14
+FOOTPRINT
+R_1210_3225Metric
+PARTTYPE
+33R 0.5W
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+33R 0.5W
+PCB Layer
+Default
+Name
+33R 0.5W
+Designator
+R14
+Symbol
+33R 0.5W
+BOM
+yes
+Unique ID
+ggeSCHR14
+Description
+
+
+*
+]
+[
+DESIGNATOR
+U3
+FOOTPRINT
+MSOP-8_3x3mm_P0.65mm
+PARTTYPE
+NS4150B
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+NS4150B
+PCB Layer
+Default
+Name
+NS4150B
+Designator
+U3
+Symbol
+NS4150B
+Manufacturer Part
+NS4150B
+BOM
+yes
+Unique ID
+ggeSCHU3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+J4
+FOOTPRINT
+JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal
+PARTTYPE
+SM02B-SRSS-TB(LF)(SN)
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+SM02B-SRSS-TB(LF)(SN)
+PCB Layer
+Default
+Name
+Speaker 8R >=1W
+Designator
+J4
+Symbol
+Speaker 8R >=1W
+Manufacturer Part
+SM02B-SRSS-TB(LF)(SN)
+BOM
+yes
+Unique ID
+ggeSCHJ4
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R15
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1k
+PCB Layer
+Default
+Name
+1k
+Designator
+R15
+Symbol
+1k
+BOM
+yes
+Unique ID
+ggeSCHR15
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C24
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+4.7nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+4.7nF
+PCB Layer
+Default
+Name
+4.7nF
+Designator
+C24
+Symbol
+4.7nF
+BOM
+yes
+Unique ID
+ggeSCHC24
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R16
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1k
+PCB Layer
+Default
+Name
+1k
+Designator
+R16
+Symbol
+1k
+BOM
+yes
+Unique ID
+ggeSCHR16
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C25
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.2nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+2.2nF
+PCB Layer
+Default
+Name
+2.2nF
+Designator
+C25
+Symbol
+2.2nF
+BOM
+yes
+Unique ID
+ggeSCHC25
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R17
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1k
+PCB Layer
+Default
+Name
+1k
+Designator
+R17
+Symbol
+1k
+BOM
+yes
+Unique ID
+ggeSCHR17
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C26
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1nF
+PCB Layer
+Default
+Name
+1nF
+Designator
+C26
+Symbol
+1nF
+BOM
+yes
+Unique ID
+ggeSCHC26
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R18
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1k
+PCB Layer
+Default
+Name
+1k
+Designator
+R18
+Symbol
+1k
+BOM
+yes
+Unique ID
+ggeSCHR18
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C27
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+4.7nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+4.7nF
+PCB Layer
+Default
+Name
+4.7nF
+Designator
+C27
+Symbol
+4.7nF
+BOM
+yes
+Unique ID
+ggeSCHC27
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R19
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1k
+PCB Layer
+Default
+Name
+1k
+Designator
+R19
+Symbol
+1k
+BOM
+yes
+Unique ID
+ggeSCHR19
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C28
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.2nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+2.2nF
+PCB Layer
+Default
+Name
+2.2nF
+Designator
+C28
+Symbol
+2.2nF
+BOM
+yes
+Unique ID
+ggeSCHC28
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R20
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1k
+PCB Layer
+Default
+Name
+1k
+Designator
+R20
+Symbol
+1k
+BOM
+yes
+Unique ID
+ggeSCHR20
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C29
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1nF
+PCB Layer
+Default
+Name
+1nF
+Designator
+C29
+Symbol
+1nF
+BOM
+yes
+Unique ID
+ggeSCHC29
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C30
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C30
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC30
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C31
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C31
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC31
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R21
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+33k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+33k
+PCB Layer
+Default
+Name
+33k
+Designator
+R21
+Symbol
+33k
+BOM
+yes
+Unique ID
+ggeSCHR21
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R22
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+33k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+33k
+PCB Layer
+Default
+Name
+33k
+Designator
+R22
+Symbol
+33k
+BOM
+yes
+Unique ID
+ggeSCHR22
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C32
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+1uF
+PCB Layer
+Default
+Name
+1uF
+Designator
+C32
+Symbol
+1uF
+BOM
+yes
+Unique ID
+ggeSCHC32
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C33
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C33
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC33
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C34
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10uF 10V X5R
+PCB Layer
+Default
+Name
+10uF 10V X5R
+Designator
+C34
+Symbol
+10uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC34
+Description
+
+
+*
+]
+[
+DESIGNATOR
+U4
+FOOTPRINT
+SOT-23-5
+PARTTYPE
+LMV321IDBVR
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+LMV321IDBVR
+PCB Layer
+Default
+Name
+LMV321IDBVR
+Designator
+U4
+Symbol
+LMV321IDBVR
+Manufacturer Part
+LMV321IDBVR
+BOM
+yes
+Unique ID
+ggeSCHU4
+Description
+
+
+*
+]
+[
+DESIGNATOR
+J3
+FOOTPRINT
+JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal
+PARTTYPE
+SM02B-SRSS-TB(LF)(SN)
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+SM02B-SRSS-TB(LF)(SN)
+PCB Layer
+Default
+Name
+Electret microphone
+Designator
+J3
+Symbol
+Electret microphone
+Manufacturer Part
+SM02B-SRSS-TB(LF)(SN)
+BOM
+yes
+Unique ID
+ggeSCHJ3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R23
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+200R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+200R
+PCB Layer
+Default
+Name
+200R
+Designator
+R23
+Symbol
+200R
+BOM
+yes
+Unique ID
+ggeSCHR23
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C35
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10uF 10V X5R
+PCB Layer
+Default
+Name
+10uF 10V X5R
+Designator
+C35
+Symbol
+10uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC35
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C36
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C36
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC36
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R24
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.2k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+2.2k
+PCB Layer
+Default
+Name
+2.2k
+Designator
+R24
+Symbol
+2.2k
+BOM
+yes
+Unique ID
+ggeSCHR24
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C37
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+22pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+22pF C0G
+PCB Layer
+Default
+Name
+22pF C0G
+Designator
+C37
+Symbol
+22pF C0G
+BOM
+yes
+Unique ID
+ggeSCHC37
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C38
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+4.7uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+4.7uF 10V X5R
+PCB Layer
+Default
+Name
+4.7uF 10V X5R
+Designator
+C38
+Symbol
+4.7uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC38
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R25
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+2k
+PCB Layer
+Default
+Name
+2k
+Designator
+R25
+Symbol
+2k
+BOM
+yes
+Unique ID
+ggeSCHR25
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R26
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+150k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+150k
+PCB Layer
+Default
+Name
+150k
+Designator
+R26
+Symbol
+150k
+BOM
+yes
+Unique ID
+ggeSCHR26
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C39
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+15pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+15pF C0G
+PCB Layer
+Default
+Name
+15pF C0G
+Designator
+C39
+Symbol
+15pF C0G
+BOM
+yes
+Unique ID
+ggeSCHC39
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R27
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100k
+PCB Layer
+Default
+Name
+100k
+Designator
+R27
+Symbol
+100k
+BOM
+yes
+Unique ID
+ggeSCHR27
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R28
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100k
+PCB Layer
+Default
+Name
+100k
+Designator
+R28
+Symbol
+100k
+BOM
+yes
+Unique ID
+ggeSCHR28
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C40
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C40
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC40
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C41
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+4.7uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+4.7uF 10V X5R
+PCB Layer
+Default
+Name
+4.7uF 10V X5R
+Designator
+C41
+Symbol
+4.7uF 10V X5R
+BOM
+yes
+Unique ID
+ggeSCHC41
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R29
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+56k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+56k
+PCB Layer
+Default
+Name
+56k
+Designator
+R29
+Symbol
+56k
+BOM
+yes
+Unique ID
+ggeSCHR29
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R30
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k
+PCB Layer
+Default
+Name
+10k
+Designator
+R30
+Symbol
+10k
+BOM
+yes
+Unique ID
+ggeSCHR30
+Description
+
+
+*
+]
+[
+DESIGNATOR
+J5
+FOOTPRINT
+JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal
+PARTTYPE
+SM04B-SRSS-TB(LF)(SN)
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+SM04B-SRSS-TB(LF)(SN)
+PCB Layer
+Default
+Name
+Wake expansion
+Designator
+J5
+Symbol
+Wake expansion
+Manufacturer Part
+SM04B-SRSS-TB(LF)(SN)
+BOM
+yes
+Unique ID
+ggeSCHJ5
+Description
+
+
+*
+]
+[
+DESIGNATOR
+LED1
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+WS2812B-2020-V6
+PCB Layer
+Default
+Name
+WS2812B-2020-V6
+Designator
+LED1
+Symbol
+WS2812B-2020-V6
+Manufacturer Part
+WS2812B-2020-V6
+BOM
+yes
+Unique ID
+ggeSCHLED1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+LED2
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+WS2812B-2020-V6
+PCB Layer
+Default
+Name
+WS2812B-2020-V6
+Designator
+LED2
+Symbol
+WS2812B-2020-V6
+Manufacturer Part
+WS2812B-2020-V6
+BOM
+yes
+Unique ID
+ggeSCHLED2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+LED3
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+WS2812B-2020-V6
+PCB Layer
+Default
+Name
+WS2812B-2020-V6
+Designator
+LED3
+Symbol
+WS2812B-2020-V6
+Manufacturer Part
+WS2812B-2020-V6
+BOM
+yes
+Unique ID
+ggeSCHLED3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+LED4
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+WS2812B-2020-V6
+PCB Layer
+Default
+Name
+WS2812B-2020-V6
+Designator
+LED4
+Symbol
+WS2812B-2020-V6
+Manufacturer Part
+WS2812B-2020-V6
+BOM
+yes
+Unique ID
+ggeSCHLED4
+Description
+
+
+*
+]
+[
+DESIGNATOR
+SW1
+FOOTPRINT
+SW_SPST_PTS810
+PARTTYPE
+PTS810 SJM 250 SMTR LFS
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+PTS810 SJM 250 SMTR LFS
+PCB Layer
+Default
+Name
+BOOT
+Designator
+SW1
+Symbol
+BOOT
+Manufacturer Part
+PTS810 SJM 250 SMTR LFS
+BOM
+yes
+Unique ID
+ggeSCHSW1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+SW2
+FOOTPRINT
+SW_SPST_PTS810
+PARTTYPE
+PTS810 SJM 250 SMTR LFS
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+PTS810 SJM 250 SMTR LFS
+PCB Layer
+Default
+Name
+RESET
+Designator
+SW2
+Symbol
+RESET
+Manufacturer Part
+PTS810 SJM 250 SMTR LFS
+BOM
+yes
+Unique ID
+ggeSCHSW2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+SW3
+FOOTPRINT
+SW_SPST_PTS810
+PARTTYPE
+PTS810 SJM 250 SMTR LFS
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+PTS810 SJM 250 SMTR LFS
+PCB Layer
+Default
+Name
+WAKE
+Designator
+SW3
+Symbol
+WAKE
+Manufacturer Part
+PTS810 SJM 250 SMTR LFS
+BOM
+yes
+Unique ID
+ggeSCHSW3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R5
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k
+PCB Layer
+Default
+Name
+10k
+Designator
+R5
+Symbol
+10k
+BOM
+yes
+Unique ID
+ggeSCHR5
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R6
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+10k
+PCB Layer
+Default
+Name
+10k
+Designator
+R6
+Symbol
+10k
+BOM
+yes
+Unique ID
+ggeSCHR6
+Description
+
+
+*
+]
+[
+DESIGNATOR
+R31
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100R
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100R
+PCB Layer
+Default
+Name
+100R
+Designator
+R31
+Symbol
+100R
+BOM
+yes
+Unique ID
+ggeSCHR31
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C43
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C43
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC43
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C44
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C44
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC44
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C45
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C45
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC45
+Description
+
+
+*
+]
+[
+DESIGNATOR
+C46
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+100nF
+PCB Layer
+Default
+Name
+100nF
+Designator
+C46
+Symbol
+100nF
+BOM
+yes
+Unique ID
+ggeSCHC46
+Description
+
+
+*
+]
+[
+DESIGNATOR
+TP1
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+GND
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+GND
+PCB Layer
+Default
+Name
+GND
+Designator
+TP1
+Symbol
+GND
+BOM
+yes
+Unique ID
+ggeSCHTP1
+Description
+
+
+*
+]
+[
+DESIGNATOR
+TP2
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
++3V4
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
++3V4
+PCB Layer
+Default
+Name
++3V4
+Designator
+TP2
+Symbol
++3V4
+BOM
+yes
+Unique ID
+ggeSCHTP2
+Description
+
+
+*
+]
+[
+DESIGNATOR
+TP3
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+VBUS
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+VBUS
+PCB Layer
+Default
+Name
+VBUS
+Designator
+TP3
+Symbol
+VBUS
+BOM
+yes
+Unique ID
+ggeSCHTP3
+Description
+
+
+*
+]
+[
+DESIGNATOR
+TP4
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+UART_TX
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+UART_TX
+PCB Layer
+Default
+Name
+UART_TX
+Designator
+TP4
+Symbol
+UART_TX
+BOM
+yes
+Unique ID
+ggeSCHTP4
+Description
+
+
+*
+]
+[
+DESIGNATOR
+TP5
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+UART_RX
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+UART_RX
+PCB Layer
+Default
+Name
+UART_RX
+Designator
+TP5
+Symbol
+UART_RX
+BOM
+yes
+Unique ID
+ggeSCHTP5
+Description
+
+
+*
+]
+[
+DESIGNATOR
+TP6
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+EN
+DESCRIPTION
+
+Component Kind
+Standard
+Add into BOM
+yes
+Convert to PCB
+yes
+Device
+EN
+PCB Layer
+Default
+Name
+EN
+Designator
+TP6
+Symbol
+EN
+BOM
+yes
+Unique ID
+ggeSCHTP6
+Description
+
+
+*
+]
+(
+RF_CHIP 
+U1-1 ESP32-C3FH4X-LNA_IN Passive 
+R7-1 0R RF tuning link-1 Passive 
+C12-1 DNP RF tuning-1 Passive 
+)
+(
+RF_3V4 
+U1-2 ESP32-C3FH4X-VDD3P3 Passive 
+U1-3 ESP32-C3FH4X-VDD3P3 Passive 
+L1-2 2.0nH >=500mA-2 Passive 
+C8-1 1uF-1 Passive 
+)
+(
+WAKE_MOVE 
+U1-4 ESP32-C3FH4X-GPIO0 Passive 
+J5-1 SM04B-SRSS-TB(LF)(SN)-1 Passive 
+SW3-1 PTS810 SJM 250 SMTR LFS-1 Passive 
+R5-2 10k-2 Passive 
+)
+(
+WAKE_AUDIO 
+U1-5 ESP32-C3FH4X-GPIO1 Passive 
+J5-2 SM04B-SRSS-TB(LF)(SN)-2 Passive 
+R6-2 10k-2 Passive 
+)
+(
+MIC_ADC 
+U1-6 ESP32-C3FH4X-GPIO2/ADC1_CH2 Passive 
+C41-2 4.7uF 10V X5R-2 Passive 
+R29-2 56k-2 Passive 
+R30-1 10k-1 Passive 
+)
+(
+EN 
+U1-7 ESP32-C3FH4X-CHIP_EN Passive 
+R1-2 10k-2 Passive 
+C11-1 1uF-1 Passive 
+D2-1 BAT54WS-1 Passive 
+SW2-1 PTS810 SJM 250 SMTR LFS-1 Passive 
+TP6-1 EN-1 Passive 
+)
+(
+PA_EN 
+U1-8 ESP32-C3FH4X-GPIO3 Passive 
+R4-1 100k-1 Passive 
+U3-1 NS4150B-CTRL Passive 
+)
+(
+LCD_MOSI 
+U1-9 ESP32-C3FH4X-GPIO4 Passive 
+U5-1 SN74LVC3G17DCUR-1A Passive 
+)
+(
+LCD_SCLK 
+U1-10 ESP32-C3FH4X-GPIO5 Passive 
+U5-6 SN74LVC3G17DCUR-3A Passive 
+R12-1 47k-1 Passive 
+)
+(
++3V4 
+U1-11 ESP32-C3FH4X-VDD3P3_RTC Passive 
+U1-17 ESP32-C3FH4X-VDD3P3_CPU Passive 
+U1-31 ESP32-C3FH4X-VDDA Passive 
+U1-32 ESP32-C3FH4X-VDDA Passive 
+C1-1 100nF-1 Passive 
+C2-1 100nF-1 Passive 
+C4-1 1uF-1 Passive 
+C5-1 10nF-1 Passive 
+L1-1 2.0nH >=500mA-1 Passive 
+C6-1 10uF 10V X5R-1 Passive 
+C7-1 100nF-1 Passive 
+R1-1 10k-1 Passive 
+R2-1 10k-1 Passive 
+R3-1 10k-1 Passive 
+R32-1 32.4k 0.1%-1 Passive 
+L3-2 XAL4030-472MEC-2 Passive 
+C17-1 22uF 10V X5R-1 Passive 
+C18-1 22uF 10V X5R-1 Passive 
+U6-1 TLV70030DDCR-IN Passive 
+U6-3 TLV70030DDCR-EN Passive 
+C19-1 1uF-1 Passive 
+U3-6 NS4150B-VCC Passive 
+C33-1 100nF-1 Passive 
+C34-1 10uF 10V X5R-1 Passive 
+U4-5 LMV321IDBVR-VCC Passive 
+R23-1 200R-1 Passive 
+C36-1 100nF-1 Passive 
+R27-1 100k-1 Passive 
+R29-1 56k-1 Passive 
+LED1-4 WS2812B-2020-V6-VDD Passive 
+LED2-4 WS2812B-2020-V6-VDD Passive 
+LED3-4 WS2812B-2020-V6-VDD Passive 
+LED4-4 WS2812B-2020-V6-VDD Passive 
+R5-1 10k-1 Passive 
+R6-1 10k-1 Passive 
+C43-1 100nF-1 Passive 
+C44-1 100nF-1 Passive 
+C45-1 100nF-1 Passive 
+C46-1 100nF-1 Passive 
+TP2-1 +3V4-1 Passive 
+)
+(
+PDM_P 
+U1-12 ESP32-C3FH4X-GPIO6 Passive 
+R15-1 1k-1 Passive 
+)
+(
+PDM_N 
+U1-13 ESP32-C3FH4X-GPIO7 Passive 
+R18-1 1k-1 Passive 
+)
+(
+RGB_3V4 
+U1-14 ESP32-C3FH4X-GPIO8/STRAP Passive 
+R3-2 10k-2 Passive 
+R31-1 100R-1 Passive 
+)
+(
+BOOT_N 
+U1-15 ESP32-C3FH4X-GPIO9/BOOT Passive 
+R2-2 10k-2 Passive 
+SW1-1 PTS810 SJM 250 SMTR LFS-1 Passive 
+)
+(
+LCD_DC 
+U1-16 ESP32-C3FH4X-GPIO10 Passive 
+U5-3 SN74LVC3G17DCUR-2A Passive 
+)
+(
+VDD_SPI 
+U1-18 ESP32-C3FH4X-VDD_SPI Passive 
+C3-1 1uF-1 Passive 
+)
+(
+USB_DM_MCU 
+U1-25 ESP32-C3FH4X-GPIO18/USB_D- Passive 
+R10-2 22R-2 Passive 
+)
+(
+USB_DP_MCU 
+U1-26 ESP32-C3FH4X-GPIO19/USB_D+ Passive 
+R11-2 22R-2 Passive 
+)
+(
+UART_RX 
+U1-27 ESP32-C3FH4X-GPIO20/RX Passive 
+TP5-1 UART_RX-1 Passive 
+)
+(
+UART_TX 
+U1-28 ESP32-C3FH4X-GPIO21/TX Passive 
+TP4-1 UART_TX-1 Passive 
+)
+(
+XTAL_N 
+U1-29 ESP32-C3FH4X-XTAL_N Passive 
+Y1-3 FA-20H 40.0000MF10Z-K3-3 Passive 
+C10-1 15pF C0G-1 Passive 
+)
+(
+XTAL_P 
+U1-30 ESP32-C3FH4X-XTAL_P Passive 
+L2-1 24nH-1 Passive 
+)
+(
+GND 
+U1-33 ESP32-C3FH4X-EP/GND Passive 
+Y1-2 FA-20H 40.0000MF10Z-K3-2 Passive 
+Y1-4 FA-20H 40.0000MF10Z-K3-4 Passive 
+C1-2 100nF-2 Passive 
+C2-2 100nF-2 Passive 
+C3-2 1uF-2 Passive 
+C4-2 1uF-2 Passive 
+C5-2 10nF-2 Passive 
+C6-2 10uF 10V X5R-2 Passive 
+C7-2 100nF-2 Passive 
+C8-2 1uF-2 Passive 
+C9-2 15pF C0G-2 Passive 
+C10-2 15pF C0G-2 Passive 
+C11-2 1uF-2 Passive 
+R4-2 100k-2 Passive 
+C12-2 DNP RF tuning-2 Passive 
+C13-2 DNP RF tuning-2 Passive 
+J6-2 U.FL-R-SMT-1(10)-2 Passive 
+J1-A1/B12 USB4110-GF-A-A1/B12 Passive 
+J1-A12/B1 USB4110-GF-A-A12/B1 Passive 
+J1-S1 USB4110-GF-A-S1 Passive 
+J1-S2 USB4110-GF-A-S2 Passive 
+J1-S3 USB4110-GF-A-S3 Passive 
+J1-S4 USB4110-GF-A-S4 Passive 
+D1-2 USBLC6-2SC6-2 Passive 
+U2-4 AP63200WU-7-GND Passive 
+R8-2 5.1k 1%-2 Passive 
+R9-2 5.1k 1%-2 Passive 
+R33-2 10k 0.1%-2 Passive 
+C14-2 10uF 10V X5R-2 Passive 
+C15-2 100nF-2 Passive 
+C17-2 22uF 10V X5R-2 Passive 
+C18-2 22uF 10V X5R-2 Passive 
+J2-24 52435-2471-24 Passive 
+J2-21 52435-2471-21 Passive 
+J2-18 52435-2471-18 Passive 
+J2-15 52435-2471-15 Passive 
+J2-7 52435-2471-7 Passive 
+J2-6 52435-2471-6 Passive 
+J2-5 52435-2471-5 Passive 
+J2-MP 52435-2471-MP Passive 
+U5-4 SN74LVC3G17DCUR-GND Passive 
+U6-2 TLV70030DDCR-GND Passive 
+C19-2 1uF-2 Passive 
+C20-2 1uF-2 Passive 
+C21-2 100nF-2 Passive 
+C22-2 1uF-2 Passive 
+R12-2 47k-2 Passive 
+C23-2 1uF-2 Passive 
+U3-7 NS4150B-GND Passive 
+J4-MP SM02B-SRSS-TB(LF)(SN)-MP Passive 
+C24-2 4.7nF-2 Passive 
+C25-2 2.2nF-2 Passive 
+C26-2 1nF-2 Passive 
+C27-2 4.7nF-2 Passive 
+C28-2 2.2nF-2 Passive 
+C29-2 1nF-2 Passive 
+C32-2 1uF-2 Passive 
+C33-2 100nF-2 Passive 
+C34-2 10uF 10V X5R-2 Passive 
+U4-2 LMV321IDBVR-GND Passive 
+J3-2 SM02B-SRSS-TB(LF)(SN)-2 Passive 
+J3-MP SM02B-SRSS-TB(LF)(SN)-MP Passive 
+C35-2 10uF 10V X5R-2 Passive 
+C36-2 100nF-2 Passive 
+C37-2 22pF C0G-2 Passive 
+R28-2 100k-2 Passive 
+C40-2 100nF-2 Passive 
+R30-2 10k-2 Passive 
+J5-4 SM04B-SRSS-TB(LF)(SN)-4 Passive 
+J5-MP SM04B-SRSS-TB(LF)(SN)-MP Passive 
+LED1-2 WS2812B-2020-V6-GND Passive 
+LED2-2 WS2812B-2020-V6-GND Passive 
+LED3-2 WS2812B-2020-V6-GND Passive 
+LED4-2 WS2812B-2020-V6-GND Passive 
+SW1-2 PTS810 SJM 250 SMTR LFS-2 Passive 
+SW2-2 PTS810 SJM 250 SMTR LFS-2 Passive 
+SW3-2 PTS810 SJM 250 SMTR LFS-2 Passive 
+C43-2 100nF-2 Passive 
+C44-2 100nF-2 Passive 
+C45-2 100nF-2 Passive 
+C46-2 100nF-2 Passive 
+TP1-1 GND-1 Passive 
+)
+(
+XTAL_LOAD 
+Y1-1 FA-20H 40.0000MF10Z-K3-1 Passive 
+L2-2 24nH-2 Passive 
+C9-1 15pF C0G-1 Passive 
+)
+(
+RF_50 
+R7-2 0R RF tuning link-2 Passive 
+C13-1 DNP RF tuning-1 Passive 
+J6-1 U.FL-R-SMT-1(10)-1 Passive 
+)
+(
+VBUS 
+J1-A4/B9 USB4110-GF-A-A4/B9 Passive 
+J1-A9/B4 USB4110-GF-A-A9/B4 Passive 
+D1-5 USBLC6-2SC6-5 Passive 
+U2-2 AP63200WU-7-EN Passive 
+U2-3 AP63200WU-7-VIN Passive 
+C14-1 10uF 10V X5R-1 Passive 
+C15-1 100nF-1 Passive 
+R14-1 33R 0.5W-1 Passive 
+J5-3 SM04B-SRSS-TB(LF)(SN)-3 Passive 
+TP3-1 VBUS-1 Passive 
+)
+(
+CC1 
+J1-A5 USB4110-GF-A-A5 Passive 
+R8-1 5.1k 1%-1 Passive 
+)
+(
+USB_DM 
+J1-B7 USB4110-GF-A-B7 Passive 
+J1-A7 USB4110-GF-A-A7 Passive 
+D1-1 USBLC6-2SC6-1 Passive 
+D1-6 USBLC6-2SC6-6 Passive 
+R10-1 22R-1 Passive 
+)
+(
+USB_DP 
+J1-A6 USB4110-GF-A-A6 Passive 
+J1-B6 USB4110-GF-A-B6 Passive 
+D1-3 USBLC6-2SC6-3 Passive 
+D1-4 USBLC6-2SC6-4 Passive 
+R11-1 22R-1 Passive 
+)
+(
+CC2 
+J1-B5 USB4110-GF-A-B5 Passive 
+R9-1 5.1k 1%-1 Passive 
+)
+(
+BUCK_FB 
+U2-1 AP63200WU-7-FB Passive 
+R32-2 32.4k 0.1%-2 Passive 
+R33-1 10k 0.1%-1 Passive 
+)
+(
+SW_BUCK 
+U2-5 AP63200WU-7-SW Passive 
+C16-2 100nF-2 Passive 
+L3-1 XAL4030-472MEC-1 Passive 
+)
+(
+BST 
+U2-6 AP63200WU-7-BST Passive 
+C16-1 100nF-1 Passive 
+)
+(
++3V0_LCD 
+J2-23 52435-2471-23 Passive 
+J2-22 52435-2471-22 Passive 
+J2-14 52435-2471-14 Passive 
+U5-8 SN74LVC3G17DCUR-VCC Passive 
+U6-5 TLV70030DDCR-OUT Passive 
+C20-1 1uF-1 Passive 
+C21-1 100nF-1 Passive 
+C22-1 1uF-1 Passive 
+R13-1 10k-1 Passive 
+)
+(
+LCD_RESET_N 
+J2-20 52435-2471-20 Passive 
+R13-2 10k-2 Passive 
+C23-1 1uF-1 Passive 
+D2-2 BAT54WS-2 Passive 
+)
+(
+LCD_MOSI_3V0 
+J2-19 52435-2471-19 Passive 
+U5-7 SN74LVC3G17DCUR-1Y Passive 
+)
+(
+LCD_DC_3V0 
+J2-17 52435-2471-17 Passive 
+U5-5 SN74LVC3G17DCUR-2Y Passive 
+)
+(
+LCD_CLK_3V0 
+J2-16 52435-2471-16 Passive 
+U5-2 SN74LVC3G17DCUR-3Y Passive 
+)
+(
+LCD_LEDA 
+J2-8 52435-2471-8 Passive 
+R14-2 33R 0.5W-2 Passive 
+)
+(
+PA_BYPASS 
+U3-2 NS4150B-BYPASS Passive 
+C32-1 1uF-1 Passive 
+)
+(
+PA_INP 
+U3-3 NS4150B-INP Passive 
+R21-2 33k-2 Passive 
+)
+(
+PA_INN 
+U3-4 NS4150B-INN Passive 
+R22-2 33k-2 Passive 
+)
+(
+SPK_N 
+U3-5 NS4150B-VON Passive 
+J4-2 SM02B-SRSS-TB(LF)(SN)-2 Passive 
+)
+(
+SPK_P 
+U3-8 NS4150B-VOP Passive 
+J4-1 SM02B-SRSS-TB(LF)(SN)-1 Passive 
+)
+(
+PDM_P_F1 
+R15-2 1k-2 Passive 
+C24-1 4.7nF-1 Passive 
+R16-1 1k-1 Passive 
+)
+(
+PDM_P_F2 
+R16-2 1k-2 Passive 
+C25-1 2.2nF-1 Passive 
+R17-1 1k-1 Passive 
+)
+(
+PDM_P_F3 
+R17-2 1k-2 Passive 
+C26-1 1nF-1 Passive 
+C30-1 100nF-1 Passive 
+)
+(
+PDM_N_F1 
+R18-2 1k-2 Passive 
+C27-1 4.7nF-1 Passive 
+R19-1 1k-1 Passive 
+)
+(
+PDM_N_F2 
+R19-2 1k-2 Passive 
+C28-1 2.2nF-1 Passive 
+R20-1 1k-1 Passive 
+)
+(
+PDM_N_F3 
+R20-2 1k-2 Passive 
+C29-1 1nF-1 Passive 
+C31-1 100nF-1 Passive 
+)
+(
+PA_AC_P 
+C30-2 100nF-2 Passive 
+R21-1 33k-1 Passive 
+)
+(
+PA_AC_N 
+C31-2 100nF-2 Passive 
+R22-1 33k-1 Passive 
+)
+(
+MIC_BIAS 
+U4-1 LMV321IDBVR-IN+ Passive 
+R27-2 100k-2 Passive 
+R28-1 100k-1 Passive 
+C40-1 100nF-1 Passive 
+)
+(
+MIC_INV 
+U4-3 LMV321IDBVR-IN- Passive 
+R25-2 2k-2 Passive 
+R26-1 150k-1 Passive 
+C39-1 15pF C0G-1 Passive 
+)
+(
+MIC_OUT 
+U4-4 LMV321IDBVR-OUT Passive 
+R26-2 150k-2 Passive 
+C39-2 15pF C0G-2 Passive 
+C41-1 4.7uF 10V X5R-1 Passive 
+)
+(
+MIC_P 
+J3-1 SM02B-SRSS-TB(LF)(SN)-1 Passive 
+R24-2 2.2k-2 Passive 
+C37-1 22pF C0G-1 Passive 
+C38-1 4.7uF 10V X5R-1 Passive 
+)
+(
+MIC_3V4 
+R23-2 200R-2 Passive 
+C35-1 10uF 10V X5R-1 Passive 
+R24-1 2.2k-1 Passive 
+)
+(
+MIC_AC 
+C38-2 4.7uF 10V X5R-2 Passive 
+R25-1 2k-1 Passive 
+)
+(
+RGB_D2 
+LED1-1 WS2812B-2020-V6-DO Passive 
+LED2-3 WS2812B-2020-V6-DI Passive 
+)
+(
+RGB_D1 
+LED1-3 WS2812B-2020-V6-DI Passive 
+R31-2 100R-2 Passive 
+)
+(
+RGB_D3 
+LED2-1 WS2812B-2020-V6-DO Passive 
+LED3-3 WS2812B-2020-V6-DI Passive 
+)
+(
+RGB_D4 
+LED3-1 WS2812B-2020-V6-DO Passive 
+LED4-3 WS2812B-2020-V6-DI Passive 
+)

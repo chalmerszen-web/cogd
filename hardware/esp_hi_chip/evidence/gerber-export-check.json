@@ -1,0 +1,67 @@
+{
+  "status": "PASS",
+  "native_zip_sha256": "49f84c2d06ad413734a86caeba3653803878154c6bccb6186abb3c644d4ecf10",
+  "fabrication_zip_sha256": "53bd1b48cd0e11674243ea815126e61582d22074108b2d65cb5cc5b06690a490",
+  "outline_centerline_mm": [
+    34.3,
+    46.35
+  ],
+  "copper_layers": [
+    "top",
+    "bottom"
+  ],
+  "plated_drills": 418,
+  "plated_drill_diameters_mm": {
+    "0.2": 364,
+    "0.15": 54
+  },
+  "npth": [
+    [
+      14.26,
+      -5.28,
+      0.65
+    ],
+    [
+      20.04,
+      -5.28,
+      0.65
+    ]
+  ],
+  "plated_drills_match_canonical_geometry": true,
+  "auxiliary_via_drill_is_exact_duplicate": true,
+  "bottom_soldermask_openings": 0,
+  "native_layer_objects": {
+    "Gerber_TopLayer.GTL": 2049,
+    "Gerber_BottomLayer.GBL": 2416,
+    "Gerber_TopSilkscreenLayer.GTO": 0,
+    "Gerber_BottomSilkscreenLayer.GBO": 0,
+    "Gerber_TopSolderMaskLayer.GTS": 334,
+    "Gerber_BottomSolderMaskLayer.GBS": 0,
+    "Gerber_TopPasteMaskLayer.GTP": 336,
+    "Gerber_TopAssemblyLayer.GTA": 3642,
+    "Gerber_BoardOutlineLayer.GKO": 4,
+    "Gerber_DocumentLayer.GDL": 1247,
+    "Gerber_DrillDrawingLayer.GDD": 2364
+  },
+  "fabrication_zip_files": [
+    "Drill_NPTH_Through.DRL",
+    "Drill_PTH_Through.DRL",
+    "Gerber_BoardOutlineLayer.GKO",
+    "Gerber_BottomLayer.GBL",
+    "Gerber_BottomSilkscreenLayer.GBO",
+    "Gerber_BottomSolderMaskLayer.GBS",
+    "Gerber_TopLayer.GTL",
+    "Gerber_TopPasteMaskLayer.GTP",
+    "Gerber_TopSilkscreenLayer.GTO",
+    "Gerber_TopSolderMaskLayer.GTS"
+  ],
+  "omitted_auxiliary_files": [
+    "Drill_PTH_Through_Via.DRL",
+    "FlyingProbeTesting.json",
+    "Gerber_DocumentLayer.GDL",
+    "Gerber_DrillDrawingLayer.GDD",
+    "Gerber_TopAssemblyLayer.GTA",
+    "PCB\u4e0b\u5355\u5fc5\u8bfb.txt"
+  ],
+  "note": "Native Gerber geometry preserved byte-for-byte. This is an export integrity check, not an electrical simulation or physical validation."
+}

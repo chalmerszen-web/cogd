@@ -1,0 +1,9 @@
+# Downloaded vendor documents are local references; retain URL/hash index instead.
+*.html
+*.js
+*.pdf
+*.png
+*.txt
+*.kicad_sym
+download-api.json
+cli-for-ai.md

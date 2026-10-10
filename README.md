@@ -1,5 +1,7 @@
 # ESP-HI Agent
 
+[裸芯片新板 Rev A：原生立创工程、原理图、两层 PCB 与制造文件](hardware/esp_hi_chip/README.md)（2026-10-10，CAD 检查通过，实板验证待执行）。
+
 当前设备验证固件：**0.12.4-clock（2026-10-10）**。开机自动显示北京时间24小时制大字HH:MM，右下角小字显示秒。USB设备需求→Codex接收→编程编译→仅应用烧录→实物时钟验收已完成：Insta360 Link连续原始照片确认正向时分与变化的秒数，软件重启后自动恢复。原有凭据、上下文、录音分区保留；旧版空白/倒置失败证据保留在报告中。
 
 [公开快照与资料索引](docs/PUBLIC_SNAPSHOT_20261010.md) · [固件和完整过程记录下载](https://github.com/chalmerszen-web/cogd/releases/tag/v0.12.4-clock) · [实物验收照片](docs/evidence/clock-20261010/README.md)。当前安装包已放入 firmware/latest/；源码、规格、行动记录和各阶段报告均在本仓库。

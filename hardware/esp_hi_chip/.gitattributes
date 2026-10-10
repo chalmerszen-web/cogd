@@ -1,0 +1,6 @@
+# Normalize source/docs while preserving native CAD and export bytes.
+* text=auto eol=lf
+/cad/** -text -diff
+/native/** -text -diff
+/exports/** -text -diff
+/libraries/footprints-mm.json -text -diff

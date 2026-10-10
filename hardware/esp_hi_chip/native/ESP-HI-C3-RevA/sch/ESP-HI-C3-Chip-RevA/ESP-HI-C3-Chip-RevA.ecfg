@@ -1,0 +1,4 @@
+{"type":"DOCHEAD"}||{"docType":"SCH","client":"7efdae4b974ae01f","uuid":"240b9c508235f5e1","updateTime":1791636785708,"version":"1791636785708","editVersion":"4.1.71","user":{"uuid":"CONFIG"}}|
+{"type":"META","ticket":278,"id":"META"}||{"title":"ESP-HI-C3-Chip-RevA","source":"","board":"3e4e5d87c113e90e","zIndex":-1}|
+{"type":"RULE","ticket":5101,"id":"[\"RULE\",\"TRACK\",\"copperThickness1oz\"]"}||{"ruleState":"DEFAULT","ruleContext":{"unit":"mm","track":{"isOpen":true,"content":[{"layerId":1,"stroDef":0.254,"stroMax":2.54,"stroMin":0.127}]}}}|
+{"type":"RULE","ticket":5102,"id":"[\"RULE\",\"TRACK\",\"copperThickness2oz\"]"}||{"ruleState":"NORMAL","ruleContext":{"unit":"mm","track":{"isOpen":true,"content":[{"layerId":1,"stroDef":0.254,"stroMax":2.54,"stroMin":0.203}]}}}

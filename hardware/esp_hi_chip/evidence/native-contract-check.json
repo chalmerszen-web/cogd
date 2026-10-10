@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "native_segments": 3252,
+  "canonical_segments": 3252,
+  "tracks_match": true,
+  "vias_match": true,
+  "native_vias": 418,
+  "footprint_count": 109,
+  "footprints_by_layer": {
+    "1": 109
+  },
+  "placement_errors": [],
+  "coordinate_comparison_resolution_mm": 0.0001
+}

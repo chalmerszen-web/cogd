@@ -1,0 +1,7 @@
+{
+  "clearance_rule_mm": 0.125,
+  "numeric_tolerance_mm": 0.001,
+  "clearance_violations": [],
+  "unconnected_nets": {},
+  "status": "PASS"
+}

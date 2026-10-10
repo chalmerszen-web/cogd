@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "tracks_match": true,
+  "changes": [
+    {
+      "before": {
+        "net": "GND",
+        "x": 13.35884,
+        "y": 6.97816,
+        "diameter": 0.45,
+        "drill": 0.2,
+        "purpose": "ground_stitch"
+      },
+      "after": {
+        "net": "GND",
+        "x": 13.3522699934,
+        "y": 6.9854100068,
+        "diameter": 0.449999989,
+        "drill": 0.20000000639999999
+      }
+    },
+    {
+      "removed": {
+        "net": "GND",
+        "x": 2.46724,
+        "y": 12.50128,
+        "diameter": 0.45,
+        "drill": 0.2,
+        "purpose": "ground_stitch"
+      }
+    }
+  ],
+  "native_vias": 418
+}

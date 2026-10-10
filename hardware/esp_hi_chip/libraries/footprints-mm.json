@@ -1,0 +1,5116 @@
+{
+  "QFN32_5x5_EP": {
+    "name": "QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": -1.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": -1.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": -0.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": -0.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "5",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": 0.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "6",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": 0.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "7",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": 1.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "8",
+        "shape": "roundrect",
+        "x": -2.4375,
+        "y": 1.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "9",
+        "shape": "roundrect",
+        "x": -1.75,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "10",
+        "shape": "roundrect",
+        "x": -1.25,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "11",
+        "shape": "roundrect",
+        "x": -0.75,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "12",
+        "shape": "roundrect",
+        "x": -0.25,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "13",
+        "shape": "roundrect",
+        "x": 0.25,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "14",
+        "shape": "roundrect",
+        "x": 0.75,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "15",
+        "shape": "roundrect",
+        "x": 1.25,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "16",
+        "shape": "roundrect",
+        "x": 1.75,
+        "y": 2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "17",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": 1.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "18",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": 1.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "19",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": 0.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "20",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": 0.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "21",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": -0.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "22",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": -0.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "23",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": -1.25,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "24",
+        "shape": "roundrect",
+        "x": 2.4375,
+        "y": -1.75,
+        "w": 0.875,
+        "h": 0.25,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "25",
+        "shape": "roundrect",
+        "x": 1.75,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "26",
+        "shape": "roundrect",
+        "x": 1.25,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "27",
+        "shape": "roundrect",
+        "x": 0.75,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "28",
+        "shape": "roundrect",
+        "x": 0.25,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "29",
+        "shape": "roundrect",
+        "x": -0.25,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "30",
+        "shape": "roundrect",
+        "x": -0.75,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "31",
+        "shape": "roundrect",
+        "x": -1.25,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "32",
+        "shape": "roundrect",
+        "x": -1.75,
+        "y": -2.4375,
+        "w": 0.25,
+        "h": 0.875,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "33",
+        "shape": "rect",
+        "x": 0.0,
+        "y": 0.0,
+        "w": 3.45,
+        "h": 3.45,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": false,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          2.135,
+          -2.61
+        ],
+        "b": [
+          2.61,
+          -2.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.61,
+          -2.61
+        ],
+        "b": [
+          2.61,
+          -2.135
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.135,
+          2.61
+        ],
+        "b": [
+          -2.61,
+          2.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.61,
+          2.61
+        ],
+        "b": [
+          -2.61,
+          2.135
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.135,
+          2.61
+        ],
+        "b": [
+          2.61,
+          2.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.61,
+          2.61
+        ],
+        "b": [
+          2.61,
+          2.135
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.135,
+          -2.61
+        ],
+        "b": [
+          -2.61,
+          -2.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -1.5,
+          -2.5
+        ],
+        "b": [
+          2.5,
+          -2.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          2.5,
+          -2.5
+        ],
+        "b": [
+          2.5,
+          2.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          2.5,
+          2.5
+        ],
+        "b": [
+          -2.5,
+          2.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.5,
+          2.5
+        ],
+        "b": [
+          -2.5,
+          -1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.5,
+          -1.5
+        ],
+        "b": [
+          -1.5,
+          -2.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -3.12,
+          -3.12
+        ],
+        "b": [
+          -3.12,
+          3.12
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -3.12,
+          3.12
+        ],
+        "b": [
+          3.12,
+          3.12
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          3.12,
+          3.12
+        ],
+        "b": [
+          3.12,
+          -3.12
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          3.12,
+          -3.12
+        ],
+        "b": [
+          -3.12,
+          -3.12
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [
+      [
+        -1.15,
+        -1.15,
+        0.93,
+        0.93
+      ],
+      [
+        -1.15,
+        0.0,
+        0.93,
+        0.93
+      ],
+      [
+        -1.15,
+        1.15,
+        0.93,
+        0.93
+      ],
+      [
+        0.0,
+        -1.15,
+        0.93,
+        0.93
+      ],
+      [
+        0.0,
+        0.0,
+        0.93,
+        0.93
+      ],
+      [
+        0.0,
+        1.15,
+        0.93,
+        0.93
+      ],
+      [
+        1.15,
+        -1.15,
+        0.93,
+        0.93
+      ],
+      [
+        1.15,
+        0.0,
+        0.93,
+        0.93
+      ],
+      [
+        1.15,
+        1.15,
+        0.93,
+        0.93
+      ]
+    ],
+    "bbox": [
+      -3.12,
+      -3.12,
+      3.12,
+      3.12
+    ],
+    "source": "libraries\\QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm.kicad_mod",
+    "upstream": "Package_DFN_QFN.pretty/QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm.kicad_mod"
+  },
+  "TSOT26": {
+    "name": "TSOT-23-6",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": -0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": 0.0,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": 0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": 0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "5",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": 0.0,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "6",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": -0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          0.0,
+          1.56
+        ],
+        "b": [
+          0.8,
+          1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          1.56
+        ],
+        "b": [
+          -0.8,
+          1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.56
+        ],
+        "b": [
+          0.8,
+          -1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.56
+        ],
+        "b": [
+          -1.8,
+          -1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.4,
+          -1.45
+        ],
+        "b": [
+          0.8,
+          -1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          -1.45
+        ],
+        "b": [
+          0.8,
+          1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          1.45
+        ],
+        "b": [
+          -0.8,
+          1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.8,
+          1.45
+        ],
+        "b": [
+          -0.8,
+          -1.05
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.8,
+          -1.05
+        ],
+        "b": [
+          -0.4,
+          -1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.05,
+          -1.7
+        ],
+        "b": [
+          -2.05,
+          1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.05,
+          1.7
+        ],
+        "b": [
+          2.05,
+          1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.05,
+          1.7
+        ],
+        "b": [
+          2.05,
+          -1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.05,
+          -1.7
+        ],
+        "b": [
+          -2.05,
+          -1.7
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.05,
+      -1.7,
+      2.05,
+      1.7
+    ],
+    "source": "libraries\\TSOT-23-6.kicad_mod",
+    "upstream": "Package_TO_SOT_SMD.pretty/TSOT-23-6.kicad_mod"
+  },
+  "SOT23-6": {
+    "name": "SOT-23-6",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": -0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": 0.0,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": 0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": 0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "5",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": 0.0,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "6",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": -0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          0.0,
+          1.56
+        ],
+        "b": [
+          0.8,
+          1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          1.56
+        ],
+        "b": [
+          -0.8,
+          1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.56
+        ],
+        "b": [
+          0.8,
+          -1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.56
+        ],
+        "b": [
+          -1.8,
+          -1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.4,
+          -1.45
+        ],
+        "b": [
+          0.8,
+          -1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          -1.45
+        ],
+        "b": [
+          0.8,
+          1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          1.45
+        ],
+        "b": [
+          -0.8,
+          1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.8,
+          1.45
+        ],
+        "b": [
+          -0.8,
+          -1.05
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.8,
+          -1.05
+        ],
+        "b": [
+          -0.4,
+          -1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.05,
+          -1.7
+        ],
+        "b": [
+          -2.05,
+          1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.05,
+          1.7
+        ],
+        "b": [
+          2.05,
+          1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.05,
+          1.7
+        ],
+        "b": [
+          2.05,
+          -1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.05,
+          -1.7
+        ],
+        "b": [
+          -2.05,
+          -1.7
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.05,
+      -1.7,
+      2.05,
+      1.7
+    ],
+    "source": "libraries\\SOT-23-6.kicad_mod",
+    "upstream": "Package_TO_SOT_SMD.pretty/SOT-23-6.kicad_mod"
+  },
+  "SOT23-5": {
+    "name": "SOT-23-5",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": -0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": 0.0,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "shape": "roundrect",
+        "x": -1.1375,
+        "y": 0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": 0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "5",
+        "shape": "roundrect",
+        "x": 1.1375,
+        "y": -0.95,
+        "w": 1.325,
+        "h": 0.6,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          0.0,
+          1.56
+        ],
+        "b": [
+          0.8,
+          1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          1.56
+        ],
+        "b": [
+          -0.8,
+          1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.56
+        ],
+        "b": [
+          0.8,
+          -1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.56
+        ],
+        "b": [
+          -1.8,
+          -1.56
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.4,
+          -1.45
+        ],
+        "b": [
+          0.8,
+          -1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          -1.45
+        ],
+        "b": [
+          0.8,
+          1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          1.45
+        ],
+        "b": [
+          -0.8,
+          1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.8,
+          1.45
+        ],
+        "b": [
+          -0.8,
+          -1.05
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.8,
+          -1.05
+        ],
+        "b": [
+          -0.4,
+          -1.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.05,
+          -1.7
+        ],
+        "b": [
+          -2.05,
+          1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.05,
+          1.7
+        ],
+        "b": [
+          2.05,
+          1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.05,
+          1.7
+        ],
+        "b": [
+          2.05,
+          -1.7
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.05,
+          -1.7
+        ],
+        "b": [
+          -2.05,
+          -1.7
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.05,
+      -1.7,
+      2.05,
+      1.7
+    ],
+    "source": "libraries\\SOT-23-5.kicad_mod",
+    "upstream": "Package_TO_SOT_SMD.pretty/SOT-23-5.kicad_mod"
+  },
+  "VSSOP8": {
+    "name": "VSSOP-8_2.3x2mm_P0.5mm",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "rect",
+        "x": -1.55,
+        "y": -0.75,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "rect",
+        "x": -1.55,
+        "y": -0.25,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "shape": "rect",
+        "x": -1.55,
+        "y": 0.25,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "shape": "rect",
+        "x": -1.55,
+        "y": 0.75,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "5",
+        "shape": "rect",
+        "x": 1.55,
+        "y": 0.75,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "6",
+        "shape": "rect",
+        "x": 1.55,
+        "y": 0.25,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "7",
+        "shape": "rect",
+        "x": 1.55,
+        "y": -0.25,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "8",
+        "shape": "rect",
+        "x": 1.55,
+        "y": -0.75,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 270.0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -2.25,
+          -1.25
+        ],
+        "b": [
+          2.25,
+          -1.25
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.25,
+          1.25
+        ],
+        "b": [
+          -2.25,
+          -1.25
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.25,
+          1.25
+        ],
+        "b": [
+          -2.25,
+          1.25
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.25,
+          -1.25
+        ],
+        "b": [
+          2.25,
+          1.25
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          1.1,
+          1.1
+        ],
+        "b": [
+          -1.1,
+          1.1
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          1.1,
+          -1.1
+        ],
+        "b": [
+          -1.9,
+          -1.1
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.6,
+          -1.0
+        ],
+        "b": [
+          -1.15,
+          -0.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.6,
+          -1.0
+        ],
+        "b": [
+          1.15,
+          -1.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.15,
+          1.0
+        ],
+        "b": [
+          -1.15,
+          -0.45
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.15,
+          1.0
+        ],
+        "b": [
+          -1.15,
+          1.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.15,
+          -1.0
+        ],
+        "b": [
+          1.15,
+          1.0
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.25,
+      -1.25,
+      2.25,
+      1.25
+    ],
+    "source": "libraries\\VSSOP-8_2.3x2mm_P0.5mm.kicad_mod",
+    "upstream": "Package_SO.pretty/VSSOP-8_2.3x2mm_P0.5mm.kicad_mod"
+  },
+  "MSOP8": {
+    "name": "MSOP-8_3x3mm_P0.65mm",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -2.1125,
+        "y": -0.975,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": -2.1125,
+        "y": -0.325,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "shape": "roundrect",
+        "x": -2.1125,
+        "y": 0.325,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "shape": "roundrect",
+        "x": -2.1125,
+        "y": 0.975,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "5",
+        "shape": "roundrect",
+        "x": 2.1125,
+        "y": 0.975,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "6",
+        "shape": "roundrect",
+        "x": 2.1125,
+        "y": 0.325,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "7",
+        "shape": "roundrect",
+        "x": 2.1125,
+        "y": -0.325,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "8",
+        "shape": "roundrect",
+        "x": 2.1125,
+        "y": -0.975,
+        "w": 1.625,
+        "h": 0.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          0.0,
+          1.61
+        ],
+        "b": [
+          1.5,
+          1.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          1.61
+        ],
+        "b": [
+          -1.5,
+          1.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.61
+        ],
+        "b": [
+          1.5,
+          -1.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.0,
+          -1.61
+        ],
+        "b": [
+          -2.925,
+          -1.61
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.75,
+          -1.5
+        ],
+        "b": [
+          1.5,
+          -1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.5,
+          -1.5
+        ],
+        "b": [
+          1.5,
+          1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.5,
+          1.5
+        ],
+        "b": [
+          -1.5,
+          1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.5,
+          1.5
+        ],
+        "b": [
+          -1.5,
+          -0.75
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.5,
+          -0.75
+        ],
+        "b": [
+          -0.75,
+          -1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -3.18,
+          -1.75
+        ],
+        "b": [
+          -3.18,
+          1.75
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -3.18,
+          1.75
+        ],
+        "b": [
+          3.18,
+          1.75
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          3.18,
+          1.75
+        ],
+        "b": [
+          3.18,
+          -1.75
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          3.18,
+          -1.75
+        ],
+        "b": [
+          -3.18,
+          -1.75
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -3.18,
+      -1.75,
+      3.18,
+      1.75
+    ],
+    "source": "libraries\\MSOP-8_3x3mm_P0.65mm.kicad_mod",
+    "upstream": "Package_SO.pretty/MSOP-8_3x3mm_P0.65mm.kicad_mod"
+  },
+  "SOD323": {
+    "name": "D_SOD-323",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "rect",
+        "x": -1.05,
+        "y": 0.0,
+        "w": 0.6,
+        "h": 0.45,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "rect",
+        "x": 1.05,
+        "y": 0.0,
+        "w": 0.6,
+        "h": 0.45,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -1.5,
+          -0.85
+        ],
+        "b": [
+          -1.5,
+          0.85
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.2,
+          0.0
+        ],
+        "b": [
+          0.45,
+          0.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.2,
+          0.35
+        ],
+        "b": [
+          -0.3,
+          0.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.2,
+          -0.35
+        ],
+        "b": [
+          0.2,
+          0.35
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.3,
+          0.0
+        ],
+        "b": [
+          0.2,
+          -0.35
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.3,
+          0.0
+        ],
+        "b": [
+          -0.5,
+          0.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.3,
+          -0.35
+        ],
+        "b": [
+          -0.3,
+          0.35
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.9,
+          0.7
+        ],
+        "b": [
+          -0.9,
+          -0.7
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.9,
+          0.7
+        ],
+        "b": [
+          -0.9,
+          0.7
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.9,
+          -0.7
+        ],
+        "b": [
+          0.9,
+          0.7
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.9,
+          -0.7
+        ],
+        "b": [
+          0.9,
+          -0.7
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.6,
+          -0.95
+        ],
+        "b": [
+          1.6,
+          -0.95
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          1.6,
+          -0.95
+        ],
+        "b": [
+          1.6,
+          0.95
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.6,
+          0.95
+        ],
+        "b": [
+          1.6,
+          0.95
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.6,
+          -0.95
+        ],
+        "b": [
+          -1.6,
+          0.95
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.5,
+          0.85
+        ],
+        "b": [
+          1.05,
+          0.85
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -1.5,
+          -0.85
+        ],
+        "b": [
+          1.05,
+          -0.85
+        ],
+        "layer": "F.SilkS"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -1.6,
+      -0.95,
+      1.6,
+      0.95
+    ],
+    "source": "libraries\\D_SOD-323.kicad_mod",
+    "upstream": "Diode_SMD.pretty/D_SOD-323.kicad_mod"
+  },
+  "JST_SH_2_RA": {
+    "name": "JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -0.5,
+        "y": -2.0,
+        "w": 0.6,
+        "h": 1.55,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": 0.5,
+        "y": -2.0,
+        "w": 0.6,
+        "h": 1.55,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "shape": "roundrect",
+        "x": -1.8,
+        "y": 1.875,
+        "w": 1.2,
+        "h": 1.8,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "shape": "roundrect",
+        "x": 1.8,
+        "y": 1.875,
+        "w": 1.2,
+        "h": 1.8,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -2.0,
+          -1.675
+        ],
+        "b": [
+          2.0,
+          -1.675
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.11,
+          0.715
+        ],
+        "b": [
+          -2.11,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.11,
+          -1.785
+        ],
+        "b": [
+          -1.06,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -1.06,
+          -1.785
+        ],
+        "b": [
+          -1.06,
+          -2.775
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.11,
+          0.715
+        ],
+        "b": [
+          2.11,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.11,
+          -1.785
+        ],
+        "b": [
+          1.06,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.94,
+          2.685
+        ],
+        "b": [
+          0.94,
+          2.685
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.0,
+          2.575
+        ],
+        "b": [
+          2.0,
+          2.575
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.0,
+          -1.675
+        ],
+        "b": [
+          -2.0,
+          2.575
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          2.0,
+          -1.675
+        ],
+        "b": [
+          2.0,
+          2.575
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.9,
+          -3.28
+        ],
+        "b": [
+          -2.9,
+          3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.9,
+          3.28
+        ],
+        "b": [
+          2.9,
+          3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.9,
+          3.28
+        ],
+        "b": [
+          2.9,
+          -3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.9,
+          -3.28
+        ],
+        "b": [
+          -2.9,
+          -3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.0,
+          -1.675
+        ],
+        "b": [
+          -0.5,
+          -0.967893
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.5,
+          -0.967893
+        ],
+        "b": [
+          0.0,
+          -1.675
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.9,
+      -3.28,
+      2.9,
+      3.28
+    ],
+    "source": "libraries\\JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal.kicad_mod",
+    "upstream": "Connector_JST.pretty/JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal.kicad_mod"
+  },
+  "JST_SH_4_RA": {
+    "name": "JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -1.5,
+        "y": -2.0,
+        "w": 0.6,
+        "h": 1.55,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": -0.5,
+        "y": -2.0,
+        "w": 0.6,
+        "h": 1.55,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "shape": "roundrect",
+        "x": 0.5,
+        "y": -2.0,
+        "w": 0.6,
+        "h": 1.55,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "shape": "roundrect",
+        "x": 1.5,
+        "y": -2.0,
+        "w": 0.6,
+        "h": 1.55,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "shape": "roundrect",
+        "x": -2.8,
+        "y": 1.875,
+        "w": 1.2,
+        "h": 1.8,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "shape": "roundrect",
+        "x": 2.8,
+        "y": 1.875,
+        "w": 1.2,
+        "h": 1.8,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -3.0,
+          -1.675
+        ],
+        "b": [
+          3.0,
+          -1.675
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -3.11,
+          0.715
+        ],
+        "b": [
+          -3.11,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -3.11,
+          -1.785
+        ],
+        "b": [
+          -2.06,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.06,
+          -1.785
+        ],
+        "b": [
+          -2.06,
+          -2.775
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          3.11,
+          0.715
+        ],
+        "b": [
+          3.11,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          3.11,
+          -1.785
+        ],
+        "b": [
+          2.06,
+          -1.785
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -1.94,
+          2.685
+        ],
+        "b": [
+          1.94,
+          2.685
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -3.0,
+          2.575
+        ],
+        "b": [
+          3.0,
+          2.575
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -3.0,
+          -1.675
+        ],
+        "b": [
+          -3.0,
+          2.575
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          3.0,
+          -1.675
+        ],
+        "b": [
+          3.0,
+          2.575
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -3.9,
+          -3.28
+        ],
+        "b": [
+          -3.9,
+          3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -3.9,
+          3.28
+        ],
+        "b": [
+          3.9,
+          3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          3.9,
+          3.28
+        ],
+        "b": [
+          3.9,
+          -3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          3.9,
+          -3.28
+        ],
+        "b": [
+          -3.9,
+          -3.28
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.0,
+          -1.675
+        ],
+        "b": [
+          -1.5,
+          -0.967893
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.5,
+          -0.967893
+        ],
+        "b": [
+          -1.0,
+          -1.675
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -3.9,
+      -3.28,
+      3.9,
+      3.28
+    ],
+    "source": "libraries\\JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal.kicad_mod",
+    "upstream": "Connector_JST.pretty/JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal.kicad_mod"
+  },
+  "U.FL_SMT": {
+    "name": "U.FL_Hirose_U.FL-R-SMT-1_Vertical",
+    "pads": [
+      {
+        "number": "2",
+        "shape": "rect",
+        "x": 0.475,
+        "y": 1.475,
+        "w": 2.2,
+        "h": 1.05,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "1",
+        "shape": "rect",
+        "x": -1.05,
+        "y": 0.0,
+        "w": 1.05,
+        "h": 1.0,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "rect",
+        "x": 0.475,
+        "y": -1.475,
+        "w": 2.2,
+        "h": 1.05,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -2.02,
+          1.0
+        ],
+        "b": [
+          -2.02,
+          -1.0
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.32,
+          1.0
+        ],
+        "b": [
+          -2.02,
+          1.0
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.08,
+          1.8
+        ],
+        "b": [
+          2.28,
+          1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.08,
+          2.5
+        ],
+        "b": [
+          2.08,
+          1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.28,
+          1.8
+        ],
+        "b": [
+          2.28,
+          -1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.32,
+          1.8
+        ],
+        "b": [
+          -1.12,
+          1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.12,
+          2.5
+        ],
+        "b": [
+          -1.12,
+          1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.08,
+          2.5
+        ],
+        "b": [
+          -1.12,
+          2.5
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          1.835,
+          -1.35
+        ],
+        "b": [
+          1.835,
+          1.35
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.885,
+          -0.76
+        ],
+        "b": [
+          -1.515,
+          -0.76
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.885,
+          1.4
+        ],
+        "b": [
+          -0.885,
+          0.76
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.925,
+          -0.3
+        ],
+        "b": [
+          -1.075,
+          -0.15
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.775,
+          -1.3
+        ],
+        "b": [
+          1.375,
+          -1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.375,
+          -1.5
+        ],
+        "b": [
+          1.375,
+          -1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.425,
+          -1.5
+        ],
+        "b": [
+          1.375,
+          -1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.775,
+          -1.3
+        ],
+        "b": [
+          1.775,
+          1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.775,
+          1.3
+        ],
+        "b": [
+          1.375,
+          1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.375,
+          1.5
+        ],
+        "b": [
+          1.375,
+          1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.425,
+          1.5
+        ],
+        "b": [
+          1.375,
+          1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.425,
+          -1.3
+        ],
+        "b": [
+          -0.825,
+          -1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.425,
+          -1.5
+        ],
+        "b": [
+          -0.425,
+          -1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.825,
+          -0.3
+        ],
+        "b": [
+          -0.825,
+          -1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.925,
+          -0.3
+        ],
+        "b": [
+          -0.825,
+          -0.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.075,
+          0.3
+        ],
+        "b": [
+          -1.075,
+          -0.15
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.075,
+          0.3
+        ],
+        "b": [
+          -0.825,
+          0.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.825,
+          0.3
+        ],
+        "b": [
+          -0.825,
+          1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.425,
+          1.3
+        ],
+        "b": [
+          -0.825,
+          1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.425,
+          1.5
+        ],
+        "b": [
+          -0.425,
+          1.3
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.885,
+          -1.4
+        ],
+        "b": [
+          -0.885,
+          -0.76
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.08,
+          -1.8
+        ],
+        "b": [
+          2.28,
+          -1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.08,
+          -1.8
+        ],
+        "b": [
+          2.08,
+          -2.5
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.32,
+          -1.0
+        ],
+        "b": [
+          -1.32,
+          -1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.08,
+          -2.5
+        ],
+        "b": [
+          -1.12,
+          -2.5
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.12,
+          -1.8
+        ],
+        "b": [
+          -1.12,
+          -2.5
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.32,
+          -1.8
+        ],
+        "b": [
+          -1.12,
+          -1.8
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.32,
+          1.8
+        ],
+        "b": [
+          -1.32,
+          1.0
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.32,
+          -1.0
+        ],
+        "b": [
+          -2.02,
+          -1.0
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.02,
+      -2.5,
+      2.28,
+      2.5
+    ],
+    "source": "libraries\\U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod",
+    "upstream": "Connector_Coaxial.pretty/U.FL_Hirose_U.FL-R-SMT-1_Vertical.kicad_mod"
+  },
+  "SMD_Tactile_2P": {
+    "name": "SW_SPST_PTS810",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "rect",
+        "x": -2.075,
+        "y": -1.075,
+        "w": 1.05,
+        "h": 0.65,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "1",
+        "shape": "rect",
+        "x": 2.075,
+        "y": -1.075,
+        "w": 1.05,
+        "h": 0.65,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "rect",
+        "x": -2.075,
+        "y": 1.075,
+        "w": 1.05,
+        "h": 0.65,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "rect",
+        "x": 2.075,
+        "y": 1.075,
+        "w": 1.05,
+        "h": 0.65,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -2.85,
+          -1.85
+        ],
+        "b": [
+          2.85,
+          -1.85
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.85,
+          1.85
+        ],
+        "b": [
+          -2.85,
+          -1.85
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.85,
+          1.85
+        ],
+        "b": [
+          -2.85,
+          1.85
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.85,
+          -1.85
+        ],
+        "b": [
+          2.85,
+          1.85
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.2,
+          -1.58
+        ],
+        "b": [
+          2.2,
+          -1.7
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.2,
+          0.57
+        ],
+        "b": [
+          2.2,
+          -0.57
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.2,
+          1.7
+        ],
+        "b": [
+          2.2,
+          1.58
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.2,
+          1.7
+        ],
+        "b": [
+          2.2,
+          1.7
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.2,
+          1.58
+        ],
+        "b": [
+          -2.2,
+          1.7
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.2,
+          -0.57
+        ],
+        "b": [
+          -2.2,
+          0.57
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.2,
+          -1.7
+        ],
+        "b": [
+          -2.2,
+          -1.58
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          2.2,
+          -1.7
+        ],
+        "b": [
+          -2.2,
+          -1.7
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          0.4,
+          1.1
+        ],
+        "b": [
+          -0.4,
+          1.1
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.4,
+          -1.1
+        ],
+        "b": [
+          0.4,
+          -1.1
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.1,
+          1.6
+        ],
+        "b": [
+          2.1,
+          1.6
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.1,
+          -1.6
+        ],
+        "b": [
+          -2.1,
+          1.6
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          2.1,
+          -1.6
+        ],
+        "b": [
+          -2.1,
+          -1.6
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          2.1,
+          1.6
+        ],
+        "b": [
+          2.1,
+          -1.6
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.85,
+      -1.85,
+      2.85,
+      1.85
+    ],
+    "source": "libraries\\SW_SPST_PTS810.kicad_mod",
+    "upstream": "Button_Switch_SMD.pretty/SW_SPST_PTS810.kicad_mod"
+  },
+  "Inductor_4x4": {
+    "name": "L_Coilcraft_XxL4030",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "rect",
+        "x": -1.185,
+        "y": 0.0,
+        "w": 0.98,
+        "h": 3.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "rect",
+        "x": 1.185,
+        "y": 0.0,
+        "w": 0.98,
+        "h": 3.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          2.154,
+          2.154
+        ],
+        "b": [
+          -2.154,
+          2.154
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.154,
+          -2.154
+        ],
+        "b": [
+          2.154,
+          -2.154
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.26,
+          2.26
+        ],
+        "b": [
+          -2.26,
+          -2.26
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.26,
+          2.26
+        ],
+        "b": [
+          -2.26,
+          2.26
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.26,
+          -2.26
+        ],
+        "b": [
+          2.26,
+          2.26
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.26,
+          -2.26
+        ],
+        "b": [
+          2.26,
+          -2.26
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.0,
+          2.0
+        ],
+        "b": [
+          -2.0,
+          -2.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          2.0,
+          2.0
+        ],
+        "b": [
+          -2.0,
+          2.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          2.0,
+          -2.0
+        ],
+        "b": [
+          2.0,
+          2.0
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -2.0,
+          -2.0
+        ],
+        "b": [
+          2.0,
+          -2.0
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.26,
+      -2.26,
+      2.26,
+      2.26
+    ],
+    "source": "libraries\\L_Coilcraft_XxL4030.kicad_mod",
+    "upstream": "Inductor_SMD.pretty/L_Coilcraft_XxL4030.kicad_mod"
+  },
+  "0402": {
+    "name": "R_0402_1005Metric",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -0.51,
+        "y": 0.0,
+        "w": 0.54,
+        "h": 0.64,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": 0.51,
+        "y": 0.0,
+        "w": 0.54,
+        "h": 0.64,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -0.525,
+          0.27
+        ],
+        "b": [
+          -0.525,
+          -0.27
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.525,
+          -0.27
+        ],
+        "b": [
+          0.525,
+          -0.27
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.525,
+          -0.27
+        ],
+        "b": [
+          0.525,
+          0.27
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.525,
+          0.27
+        ],
+        "b": [
+          -0.525,
+          0.27
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.153641,
+          -0.38
+        ],
+        "b": [
+          0.153641,
+          -0.38
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.153641,
+          0.38
+        ],
+        "b": [
+          0.153641,
+          0.38
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.93,
+          0.47
+        ],
+        "b": [
+          -0.93,
+          -0.47
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -0.93,
+          -0.47
+        ],
+        "b": [
+          0.93,
+          -0.47
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          0.93,
+          -0.47
+        ],
+        "b": [
+          0.93,
+          0.47
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          0.93,
+          0.47
+        ],
+        "b": [
+          -0.93,
+          0.47
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -0.93,
+      -0.47,
+      0.93,
+      0.47
+    ],
+    "source": "libraries\\R_0402_1005Metric.kicad_mod",
+    "upstream": "Resistor_SMD.pretty/R_0402_1005Metric.kicad_mod"
+  },
+  "0603": {
+    "name": "R_0603_1608Metric",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -0.825,
+        "y": 0.0,
+        "w": 0.8,
+        "h": 0.95,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": 0.825,
+        "y": 0.0,
+        "w": 0.8,
+        "h": 0.95,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -0.8,
+          0.4125
+        ],
+        "b": [
+          -0.8,
+          -0.4125
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.8,
+          -0.4125
+        ],
+        "b": [
+          0.8,
+          -0.4125
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          -0.4125
+        ],
+        "b": [
+          0.8,
+          0.4125
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.8,
+          0.4125
+        ],
+        "b": [
+          -0.8,
+          0.4125
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.237258,
+          -0.5225
+        ],
+        "b": [
+          0.237258,
+          -0.5225
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.237258,
+          0.5225
+        ],
+        "b": [
+          0.237258,
+          0.5225
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -1.48,
+          0.73
+        ],
+        "b": [
+          -1.48,
+          -0.73
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.48,
+          -0.73
+        ],
+        "b": [
+          1.48,
+          -0.73
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          1.48,
+          -0.73
+        ],
+        "b": [
+          1.48,
+          0.73
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          1.48,
+          0.73
+        ],
+        "b": [
+          -1.48,
+          0.73
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -1.48,
+      -0.73,
+      1.48,
+      0.73
+    ],
+    "source": "libraries\\R_0603_1608Metric.kicad_mod",
+    "upstream": "Resistor_SMD.pretty/R_0603_1608Metric.kicad_mod"
+  },
+  "0805": {
+    "name": "R_0805_2012Metric",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -0.9125,
+        "y": 0.0,
+        "w": 1.025,
+        "h": 1.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": 0.9125,
+        "y": 0.0,
+        "w": 1.025,
+        "h": 1.4,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -1.0,
+          0.625
+        ],
+        "b": [
+          -1.0,
+          -0.625
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.0,
+          -0.625
+        ],
+        "b": [
+          1.0,
+          -0.625
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.0,
+          -0.625
+        ],
+        "b": [
+          1.0,
+          0.625
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.0,
+          0.625
+        ],
+        "b": [
+          -1.0,
+          0.625
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.227064,
+          -0.735
+        ],
+        "b": [
+          0.227064,
+          -0.735
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.227064,
+          0.735
+        ],
+        "b": [
+          0.227064,
+          0.735
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -1.68,
+          0.95
+        ],
+        "b": [
+          -1.68,
+          -0.95
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -1.68,
+          -0.95
+        ],
+        "b": [
+          1.68,
+          -0.95
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          1.68,
+          -0.95
+        ],
+        "b": [
+          1.68,
+          0.95
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          1.68,
+          0.95
+        ],
+        "b": [
+          -1.68,
+          0.95
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -1.68,
+      -0.95,
+      1.68,
+      0.95
+    ],
+    "source": "libraries\\R_0805_2012Metric.kicad_mod",
+    "upstream": "Resistor_SMD.pretty/R_0805_2012Metric.kicad_mod"
+  },
+  "1210": {
+    "name": "R_1210_3225Metric",
+    "pads": [
+      {
+        "number": "1",
+        "shape": "roundrect",
+        "x": -1.4625,
+        "y": 0.0,
+        "w": 1.125,
+        "h": 2.65,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "shape": "roundrect",
+        "x": 1.4625,
+        "y": 0.0,
+        "w": 1.125,
+        "h": 2.65,
+        "rot": 0,
+        "hole": 0.0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -1.6,
+          1.245
+        ],
+        "b": [
+          -1.6,
+          -1.245
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.6,
+          -1.245
+        ],
+        "b": [
+          1.6,
+          -1.245
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.6,
+          -1.245
+        ],
+        "b": [
+          1.6,
+          1.245
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.6,
+          1.245
+        ],
+        "b": [
+          -1.6,
+          1.245
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.723737,
+          -1.355
+        ],
+        "b": [
+          0.723737,
+          -1.355
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -0.723737,
+          1.355
+        ],
+        "b": [
+          0.723737,
+          1.355
+        ],
+        "layer": "F.SilkS"
+      },
+      {
+        "a": [
+          -2.28,
+          1.58
+        ],
+        "b": [
+          -2.28,
+          -1.58
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          -2.28,
+          -1.58
+        ],
+        "b": [
+          2.28,
+          -1.58
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.28,
+          -1.58
+        ],
+        "b": [
+          2.28,
+          1.58
+        ],
+        "layer": "F.CrtYd"
+      },
+      {
+        "a": [
+          2.28,
+          1.58
+        ],
+        "b": [
+          -2.28,
+          1.58
+        ],
+        "layer": "F.CrtYd"
+      }
+    ],
+    "paste_apertures": [],
+    "bbox": [
+      -2.28,
+      -1.58,
+      2.28,
+      1.58
+    ],
+    "source": "libraries\\R_1210_3225Metric.kicad_mod",
+    "upstream": "Resistor_SMD.pretty/R_1210_3225Metric.kicad_mod"
+  },
+  "Crystal_2520_4P": {
+    "name": "EPSON_FA20H",
+    "pads": [
+      {
+        "number": "1",
+        "x": -0.85,
+        "y": 0.7,
+        "w": 1.2,
+        "h": 1.1,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "x": 0.85,
+        "y": 0.7,
+        "w": 1.2,
+        "h": 1.1,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "x": 0.85,
+        "y": -0.7,
+        "w": 1.2,
+        "h": 1.1,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "x": -0.85,
+        "y": -0.7,
+        "w": 1.2,
+        "h": 1.1,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -1.7,
+          -1.5
+        ],
+        "b": [
+          1.7,
+          -1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.7,
+          -1.5
+        ],
+        "b": [
+          1.7,
+          1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.7,
+          1.5
+        ],
+        "b": [
+          -1.7,
+          1.5
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.7,
+          1.5
+        ],
+        "b": [
+          -1.7,
+          -1.5
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "bbox": [
+      -1.7,
+      -1.5,
+      1.7,
+      1.5
+    ],
+    "source": "Epson FA-20H brief sheet p1 recommended land pattern"
+  },
+  "LED_2020_4P": {
+    "name": "WS2812B_2020_V6",
+    "pads": [
+      {
+        "number": "1",
+        "x": 0.915,
+        "y": 0.55,
+        "w": 0.7,
+        "h": 0.7,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "x": 0.915,
+        "y": -0.55,
+        "w": 0.7,
+        "h": 0.7,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "x": -0.915,
+        "y": -0.55,
+        "w": 0.7,
+        "h": 0.7,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "x": -0.915,
+        "y": 0.55,
+        "w": 0.7,
+        "h": 0.7,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -1.45,
+          -1.2
+        ],
+        "b": [
+          1.45,
+          -1.2
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.45,
+          -1.2
+        ],
+        "b": [
+          1.45,
+          1.2
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          1.45,
+          1.2
+        ],
+        "b": [
+          -1.45,
+          1.2
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -1.45,
+          1.2
+        ],
+        "b": [
+          -1.45,
+          -1.2
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "bbox": [
+      -1.45,
+      -1.2,
+      1.45,
+      1.2
+    ],
+    "source": "Worldsemi WS2812B-2020-V6 p2, component-side pin arrangement"
+  },
+  "USB4110": {
+    "name": "GCT_USB4110_GF_A",
+    "pads": [
+      {
+        "number": "A1/B12",
+        "x": -3.2,
+        "y": -7.355,
+        "w": 0.6,
+        "h": 1.08,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "A4/B9",
+        "x": -2.4,
+        "y": -7.355,
+        "w": 0.6,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "B8",
+        "x": -1.75,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "A5",
+        "x": -1.25,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "B7",
+        "x": -0.75,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "A6",
+        "x": -0.25,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "A7",
+        "x": 0.25,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "B6",
+        "x": 0.75,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "A8",
+        "x": 1.25,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "B5",
+        "x": 1.75,
+        "y": -7.355,
+        "w": 0.3,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "A9/B4",
+        "x": 2.4,
+        "y": -7.355,
+        "w": 0.6,
+        "h": 1.15,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "A12/B1",
+        "x": 3.2,
+        "y": -7.355,
+        "w": 0.6,
+        "h": 1.08,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "S1",
+        "x": -5.11,
+        "y": -6.78,
+        "w": 2.18,
+        "h": 2,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "S2",
+        "x": 5.11,
+        "y": -6.78,
+        "w": 2.18,
+        "h": 2,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "S3",
+        "x": -5.11,
+        "y": -2.85,
+        "w": 2.18,
+        "h": 2,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "S4",
+        "x": 5.11,
+        "y": -2.85,
+        "w": 2.18,
+        "h": 2,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "",
+        "x": -2.89,
+        "y": -6.28,
+        "w": 0.65,
+        "h": 0.65,
+        "rot": 0,
+        "shape": "circle",
+        "hole": 0.65,
+        "paste": false,
+        "mask": false,
+        "kind": "np_thru_hole"
+      },
+      {
+        "number": "",
+        "x": 2.89,
+        "y": -6.28,
+        "w": 0.65,
+        "h": 0.65,
+        "rot": 0,
+        "shape": "circle",
+        "hole": 0.65,
+        "paste": false,
+        "mask": false,
+        "kind": "np_thru_hole"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -6.45,
+          -8.2
+        ],
+        "b": [
+          6.45,
+          -8.2
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          6.45,
+          -8.2
+        ],
+        "b": [
+          6.45,
+          0.2
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          6.45,
+          0.2
+        ],
+        "b": [
+          -6.45,
+          0.2
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -6.45,
+          0.2
+        ],
+        "b": [
+          -6.45,
+          -8.2
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "bbox": [
+      -6.45,
+      -8.2,
+      6.45,
+      0.2
+    ],
+    "source": "GCT USB4110 B4 p1 layout; origin at mouth; ground lands shortened 1.15 to 1.08 mm for >=0.20 mm NPTH clearance"
+  },
+  "Molex_52435_24P": {
+    "name": "Molex_52435_2471",
+    "pads": [
+      {
+        "number": "1",
+        "x": -5.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "2",
+        "x": -5.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "3",
+        "x": -4.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "4",
+        "x": -4.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "5",
+        "x": -3.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "6",
+        "x": -3.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "7",
+        "x": -2.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "8",
+        "x": -2.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "9",
+        "x": -1.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "10",
+        "x": -1.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "11",
+        "x": -0.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "12",
+        "x": -0.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "13",
+        "x": 0.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "14",
+        "x": 0.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "15",
+        "x": 1.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "16",
+        "x": 1.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "17",
+        "x": 2.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "18",
+        "x": 2.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "19",
+        "x": 3.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "20",
+        "x": 3.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "21",
+        "x": 4.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "22",
+        "x": 4.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "23",
+        "x": 5.25,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "24",
+        "x": 5.75,
+        "y": -0.4,
+        "w": 0.3,
+        "h": 0.8,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "x": -8.225,
+        "y": 1.1,
+        "w": 2.35,
+        "h": 2.2,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "x": -7.675,
+        "y": 2.625,
+        "w": 1.25,
+        "h": 0.85,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "x": 8.225,
+        "y": 1.1,
+        "w": 2.35,
+        "h": 2.2,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      },
+      {
+        "number": "MP",
+        "x": 7.675,
+        "y": 2.625,
+        "w": 1.25,
+        "h": 0.85,
+        "rot": 0,
+        "shape": "rect",
+        "hole": 0,
+        "paste": true,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -9.65,
+          -1.2
+        ],
+        "b": [
+          9.65,
+          -1.2
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          9.65,
+          -1.2
+        ],
+        "b": [
+          9.65,
+          5.9
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          9.65,
+          5.9
+        ],
+        "b": [
+          -9.65,
+          5.9
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -9.65,
+          5.9
+        ],
+        "b": [
+          -9.65,
+          -1.2
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "bbox": [
+      -9.65,
+      -1.2,
+      9.65,
+      5.9
+    ],
+    "source": "Molex SD-52435-016 rev D, pages 1-2, Farnell 2174151.pdf; includes open actuator envelope"
+  },
+  "TestPad_1mm": {
+    "name": "TestPad_1mm",
+    "pads": [
+      {
+        "number": "1",
+        "x": 0,
+        "y": 0,
+        "w": 1,
+        "h": 1,
+        "rot": 0,
+        "shape": "circle",
+        "hole": 0,
+        "paste": false,
+        "mask": true,
+        "kind": "smd"
+      }
+    ],
+    "lines": [
+      {
+        "a": [
+          -0.7,
+          -0.7
+        ],
+        "b": [
+          0.7,
+          -0.7
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.7,
+          -0.7
+        ],
+        "b": [
+          0.7,
+          0.7
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          0.7,
+          0.7
+        ],
+        "b": [
+          -0.7,
+          0.7
+        ],
+        "layer": "F.Fab"
+      },
+      {
+        "a": [
+          -0.7,
+          0.7
+        ],
+        "b": [
+          -0.7,
+          -0.7
+        ],
+        "layer": "F.Fab"
+      }
+    ],
+    "bbox": [
+      -0.7,
+      -0.7,
+      0.7,
+      0.7
+    ],
+    "source": "1.0mm SMT probe contact; no paste aperture"
+  }
+}

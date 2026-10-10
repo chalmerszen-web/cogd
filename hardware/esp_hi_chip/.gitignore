@@ -1,0 +1,31 @@
+# Iteration snapshots are reproducible development scratch, not release inputs.
+cad/attempts/
+cad/ESP-HI-C3-RevA-standard-review.zip
+cad/ESP-HI-C3-RevA-PCB-routed.json
+cad/ESP-HI-C3-RevA.dsn
+cad/ESP-HI-C3-RevA.ses
+
+# Keep authoritative final checks; omit transient API responses and editor UI.
+evidence/*
+!evidence/geometry-check.json
+!evidence/manufacturing-geometry.json
+!evidence/schematic-netlist-contract.json
+!evidence/pcb-netlist-contract.json
+!evidence/pro-drc-final.json
+!evidence/pro-schematic-drc.json
+!evidence/pro-export-final.json
+!evidence/pro-export-schematic.json
+!evidence/gerber-export-check.json
+!evidence/native-geometry-sync.json
+!evidence/native-final-check.json
+!evidence/native-contract-check.json
+!evidence/DELIVERY_CHECK.json
+
+# Native SVG inputs + final PDFs are published; intermediate rasterizations stay local.
+exports/schematic/print-sheet-*.svg
+exports/schematic/sheet-*.png
+exports/gerber-review/*.svg
+exports/gerber-review/*.png
+
+# ZIP bundle is delivered from the ignored outputs directory to avoid recursion.
+*.tmp

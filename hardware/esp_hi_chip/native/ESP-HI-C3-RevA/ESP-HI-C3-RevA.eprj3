@@ -1,0 +1,126 @@
+{
+  "name": "ESP-HI-C3-RevA",
+  "owner_uuid": "b6dab2ef1743498eb077a0813e55977e",
+  "creator_uuid": "b6dab2ef1743498eb077a0813e55977e",
+  "created_at": "2026-10-10 20:51:25",
+  "updated_at": "2026-10-10 20:51:25",
+  "modifier_uuid": "b6dab2ef1743498eb077a0813e55977e",
+  "content": "",
+  "archive": false,
+  "cbb_project": 0,
+  "thumb": "",
+  "ticket": 1,
+  "g_ticket": 1,
+  "boards": [],
+  "block_symbol_attrs_groups": {},
+  "default_sheet": "",
+  "branch_uuid": "",
+  "pcb_count": 0,
+  "format": "folder",
+  "config": {
+    "defaultSheet": "",
+    "settings": {}
+  },
+  "profile": {
+    "boards": {
+      "3e4e5d87c113e90e": {
+        "uuid": "3e4e5d87c113e90e",
+        "title": "ESP-HI-C3-Chip-RevA",
+        "zIndex": -1
+      }
+    },
+    "schematics": {
+      "240b9c508235f5e1": {
+        "uuid": "240b9c508235f5e1",
+        "name": "ESP-HI-C3-Chip-RevA",
+        "board": "3e4e5d87c113e90e",
+        "source": "",
+        "version": "1791636785708",
+        "updateTime": 1791636785708
+      }
+    },
+    "sheets": {
+      "30968987fbc1647d": {
+        "uuid": "30968987fbc1647d",
+        "title": "01 MCU, crystal and reset",
+        "schematic_uuid": "240b9c508235f5e1",
+        "zIndex": 1,
+        "source": "",
+        "version": "1791636269789",
+        "updateTime": 1791636269789
+      },
+      "8fa31840ba825b92": {
+        "uuid": "8fa31840ba825b92",
+        "title": "02 External antenna and matching",
+        "schematic_uuid": "240b9c508235f5e1",
+        "zIndex": 2,
+        "source": "",
+        "version": "1791636269789",
+        "updateTime": 1791636269789
+      },
+      "bbbca101b360e299": {
+        "uuid": "bbbca101b360e299",
+        "title": "03 USB-C and regulated supply",
+        "schematic_uuid": "240b9c508235f5e1",
+        "zIndex": 3,
+        "source": "",
+        "version": "1791636269789",
+        "updateTime": 1791636269789
+      },
+      "9e364700c984f124": {
+        "uuid": "9e364700c984f124",
+        "title": "04 128x160 SPI display",
+        "schematic_uuid": "240b9c508235f5e1",
+        "zIndex": 4,
+        "source": "",
+        "version": "1791636269789",
+        "updateTime": 1791636269789
+      },
+      "07dc7dde94c1bf76": {
+        "uuid": "07dc7dde94c1bf76",
+        "title": "05 PDM reconstruction and speaker",
+        "schematic_uuid": "240b9c508235f5e1",
+        "zIndex": 5,
+        "source": "",
+        "version": "1791636269789",
+        "updateTime": 1791636269789
+      },
+      "e98944c2045546cf": {
+        "uuid": "e98944c2045546cf",
+        "title": "06 Electret microphone and ADC",
+        "schematic_uuid": "240b9c508235f5e1",
+        "zIndex": 6,
+        "source": "",
+        "version": "1791636269789",
+        "updateTime": 1791636269789
+      },
+      "2ef9ed7773e0c42f": {
+        "uuid": "2ef9ed7773e0c42f",
+        "title": "07 Buttons, RGB and external IO",
+        "schematic_uuid": "240b9c508235f5e1",
+        "zIndex": 7,
+        "source": "",
+        "version": "1791636269789",
+        "updateTime": 1791636269789
+      }
+    },
+    "pcbs": {
+      "52caa9452ee66dee": {
+        "uuid": "52caa9452ee66dee",
+        "title": "ESP-HI-C3-RevA-PCB-routed",
+        "board": "3e4e5d87c113e90e",
+        "parent_uuid": "",
+        "source": "",
+        "version": "1791640329403",
+        "updateTime": 1791640329403
+      }
+    },
+    "panels": {},
+    "blockSymbols": {},
+    "owner": {
+      "uuid": "b6dab2ef1743498eb077a0813e55977e"
+    },
+    "simSchematics": {},
+    "simulations": {}
+  }
+}

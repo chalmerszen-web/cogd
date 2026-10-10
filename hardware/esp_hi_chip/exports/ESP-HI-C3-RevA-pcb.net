@@ -1,0 +1,4923 @@
+PROTEL NETLIST 2.0
+[
+DESIGNATOR
+U1
+FOOTPRINT
+QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm
+PARTTYPE
+ESP32-C3FH4X
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+ESP32-C3FH4X
+Designator
+U1
+Footprint
+QFN-32-1EP_5x5mm_P0.5mm_EP3.45x3.45mm
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHU1
+3D Model Title
+undefined
+Manufacturer Part
+ESP32-C3FH4X
+Device
+ESP32-C3FH4X
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C1
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C1
+Footprint
+R_0402_1005Metric
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHC1
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C2
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C2
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC2
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C3
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C3
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC3
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C4
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C4
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC4
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C5
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10nF
+Designator
+C5
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC5
+3D Model Title
+undefined
+Device
+10nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+L1
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.0nH >=500mA
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+2.0nH >=500mA
+Designator
+L1
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHL1
+3D Model Title
+undefined
+Device
+2.0nH >=500mA
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C6
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10uF 10V X5R
+Designator
+C6
+Footprint
+R_0603_1608Metric
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHC6
+3D Model Title
+undefined
+Device
+10uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C7
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C7
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC7
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C8
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C8
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC8
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+Y1
+FOOTPRINT
+EPSON_FA20H
+PARTTYPE
+40MHz CL10pF +/-10ppm
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+40MHz CL10pF +/-10ppm
+Designator
+Y1
+Footprint
+EPSON_FA20H
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHY1
+3D Model Title
+undefined
+Manufacturer Part
+FA-20H 40.0000MF10Z-K3
+Device
+40MHz CL10pF +/-10ppm
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+L2
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+24nH
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+24nH
+Designator
+L2
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHL2
+3D Model Title
+undefined
+Device
+24nH
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C9
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+15pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+15pF C0G
+Designator
+C9
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC9
+3D Model Title
+undefined
+Device
+15pF C0G
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C10
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+15pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+15pF C0G
+Designator
+C10
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC10
+3D Model Title
+undefined
+Device
+15pF C0G
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R1
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k
+Designator
+R1
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR1
+3D Model Title
+undefined
+Device
+10k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C11
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C11
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC11
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R2
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k
+Designator
+R2
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR2
+3D Model Title
+undefined
+Device
+10k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R3
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k
+Designator
+R3
+Footprint
+R_0402_1005Metric
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHR3
+3D Model Title
+undefined
+Device
+10k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R4
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100k
+Designator
+R4
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR4
+3D Model Title
+undefined
+Device
+100k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+SW1
+FOOTPRINT
+SW_SPST_PTS810
+PARTTYPE
+BOOT
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+BOOT
+Designator
+SW1
+Footprint
+SW_SPST_PTS810
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHSW1
+3D Model Title
+undefined
+Manufacturer Part
+PTS810 SJM 250 SMTR LFS
+Device
+BOOT
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+SW2
+FOOTPRINT
+SW_SPST_PTS810
+PARTTYPE
+RESET
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+RESET
+Designator
+SW2
+Footprint
+SW_SPST_PTS810
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHSW2
+3D Model Title
+undefined
+Manufacturer Part
+PTS810 SJM 250 SMTR LFS
+Device
+RESET
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+SW3
+FOOTPRINT
+SW_SPST_PTS810
+PARTTYPE
+WAKE
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+WAKE
+Designator
+SW3
+Footprint
+SW_SPST_PTS810
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHSW3
+3D Model Title
+undefined
+Manufacturer Part
+PTS810 SJM 250 SMTR LFS
+Device
+WAKE
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R5
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k
+Designator
+R5
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR5
+3D Model Title
+undefined
+Device
+10k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R6
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k
+Designator
+R6
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR6
+3D Model Title
+undefined
+Device
+10k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R7
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+0R RF tuning link
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+0R RF tuning link
+Designator
+R7
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR7
+3D Model Title
+undefined
+Device
+0R RF tuning link
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C12
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+DNP RF tuning
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+DNP RF tuning
+Designator
+C12
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC12
+3D Model Title
+undefined
+Device
+DNP RF tuning
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C13
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+DNP RF tuning
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+DNP RF tuning
+Designator
+C13
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC13
+3D Model Title
+undefined
+Device
+DNP RF tuning
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+J6
+FOOTPRINT
+U.FL_Hirose_U.FL-R-SMT-1_Vertical
+PARTTYPE
+External 2.4GHz antenna
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+External 2.4GHz antenna
+Designator
+J6
+Footprint
+U.FL_Hirose_U.FL-R-SMT-1_Vertical
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHJ6
+3D Model Title
+undefined
+Manufacturer Part
+U.FL-R-SMT-1(10)
+Device
+External 2.4GHz antenna
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+J1
+FOOTPRINT
+GCT_USB4110_GF_A
+PARTTYPE
+USB-C USB2 all-SMT
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+USB-C USB2 all-SMT
+Designator
+J1
+Footprint
+GCT_USB4110_GF_A
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHJ1
+3D Model Title
+undefined
+Manufacturer Part
+USB4110-GF-A
+Device
+USB-C USB2 all-SMT
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R8
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+5.1k 1%
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+5.1k 1%
+Designator
+R8
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR8
+3D Model Title
+undefined
+Device
+5.1k 1%
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R9
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+5.1k 1%
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+5.1k 1%
+Designator
+R9
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR9
+3D Model Title
+undefined
+Device
+5.1k 1%
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R10
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+22R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+22R
+Designator
+R10
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR10
+3D Model Title
+undefined
+Device
+22R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R11
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+22R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+22R
+Designator
+R11
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR11
+3D Model Title
+undefined
+Device
+22R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+D1
+FOOTPRINT
+SOT-23-6
+PARTTYPE
+USB ESD
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+USB ESD
+Designator
+D1
+Footprint
+SOT-23-6
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHD1
+3D Model Title
+undefined
+Manufacturer Part
+USBLC6-2SC6
+Device
+USB ESD
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+U2
+FOOTPRINT
+TSOT-23-6
+PARTTYPE
+3.392V buck 2A
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+3.392V buck 2A
+Designator
+U2
+Footprint
+TSOT-23-6
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHU2
+3D Model Title
+undefined
+Manufacturer Part
+AP63200WU-7
+Device
+3.392V buck 2A
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R32
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+32.4k 0.1%
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+32.4k 0.1%
+Designator
+R32
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR32
+3D Model Title
+undefined
+Device
+32.4k 0.1%
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R33
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k 0.1%
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k 0.1%
+Designator
+R33
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR33
+3D Model Title
+undefined
+Device
+10k 0.1%
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C14
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10uF 10V X5R
+Designator
+C14
+Footprint
+R_0603_1608Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC14
+3D Model Title
+undefined
+Device
+10uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C15
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C15
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC15
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C16
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C16
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC16
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+L3
+FOOTPRINT
+L_Coilcraft_XxL4030
+PARTTYPE
+4.7uH Isat4.6A
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+4.7uH Isat4.6A
+Designator
+L3
+Footprint
+L_Coilcraft_XxL4030
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHL3
+3D Model Title
+undefined
+Manufacturer Part
+XAL4030-472MEC
+Device
+4.7uH Isat4.6A
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C17
+FOOTPRINT
+R_0805_2012Metric
+PARTTYPE
+22uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+22uF 10V X5R
+Designator
+C17
+Footprint
+R_0805_2012Metric
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHC17
+3D Model Title
+undefined
+Device
+22uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C18
+FOOTPRINT
+R_0805_2012Metric
+PARTTYPE
+22uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+22uF 10V X5R
+Designator
+C18
+Footprint
+R_0805_2012Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC18
+3D Model Title
+undefined
+Device
+22uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+U5
+FOOTPRINT
+VSSOP-8_2.3x2mm_P0.5mm
+PARTTYPE
+3-channel LCD buffer
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+3-channel LCD buffer
+Designator
+U5
+Footprint
+VSSOP-8_2.3x2mm_P0.5mm
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHU5
+3D Model Title
+undefined
+Manufacturer Part
+SN74LVC3G17DCUR
+Device
+3-channel LCD buffer
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+U6
+FOOTPRINT
+SOT-23-5
+PARTTYPE
+3.0V LCD LDO
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+3.0V LCD LDO
+Designator
+U6
+Footprint
+SOT-23-5
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHU6
+3D Model Title
+undefined
+Manufacturer Part
+TLV70030DDCR
+Device
+3.0V LCD LDO
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C19
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C19
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC19
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C20
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C20
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC20
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C21
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C21
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC21
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C22
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C22
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC22
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R12
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+47k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+47k
+Designator
+R12
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR12
+3D Model Title
+undefined
+Device
+47k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R13
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k
+Designator
+R13
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR13
+3D Model Title
+undefined
+Device
+10k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C23
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C23
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC23
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+D2
+FOOTPRINT
+D_SOD-323
+PARTTYPE
+Reset clamp
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+Reset clamp
+Designator
+D2
+Footprint
+D_SOD-323
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHD2
+3D Model Title
+undefined
+Manufacturer Part
+BAT54WS
+Device
+Reset clamp
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R14
+FOOTPRINT
+R_1210_3225Metric
+PARTTYPE
+33R 0.5W
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+33R 0.5W
+Designator
+R14
+Footprint
+R_1210_3225Metric
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHR14
+3D Model Title
+undefined
+Device
+33R 0.5W
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+J2
+FOOTPRINT
+Molex_52435_2471
+PARTTYPE
+LCD top-contact FPC24 0.5mm
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+LCD top-contact FPC24 0.5mm
+Designator
+J2
+Footprint
+Molex_52435_2471
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHJ2
+3D Model Title
+undefined
+Manufacturer Part
+52435-2471
+Device
+LCD top-contact FPC24 0.5mm
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R15
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1k
+Designator
+R15
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR15
+3D Model Title
+undefined
+Device
+1k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C24
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+4.7nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+4.7nF
+Designator
+C24
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC24
+3D Model Title
+undefined
+Device
+4.7nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R16
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1k
+Designator
+R16
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR16
+3D Model Title
+undefined
+Device
+1k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C25
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.2nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+2.2nF
+Designator
+C25
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC25
+3D Model Title
+undefined
+Device
+2.2nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R17
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1k
+Designator
+R17
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR17
+3D Model Title
+undefined
+Device
+1k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C26
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1nF
+Designator
+C26
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC26
+3D Model Title
+undefined
+Device
+1nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R18
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1k
+Designator
+R18
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR18
+3D Model Title
+undefined
+Device
+1k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C27
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+4.7nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+4.7nF
+Designator
+C27
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC27
+3D Model Title
+undefined
+Device
+4.7nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R19
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1k
+Designator
+R19
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR19
+3D Model Title
+undefined
+Device
+1k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C28
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.2nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+2.2nF
+Designator
+C28
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC28
+3D Model Title
+undefined
+Device
+2.2nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R20
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1k
+Designator
+R20
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR20
+3D Model Title
+undefined
+Device
+1k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C29
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1nF
+Designator
+C29
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC29
+3D Model Title
+undefined
+Device
+1nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C30
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C30
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC30
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C31
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C31
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC31
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R21
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+33k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+33k
+Designator
+R21
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR21
+3D Model Title
+undefined
+Device
+33k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R22
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+33k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+33k
+Designator
+R22
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR22
+3D Model Title
+undefined
+Device
+33k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+U3
+FOOTPRINT
+MSOP-8_3x3mm_P0.65mm
+PARTTYPE
+NS4150B
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+NS4150B
+Designator
+U3
+Footprint
+MSOP-8_3x3mm_P0.65mm
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHU3
+3D Model Title
+undefined
+Manufacturer Part
+NS4150B
+Device
+NS4150B
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C32
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+1uF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+1uF
+Designator
+C32
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC32
+3D Model Title
+undefined
+Device
+1uF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C33
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C33
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC33
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C34
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10uF 10V X5R
+Designator
+C34
+Footprint
+R_0603_1608Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC34
+3D Model Title
+undefined
+Device
+10uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+J4
+FOOTPRINT
+JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal
+PARTTYPE
+Speaker 8R >=1W
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+Speaker 8R >=1W
+Designator
+J4
+Footprint
+JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHJ4
+3D Model Title
+undefined
+Manufacturer Part
+SM02B-SRSS-TB(LF)(SN)
+Device
+Speaker 8R >=1W
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R23
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+200R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+200R
+Designator
+R23
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR23
+3D Model Title
+undefined
+Device
+200R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C35
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+10uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10uF 10V X5R
+Designator
+C35
+Footprint
+R_0603_1608Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC35
+3D Model Title
+undefined
+Device
+10uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C36
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C36
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC36
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+J3
+FOOTPRINT
+JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal
+PARTTYPE
+Electret microphone
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+Electret microphone
+Designator
+J3
+Footprint
+JST_SH_SM02B-SRSS-TB_1x02-1MP_P1.00mm_Horizontal
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHJ3
+3D Model Title
+undefined
+Manufacturer Part
+SM02B-SRSS-TB(LF)(SN)
+Device
+Electret microphone
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R24
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2.2k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+2.2k
+Designator
+R24
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR24
+3D Model Title
+undefined
+Device
+2.2k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C37
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+22pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+22pF C0G
+Designator
+C37
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC37
+3D Model Title
+undefined
+Device
+22pF C0G
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C38
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+4.7uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+4.7uF 10V X5R
+Designator
+C38
+Footprint
+R_0603_1608Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC38
+3D Model Title
+undefined
+Device
+4.7uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R25
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+2k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+2k
+Designator
+R25
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR25
+3D Model Title
+undefined
+Device
+2k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+U4
+FOOTPRINT
+SOT-23-5
+PARTTYPE
+LMV321IDBVR
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+LMV321IDBVR
+Designator
+U4
+Footprint
+SOT-23-5
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHU4
+3D Model Title
+undefined
+Manufacturer Part
+LMV321IDBVR
+Device
+LMV321IDBVR
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R26
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+150k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+150k
+Designator
+R26
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR26
+3D Model Title
+undefined
+Device
+150k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C39
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+15pF C0G
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+15pF C0G
+Designator
+C39
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC39
+3D Model Title
+undefined
+Device
+15pF C0G
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R27
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100k
+Designator
+R27
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR27
+3D Model Title
+undefined
+Device
+100k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R28
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100k
+Designator
+R28
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR28
+3D Model Title
+undefined
+Device
+100k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C40
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C40
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC40
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C41
+FOOTPRINT
+R_0603_1608Metric
+PARTTYPE
+4.7uF 10V X5R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+4.7uF 10V X5R
+Designator
+C41
+Footprint
+R_0603_1608Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC41
+3D Model Title
+undefined
+Device
+4.7uF 10V X5R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R29
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+56k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+56k
+Designator
+R29
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR29
+3D Model Title
+undefined
+Device
+56k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R30
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+10k
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+10k
+Designator
+R30
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR30
+3D Model Title
+undefined
+Device
+10k
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+R31
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100R
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100R
+Designator
+R31
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHR31
+3D Model Title
+undefined
+Device
+100R
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+LED1
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+WS2812B-2020-V6
+Designator
+LED1
+Footprint
+WS2812B_2020_V6
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHLED1
+3D Model Title
+undefined
+Manufacturer Part
+WS2812B-2020-V6
+Device
+WS2812B-2020-V6
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C43
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C43
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC43
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+LED2
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+WS2812B-2020-V6
+Designator
+LED2
+Footprint
+WS2812B_2020_V6
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHLED2
+3D Model Title
+undefined
+Manufacturer Part
+WS2812B-2020-V6
+Device
+WS2812B-2020-V6
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C44
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C44
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC44
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+LED3
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+WS2812B-2020-V6
+Designator
+LED3
+Footprint
+WS2812B_2020_V6
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHLED3
+3D Model Title
+undefined
+Manufacturer Part
+WS2812B-2020-V6
+Device
+WS2812B-2020-V6
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C45
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C45
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC45
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+LED4
+FOOTPRINT
+WS2812B_2020_V6
+PARTTYPE
+WS2812B-2020-V6
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+WS2812B-2020-V6
+Designator
+LED4
+Footprint
+WS2812B_2020_V6
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHLED4
+3D Model Title
+undefined
+Manufacturer Part
+WS2812B-2020-V6
+Device
+WS2812B-2020-V6
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+C46
+FOOTPRINT
+R_0402_1005Metric
+PARTTYPE
+100nF
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+100nF
+Designator
+C46
+Footprint
+R_0402_1005Metric
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHC46
+3D Model Title
+undefined
+Device
+100nF
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+J5
+FOOTPRINT
+JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal
+PARTTYPE
+Wake expansion
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+Wake expansion
+Designator
+J5
+Footprint
+JST_SH_SM04B-SRSS-TB_1x04-1MP_P1.00mm_Horizontal
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHJ5
+3D Model Title
+undefined
+Manufacturer Part
+SM04B-SRSS-TB(LF)(SN)
+Device
+Wake expansion
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+TP1
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+GND
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+GND
+Designator
+TP1
+Footprint
+TestPad_1mm
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHTP1
+3D Model Title
+undefined
+Device
+GND
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+TP2
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
++3V4
+DESCRIPTION
+
+Component Kind
+Standard
+Name
++3V4
+Designator
+TP2
+Footprint
+TestPad_1mm
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHTP2
+3D Model Title
+undefined
+Device
++3V4
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+TP3
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+VBUS
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+VBUS
+Designator
+TP3
+Footprint
+TestPad_1mm
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHTP3
+3D Model Title
+undefined
+Device
+VBUS
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+TP4
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+UART_TX
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+UART_TX
+Designator
+TP4
+Footprint
+TestPad_1mm
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHTP4
+3D Model Title
+undefined
+Device
+UART_TX
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+TP5
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+UART_RX
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+UART_RX
+Designator
+TP5
+Footprint
+TestPad_1mm
+Description
+
+BOM
+yes
+Add into BOM
+yes
+Unique ID
+ggeSCHTP5
+3D Model Title
+undefined
+Device
+UART_RX
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+[
+DESIGNATOR
+TP6
+FOOTPRINT
+TestPad_1mm
+PARTTYPE
+EN
+DESCRIPTION
+
+Component Kind
+Standard
+Name
+EN
+Designator
+TP6
+Footprint
+TestPad_1mm
+Description
+
+Add into BOM
+yes
+Unique ID
+ggeSCHTP6
+3D Model Title
+undefined
+Device
+EN
+Group ID
+
+Channel ID
+
+Reuse Block
+
+PCB Layer
+TopLayer
+Convert to PCB
+yes
+
+*
+]
+(
+RF_CHIP 
+U1-1 ESP32-C3FH4X-1 Passive 
+R7-1 0R RF tuning link-1 Passive 
+C12-1 DNP RF tuning-1 Passive 
+)
+(
+RF_3V4 
+U1-2 ESP32-C3FH4X-2 Passive 
+U1-3 ESP32-C3FH4X-3 Passive 
+L1-2 2.0nH >=500mA-2 Passive 
+C8-1 1uF-1 Passive 
+)
+(
+WAKE_MOVE 
+U1-4 ESP32-C3FH4X-4 Passive 
+SW3-1 WAKE-1 Passive 
+R5-2 10k-2 Passive 
+J5-1 Wake expansion-1 Passive 
+)
+(
+WAKE_AUDIO 
+U1-5 ESP32-C3FH4X-5 Passive 
+R6-2 10k-2 Passive 
+J5-2 Wake expansion-2 Passive 
+)
+(
+MIC_ADC 
+U1-6 ESP32-C3FH4X-6 Passive 
+C41-2 4.7uF 10V X5R-2 Passive 
+R29-2 56k-2 Passive 
+R30-1 10k-1 Passive 
+)
+(
+EN 
+U1-7 ESP32-C3FH4X-7 Passive 
+R1-2 10k-2 Passive 
+C11-1 1uF-1 Passive 
+SW2-1 RESET-1 Passive 
+D2-1 Reset clamp-1 Passive 
+TP6-1 EN-1 Passive 
+)
+(
+PA_EN 
+U1-8 ESP32-C3FH4X-8 Passive 
+R4-1 100k-1 Passive 
+U3-1 NS4150B-1 Passive 
+)
+(
+LCD_MOSI 
+U1-9 ESP32-C3FH4X-9 Passive 
+U5-1 3-channel LCD buffer-1 Passive 
+)
+(
+LCD_SCLK 
+U1-10 ESP32-C3FH4X-10 Passive 
+U5-6 3-channel LCD buffer-6 Passive 
+R12-1 47k-1 Passive 
+)
+(
++3V4 
+U1-11 ESP32-C3FH4X-11 Passive 
+U1-17 ESP32-C3FH4X-17 Passive 
+U1-31 ESP32-C3FH4X-31 Passive 
+U1-32 ESP32-C3FH4X-32 Passive 
+C1-1 100nF-1 Passive 
+C2-1 100nF-1 Passive 
+C4-1 1uF-1 Passive 
+C5-1 10nF-1 Passive 
+L1-1 2.0nH >=500mA-1 Passive 
+C6-1 10uF 10V X5R-1 Passive 
+C7-1 100nF-1 Passive 
+R1-1 10k-1 Passive 
+R2-1 10k-1 Passive 
+R3-1 10k-1 Passive 
+R5-1 10k-1 Passive 
+R6-1 10k-1 Passive 
+R32-1 32.4k 0.1%-1 Passive 
+L3-2 4.7uH Isat4.6A-2 Passive 
+C17-1 22uF 10V X5R-1 Passive 
+C18-1 22uF 10V X5R-1 Passive 
+U6-1 3.0V LCD LDO-1 Passive 
+U6-3 3.0V LCD LDO-3 Passive 
+C19-1 1uF-1 Passive 
+U3-6 NS4150B-6 Passive 
+C33-1 100nF-1 Passive 
+C34-1 10uF 10V X5R-1 Passive 
+R23-1 200R-1 Passive 
+C36-1 100nF-1 Passive 
+U4-5 LMV321IDBVR-5 Passive 
+R27-1 100k-1 Passive 
+R29-1 56k-1 Passive 
+LED1-4 WS2812B-2020-V6-4 Passive 
+C43-1 100nF-1 Passive 
+LED2-4 WS2812B-2020-V6-4 Passive 
+C44-1 100nF-1 Passive 
+LED3-4 WS2812B-2020-V6-4 Passive 
+C45-1 100nF-1 Passive 
+LED4-4 WS2812B-2020-V6-4 Passive 
+C46-1 100nF-1 Passive 
+TP2-1 +3V4-1 Passive 
+)
+(
+PDM_P 
+U1-12 ESP32-C3FH4X-12 Passive 
+R15-1 1k-1 Passive 
+)
+(
+PDM_N 
+U1-13 ESP32-C3FH4X-13 Passive 
+R18-1 1k-1 Passive 
+)
+(
+RGB_3V4 
+U1-14 ESP32-C3FH4X-14 Passive 
+R3-2 10k-2 Passive 
+R31-1 100R-1 Passive 
+)
+(
+BOOT_N 
+U1-15 ESP32-C3FH4X-15 Passive 
+R2-2 10k-2 Passive 
+SW1-1 BOOT-1 Passive 
+)
+(
+LCD_DC 
+U1-16 ESP32-C3FH4X-16 Passive 
+U5-3 3-channel LCD buffer-3 Passive 
+)
+(
+VDD_SPI 
+U1-18 ESP32-C3FH4X-18 Passive 
+C3-1 1uF-1 Passive 
+)
+(
+USB_DM_MCU 
+U1-25 ESP32-C3FH4X-25 Passive 
+R10-2 22R-2 Passive 
+)
+(
+USB_DP_MCU 
+U1-26 ESP32-C3FH4X-26 Passive 
+R11-2 22R-2 Passive 
+)
+(
+UART_RX 
+U1-27 ESP32-C3FH4X-27 Passive 
+TP5-1 UART_RX-1 Passive 
+)
+(
+UART_TX 
+U1-28 ESP32-C3FH4X-28 Passive 
+TP4-1 UART_TX-1 Passive 
+)
+(
+XTAL_N 
+U1-29 ESP32-C3FH4X-29 Passive 
+Y1-3 40MHz CL10pF +/-10ppm-3 Passive 
+C10-1 15pF C0G-1 Passive 
+)
+(
+XTAL_P 
+U1-30 ESP32-C3FH4X-30 Passive 
+L2-1 24nH-1 Passive 
+)
+(
+GND 
+U1-33 ESP32-C3FH4X-33 Passive 
+C1-2 100nF-2 Passive 
+C2-2 100nF-2 Passive 
+C3-2 1uF-2 Passive 
+C4-2 1uF-2 Passive 
+C5-2 10nF-2 Passive 
+C6-2 10uF 10V X5R-2 Passive 
+C7-2 100nF-2 Passive 
+C8-2 1uF-2 Passive 
+Y1-2 40MHz CL10pF +/-10ppm-2 Passive 
+Y1-4 40MHz CL10pF +/-10ppm-4 Passive 
+C9-2 15pF C0G-2 Passive 
+C10-2 15pF C0G-2 Passive 
+C11-2 1uF-2 Passive 
+R4-2 100k-2 Passive 
+SW1-2 BOOT-2 Passive 
+SW2-2 RESET-2 Passive 
+SW3-2 WAKE-2 Passive 
+C12-2 DNP RF tuning-2 Passive 
+C13-2 DNP RF tuning-2 Passive 
+J6-2 External 2.4GHz antenna-2 Passive 
+J1-A1/B12 USB-C USB2 all-SMT-A1/B12 Passive 
+J1-A12/B1 USB-C USB2 all-SMT-A12/B1 Passive 
+J1-S1 USB-C USB2 all-SMT-S1 Passive 
+J1-S2 USB-C USB2 all-SMT-S2 Passive 
+J1-S3 USB-C USB2 all-SMT-S3 Passive 
+J1-S4 USB-C USB2 all-SMT-S4 Passive 
+R8-2 5.1k 1%-2 Passive 
+R9-2 5.1k 1%-2 Passive 
+D1-2 USB ESD-2 Passive 
+U2-4 3.392V buck 2A-4 Passive 
+R33-2 10k 0.1%-2 Passive 
+C14-2 10uF 10V X5R-2 Passive 
+C15-2 100nF-2 Passive 
+C17-2 22uF 10V X5R-2 Passive 
+C18-2 22uF 10V X5R-2 Passive 
+U5-4 3-channel LCD buffer-4 Passive 
+U6-2 3.0V LCD LDO-2 Passive 
+C19-2 1uF-2 Passive 
+C20-2 1uF-2 Passive 
+C21-2 100nF-2 Passive 
+C22-2 1uF-2 Passive 
+R12-2 47k-2 Passive 
+C23-2 1uF-2 Passive 
+J2-5 LCD top-contact FPC24 0.5mm-5 Passive 
+J2-6 LCD top-contact FPC24 0.5mm-6 Passive 
+J2-7 LCD top-contact FPC24 0.5mm-7 Passive 
+J2-15 LCD top-contact FPC24 0.5mm-15 Passive 
+J2-18 LCD top-contact FPC24 0.5mm-18 Passive 
+J2-21 LCD top-contact FPC24 0.5mm-21 Passive 
+J2-24 LCD top-contact FPC24 0.5mm-24 Passive 
+J2-MP LCD top-contact FPC24 0.5mm-MP Passive 
+C24-2 4.7nF-2 Passive 
+C25-2 2.2nF-2 Passive 
+C26-2 1nF-2 Passive 
+C27-2 4.7nF-2 Passive 
+C28-2 2.2nF-2 Passive 
+C29-2 1nF-2 Passive 
+U3-7 NS4150B-7 Passive 
+C32-2 1uF-2 Passive 
+C33-2 100nF-2 Passive 
+C34-2 10uF 10V X5R-2 Passive 
+J4-MP Speaker 8R >=1W-MP Passive 
+C35-2 10uF 10V X5R-2 Passive 
+C36-2 100nF-2 Passive 
+J3-2 Electret microphone-2 Passive 
+J3-MP Electret microphone-MP Passive 
+C37-2 22pF C0G-2 Passive 
+U4-2 LMV321IDBVR-2 Passive 
+R28-2 100k-2 Passive 
+C40-2 100nF-2 Passive 
+R30-2 10k-2 Passive 
+LED1-2 WS2812B-2020-V6-2 Passive 
+C43-2 100nF-2 Passive 
+LED2-2 WS2812B-2020-V6-2 Passive 
+C44-2 100nF-2 Passive 
+LED3-2 WS2812B-2020-V6-2 Passive 
+C45-2 100nF-2 Passive 
+LED4-2 WS2812B-2020-V6-2 Passive 
+C46-2 100nF-2 Passive 
+J5-4 Wake expansion-4 Passive 
+J5-MP Wake expansion-MP Passive 
+TP1-1 GND-1 Passive 
+)
+(
+XTAL_LOAD 
+Y1-1 40MHz CL10pF +/-10ppm-1 Passive 
+L2-2 24nH-2 Passive 
+C9-1 15pF C0G-1 Passive 
+)
+(
+RF_50 
+R7-2 0R RF tuning link-2 Passive 
+C13-1 DNP RF tuning-1 Passive 
+J6-1 External 2.4GHz antenna-1 Passive 
+)
+(
+VBUS 
+J1-A4/B9 USB-C USB2 all-SMT-A4/B9 Passive 
+J1-A9/B4 USB-C USB2 all-SMT-A9/B4 Passive 
+D1-5 USB ESD-5 Passive 
+U2-2 3.392V buck 2A-2 Passive 
+U2-3 3.392V buck 2A-3 Passive 
+C14-1 10uF 10V X5R-1 Passive 
+C15-1 100nF-1 Passive 
+R14-1 33R 0.5W-1 Passive 
+J5-3 Wake expansion-3 Passive 
+TP3-1 VBUS-1 Passive 
+)
+(
+CC1 
+J1-A5 USB-C USB2 all-SMT-A5 Passive 
+R8-1 5.1k 1%-1 Passive 
+)
+(
+USB_DM 
+J1-B7 USB-C USB2 all-SMT-B7 Passive 
+J1-A7 USB-C USB2 all-SMT-A7 Passive 
+R10-1 22R-1 Passive 
+D1-1 USB ESD-1 Passive 
+D1-6 USB ESD-6 Passive 
+)
+(
+USB_DP 
+J1-A6 USB-C USB2 all-SMT-A6 Passive 
+J1-B6 USB-C USB2 all-SMT-B6 Passive 
+R11-1 22R-1 Passive 
+D1-3 USB ESD-3 Passive 
+D1-4 USB ESD-4 Passive 
+)
+(
+CC2 
+J1-B5 USB-C USB2 all-SMT-B5 Passive 
+R9-1 5.1k 1%-1 Passive 
+)
+(
+BUCK_FB 
+U2-1 3.392V buck 2A-1 Passive 
+R32-2 32.4k 0.1%-2 Passive 
+R33-1 10k 0.1%-1 Passive 
+)
+(
+SW_BUCK 
+U2-5 3.392V buck 2A-5 Passive 
+C16-2 100nF-2 Passive 
+L3-1 4.7uH Isat4.6A-1 Passive 
+)
+(
+BST 
+U2-6 3.392V buck 2A-6 Passive 
+C16-1 100nF-1 Passive 
+)
+(
+LCD_CLK_3V0 
+U5-2 3-channel LCD buffer-2 Passive 
+J2-16 LCD top-contact FPC24 0.5mm-16 Passive 
+)
+(
+LCD_DC_3V0 
+U5-5 3-channel LCD buffer-5 Passive 
+J2-17 LCD top-contact FPC24 0.5mm-17 Passive 
+)
+(
+LCD_MOSI_3V0 
+U5-7 3-channel LCD buffer-7 Passive 
+J2-19 LCD top-contact FPC24 0.5mm-19 Passive 
+)
+(
++3V0_LCD 
+U5-8 3-channel LCD buffer-8 Passive 
+U6-5 3.0V LCD LDO-5 Passive 
+C20-1 1uF-1 Passive 
+C21-1 100nF-1 Passive 
+C22-1 1uF-1 Passive 
+R13-1 10k-1 Passive 
+J2-14 LCD top-contact FPC24 0.5mm-14 Passive 
+J2-22 LCD top-contact FPC24 0.5mm-22 Passive 
+J2-23 LCD top-contact FPC24 0.5mm-23 Passive 
+)
+(
+LCD_RESET_N 
+R13-2 10k-2 Passive 
+C23-1 1uF-1 Passive 
+D2-2 Reset clamp-2 Passive 
+J2-20 LCD top-contact FPC24 0.5mm-20 Passive 
+)
+(
+LCD_LEDA 
+R14-2 33R 0.5W-2 Passive 
+J2-8 LCD top-contact FPC24 0.5mm-8 Passive 
+)
+(
+PDM_P_F1 
+R15-2 1k-2 Passive 
+C24-1 4.7nF-1 Passive 
+R16-1 1k-1 Passive 
+)
+(
+PDM_P_F2 
+R16-2 1k-2 Passive 
+C25-1 2.2nF-1 Passive 
+R17-1 1k-1 Passive 
+)
+(
+PDM_P_F3 
+R17-2 1k-2 Passive 
+C26-1 1nF-1 Passive 
+C30-1 100nF-1 Passive 
+)
+(
+PDM_N_F1 
+R18-2 1k-2 Passive 
+C27-1 4.7nF-1 Passive 
+R19-1 1k-1 Passive 
+)
+(
+PDM_N_F2 
+R19-2 1k-2 Passive 
+C28-1 2.2nF-1 Passive 
+R20-1 1k-1 Passive 
+)
+(
+PDM_N_F3 
+R20-2 1k-2 Passive 
+C29-1 1nF-1 Passive 
+C31-1 100nF-1 Passive 
+)
+(
+PA_AC_P 
+C30-2 100nF-2 Passive 
+R21-1 33k-1 Passive 
+)
+(
+PA_AC_N 
+C31-2 100nF-2 Passive 
+R22-1 33k-1 Passive 
+)
+(
+PA_INP 
+R21-2 33k-2 Passive 
+U3-3 NS4150B-3 Passive 
+)
+(
+PA_INN 
+R22-2 33k-2 Passive 
+U3-4 NS4150B-4 Passive 
+)
+(
+PA_BYPASS 
+U3-2 NS4150B-2 Passive 
+C32-1 1uF-1 Passive 
+)
+(
+SPK_N 
+U3-5 NS4150B-5 Passive 
+J4-2 Speaker 8R >=1W-2 Passive 
+)
+(
+SPK_P 
+U3-8 NS4150B-8 Passive 
+J4-1 Speaker 8R >=1W-1 Passive 
+)
+(
+MIC_3V4 
+R23-2 200R-2 Passive 
+C35-1 10uF 10V X5R-1 Passive 
+R24-1 2.2k-1 Passive 
+)
+(
+MIC_P 
+J3-1 Electret microphone-1 Passive 
+R24-2 2.2k-2 Passive 
+C37-1 22pF C0G-1 Passive 
+C38-1 4.7uF 10V X5R-1 Passive 
+)
+(
+MIC_AC 
+C38-2 4.7uF 10V X5R-2 Passive 
+R25-1 2k-1 Passive 
+)
+(
+MIC_INV 
+R25-2 2k-2 Passive 
+U4-3 LMV321IDBVR-3 Passive 
+R26-1 150k-1 Passive 
+C39-1 15pF C0G-1 Passive 
+)
+(
+MIC_BIAS 
+U4-1 LMV321IDBVR-1 Passive 
+R27-2 100k-2 Passive 
+R28-1 100k-1 Passive 
+C40-1 100nF-1 Passive 
+)
+(
+MIC_OUT 
+U4-4 LMV321IDBVR-4 Passive 
+R26-2 150k-2 Passive 
+C39-2 15pF C0G-2 Passive 
+C41-1 4.7uF 10V X5R-1 Passive 
+)
+(
+RGB_D1 
+R31-2 100R-2 Passive 
+LED1-3 WS2812B-2020-V6-3 Passive 
+)
+(
+RGB_D2 
+LED1-1 WS2812B-2020-V6-1 Passive 
+LED2-3 WS2812B-2020-V6-3 Passive 
+)
+(
+RGB_D3 
+LED2-1 WS2812B-2020-V6-1 Passive 
+LED3-3 WS2812B-2020-V6-3 Passive 
+)
+(
+RGB_D4 
+LED3-1 WS2812B-2020-V6-1 Passive 
+LED4-3 WS2812B-2020-V6-3 Passive 
+)

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "outline_mm": [
+    34.3,
+    46.35
+  ],
+  "copper_to_edge_rule_mm": 0.3,
+  "npth_to_copper_rule_mm": 0.2,
+  "hole_to_hole_rule_mm": 0.2,
+  "edge_violations": [],
+  "npth_violations": [],
+  "hole_spacing_violations": [],
+  "annulus_violations": [],
+  "different_net_smd_pad_clearance_rule_mm": 0.15,
+  "pad_spacing_violations": [],
+  "minimum_track_width_mm": 0.125,
+  "minimum_annulus_mm": 0.075,
+  "used_copper_layers": [
+    1,
+    2
+  ]
+}
