@@ -1,5 +1,5 @@
 {
-  "family": "Noto Sans SC",
+  "family": "Noto Sans SC with DejaVu Sans math supplement",
   "weight": 400,
   "size_px": 16,
   "bpp": 2,
@@ -8,14 +8,50 @@
   "ranges": "0x20-0x7e,0xa0-0xff,0x370-0x3ff,0x2000-0x22ff,0x2460-0x24ff,0x3000-0x303f,0x4e00-0x9fff,0xff00-0xffef",
   "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
   "license": "FONT-LICENSE.txt",
-  "latin_runtime_font": "LVGL Montserrat 14; Chinese fallback is cjk16.bin",
+  "latin_runtime_font": "LVGL Montserrat 14; fallback is cjk16.bin",
   "source": {
     "bytes": 17772300,
     "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
   },
+  "math_supplement": {
+    "source": "tools/fonts/DejaVuSans.ttf",
+    "license": "tools/fonts/DejaVuSans-LICENSE.txt",
+    "sha256": "3fdf69cabf06049ea70a00b5919340e2ce1e6d02b0cc3c4b44fb6801bd1e0d22",
+    "codepoints": [
+      "U+2070",
+      "U+2071",
+      "U+2075",
+      "U+2076",
+      "U+2077",
+      "U+2078",
+      "U+2079",
+      "U+207A",
+      "U+207B",
+      "U+207C",
+      "U+207D",
+      "U+207E",
+      "U+207F",
+      "U+2080",
+      "U+2081",
+      "U+2082",
+      "U+2083",
+      "U+2084",
+      "U+2085",
+      "U+2086",
+      "U+2087",
+      "U+2088",
+      "U+2089",
+      "U+208A",
+      "U+208B",
+      "U+208C",
+      "U+208D",
+      "U+208E"
+    ]
+  },
+  "required_math": "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾ⁱⁿ₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎αβγδθλμπσφω′″←→↔⇒⇔±×÷−∞√∑∏∫∂∇≈≠≤≥∈∉∅",
   "binary": {
-    "bytes": 1345212,
-    "sha256": "1184fe451d80fc7e8b1eea62dcdf44952d2ff97b0e03bde1d265562b721ee1e8"
+    "bytes": 1345696,
+    "sha256": "c57bdb310bba05304d59b7711547f787a7a398ff55d80f38abecac199a098103"
   },
   "requires": "CONFIG_LV_FONT_FMT_TXT_LARGE=y (bitmap offsets exceed 20 bits)"
 }

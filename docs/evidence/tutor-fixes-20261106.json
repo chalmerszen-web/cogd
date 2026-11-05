@@ -1,0 +1,1594 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "prepared_utc": "2026-11-05T21:26:32.669186+00:00",
+  "release_status": "candidate_05_scoped_acceptance_passed",
+  "overall_acceptance_passed": true,
+  "version": "0.9.3-p4-tutor",
+  "wake_word": "你好小智",
+  "source_baseline_commit": "a4e7319",
+  "evidence_policy": "Raw video, recordings, serial logs and flash readbacks remain local. This receipt publishes selected outcomes and SHA256 identities only.",
+  "software": {
+    "full_host": {
+      "status": "PASS",
+      "passed": 105,
+      "failed": 0,
+      "scope": "earlier candidate stage; not rerun as a full suite after candidate 02 follow-up fixes",
+      "log": "host-tests.log",
+      "log_sha256": "ab1219b60d113f4093fec193dd6c8abaa67d920a8f4aec6f9564e8a4651bc7a4"
+    },
+    "candidate_02_frozen_targeted": {
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "tests": [
+        "p4_response_owner",
+        "p4_document_state",
+        "p4_tutor_contract"
+      ],
+      "log": "host-candidate02-frozen.log",
+      "log_sha256": "bbf57416b04d826758cb0eea5635f6e5c13bbb55401ffc1b7a381320ed4b53b6"
+    },
+    "candidate_02_font": {
+      "status": "PASS",
+      "passed": 4,
+      "failed": 0,
+      "scope": "offline font asset and coverage checks; not physical screen acceptance",
+      "log": "font-candidate02.log",
+      "log_sha256": "09a33835eb27cae91e1addf50fd936eb545e5ed151b99f2ea70e0f916fde306f"
+    },
+    "candidate_02_build": {
+      "status": "PASS",
+      "log": "p4-build-candidate02-frozen.log",
+      "log_sha256": "f802952696e6b4fdcc7d36f3358c9e2f1ad3da7f9ca9d75a453ed0c79d9eccf0"
+    },
+    "candidate_03_targeted": {
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "tests": [
+        "p4_response_owner",
+        "p4_document_state",
+        "p4_tutor_contract"
+      ],
+      "scope": "Includes user-only fallback readiness, 1000 ms automatic-response grace, early/late automatic response, stale transcription and one manual response per ticket.",
+      "log": "host-candidate03.log",
+      "log_sha256": "42f27b87f250a4bc320cbac4ff97f04011bbdd2471ad92eb26194838590f49db"
+    },
+    "candidate_03_build": {
+      "status": "PASS",
+      "log": "p4-build-candidate03.log",
+      "log_sha256": "c8c8bd36a81491a587776b5b2fb008f7fb66e2989a94dcd14877d6647f6ffa71"
+    },
+    "candidate_04_targeted": {
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "tests": [
+        "p4_response_owner",
+        "p4_document_state",
+        "p4_tutor_contract"
+      ],
+      "log": "host-candidate04-frozen.log",
+      "log_sha256": "42f27b87f250a4bc320cbac4ff97f04011bbdd2471ad92eb26194838590f49db"
+    },
+    "candidate_04_build": {
+      "status": "PASS",
+      "log": "p4-build-candidate04-frozen.log",
+      "log_sha256": "fc407cc46bffa839e60900f82660add19b41e38eb357de0cd678206a000eb1c3"
+    },
+    "candidate_05_targeted": {
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "tests": [
+        "p4_response_owner",
+        "p4_document_state",
+        "p4_tutor_contract"
+      ],
+      "log": "host-candidate05.log",
+      "log_sha256": "f92bf41f4c1fa3bfe75f665b676e90f401a0571a6391eb00d96ee12e17b93c40"
+    },
+    "candidate_05_build": {
+      "status": "PASS",
+      "log": "p4-build-candidate05.log",
+      "log_sha256": "c478769ff807fb9c900c854296eb256330b2ab2259b404dbba7bbaa4616c6b8e"
+    },
+    "candidate_05_full": {
+      "status": "PASS",
+      "passed": 105,
+      "failed": 0,
+      "log": "host-candidate05-full.log",
+      "log_sha256": "6ee138f372822f44a818cb11001cecca339ffde474c62e6290bfc8dccbdf1057",
+      "scope": "Independent full host suite on candidate05 source; does not imply physical acceptance."
+    }
+  },
+  "c3": {
+    "build": "PASS",
+    "version": "0.13.0-c3-xiaozhi",
+    "app_bytes": 1569184,
+    "free_app_bytes": 3680,
+    "app_sha256": "addfc5b39223bea84b0a2f18c10bb716a99f6a07f012ef3cf225caaa72b97193",
+    "partition_sha256": "03135fff90b8a4983a4a7a758018626dc296756ac79578e5df9c7b8eb64b3179",
+    "app_matches_baseline": true,
+    "partition_matches_baseline": true,
+    "hardware_validation": "NOT_RUN",
+    "flashed": false,
+    "receipt_sha256": "4985595e14e52b140c312794c18dc606761ebbb10cc7fa016ef11eba3458b4a1",
+    "candidate_05_rebuild": {
+      "build": "PASS",
+      "build_kind": "independent rerun using existing C3 cache/profile; no fullclean",
+      "started_utc": "2026-11-05T20:59:24.8506185Z",
+      "finished_utc": "2026-11-05T21:00:04.9563414Z",
+      "target": "esp32c3",
+      "version": "0.13.0-c3-xiaozhi",
+      "wake_model": "wn9s_nihaoxiaozhi",
+      "app_bytes": 1569184,
+      "free_app_bytes": 3680,
+      "app_sha256": "addfc5b39223bea84b0a2f18c10bb716a99f6a07f012ef3cf225caaa72b97193",
+      "partition_sha256": "03135fff90b8a4983a4a7a758018626dc296756ac79578e5df9c7b8eb64b3179",
+      "app_matches_prebuild": true,
+      "app_matches_baseline": true,
+      "partition_matches_prebuild": true,
+      "partition_matches_baseline": true,
+      "c3_p4_isolation": "PASS",
+      "hardware_validation": "NOT_RUN",
+      "flashed": false,
+      "serial_ports_opened": false,
+      "receipt_sha256": "e9cd0ba947b4dcaad936cc9a2b24d8e47e775c9ce8e0672dc98daccc29bf8ded",
+      "log_sha256": "fc65aaf0252e4879cf24e9bc5a82dd5940e6caf0bdecf87df8b2ced4497b07b7",
+      "isolation_sha256": "8237abac9aff77547b12ab64824c5a78525af3a76ed0d4acf5d96099bc829cc3"
+    }
+  },
+  "s3": {
+    "implementation": "NOT_IMPLEMENTED",
+    "hardware": "NOT_RUN"
+  },
+  "candidate_01": {
+    "app_bytes": 5765696,
+    "app_sha256": "9d6263aa90326e1d33e9e827703310f12d37fb7f94c5f39baac0c3a702ab8992",
+    "assets_bytes": 1349792,
+    "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+    "partition_sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+    "installed": true,
+    "protected_regions_checked": true,
+    "readback_matched": true,
+    "trial_02": {
+      "status": "FAIL",
+      "source": "fixed_acoustic_replay_of_original_user_voice",
+      "video_duration_seconds": 597.266667,
+      "physical_touch_tested": false,
+      "camera_question_accuracy_tested": false,
+      "review_method": "Local VAD/SenseVoice ASR, fixture waveform correlation, serial cross-check and inspected video frames. No claim of manual audio listening.",
+      "bug_results": [
+        {
+          "id": 1,
+          "target": "selected_subquestion_only",
+          "status": "NOT_FULLY_ASSESSED",
+          "detail": "Offline review did not certify mathematical correctness or full solution scope."
+        },
+        {
+          "id": 2,
+          "target": "display_before_claiming_completion",
+          "status": "NOT_REPRODUCED_IN_THIS_RUN",
+          "screen_transition_seconds": [
+            208,
+            209
+          ],
+          "explanation_start_seconds": 214.308,
+          "detail": "Waiting speech said solving; white solution page was visible before the explanation. This is bounded to the sampled run."
+        },
+        {
+          "id": 3,
+          "target": "duplicate_or_stale_responses_and_actions",
+          "status": "FAIL",
+          "automatic_action_failure": {
+            "detail": "After one selection clarification, a completed refine notification triggered status then another refine.",
+            "device_time_ms": [
+              135391,
+              141357,
+              143645,
+              146362,
+              152473
+            ],
+            "events": [
+              "refine_accepted",
+              "refine_result",
+              "status_call",
+              "second_refine_call",
+              "second_refine_result"
+            ]
+          },
+          "spoken_confirmation": {
+            "status": "NOT_ESTABLISHED_AS_UNSOLICITED_REPEAT",
+            "detail": "The two confirmation prompts had a new user selection clarification between them."
+          },
+          "slow_explain": {
+            "status": "FAIL",
+            "question_id": 4,
+            "step": 1,
+            "call_time_ms": 336753,
+            "accepted_time_ms": 336948,
+            "obsolete_time_ms": 337660,
+            "unanswered_interval_seconds_approx": 62,
+            "detail": "No corresponding new speaker start or matched external reply before the next question."
+          }
+        },
+        {
+          "id": 4,
+          "target": "retain_early_explain_preference",
+          "status": "FAIL",
+          "failure_kind": "state_contract",
+          "observed_behavior": "NOT_REPRODUCED_AS_ANOTHER_CHOICE_QUESTION",
+          "detail": "The early request was followed by direct explanation after solving, without another reading/explaining question; pending_action remained empty, so the intended persisted-choice path did not run."
+        },
+        {
+          "id": 5,
+          "target": "mathematical_glyphs",
+          "status": "FAIL_CANDIDATE01",
+          "detail": "The inspected selected.jpg shows missing Latin superscript glyphs after x and ln. Later candidate fixes do not retroactively change this result."
+        },
+        {
+          "id": 6,
+          "target": "first_return_to_solution",
+          "status": "PASS_FIXED_REPLAY",
+          "return_request_count": 1,
+          "question_id": 4,
+          "revision": 1,
+          "restored": true,
+          "screen_transition_seconds": [
+            481,
+            482
+          ],
+          "detail": "One executed return request restored the solution before the completed-return announcement."
+        },
+        {
+          "id": 7,
+          "target": "restore_reading_position",
+          "status": "PASS_SOFTWARE_FOCUS_POSITION",
+          "before_scroll_y": 617,
+          "after_scroll_y": 617,
+          "detail": "Before/after frames show the same paragraph region. Position came from explain step-1 focus; scroll500 returned busy. This was not physical touch scrolling."
+        }
+      ],
+      "not_executed": [
+        "read request after the run deadline",
+        "five-minute quiet reading",
+        "physical touch restoration"
+      ],
+      "limits": [
+        "The run is fixed voice replay, not a new live human conversation.",
+        "Screen transitions are bounded by sampled one-second intervals; image snapshots may trail commands.",
+        "ASR contains formula and short-phrase errors; quiet early speech was confirmed by fixture correlation and device events.",
+        "An unmatched ASR segment at 210.084-211.906 seconds remains unattributed and is not reported as a device utterance.",
+        "Mathematical correctness and historical factual accuracy were not evaluated."
+      ]
+    }
+  },
+  "candidate_02": {
+    "source_state": "frozen_after_failure_notice_fix",
+    "app_bytes": 5771280,
+    "app_sha256": "14459a84313ae825fa124b2ff294ca653656ef2156618029c8081ef992ce37f9",
+    "assets_bytes": 1349792,
+    "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+    "partition_sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+    "installation": "PASS",
+    "protected_regions_checked": true,
+    "readback": "PASS",
+    "hardware_acceptance": "PARTIAL_FAIL",
+    "passed": false,
+    "bug_results": [
+      {
+        "id": 1,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 2,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 3,
+        "status": "PARTIAL_FAIL",
+        "detail": "Each of the two selection inputs caused one refine. The later confirmation was transcribed but received no response or confirm action; slow explain and later notice paths were not executed."
+      },
+      {
+        "id": 4,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 5,
+        "status": "PARTIAL_PASS",
+        "detail": "Inspected question-summary frame displays x^(a) ln^(b) x and visible 0-plus; the former two missing superscript boxes are absent. Solution-page and remaining symbol coverage were NOT_RUN."
+      },
+      {
+        "id": 6,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 7,
+        "status": "NOT_RUN"
+      }
+    ],
+    "trial_04": {
+      "status": "FAIL_AT_CONFIRMATION",
+      "source": "fixed_acoustic_replay_of_original_user_voice",
+      "video_duration_seconds": 192.866667,
+      "executed_replay": [
+        "wake",
+        "select",
+        "first",
+        "confirm"
+      ],
+      "confirmation_user_time_ms": 157503,
+      "timeout_time_ms": 202506,
+      "unanswered_before_timeout_seconds": 45.003,
+      "confirm_tool_called": false,
+      "response_after_confirmation": false,
+      "last_tutor_state": "awaiting_confirmation",
+      "question_id": 4,
+      "revision": 0,
+      "solution_bytes": 0,
+      "review": "analysis/trial-04/review.json",
+      "review_sha256": "107b1f6708f1cdfcc04e9355b10ac4681b89a68676ea2c796d3cd7f20be5318b",
+      "limits": [
+        "Only four voice fixtures were replayed; solving, early explanation, follow-up questions, portrait return and position restoration were NOT_RUN.",
+        "The two selection confirmations had intervening new user input; they are not unsolicited repeated speech.",
+        "Summary superscript visibility is a local frame observation, not all-symbol or solution-page acceptance.",
+        "Recovery wording does not prove a network outage or identify why the provider omitted the automatic response.",
+        "No new live-human, physical-touch or camera-recognition acceptance."
+      ]
+    },
+    "trial_03": {
+      "status": "HARNESS_ABORTED_BEFORE_REPLAY",
+      "user_audio_played": false,
+      "counts_as_device_failure": false,
+      "detail": "Controller log-argument conflict stopped preparation before any user fixture was played."
+    },
+    "final_device_state": null
+  },
+  "candidate_03": {
+    "app_bytes": 5771824,
+    "app_sha256": "2e75f2cc4ac551f8936b37ce692c3e449fa1b36acd95f9b9fbe63efdc855b816",
+    "assets_bytes": 1349792,
+    "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+    "partition_sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+    "installation": "PASS",
+    "protected_regions_checked": true,
+    "readback": "PASS",
+    "hardware_acceptance": "PARTIAL_FAIL",
+    "passed": false,
+    "receipt_sha256": "8fb846ab8608a1df618190d82b84ff3ba9a03571d3a275e5c3635a091d8c01fe",
+    "trial_05": {
+      "status": "FAIL",
+      "trial": "trial-05",
+      "candidate": "03",
+      "app_sha256": "2e75f2cc4ac551f8936b37ce692c3e449fa1b36acd95f9b9fbe63efdc855b816",
+      "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+      "video_sha256": "e2a224c74a1dee2b7770adfa217184bc6be9aaa58df3657caae70ea01e5e906d",
+      "video_seconds": 409.8,
+      "audio_seconds": 408.02125,
+      "source_closed": true,
+      "method": "Local automatic SenseVoice ASR plus fixed-WAV waveform alignment, event/state cross-check and two visually inspected frames; not human audio transcription or speaker diarization.",
+      "timing": {
+        "video_origin": "original MP4",
+        "host_to_video_offset_seconds": 393798.61818,
+        "replay_alignment_offset_spread_seconds": 0.00489,
+        "event_limits": "Event times derive from host observation and can include transport/collection latency."
+      },
+      "checks": [
+        {
+          "name": "first_confirmation_executes",
+          "status": "FAIL",
+          "video": [
+            86.0387,
+            98.3472
+          ],
+          "device_answer_ms": 107411,
+          "observation": "Internal workflow spoken; no confirm tool. A separately injected retry at 164.6983s eventually confirmed. Retry cannot promote first attempt to PASS."
+        },
+        {
+          "name": "show_while_solving_claim",
+          "status": "PASS_SUBSET",
+          "video": [
+            176.804,
+            179.33
+          ],
+          "observation": "Answered generating solution, please wait; did not claim the solution was already visible in this reply."
+        },
+        {
+          "name": "early_intent_persistence",
+          "status": "PASS_SUBSET",
+          "video": [
+            187.521,
+            233.1405
+          ],
+          "observation": "explain step0 accepted while solving; pending_action explaining; completed state later explaining with visible/rendered true."
+        },
+        {
+          "name": "no_explanation_before_completed_solution",
+          "status": "FAIL",
+          "video": [
+            188.004,
+            195.682
+          ],
+          "observation": "ASR identifies beginning of actual explanation while visually inspected 192.5s frame still shows solving status."
+        },
+        {
+          "name": "completion_spoken_reply_full",
+          "status": "INCONCLUSIVE_HARNESS_INTERRUPTED",
+          "video": [
+            233.86,
+            240.7912
+          ],
+          "observation": "Controller started overview replay before latest speaker response had playback_done, causing real replay overlap and interruption."
+        },
+        {
+          "name": "overview_completed_reply",
+          "status": "FAIL",
+          "video": [
+            249.0813,
+            264.1765
+          ],
+          "observation": "Partial explanation then timeout/recovery. Network recovered prompt was wrongly counted by controller as completed overview."
+        },
+        {
+          "name": "substitution_completed_reply",
+          "status": "PASS_SUBSET",
+          "video": [
+            270.029,
+            299.0724
+          ],
+          "observation": "Relevant explanation and playback_done observed. Full mathematical correctness not assessed."
+        },
+        {
+          "name": "lhopital_completed_reply",
+          "status": "FAIL",
+          "video": [
+            303.9829,
+            351.0733
+          ],
+          "observation": "Relevant explanation starts but ends mid-derivative after local_vad; no playback_done. Full answer text is not proof of full audible response."
+        }
+      ],
+      "vad": [
+        {
+          "device_ms": 208862,
+          "video_approx_seconds": 196.5392,
+          "overlapping_replay": null,
+          "nearby_device_speech": true,
+          "extra_room_speech_identified": false,
+          "cause": "UNKNOWN",
+          "detail": "Raw and 4x-gain forced ASR identify device explanation only; 195-199s produces no valid sentence. Does not exclude quiet room speech/noise/echo."
+        },
+        {
+          "device_ms": 252753,
+          "video_approx_seconds": 240.4416,
+          "overlapping_replay": {
+            "name": "overview",
+            "start": 238.9312,
+            "end": 240.7912
+          },
+          "nearby_device_speech": true,
+          "cause": "PLANNED_REPLAY_OVERLAP",
+          "detail": "Cannot count as a no-test-input interruption. Waveform alignment across all ten replays agrees within approximately 5ms."
+        },
+        {
+          "device_ms": 363398,
+          "video_approx_seconds": 351.0733,
+          "overlapping_replay": null,
+          "nearby_device_speech": true,
+          "extra_room_speech_identified": false,
+          "cause": "UNKNOWN",
+          "detail": "Raw and 4x-gain forced ASR identify device derivative sentence only; narrow window fragment cannot identify another speaker. Does not exclude quiet room speech/noise/echo."
+        }
+      ],
+      "not_run": [
+        "history",
+        "portrait",
+        "first_return",
+        "read",
+        "three_scroll_image_resume_cycles"
+      ],
+      "physical_evidence": {
+        "inspected_frames_seconds": [
+          192.5,
+          233.3
+        ],
+        "frame_192_5": "Solving status, dark page",
+        "frame_233_3": "White solution document",
+        "first_render_time": "NOT_LOCATED_FRAME_BY_FRAME",
+        "physical_touch": false,
+        "question_from_camera": false
+      },
+      "limits": [
+        "No independent speaker diarization or human auditory confirmation",
+        "No causal attribution of two unexplained local_vad triggers",
+        "No overall seven-bug acceptance",
+        "No first-return/bookmark test in this run",
+        "Local ASR has mathematical and overlapping-speech errors",
+        "Firmware readback is inherited from trial binding record, not repeated by this reviewer"
+      ],
+      "source": "fixed_acoustic_replay_of_original_user_voice",
+      "review": "analysis/trial-05/review.json",
+      "review_sha256": "aa1c54cf2db238fd8c09333f75696813ec464753dccd045f4e5f52a4d9b6f172",
+      "physical_touch_tested": false,
+      "camera_question_accuracy_tested": false,
+      "diagnostic_confirm_retry": true,
+      "harness_issue": "wait_turn accepted an old answer/playback_done while a newer response was speaking; overview replay overlapped the completion response. Recovery wording was also wrongly accepted as overview completion."
+    },
+    "final_device_state": null,
+    "source_state": "frozen_after_user_response_fallback_fix",
+    "bug_results": [
+      {
+        "id": 1,
+        "status": "NOT_FULLY_ASSESSED",
+        "detail": "Single selected question persisted, but full mathematical correctness and scope were not certified."
+      },
+      {
+        "id": 2,
+        "status": "PARTIAL_FAIL",
+        "detail": "Show request honestly answered still generating; actual oral explanation began while sampled screen still showed solving. Exact false display-complete wording was not reproduced."
+      },
+      {
+        "id": 3,
+        "status": "FAIL",
+        "detail": "First confirmation spoke internal workflow without confirm. Diagnostic retry was required. Overview recovery prompt was not a completed answer; lhopital playback was truncated."
+      },
+      {
+        "id": 4,
+        "status": "PARTIAL_PASS",
+        "detail": "Early explain intent persisted and completion entered explaining. Natural completion playback was interrupted by premature harness replay, so end-to-end acceptance remains incomplete."
+      },
+      {
+        "id": 5,
+        "status": "NOT_ASSESSED_IN_THIS_RUN"
+      },
+      {
+        "id": 6,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 7,
+        "status": "NOT_RUN"
+      }
+    ]
+  },
+  "raw_evidence": {
+    "local_root": ".local/tutor-fixes-20261106/",
+    "files": {
+      "analysis/trial-02/review.json": "7e13d29753de69e409a4a74e57c3524328287cbb11546e36ae9327b477168773",
+      "trial-02/events.jsonl": "14861fab39d4b72d0879446b476481a6660f6958cbd748f0d1c5850dec63ec08",
+      "trial-02/responses.jsonl": "1d7324923a0e9fecf98b6b1ed3399617c2836a28bedd726c8d3799fc6232ffc7",
+      "trial-02/firmware-binding.json": "9c34a08cb8774372aa5d4b4792f81268168ffc59856c1b25a3dff9d0c9055e42",
+      "trial-02/screen-room.mp4": "652064c15ab8cd9b302ae44e9bb0ddd9f2f2c832c05f219a869cfa9c615ad6cf",
+      "trial-02/selected.jpg": "9c879f7e1f8c37098b243e28235f02646160f0813a1604bd87ae4e4149fb2532",
+      "trial-02/before-portrait.jpg": "a52798b03e89522e8431e6363dbdb94d5979f1086217978cfb868b1bd29c7a1e",
+      "trial-02/returned.jpg": "0ad6536aa40810c0dd90328a3edc75966b987e4d8003ceba92d4b156f5f3cb93",
+      "analysis/trial-04/review.json": "107b1f6708f1cdfcc04e9355b10ac4681b89a68676ea2c796d3cd7f20be5318b",
+      "trial-04/events.jsonl": "0237833791bfdb306a2db4edc1541f108c1d7f8765990e7d6f95ba2475426643",
+      "trial-04/firmware-binding.json": "7020cc0d71e5d6ad62d1b5b0bfae444f6752575bf69bbc607e337540fc6d418e",
+      "trial-04/selected.jpg": "f1ff48e6283187b1c9454a9d54f267ef9274256596568679a894aa16572fd657",
+      "trial-05/events.jsonl": "9129f741b0022def8f93504883ab20bf4a905643f9866a265e2d618ed8f5132b",
+      "trial-05/responses.jsonl": "b275a625a2e638bd2663db11444f6010059bd18119d36ab1108cfe0dd2c7c3ed",
+      "trial-05/firmware-binding.json": "8fb846ab8608a1df618190d82b84ff3ba9a03571d3a275e5c3635a091d8c01fe",
+      "trial-05/session.json": "b27306db420cee1211923d4e257c860738f21b54362a5aa1ebe198af190a08b8",
+      "trial-05/screen-room.mp4": "e2a224c74a1dee2b7770adfa217184bc6be9aaa58df3657caae70ea01e5e906d",
+      "trial-05/selected.jpg": "c369659e598e6c9b613e1f44aece84788358c31ac9d932ebf42037e64d5869ad",
+      "analysis/trial-05/review.json": "aa1c54cf2db238fd8c09333f75696813ec464753dccd045f4e5f52a4d9b6f172",
+      "analysis/trial-05/transcript.json": "82c7ceccd3cf5e803406811900ab49901dcc7b8eaa0a382ee537bd5ece6ec970",
+      "analysis/trial-05/fixture-alignment.json": "0de4c5f05464e482dbc0ac703dfd7a3f2334dd2911eaa6df54b8ce3ce960ec50",
+      "trial-06/events.jsonl": "512071c96de020bacb1f514e7c05cd30a2c97aeb6c39a4d4f232810c40e6327d",
+      "trial-06/responses.jsonl": "ed7729a37eead54ea96b81f8e0e6400c09ab92dd1fa4bd111a26f3ea6163c25d",
+      "trial-06/firmware-binding.json": "218872492b224dbfd093d612941ee8c37584400f1de9a2e3f8dc934e8e1e67a1",
+      "trial-06/session.json": "9a0bd908c201f0767bb3ba956fa796ad34554b77de0099bf33814c461a357439",
+      "trial-06/screen-room.mp4": "1ac8cac850f6be97d7bf1a03ba33173b3f275a176908bf9f3127c7ba44de5029",
+      "trial-06/selected.jpg": "1c847cf83ea42399582e4140ab51fab3350abfa7a3e9fad61c2b6a3830522a58",
+      "analysis/trial-06/review.json": "9eabbae25927156f6b452ec66324e333d56ec86e11233c0bcdf3a04db839cf3c",
+      "analysis/trial-06/transcript.json": "020cbf6506bbce28966f5079ee4b20d08fccb9c941e2e611b328b9d4bbef11a9",
+      "analysis/trial-06/fixture-alignment.json": "ddb6771ef8c4c0724754d500c0dc3a44df3f046ae4e039ebf2574aa1c5cb3388",
+      "candidate05-c3-result.json": "e9cd0ba947b4dcaad936cc9a2b24d8e47e775c9ce8e0672dc98daccc29bf8ded",
+      "candidate05-c3-build.log": "fc65aaf0252e4879cf24e9bc5a82dd5940e6caf0bdecf87df8b2ced4497b07b7",
+      "candidate05-c3-isolation.json": "8237abac9aff77547b12ab64824c5a78525af3a76ed0d4acf5d96099bc829cc3",
+      "trial-07/events.jsonl": "9bb33b0cb2f2d779f53f8476a364db273ceab369dd3797194372cf0e92634d54",
+      "trial-07/controller.jsonl": "b0197d300a0aaf5bd6513fb0bc4b73f67451746370f0ee8c35e6336901c23b5b",
+      "trial-07/responses.jsonl": "a3e5e3b94b8b41f97af0aae1f38abb5897a1efa060ee4a12981de5cd2ae441e8",
+      "trial-07/requests.jsonl": "a51eed31509848b3d54885926aaf646594da943eb571d83f5a72449345e264d1",
+      "trial-07/firmware-binding.json": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c",
+      "trial-07/session.json": "a806b5979288cc6954e6f0cdfb11493d21d3cb7497b87fe8505caff80b508f0e",
+      "trial-07/screen-room.mp4": "fbea8a9c13af70d8ddc37afe7c3cf9cb5cd184b58995ba2070bee472795526fc",
+      "analysis/trial-07/review.json": "ca964446f1cedc33e33a17dc7894ea425e879e8dd41798444c2680059ad00060",
+      "trial-08/events.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trial-08/controller.jsonl": "b7559996c9acf57e486f0969b7223086a02d66234f75523b5f48f35634fee96d",
+      "trial-08/responses.jsonl": "fa09b594cf4cedd56793d9100fb7059ebc4319bd45a12e517cb0b59f9c390785",
+      "trial-08/requests.jsonl": "2d1f5f4f1784be26c5e16a74a06a839d6705cf1f2aa625e9614a0a49b295ef76",
+      "trial-08/firmware-binding.json": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c",
+      "trial-08/session.json": "fa6307f7a2965ba46875f1d0c4de947138173e7da012de612c1d059880972666",
+      "trial-08/screen-room.mp4": "9f88c642a541a95cd6804ea475851b91b5f276541215e3a4eab774692604a79d",
+      "analysis/trial-08/review.json": "3f3704ae1207fec6b7b79edc2144e43454b6bb34ca29a0673f1807f827ad5853",
+      "trial-09/events.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "trial-09/controller.jsonl": "bd688bf637c7cfb6aa5bcb7f190505b4a5ccb1440f7c59da13f35d12b7a369bd",
+      "trial-09/responses.jsonl": "eccb4cee542c06c6034f0169c057d46a604715a75b40ade12a85d3fc7c71690f",
+      "trial-09/requests.jsonl": "37d55b3a8d9a32ae3a4cd1632683c95bb40dbdef2324b143842be69a49101748",
+      "trial-09/firmware-binding.json": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c",
+      "trial-09/session.json": "aeaa1ba22c7881b53643a07aaac62796c521f03a2e6e8e5b95ea3b17c971b704",
+      "trial-09/screen-room.mp4": "566a24f7da3dc29de2581e524f21c752a5234f75db9cd4af2c2007734199581a",
+      "analysis/trial-09/review.json": "e3deb845e8b8932845d82189e552b5ad3952ec822e47459718ef193e9e58cc86",
+      "analysis/trial-07/transcript.json": "f277bdaecaabfb4ad79b4dbe20bdc58f684e32ad40f84a73afbe23ee222066ea",
+      "analysis/trial-07/fixture-alignment.json": "7351a8c3285b46f45d67e7f406b24d237adeda39f14942099522c07bf4a53b63",
+      "analysis/trial-10/review.json": "53c00556c91eb841b2a3e3f1b6b3a12847789d5d39fcf6365f1a6323916146e1",
+      "candidate05-final-readback/receipt.json": "fa7a42d47013c721a558b713ad43bf1808a3a25b5760c7f64b1904809df25d8d",
+      "candidate05-final-normal-state/receipt.json": "be03afac8ec2ad36b3613613eb0ff217c9823e4bf07eed3cd436b7344894d296",
+      "link-controller-review/exposure-before.json": "43cacb8fd3da93dd3e718b59414cf6f464d9b9cbab20fd24f5186f8d3a96db1a",
+      "link-controller-review/exposure-ev-minus3.json": "f63e699c58e58d82d4fa9a08a268e459296d005f5cb6b117b6f033c5a0ef2093",
+      "link-controller-review/exposure-restored.json": "3aff15dbb5e9618ed3941eb89f6de9ff9624a853e50882e210acdf43a62dabe6",
+      "trial-10/controller.jsonl": "6be83ff1cc96db29a7b7eb68781476cb2e0cca27b7e69147cb22cec020247647",
+      "trial-10/requests.jsonl": "e8b0e543a3f6972c60da94274c5b14422967a069b9ec27f96230dec7e5662862",
+      "trial-10/responses.jsonl": "5869e5d735575cb2ae5ecfd3ae18f84660c3490df5bb0a5644e16aa9718bb2da",
+      "trial-10/session.json": "b9994b36e774e641f8c04ec70c075122280b0bce1371ee04bb998a884687a275",
+      "trial-10/firmware-binding.json": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c",
+      "trial-10/roundtrip-1-before.jpg": "f11610efae0f79e2fd27e8d065cf234ac8ddc07ef9296cd83242aaaaf97c4284",
+      "trial-10/roundtrip-1-image.jpg": "f3d90e28493f01ed11501f6dad999959b17f91ac97321a0527d775752162f254",
+      "trial-10/roundtrip-1-after.jpg": "bd162c4d63800ac603b3981ce300251c0d121dded7dbf6d825e2fef693dee74c",
+      "trial-10/roundtrip-2-before.jpg": "e79826b1cf6bb3de213e79858eb442ebb91cbe32a90b0b967bebe683329f10fa",
+      "trial-10/roundtrip-2-image.jpg": "f75d3af352e9ccea425a3d2bd31144da18b3ce400a867dfecf9f8b0d207033e6",
+      "trial-10/roundtrip-2-after.jpg": "5c31cb2a3072e661c57b5f3601a444c8b6ce649beee0f273a07480702bca182b",
+      "trial-10/roundtrip-3-before.jpg": "ad107bfc6e71f472992e242b7e21594c58519d0dbdf85ab94fa0b98f64dc7317",
+      "trial-10/roundtrip-3-image.jpg": "9544e96abaa5e2769a8a0734533cb976421d93bb0c552a567f5e1212ae36e869",
+      "trial-10/roundtrip-3-after.jpg": "4526930cedd2e1f7ceca4613b18e437a6bb16c534104d85a233c88fa2b7538a7",
+      "trial-10/document-page-00.jpg": "eefb8d85d95677880cffae033060a25492d99461ac81817cb4c9a2b3629402b2",
+      "trial-10/document-page-01.jpg": "369fe27b888e89a2cfe9c007875fe7aa0dba2669ced5206dded085e7b18f32f6",
+      "trial-10/document-page-02.jpg": "99f4d72f9f3344bf7a38e9bbd3fe128487d84c639722c19ffb6496501cfac73c",
+      "trial-10/document-page-03.jpg": "3cbe74a1f133a95d67f82fb279bffec221c0b244a73c93ceb46f98b30473f1cb",
+      "trial-10/document-page-04.jpg": "bef2b7dc6ef88e31f8361258b6f0e56579ba9513b7a1ded5402576d0b36092f1",
+      "trial-10/document-page-05.jpg": "5938d715a1d2dcb07961b186e957d856f430f8e12e3cb5fc49fac45828ef9a1b",
+      "trial-10/restored-document.jpg": "5382d8d6846320875c467d19aae974883bbff625cd43cf2968cdf28fffe1a6d0",
+      "trial-10/final.jpg": "08d266fc373e1f2775489b7aba0c54fa7716e8e917f66eb925ded82f82fdb612",
+      "trial-10/screen-room.mp4": "4642bc1785e935f500e94130ffd2be3dd26912371e19cf4004d53bdfc07b0c7b"
+    },
+    "original_user_video": {
+      "name": "629f595b594984c56fc7a2ba2dfaefc6.mp4",
+      "sha256": "5952028b46fb498fe2ee702fc9402a39af204aae489368606e359c02f2595fc6",
+      "published": false
+    }
+  },
+  "retained_limits": [
+    "Candidate05 full host105 and independent cached C3 rebuild/isolation passed. No C3 physical validation and no S3 implementation or hardware validation.",
+    "Seven scoped outcomes combine candidate05 trial07 acoustic replay with trial10 visual-only software checks of the same retained document. Trial07-09 clipped or stale frames remain unverified; trial10 camera EV-3 does not retroactively establish their body pixels. Camera EV restored0 verified.",
+    "Trial07 read silence is a controller spoken-reply expectation mismatch, not an automatic firmware failure or proof of a new reading transition. End fixture and cycles were not run there; later software cycles are separate runs.",
+    "Trial08 completed3 software cycles before a harness utf8-sig error. Trial09 diagnostic target glyphs are not end-to-end teaching normalization proof. Trial10 actual document primarily uses ASCII exponent notation, not all Unicode inputs.",
+    "Earlier candidate failures remain unchanged. Trial05 two unexplained local_vad triggers remain UNKNOWN; the third overlapped planned replay. Trial07 zero local_vad is not broad AEC/noise acceptance.",
+    "Physical touch, new live-camera question recognition, five-minute reading, mathematical correctness, historical accuracy, slow ordinary-tool hardware result path, noisy-room interaction and endurance remain outside this acceptance.",
+    "Final readback independently matched app/assets/partition without writing flash; final normal listening snapshot is time-specific and does not convert zero reset counters into dialogue acceptance."
+  ],
+  "candidate_04": {
+    "app_bytes": 5774432,
+    "app_sha256": "7dd2c1cb89a5ef54118d5a044c3f75c7f4cab9e64c6ef06b47a96a98bb4f0992",
+    "assets_bytes": 1349792,
+    "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+    "partition_sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+    "installation": "PASS",
+    "protected_regions_checked": true,
+    "readback": "PASS",
+    "hardware_acceptance": "PARTIAL_FAIL",
+    "passed": false,
+    "receipt_sha256": "218872492b224dbfd093d612941ee8c37584400f1de9a2e3f8dc934e8e1e67a1",
+    "trial_06": {
+      "status": "FAIL",
+      "trial": "trial-06",
+      "candidate": "04",
+      "app_sha256": "7dd2c1cb89a5ef54118d5a044c3f75c7f4cab9e64c6ef06b47a96a98bb4f0992",
+      "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+      "video_sha256": "1ac8cac850f6be97d7bf1a03ba33173b3f275a176908bf9f3127c7ba44de5029",
+      "video_seconds": 266.866667,
+      "audio_seconds": 265.5214375,
+      "camera_exit_code": 0,
+      "method": "Local automatic SenseVoice ASR, original replay waveform alignment, events/state cross-check and two personally inspected screen photos; no remote API, manual listening or diarization.",
+      "host_to_video_offset_seconds": 394891.1399954,
+      "alignment_spread_seconds": 0.0049309,
+      "checks": [
+        {
+          "name": "no_explanation_before_confirmation",
+          "status": "FAIL",
+          "audio_video_seconds": [
+            60.836,
+            144.45
+          ],
+          "answer_device_ms": 131866,
+          "observation": "Actual long solution explanation from problem statement through final conclusion while state remains awaiting_confirmation, revision0, solution_bytes0, with no confirm call."
+        },
+        {
+          "name": "one_long_response_played_to_end",
+          "status": "PASS_SUBSET",
+          "speaker_start_device_ms": 71744,
+          "playback_done_device_ms": 157106,
+          "speaker_to_done_seconds": 85.362,
+          "playback_done_video_approx": 144.9571,
+          "observation": "Local ASR identifies final sentence, followed by playback_done. Next replay first begins150.0882s. Not general AEC acceptance."
+        },
+        {
+          "name": "spoken_selected_question_matches_state_screen",
+          "status": "FAIL",
+          "audio_video_seconds": [
+            163.716,
+            165.73
+          ],
+          "answer_device_ms": 176638,
+          "actual_spoken_claim": "好的，已切换到第一大题第一小题。",
+          "actual_selection_key": "二(1)",
+          "question_id": 3,
+          "observation": "Answer/event and external ASR corroborate first-major-question claim; selected and confirmed-question photos and summary still show 二(1)."
+        },
+        {
+          "name": "confirmation_starts_solving",
+          "status": "FAIL",
+          "confirm_replay_video_seconds": [
+            171.0371,
+            172.5371
+          ],
+          "invalid_turn_device_ms": 188025,
+          "correct_user_asr_device_ms": 188151,
+          "observation": "Correct confirmation ASR follows invalid_turn by126ms but no confirm tool or solving occurs; remains awaiting_confirmation until controller timeout. Causal mechanism not established by this review."
+        }
+      ],
+      "local_vad_events": 0,
+      "personally_viewed_screen_photos": [
+        "trial-06/selected.jpg",
+        "trial-06/confirmed-question.jpg"
+      ],
+      "not_run": [
+        "show",
+        "explain_early",
+        "overview",
+        "substitution",
+        "lhopital",
+        "history",
+        "portrait",
+        "first_return",
+        "read",
+        "three_scroll_image_resume_cycles",
+        "probe"
+      ],
+      "limits": [
+        "Automatic ASR has mathematical and short-speech errors",
+        "Event video positions include transport/collection latency",
+        "Single long completed playback is not AEC acceptance",
+        "No seven-bug overall acceptance",
+        "No physical touch or camera-question accuracy test",
+        "Readback inherited from firmware binding, not independently repeated by reviewer"
+      ],
+      "source": "fixed_acoustic_replay_of_original_user_voice",
+      "review": "analysis/trial-06/review.json",
+      "review_sha256": "9eabbae25927156f6b452ec66324e333d56ec86e11233c0bcdf3a04db839cf3c",
+      "physical_touch_tested": false,
+      "camera_question_accuracy_tested": false
+    },
+    "final_device_state": null,
+    "source_state": "frozen_after_consumed_notice_deletion_and_one_confirmation_prompt",
+    "bug_results": [
+      {
+        "id": 1,
+        "status": "PARTIAL_FAIL",
+        "detail": "Spoken first-major-question selection claim mismatched actual 二(1) summary and screen. Full generated solution scope was NOT_RUN."
+      },
+      {
+        "id": 2,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 3,
+        "status": "FAIL",
+        "detail": "Selection notice gave a long explanation while awaiting confirmation. Correct later confirmation transcription received no confirm/solving response."
+      },
+      {
+        "id": 4,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 5,
+        "status": "NOT_ASSESSED_IN_THIS_RUN"
+      },
+      {
+        "id": 6,
+        "status": "NOT_RUN"
+      },
+      {
+        "id": 7,
+        "status": "NOT_RUN"
+      }
+    ]
+  },
+  "candidate_05": {
+    "source_state": "stage_specific_notice_summary_and_explicit_confirmation_prompt",
+    "app_bytes": 5774736,
+    "app_sha256": "4f2c380160c24f979fbf286988c17d5edf0f4370ccec13940370ffe931ab14b8",
+    "assets_bytes": 1349792,
+    "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+    "partition_sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+    "installation": "PASS",
+    "readback": "PASS",
+    "protected_regions_checked": true,
+    "hardware_acceptance": "PASS_SCOPED_SEVEN_ISSUES",
+    "passed": true,
+    "quiet_environment": "USER_REPORTED_BEFORE_PLANNED_RUN",
+    "bug_results": [
+      {
+        "id": 1,
+        "status": "PASS_FIXED_DOCUMENT_SCOPE",
+        "evidence": [
+          "trial_07",
+          "trial_10"
+        ],
+        "detail": "Trial07 selection and explanation stayed on 二(1); trial10 full page walk of the same qid3/rev1/2027-byte document showed only 二(1), four steps, answer and verification. Mathematical correctness NOT_ASSESSED."
+      },
+      {
+        "id": 2,
+        "status": "PASS_SCOPED_DISPLAY_SEQUENCE",
+        "evidence": [
+          "trial_07",
+          "trial_10"
+        ],
+        "detail": "Trial07 waiting speech said not yet displayed; solving-to-white transition166-167s preceded explanation167.748s. Trial10 made the same retained document physically readable after camera EV adjustment. Earlier white frames remain unreadable; later pixels do not prove earlier body pixels."
+      },
+      {
+        "id": 3,
+        "status": "PASS_OBSERVED_FIXED_REPLAY",
+        "evidence": [
+          "trial_07"
+        ],
+        "detail": "No observed unsolicited duplicate actions/speech, internal-plan reading or lost voiced follow-up in trial07. Slow ordinary explain accepted-result path NOT_RUN; direct realtime answer does not cover it."
+      },
+      {
+        "id": 4,
+        "status": "PASS_FIXED_REPLAY",
+        "evidence": [
+          "trial_07"
+        ],
+        "detail": "Pending explain persisted, no early explanation identified while solving, completed solution followed by direct explanation without another choice question."
+      },
+      {
+        "id": 5,
+        "status": "PASS_OBSERVED_DOCUMENT_AND_TARGET_GLYPHS",
+        "evidence": [
+          "trial_10",
+          "trial_09",
+          "candidate_02_font"
+        ],
+        "detail": "No missing-glyph boxes observed across the actual fixed teaching document in trial10. Its exponents mainly use ASCII notation. Trial09 direct target-glyph controls and host normalization tests provide separate coverage; neither certifies all Unicode inputs or every teaching normalization branch."
+      },
+      {
+        "id": 6,
+        "status": "PASS_SCOPED_FIRST_RETURN_AND_SOFTWARE_VISUAL",
+        "evidence": [
+          "trial_07",
+          "trial_10"
+        ],
+        "detail": "One spoken return in trial07 restored qid3/rev1; portrait-to-white at506-507s preceded return-claim audio508.644-511.074s, with body unreadable then. Trial10 single software resumes restored readable content in all three image/return cycles."
+      },
+      {
+        "id": 7,
+        "status": "PASS_THREE_SOFTWARE_BOOKMARKS_VISUAL",
+        "evidence": [
+          "trial_10",
+          "trial_08"
+        ],
+        "scroll_y": [
+          584,
+          461,
+          794
+        ],
+        "detail": "Trial10 preserved qid3/rev1, nonzero offsets, visible-step, paragraph cutoffs and scrollbar in all three before/after pairs. Trial08 offsets187/64/397 remain telemetry-only evidence. Physical touch NOT_RUN."
+      }
+    ],
+    "final_device_state": {
+      "status": "PASS_NORMAL_LISTENING",
+      "source": "candidate05-final-normal-state/receipt.json",
+      "receipt_sha256": "be03afac8ec2ad36b3613613eb0ff217c9823e4bf07eed3cd436b7344894d296",
+      "observed_utc": "2026-11-05T21:24:10.861948+00:00",
+      "version": "0.9.3-p4-tutor",
+      "wifi": true,
+      "time_valid": true,
+      "voice_enabled": true,
+      "voice_mode": "natural",
+      "realtime": {
+        "active": false,
+        "ready": false,
+        "error": "ok"
+      },
+      "wake": {
+        "enabled": true,
+        "state": "listening",
+        "word": "你好小智",
+        "model": "wn10_nihaoxiaozhi",
+        "error": "ok"
+      },
+      "audio": {
+        "audio_ready": true,
+        "volume": 80
+      },
+      "port_released": true,
+      "scope": "Post-readback normal listening snapshot; reset counters do not establish preceding dialogue performance."
+    },
+    "receipt_sha256": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c",
+    "trial_07": {
+      "status": "INCOMPLETE_VISUAL_ACCEPTANCE",
+      "overall_seven_bug_acceptance": false,
+      "trial": "trial-07",
+      "candidate": "05",
+      "app_sha256": "4f2c380160c24f979fbf286988c17d5edf0f4370ccec13940370ffe931ab14b8",
+      "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+      "video_sha256": "fbea8a9c13af70d8ddc37afe7c3cf9cb5cd184b58995ba2070bee472795526fc",
+      "video_bytes": 570754829,
+      "video_seconds": 560.8,
+      "audio_seconds": 559.010625,
+      "camera_exit_code": 0,
+      "method": "Local Silero/SenseVoice automatic ASR, 13 original-WAV waveform matches, event/state comparison and personally inspected screen snapshots/frames. No remote API, manual audio listening or diarization.",
+      "host_to_video_offset_seconds": 395717.4913982,
+      "alignment_spread_seconds": 0.0106279,
+      "event_timing_limits": "Host event receipt can include transport and collection latency.",
+      "quiet_environment": "USER_REPORTED_BEFORE_RUN",
+      "local_vad_events": 0,
+      "bug_results": [
+        {
+          "id": 1,
+          "status": "PASS_SCOPE_TELEMETRY",
+          "visual_status": "NOT_FULLY_VERIFIED",
+          "detail": "Two refine actions matched two real selection inputs. One confirmation led to qid3/rev1/二(1); observed spoken solution stayed on this limit question. Full mathematical correctness and all document content not certified."
+        },
+        {
+          "id": 2,
+          "status": "PARTIAL_PASS",
+          "visual_status": "CONTENT_UNRESOLVED",
+          "detail": "Waiting reply honestly said not displayed. Screen changed from solving at166.0s to white at167.0s before explanation begins167.748s; body remains unreadable, so visible document content is unproven."
+        },
+        {
+          "id": 3,
+          "status": "PASS_OBSERVED_REPLAY",
+          "slow_tool_result_path": "NOT_RUN",
+          "detail": "No observed unprompted duplicate refine/speech, internal-plan reading, lost confirmation or unanswered voiced follow-up. Each completed turn has a fresh playback_done. Lhopital was direct realtime speech, not slow explain tool."
+        },
+        {
+          "id": 4,
+          "status": "PASS_FIXED_REPLAY",
+          "detail": "Early explain persisted as pending_action explaining; no premature explanation identified while solving; completion directly explained without asking another choice."
+        },
+        {
+          "id": 5,
+          "status": "NOT_VERIFIED_PHYSICAL",
+          "detail": "Summary small symbols are bright and solution body is an unreadable white area. Earlier same-hash candidate screen observations are not current physical acceptance."
+        },
+        {
+          "id": 6,
+          "status": "PASS_TELEMETRY_VISUAL_UNRESOLVED",
+          "return_requests": 1,
+          "question_id": 3,
+          "revision": 1,
+          "restored": true,
+          "detail": "Portrait changed to a white area and telemetry restored the document on first request. Actual solution body is not legible, so physical content restoration is unproven."
+        },
+        {
+          "id": 7,
+          "status": "NOT_RUN_NONZERO_BOOKMARK",
+          "before_scroll_y": 0,
+          "after_scroll_y": 0,
+          "detail": "Top-to-top restoration does not exercise nonzero reading position. Three scroll/image/resume cycles did not run; no legible paragraph comparison."
+        }
+      ],
+      "confirmation": {
+        "replay_video_seconds": [
+          79.9706,
+          81.4706
+        ],
+        "confirm_tool_device_ms": 95979,
+        "confirm_tool_video_approx": 85.1721,
+        "diagnostic_retry": false
+      },
+      "early_explain": {
+        "replay_video_seconds": [
+          104.09,
+          105.19
+        ],
+        "tool_device_ms": 118309,
+        "tool_video_approx": 107.548,
+        "pending_action": "explaining",
+        "completion_audio_seconds": [
+          167.748,
+          190.914
+        ],
+        "playback_done_video_approx": 191.053
+      },
+      "completed_reply_playback_done_video_approx": {
+        "select": 47.6113,
+        "first": 75.0889,
+        "show": 99.3414,
+        "completion": 191.053,
+        "overview": 253.0539,
+        "substitution": 288.1712,
+        "lhopital": 337.0454,
+        "history": 430.0288,
+        "portrait": 469.5142,
+        "return": 511.1817
+      },
+      "read": {
+        "status": "HARNESS_EXPECTATION_MISMATCH",
+        "replay_video_seconds": [
+          517.0878,
+          518.7178
+        ],
+        "invalid_turn_device_ms": 533972,
+        "correct_user_asr_device_ms": 534132,
+        "before_state": "reading",
+        "diagnostic_state": "reading",
+        "diagnostic_question_id": 3,
+        "diagnostic_revision": 1,
+        "diagnostic_scroll_y": 0,
+        "diagnostic_idle_ms": 36655,
+        "spoken_reply": false,
+        "reason": "Silence is consistent with user's I'll look now intent and already-active reading state. Controller required spoken completion. No inference that this input itself caused the state transition."
+      },
+      "visual": {
+        "white_transition_interval_seconds": [
+          166.0,
+          167.0
+        ],
+        "body_legible": false,
+        "cause": "UNRESOLVED_CAMERA_OR_RENDERING",
+        "not_assumed": "Telemetry rendered/visible is not proof of actual glyph pixels; white area is not proof of correct solution content.",
+        "viewed_photos": [
+          "selected.jpg",
+          "confirmed-question.jpg",
+          "early-intent.jpg",
+          "solution.jpg",
+          "camera-image-after-35.jpg",
+          "portrait.jpg",
+          "before-portrait.jpg",
+          "returned.jpg",
+          "final.jpg"
+        ],
+        "viewed_video_frames_seconds": [
+          165,
+          165.5,
+          166,
+          167,
+          168,
+          170,
+          506,
+          507,
+          508
+        ],
+        "return_portrait_to_white_interval_seconds": [
+          506,
+          507
+        ],
+        "return_claim_audio_seconds": [
+          508.644,
+          511.074
+        ],
+        "return_timing_limit": "Only portrait-to-white transition verified before spoken completion; solution body is unreadable."
+      },
+      "not_run": [
+        "end_voice_fixture",
+        "three_scroll_image_resume_cycles",
+        "nonzero_bookmark_restoration",
+        "five_minute_reading",
+        "slow_ordinary_explain_tool_result_path"
+      ],
+      "limits": [
+        "Automatic ASR has mathematical and short-phrase errors",
+        "No mathematical correctness or historical factual accuracy certification",
+        "No physical touch or camera-question accuracy test",
+        "Zero observed local_vad is not comprehensive AEC validation",
+        "Four-second audio probe during first completed speech is outside this reviewer analysis",
+        "Firmware readback inherited from dedicated candidate receipt",
+        "Later trial08 evidence must remain a separate run"
+      ],
+      "review": "analysis/trial-07/review.json",
+      "review_sha256": "ca964446f1cedc33e33a17dc7894ea425e879e8dd41798444c2680059ad00060"
+    },
+    "trial_08": {
+      "status": "INCOMPLETE_VISUAL_ACCEPTANCE",
+      "trial": "trial-08",
+      "candidate": "05",
+      "app_sha256": "4f2c380160c24f979fbf286988c17d5edf0f4370ccec13940370ffe931ab14b8",
+      "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+      "video_sha256": "9f88c642a541a95cd6804ea475851b91b5f276541215e3a4eab774692604a79d",
+      "camera_exit_code": 0,
+      "source": "DIRECT_SOFTWARE_COMMANDS",
+      "voice_fixture_played": false,
+      "physical_touch": false,
+      "review_method": "Read stored command responses and personally inspect snapshots; no hardware or live camera access.",
+      "body_visible": "UNVERIFIED",
+      "raw_evidence_hashes": {
+        "controller.jsonl": "b7559996c9acf57e486f0969b7223086a02d66234f75523b5f48f35634fee96d",
+        "responses.jsonl": "fa09b594cf4cedd56793d9100fb7059ebc4319bd45a12e517cb0b59f9c390785",
+        "requests.jsonl": "2d1f5f4f1784be26c5e16a74a06a839d6705cf1f2aa625e9614a0a49b295ef76",
+        "session.json": "fa6307f7a2965ba46875f1d0c4de947138173e7da012de612c1d059880972666",
+        "firmware-binding.json": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c"
+      },
+      "cycles": [
+        {
+          "cycle": 1,
+          "before": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "scroll_y": 187,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "after": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "scroll_y": 187,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "status": "PASS_SOFTWARE_TELEMETRY",
+          "visual_status": "UNVERIFIED"
+        },
+        {
+          "cycle": 2,
+          "before": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "scroll_y": 64,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "after": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "scroll_y": 64,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "status": "PASS_SOFTWARE_TELEMETRY",
+          "visual_status": "UNVERIFIED"
+        },
+        {
+          "cycle": 3,
+          "before": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "scroll_y": 397,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "after": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "scroll_y": 397,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "status": "PASS_SOFTWARE_TELEMETRY",
+          "visual_status": "UNVERIFIED"
+        }
+      ],
+      "harness_error": {
+        "status": "HARNESS_ERROR_AFTER_THREE_CYCLES",
+        "text": "unknown encoding: utf8-sig",
+        "font_diagnostics": "NOT_RUN",
+        "counts_as_firmware_failure": false
+      },
+      "viewed_photos": [
+        "roundtrip-1-before.jpg",
+        "roundtrip-1-image.jpg",
+        "roundtrip-1-after.jpg",
+        "roundtrip-2-before.jpg",
+        "roundtrip-2-image.jpg",
+        "roundtrip-2-after.jpg",
+        "roundtrip-3-before.jpg",
+        "roundtrip-3-image.jpg",
+        "roundtrip-3-after.jpg",
+        "final.jpg"
+      ],
+      "visual_observation": "All before snapshots white; each named after snapshot still resembles the image stage. Later final snapshot white. Snapshot timing can lag and cannot certify content restoration or same-paragraph position.",
+      "bug_results": [
+        {
+          "id": 6,
+          "status": "PASS_SOFTWARE_TELEMETRY_VISUAL_UNVERIFIED"
+        },
+        {
+          "id": 7,
+          "status": "PASS_SOFTWARE_TELEMETRY_VISUAL_UNVERIFIED",
+          "scroll_y": [
+            187,
+            64,
+            397
+          ],
+          "physical_touch_tested": false
+        }
+      ],
+      "limits": [
+        "No seven-bug overall acceptance",
+        "No physical touch or new acoustic replay in these command-only runs",
+        "Snapshot names do not prove current content; actual document body remains unreadable",
+        "Session generic acoustic_source label is not evidence that audio was played"
+      ],
+      "review": "analysis/trial-08/review.json",
+      "review_sha256": "3f3704ae1207fec6b7b79edc2144e43454b6bb34ca29a0673f1807f827ad5853"
+    },
+    "trial_09": {
+      "status": "INCOMPLETE_VISUAL_ACCEPTANCE",
+      "trial": "trial-09",
+      "candidate": "05",
+      "app_sha256": "4f2c380160c24f979fbf286988c17d5edf0f4370ccec13940370ffe931ab14b8",
+      "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+      "video_sha256": "566a24f7da3dc29de2581e524f21c752a5234f75db9cd4af2c2007734199581a",
+      "camera_exit_code": 0,
+      "source": "DIRECT_SOFTWARE_COMMANDS",
+      "voice_fixture_played": false,
+      "physical_touch": false,
+      "review_method": "Read stored command responses and personally inspect snapshots; no hardware or live camera access.",
+      "body_visible": "UNVERIFIED",
+      "raw_evidence_hashes": {
+        "controller.jsonl": "bd688bf637c7cfb6aa5bcb7f190505b4a5ccb1440f7c59da13f35d12b7a369bd",
+        "responses.jsonl": "eccb4cee542c06c6034f0169c057d46a604715a75b40ade12a85d3fc7c71690f",
+        "requests.jsonl": "37d55b3a8d9a32ae3a4cd1632683c95bb40dbdef2324b143842be69a49101748",
+        "session.json": "aeaa1ba22c7881b53643a07aaac62796c521f03a2e6e8e5b95ea3b17c971b704",
+        "firmware-binding.json": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c"
+      },
+      "draws": [
+        {
+          "name": "white-bg-black-text-20",
+          "generation": 13
+        },
+        {
+          "name": "white-bg-black-text-100",
+          "generation": 14
+        },
+        {
+          "name": "dark-bg-white-text-20",
+          "generation": 15
+        },
+        {
+          "name": "dark-bg-white-text-100",
+          "generation": 16
+        }
+      ],
+      "restored_telemetry": {
+        "question_id": 3,
+        "revision": 1,
+        "current_step": 0,
+        "scroll_y": 397,
+        "visible": true,
+        "rendered": true,
+        "restored": true
+      },
+      "viewed_photos": [
+        "white-bg-black-text-20.jpg",
+        "white-bg-black-text-100.jpg",
+        "dark-bg-white-text-20.jpg",
+        "dark-bg-white-text-100.jpg",
+        "restored-document.jpg",
+        "final.jpg"
+      ],
+      "glyphs": {
+        "status": "PASS_TARGET_GLYPHS_IN_DIRECT_DRAW",
+        "observed": "Dark background20 NORMALIZED row shows x^(a), ln^(b), arrow, 0 superscript-plus, infinity, less/equal and greater/equal without boxes. RAW a/b superscripts show two expected negative-control boxes.",
+        "scope": "NORMALIZED literal string was supplied directly to device_display_draw. The teaching-page normalizer was not exercised by this diagnostic."
+      },
+      "visual_observation": "White background20 text faint but present, black rectangle/line clear. White100 near clipped; dark100 bright but structured. restored-document snapshot still shows prior diagnostic; final snapshot is unreadable white, so body restoration is unverified.",
+      "bug_results": [
+        {
+          "id": 5,
+          "status": "PASS_DIAGNOSTIC_GLYPHS_ONLY",
+          "end_to_end_teaching_page": "UNVERIFIED"
+        }
+      ],
+      "harness_error": null,
+      "limits": [
+        "No seven-bug overall acceptance",
+        "No physical touch or new acoustic replay in these command-only runs",
+        "Snapshot names do not prove current content; actual document body remains unreadable",
+        "Session generic acoustic_source label is not evidence that audio was played"
+      ],
+      "review": "analysis/trial-09/review.json",
+      "review_sha256": "e3deb845e8b8932845d82189e552b5ad3952ec822e47459718ef193e9e58cc86"
+    },
+    "acceptance_scope": "The seven reported issues, bounded to fixed question-image/original-voice replay in trial07 and the same retained document with direct software restoration in trial10; not universal product, mathematical or historical correctness acceptance.",
+    "trial_10": {
+      "status": "PASS_SCOPED_VISUAL_SUPPLEMENT",
+      "trial": "trial-10",
+      "candidate": "05",
+      "app_sha256": "4f2c380160c24f979fbf286988c17d5edf0f4370ccec13940370ffe931ab14b8",
+      "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+      "video_sha256": "4642bc1785e935f500e94130ffd2be3dd26912371e19cf4004d53bdfc07b0c7b",
+      "source": "DIRECT_SOFTWARE_COMMANDS_WITH_RETAINED_DOCUMENT",
+      "voice_fixture_played": false,
+      "physical_touch": false,
+      "camera_exit_code": 0,
+      "duration_session_seconds": 139.35303499997826,
+      "method": "Personally inspected all three stable before/image/after groups, six document pages, restored and final snapshots. Analysis images only rotated/cropped for orientation, without exposure or content modification. No live device access by reviewer.",
+      "camera": {
+        "ev_during": -3,
+        "auto_exposure": true,
+        "ev_restored": 0,
+        "change_verified": true,
+        "restore_verified": true,
+        "notes": "Camera-only exposure change. Same firmware and retained qid3/rev1/2027-byte document. Does not retroactively make earlier white frames legible."
+      },
+      "document": {
+        "question_id": 3,
+        "revision": 1,
+        "solution_bytes": 2027,
+        "selected_question": "二(1)",
+        "observed_sections": [
+          "题目二(1)",
+          "思路",
+          "步骤1",
+          "步骤2",
+          "步骤3",
+          "步骤4",
+          "答案0",
+          "检验"
+        ],
+        "other_subquestion_solution_observed": false,
+        "body_legible": true,
+        "mathematical_correctness": "NOT_ASSESSED"
+      },
+      "cycles": [
+        {
+          "cycle": 1,
+          "status": "PASS_SOFTWARE_AND_VISUAL",
+          "before": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "visible_step": 1,
+            "scroll_y": 584,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "after": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "visible_step": 1,
+            "scroll_y": 584,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "visual_observation": "Steps1 and2 at the same paragraph cutoffs; scrollbar matches.",
+          "intermediate_image_visible": true
+        },
+        {
+          "cycle": 2,
+          "status": "PASS_SOFTWARE_AND_VISUAL",
+          "before": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "visible_step": 0,
+            "scroll_y": 461,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "after": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "visible_step": 0,
+            "scroll_y": 461,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "visual_observation": "Overview ending then step1 at matching positions; scrollbar matches.",
+          "intermediate_image_visible": true
+        },
+        {
+          "cycle": 3,
+          "status": "PASS_SOFTWARE_AND_VISUAL",
+          "before": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "visible_step": 1,
+            "scroll_y": 794,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "after": {
+            "question_id": 3,
+            "revision": 1,
+            "current_step": 0,
+            "visible_step": 1,
+            "scroll_y": 794,
+            "visible": true,
+            "rendered": true,
+            "restored": true
+          },
+          "visual_observation": "Step2 then step3 at matching positions; scrollbar matches.",
+          "intermediate_image_visible": true
+        }
+      ],
+      "pages": [
+        {
+          "index": 0,
+          "scroll_y": 0,
+          "target": 0,
+          "body_legible": true,
+          "missing_glyph_boxes_observed": false
+        },
+        {
+          "index": 1,
+          "scroll_y": 400,
+          "target": 400,
+          "body_legible": true,
+          "missing_glyph_boxes_observed": false
+        },
+        {
+          "index": 2,
+          "scroll_y": 800,
+          "target": 800,
+          "body_legible": true,
+          "missing_glyph_boxes_observed": false
+        },
+        {
+          "index": 3,
+          "scroll_y": 1200,
+          "target": 1200,
+          "body_legible": true,
+          "missing_glyph_boxes_observed": false
+        },
+        {
+          "index": 4,
+          "scroll_y": 1600,
+          "target": 1600,
+          "body_legible": true,
+          "missing_glyph_boxes_observed": false
+        },
+        {
+          "index": 5,
+          "scroll_y": 1901,
+          "target": 1901,
+          "body_legible": true,
+          "missing_glyph_boxes_observed": false
+        }
+      ],
+      "final_state": {
+        "question_id": 3,
+        "revision": 1,
+        "current_step": 1,
+        "visible_step": 1,
+        "scroll_y": 794,
+        "visible": true,
+        "rendered": true,
+        "restored": true,
+        "teaching_state": "reading",
+        "solution_bytes": 2027
+      },
+      "bug_results": [
+        {
+          "id": 1,
+          "status": "PASS_FIXED_DOCUMENT_SCOPE",
+          "detail": "Full page walk shows only selected 二(1) with four steps, answer and verification."
+        },
+        {
+          "id": 2,
+          "status": "PASS_RETAINED_DOCUMENT_VISIBLE",
+          "detail": "Current retained document actually readable; earlier trial07 waiting/speech timing remains separately bounded and its original white frames remain unreadable."
+        },
+        {
+          "id": 5,
+          "status": "PASS_OBSERVED_DOCUMENT_GLYPHS",
+          "detail": "No missing-glyph boxes observed across this fixed document. This document mainly uses ASCII exponent notation; all Unicode inputs are not certified. Trial09 target-glyph controls and host normalization tests remain separate."
+        },
+        {
+          "id": 6,
+          "status": "PASS_THREE_SOFTWARE_RETURNS_VISUAL",
+          "detail": "Each image replacement followed by a single software resume restores actual readable solution content."
+        },
+        {
+          "id": 7,
+          "status": "PASS_THREE_SOFTWARE_BOOKMARKS_VISUAL",
+          "detail": "Nonzero y584/461/794 and visible-step/paragraph regions match before and after. No physical finger scrolling."
+        }
+      ],
+      "not_run": [
+        "fresh acoustic sequence in trial10",
+        "physical touch scrolling",
+        "new live camera question recognition",
+        "universal Unicode/formula coverage",
+        "mathematical or historical correctness review"
+      ],
+      "evidence_sha256": {
+        "controller.jsonl": "6be83ff1cc96db29a7b7eb68781476cb2e0cca27b7e69147cb22cec020247647",
+        "requests.jsonl": "e8b0e543a3f6972c60da94274c5b14422967a069b9ec27f96230dec7e5662862",
+        "responses.jsonl": "5869e5d735575cb2ae5ecfd3ae18f84660c3490df5bb0a5644e16aa9718bb2da",
+        "session.json": "b9994b36e774e641f8c04ec70c075122280b0bce1371ee04bb998a884687a275",
+        "firmware-binding.json": "0c270b0c8c35c45d52243717aca43b17789dc1dc36567468533c96340392b75c",
+        "roundtrip-1-before.jpg": "f11610efae0f79e2fd27e8d065cf234ac8ddc07ef9296cd83242aaaaf97c4284",
+        "roundtrip-1-image.jpg": "f3d90e28493f01ed11501f6dad999959b17f91ac97321a0527d775752162f254",
+        "roundtrip-1-after.jpg": "bd162c4d63800ac603b3981ce300251c0d121dded7dbf6d825e2fef693dee74c",
+        "roundtrip-2-before.jpg": "e79826b1cf6bb3de213e79858eb442ebb91cbe32a90b0b967bebe683329f10fa",
+        "roundtrip-2-image.jpg": "f75d3af352e9ccea425a3d2bd31144da18b3ce400a867dfecf9f8b0d207033e6",
+        "roundtrip-2-after.jpg": "5c31cb2a3072e661c57b5f3601a444c8b6ce649beee0f273a07480702bca182b",
+        "roundtrip-3-before.jpg": "ad107bfc6e71f472992e242b7e21594c58519d0dbdf85ab94fa0b98f64dc7317",
+        "roundtrip-3-image.jpg": "9544e96abaa5e2769a8a0734533cb976421d93bb0c552a567f5e1212ae36e869",
+        "roundtrip-3-after.jpg": "4526930cedd2e1f7ceca4613b18e437a6bb16c534104d85a233c88fa2b7538a7",
+        "document-page-00.jpg": "eefb8d85d95677880cffae033060a25492d99461ac81817cb4c9a2b3629402b2",
+        "document-page-01.jpg": "369fe27b888e89a2cfe9c007875fe7aa0dba2669ced5206dded085e7b18f32f6",
+        "document-page-02.jpg": "99f4d72f9f3344bf7a38e9bbd3fe128487d84c639722c19ffb6496501cfac73c",
+        "document-page-03.jpg": "3cbe74a1f133a95d67f82fb279bffec221c0b244a73c93ceb46f98b30473f1cb",
+        "document-page-04.jpg": "bef2b7dc6ef88e31f8361258b6f0e56579ba9513b7a1ded5402576d0b36092f1",
+        "document-page-05.jpg": "5938d715a1d2dcb07961b186e957d856f430f8e12e3cb5fc49fac45828ef9a1b",
+        "restored-document.jpg": "5382d8d6846320875c467d19aae974883bbff625cd43cf2968cdf28fffe1a6d0",
+        "final.jpg": "08d266fc373e1f2775489b7aba0c54fa7716e8e917f66eb925ded82f82fdb612",
+        "link-controller-review/exposure-ev-minus3.json": "f63e699c58e58d82d4fa9a08a268e459296d005f5cb6b117b6f033c5a0ef2093",
+        "link-controller-review/exposure-restored.json": "3aff15dbb5e9618ed3941eb89f6de9ff9624a853e50882e210acdf43a62dabe6"
+      },
+      "review": "analysis/trial-10/review.json",
+      "review_sha256": "53c00556c91eb841b2a3e3f1b6b3a12847789d5d39fcf6365f1a6323916146e1"
+    },
+    "final_document_state_before_reset": {
+      "question_id": 3,
+      "revision": 1,
+      "current_step": 1,
+      "visible_step": 1,
+      "scroll_y": 794,
+      "visible": true,
+      "rendered": true,
+      "restored": true,
+      "teaching_state": "reading",
+      "solution_bytes": 2027,
+      "source": "trial-10 final snapshot and response",
+      "physical_solution_body": "READABLE"
+    },
+    "final_post_test_readback": {
+      "started_utc": "2026-11-05T21:22:08.675762+00:00",
+      "valid": true,
+      "flash_written": false,
+      "app": {
+        "bytes": 5774736,
+        "sha256": "4f2c380160c24f979fbf286988c17d5edf0f4370ccec13940370ffe931ab14b8",
+        "matches": true
+      },
+      "assets": {
+        "bytes": 1349792,
+        "sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+        "matches": true
+      },
+      "partition": {
+        "bytes": 3072,
+        "sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+        "matches": true
+      },
+      "finished_utc": "2026-11-05T21:23:47.403060+00:00",
+      "status": "PASS",
+      "receipt": "candidate05-final-readback/receipt.json",
+      "receipt_sha256": "fa7a42d47013c721a558b713ad43bf1808a3a25b5760c7f64b1904809df25d8d"
+    },
+    "camera_exposure": {
+      "status": "RESTORED",
+      "during_trial10_ev": -3,
+      "final_ev": 0,
+      "auto_exposure_unchanged": true,
+      "change_verified": true,
+      "restore_verified": true,
+      "scope": "Camera-only adjustment made current retained document readable; does not retroactively certify earlier clipped frames.",
+      "change_receipt_sha256": "f63e699c58e58d82d4fa9a08a268e459296d005f5cb6b117b6f033c5a0ef2093",
+      "restore_receipt_sha256": "3aff15dbb5e9618ed3941eb89f6de9ff9624a853e50882e210acdf43a62dabe6"
+    }
+  },
+  "latest_reviewed_trial": "trial-10",
+  "acceptance_scope": "The seven reported issues, bounded to fixed question-image/original-voice replay in trial07 and the same retained document with direct software restoration in trial10; not universal product, mathematical or historical correctness acceptance.",
+  "overall_acceptance_field_scope": "overall_acceptance_passed refers only to acceptance_scope and the seven scoped bug_results, not every retained subtarget or broad product acceptance.",
+  "broad_product_acceptance": "NOT_CLAIMED"
+}

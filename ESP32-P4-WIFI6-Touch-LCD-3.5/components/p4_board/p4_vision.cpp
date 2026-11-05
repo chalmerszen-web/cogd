@@ -11,6 +11,8 @@
 #include "freertos/idf_additions.h"
 #include "human_face_detect.hpp"
 #include "p4_agent.h"
+#include "p4_document_state.h"
+#include "p4_math_text.hpp"
 #include "p4_media.h"
 #include "pedestrian_detect.hpp"
 #define LODEPNG_NO_COMPILE_CPP
@@ -42,6 +44,12 @@ std::atomic<int> camera_width{0}, camera_height{0};
 lv_obj_t *surface = nullptr, *canvas = nullptr, *log_label = nullptr;
 lv_obj_t *document = nullptr;
 std::atomic<unsigned> document_step{0},document_manual_until{0};
+// All non-atomic document state is protected by the display lock. The callback
+// never takes job_lock, avoiding inversion with cloud status readers.
+unsigned document_question=0,document_revision=0,document_generation=0;
+bool document_ready=false,document_restored=false;
+unsigned display_render_frames=0;
+p4_document_bookmark_t document_bookmark{};
 uint16_t *snapshot = nullptr; // state_lock; copied only by capture owner
 unsigned snapshot_generation = 0;
 bool snapshot_ready = false;
@@ -63,6 +71,12 @@ int number(const cJSON *o, const char *k, int fallback = 0) {
     return cJSON_IsNumber(v) ? v->valueint : fallback;
 }
 uint16_t rgb(int v) { return uint16_t(((v >> 8) & 0xf800) | ((v >> 5) & 0x07e0) | ((v >> 3) & 31)); }
+std::string display_text(const char *text) {
+    return p4_math::display(text,[](uint32_t cp){
+        lv_font_glyph_dsc_t glyph{};
+        return lv_font_get_glyph_dsc(&ui_font,&glyph,cp,0) && !glyph.is_placeholder;
+    });
+}
 struct FrameQuality {
     unsigned mean, range;
     bool usable() const { return mean >= 16 && mean <= 247 && range >= 24; }
@@ -111,7 +125,31 @@ void rect(int x, int y, int w, int h, uint16_t c, bool fill) {
         line(x + w - 1, y, x + w - 1, y + h - 1, c, 2);
     }
 }
+void capture_document_position() {
+    if(!document || !document_ready)return;
+    int y=lv_obj_get_scroll_y(document);unsigned step=0,paragraph=0;
+    int paragraph_y=lv_obj_get_child_count(document)?lv_obj_get_y(lv_obj_get_child(document,0)):0;
+    for(unsigned i=0;i<lv_obj_get_child_count(document);++i) {
+        auto child=lv_obj_get_child(document,i);int top=lv_obj_get_y(child);
+        unsigned id=unsigned(uintptr_t(lv_obj_get_user_data(child)));
+        if(id && top<=y+80)step=id;
+        if(top<=y){paragraph=i;paragraph_y=top;}
+    }
+    document_step=step;
+    if(document_question && document_revision)
+        document_bookmark={document_question,document_revision,step,paragraph,y,y-paragraph_y,true};
+}
+bool refresh_document() {
+    lv_obj_invalidate(document);
+    // The adapter also calls lv_refr_now under its display lock. RENDER_READY
+    // acknowledges a software frame, not physical panel scan-out.
+    return p4_refresh_transaction(document_ready,display_render_frames,document_generation,epoch,owner,
+        []{lv_refr_now(lv_obj_get_display(document));},[]{return lv_obj_is_visible(document);});
+}
 void clear_labels() {
+    capture_document_position();
+    document_ready=false;document_restored=false;
+    document_question=document_revision=document_generation=0;
     document = nullptr;
     document_step=0;
     lv_obj_clean(surface);
@@ -536,6 +574,7 @@ extern "C" void p4_visual_init(void) {
     if (!cjk_font)
         ESP_LOGE("p4_visual", "CJK font allocation failed");
     surface = lv_obj_create(lv_screen_active());
+    lv_display_add_event_cb(lv_obj_get_display(surface),[](lv_event_t *){++display_render_frames;},LV_EVENT_RENDER_READY,nullptr);
     lv_obj_remove_style_all(surface);
     lv_obj_set_size(surface, W, H);
     lv_obj_set_pos(surface, 0, 0);
@@ -552,21 +591,19 @@ extern "C" void p4_visual_init(void) {
 }
 extern "C" const void *p4_visual_font(void) { return &ui_font; }
 extern "C" bool p4_visual_active(void) { return owner.load() != 0 || p4_wifi_visible(); }
-extern "C" bool p4_visual_current(unsigned e) { return e == epoch.load(); }
+extern "C" bool p4_visual_current(unsigned e) { return e && e == epoch.load(); }
 extern "C" unsigned p4_visual_begin(int mode) {
-    cam_mode = 0;
-    question_camera = false;
-    if(mode!=1 && state_lock)publish("{\"state\":\"off\"}");
-    unsigned e = ++epoch;
-    owner = mode;
-    if (surface && bsp_display_lock(1000)) {
+    unsigned e=p4_begin_transaction(epoch,owner,mode,[]{return surface && bsp_display_lock(1000);},[](unsigned){
+        cam_mode=0;question_camera=false;
         clear_labels();
-        std::fill(pixels, pixels + W * H, uint16_t(0));
-        lv_obj_remove_flag(surface, LV_OBJ_FLAG_HIDDEN);
+        std::fill(pixels,pixels+W*H,uint16_t(0));
+        lv_obj_remove_flag(surface,LV_OBJ_FLAG_HIDDEN);
         lv_obj_invalidate(canvas);
         bsp_display_unlock();
-        bsp_display_backlight_on();
-    }
+    });
+    if(!e)return 0;
+    if(mode!=1 && state_lock)publish("{\"state\":\"off\"}");
+    bsp_display_backlight_on();
     return e;
 }
 extern "C" void p4_visual_stop(void) {
@@ -576,6 +613,7 @@ extern "C" void p4_visual_stop(void) {
     owner = 0;
     ++epoch;
     if (surface && bsp_display_lock(1000)) {
+        capture_document_position();
         lv_obj_add_flag(surface, LV_OBJ_FLAG_HIDDEN);
         bsp_display_unlock();
     }
@@ -583,14 +621,16 @@ extern "C" void p4_visual_stop(void) {
 extern "C" void p4_visual_message(unsigned e, const char *message) {
     if (!p4_visual_current(e) || !surface || !bsp_display_lock(500))
         return;
-    lv_label_set_text(log_label, message);
+    if(!p4_visual_current(e)){bsp_display_unlock();return;}
+    auto shown=display_text(message);
+    lv_label_set_text(log_label, shown.c_str());
     lv_obj_invalidate(canvas);
     bsp_display_unlock();
 }
 extern "C" void p4_visual_brightness(int percent) { bsp_display_brightness_set(std::clamp(percent, 1, 100)); }
 
 extern "C" unsigned p4_camera_question_begin(void) {
-    unsigned e=p4_visual_begin(1);question_camera=true;cam_mode=1;
+    unsigned e=p4_visual_begin(1);if(!e)return 0;question_camera=true;cam_mode=1;
     p4_visual_message(e,"请把题目放在镜头前\n保持文字清晰、光线充足");return e;
 }
 extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
@@ -628,11 +668,20 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     *data=jpg;*size=used;return 0;
 }
 extern "C" int p4_visual_document(unsigned e,const char *text) {
+    return p4_visual_document_ex(e,text,0,0,false);
+}
+extern "C" int p4_visual_document_ex(unsigned e,const char *text,unsigned question,unsigned revision,bool restore) {
+    if(!text || !*text)return 1;
     if(!p4_visual_current(e))return 4;
     if(!surface || !bsp_display_lock(1500))return 15;
-    if(!p4_visual_current(e)){bsp_display_unlock();return 4;}
+    if(!p4_visual_current(e) || owner.load()!=5){bsp_display_unlock();return 4;}
     clear_labels();lv_obj_add_flag(canvas,LV_OBJ_FLAG_HIDDEN);lv_obj_add_flag(log_label,LV_OBJ_FLAG_HIDDEN);
-    document=lv_obj_create(surface);lv_obj_set_size(document,W,H);lv_obj_set_pos(document,0,0);
+    // Keep the bookmark local while LVGL sends layout/scroll callbacks.
+    auto saved=document_bookmark;
+    document=lv_obj_create(surface);
+    if(!document){bsp_display_unlock();return 19;}
+    document_question=question;document_revision=revision;document_generation=e;
+    lv_obj_set_size(document,W,H);lv_obj_set_pos(document,0,0);
     lv_obj_set_style_bg_color(document,lv_color_hex(0xf8f8f4),0);
     lv_obj_set_style_radius(document,0,0);lv_obj_set_style_border_width(document,0,0);
     lv_obj_set_style_pad_all(document,12,0);lv_obj_set_style_pad_row(document,0,0);
@@ -643,35 +692,72 @@ extern "C" int p4_visual_document(unsigned e,const char *text) {
         if(code==LV_EVENT_PRESSED || code==LV_EVENT_PRESSING){document_manual_until=now+1500;p4_tutor_activity();}
         if(code!=LV_EVENT_SCROLL && code!=LV_EVENT_SCROLL_END)return;
         if(int32_t(document_manual_until.load()-now)>0)p4_tutor_activity();
-        auto obj=static_cast<lv_obj_t *>(lv_event_get_target(event));int y=lv_obj_get_scroll_y(obj);unsigned step=0;
-        for(unsigned i=0;i<lv_obj_get_child_count(obj);++i){auto child=lv_obj_get_child(obj,i);
-            unsigned id=unsigned(uintptr_t(lv_obj_get_user_data(child)));if(id && lv_obj_get_y(child)<=y+80)step=id;}
-        document_step=step;
+        capture_document_position();
     },LV_EVENT_ALL,nullptr);
     /* Small paragraph labels avoid a giant glyph/layout buffer. No fixed
      * page count: content determines the height; native LVGL clamps edges. */
-    const char *at=text;unsigned step=0;
+    // Convert a display-only copy before splitting labels: a script expression
+    // crossing the 768-byte label boundary must still form one ^(...)/_(...).
+    auto shown=display_text(text);
+    const char *at=shown.c_str();unsigned step=0;
     while(*at) {
         if(!strncmp(at,"【步骤",strlen("【步骤")))step=unsigned(strtoul(at+strlen("【步骤"),nullptr,10));
         size_t n=strlen(at);if(n>768){n=768;while(n && (uint8_t(at[n])&0xc0)==0x80)--n;
             size_t k=n;while(k>n/2 && at[k-1]!='\n')--k;if(k>n/2)n=k;}
         if(auto next=strstr(at+1,"\n【"))if(size_t(next+1-at)<n)n=next+1-at;
         std::string part(at,n);auto label=lv_label_create(document);
+        if(!label){lv_obj_delete(document);document=nullptr;bsp_display_unlock();return 19;}
         lv_obj_set_user_data(label,reinterpret_cast<void *>(uintptr_t(step)));lv_obj_remove_flag(label,LV_OBJ_FLAG_CLICKABLE);
         lv_obj_set_width(label,W-24);lv_obj_set_style_text_font(label,&ui_font,0);
         lv_obj_set_style_text_color(label,lv_color_hex(0x151515),0);lv_obj_set_style_text_line_space(label,6,0);
         lv_label_set_text(label,part.c_str());at+=n;
     }
-    lv_obj_update_layout(document);lv_obj_scroll_to_y(document,0,LV_ANIM_OFF);bsp_display_unlock();return 0;
+    lv_obj_update_layout(document);
+    int maximum=std::max(0,int(lv_obj_get_scroll_y(document)+lv_obj_get_scroll_bottom(document)));
+    int paragraph_y=-1;
+    if(saved.paragraph<lv_obj_get_child_count(document))paragraph_y=lv_obj_get_y(lv_obj_get_child(document,saved.paragraph));
+    int target=p4_bookmark_target(&saved,question,revision,restore,paragraph_y,maximum);
+    document_restored=restore && p4_bookmark_matches(&saved,question,revision);
+    lv_obj_scroll_to_y(document,target,LV_ANIM_OFF);
+    lv_obj_remove_flag(surface,LV_OBJ_FLAG_HIDDEN);
+    lv_obj_remove_flag(document,LV_OBJ_FLAG_HIDDEN);
+    if(!refresh_document()){int error=p4_visual_current(e)?15:4;bsp_display_unlock();return error;}
+    capture_document_position();
+    ESP_LOGI("p4_visual","document question=%u revision=%u generation=%u render_frame=%u restored=%d scroll_y=%d step=%u",
+             question,revision,e,display_render_frames,document_restored,int(lv_obj_get_scroll_y(document)),document_step.load());
+    bsp_display_unlock();bsp_display_backlight_on();return 0;
+}
+extern "C" bool p4_document_view(unsigned question,unsigned revision,p4_document_view_t *out) {
+    if(!out)return false;
+    *out={};
+    if(!surface || !bsp_display_lock(300))return false;
+    bool match=document && document_question==question && document_revision==revision;
+    if(match) {
+        bool rendered=document_ready && p4_visual_current(document_generation);
+        bool visible=p4_document_is_visible(document_generation,epoch.load(),owner.load(),document_ready,
+                                            !lv_obj_is_visible(document) || p4_wifi_visible());
+        *out={visible,rendered,document_restored,document_generation,document_question,document_revision,
+              document_step.load(),int(lv_obj_get_scroll_y(document))};
+    }
+    bsp_display_unlock();return match;
+}
+extern "C" void p4_document_forget(unsigned question) {
+    if(!bsp_display_lock(1000))return;
+    if(!question || document_bookmark.question_id==question)document_bookmark={};
+    // Do not let destruction/scroll callbacks resurrect a discarded lesson.
+    if(!question || document_question==question)document_question=document_revision=0;
+    bsp_display_unlock();
 }
 extern "C" int p4_document_scroll(int delta,char *out,size_t cap) {
     if(!bsp_display_lock(1000))return 15;
     int error=0;
-    if(!document)error=2;
+    if(!document || !document_ready || !p4_visual_current(document_generation))error=2;
     else {
         lv_obj_update_layout(document);int y=lv_obj_get_scroll_y(document);
         int maximum=std::max(0,y+int(lv_obj_get_scroll_bottom(document)));
         y=std::clamp(y+delta,0,maximum);lv_obj_scroll_to_y(document,y,LV_ANIM_OFF);
+        if(delta && !refresh_document()){bsp_display_unlock();return 15;}
+        capture_document_position();
         if(delta){document_manual_until=unsigned(esp_timer_get_time()/1000)+1500;p4_tutor_activity();}
         snprintf(out,cap,"{\"scroll_y\":%d,\"scroll_max\":%d,\"at_top\":%s,\"at_bottom\":%s}",y,maximum,y==0?"true":"false",y==maximum?"true":"false");
     }
@@ -682,12 +768,14 @@ extern "C" int p4_document_focus(unsigned step,char *out,size_t cap) {
     if(!bsp_display_lock(300))return 15;
     int error=2;unsigned now=unsigned(esp_timer_get_time()/1000);
     bool manual=int32_t(document_manual_until.load()-now)>0;
-    if(document) {
+    if(document && document_ready && p4_visual_current(document_generation)) {
         if(manual){snprintf(out,cap,"{\"focused\":false,\"manual_scrolling\":true}");error=0;}
         else for(unsigned i=0;i<lv_obj_get_child_count(document);++i) {
             auto child=lv_obj_get_child(document,i);
             if(unsigned(uintptr_t(lv_obj_get_user_data(child)))!=step)continue;
             lv_obj_scroll_to_y(document,lv_obj_get_y(child),LV_ANIM_OFF);document_step=step;
+            if(!refresh_document()){error=15;break;}
+            capture_document_position();
             snprintf(out,cap,"{\"focused\":true,\"step\":%u}",step);error=0;break;
         }
     }
@@ -962,6 +1050,7 @@ extern "C" int p4_agent_call(const char *tool, const char *args, char *out, size
             snprintf(out, cap, "{\"state\":\"off\"}");
         } else {
             unsigned e = p4_visual_begin(1);
+            if(!e){cJSON_Delete(r);return 15;}
             p4_visual_brightness(number(r, "brightness", 100));
             int m = 1;
             for (int i = 1; i < 7; i++)
@@ -974,11 +1063,13 @@ extern "C" int p4_agent_call(const char *tool, const char *args, char *out, size
         }
     } else {
         unsigned e = p4_visual_begin(2);
+        if(!e){cJSON_Delete(r);return 15;}
         p4_visual_brightness(number(r, "brightness", 100));
         if (!bsp_display_lock(1000)) {
             cJSON_Delete(r);
             return 15;
         }
+        if(!p4_visual_current(e)){bsp_display_unlock();cJSON_Delete(r);return 4;}
         std::fill(pixels, pixels + W * H, rgb(number(r, "background", 0)));
         auto ops = cJSON_GetObjectItemCaseSensitive(r, "objects");
         const cJSON *o;
