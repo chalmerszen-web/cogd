@@ -96,7 +96,16 @@ static agent_err_t answer_begin(void *ctx)
 static agent_err_t request_sent(void *ctx)
 {
     agent_engine_t *e=ctx;
-    if(e->answer_final)return answer_begin(e);
+    if(e->answer_final) {
+#if AGENT_BOARD_P4
+        // Validate the first spoken delta before borrowing the shared TTS
+        // tail. A malformed reply can then be retried without cancelling
+        // speech or overwriting a live sink's memory.
+        return AGENT_OK;
+#else
+        return answer_begin(e);
+#endif
+    }
     if(atomic_load(&e->core->cancelled))return AGENT_ERR_CANCELLED;
     if(e->answer_stream && e->answer_prepare && !e->answer_prepared) {
         e->answer_prepared=true;
@@ -169,6 +178,15 @@ static agent_err_t emit(void *ctx,const agent_event_t *event)
 {
     agent_engine_t *e=ctx;
     if(atomic_load(&e->core->cancelled)) return AGENT_ERR_CANCELLED;
+#if AGENT_BOARD_P4
+    if(e->answer_stream && e->answer_final && event->type==AGENT_EVENT_TEXT) {
+        const char *head=e->workspace->reply.text+strspn(e->workspace->reply.text," \t\r\n");
+        // Reject leaked tool/XML markup before its first byte reaches TTS.
+        // Ordinary spoken prose retains first-delta delivery.
+        if(*head=='<')return AGENT_ERR_PROTOCOL;
+        if(!*head)return AGENT_OK;
+    }
+#endif
     if(e->answer_final && (event->type==AGENT_EVENT_TOOL_BEGIN || event->type==AGENT_EVENT_TOOL_ARGUMENT ||
                           event->type==AGENT_EVENT_TOOL_END)) return AGENT_ERR_PROTOCOL;
     if(event->type==AGENT_EVENT_TEXT && event->length) {
@@ -341,10 +359,12 @@ static agent_err_t write_messages(void *ctx,agent_write_fn write,void *write_ctx
         static const char planning_prompt[]=",{\"role\":\"system\",\"content\":\"This is the planning stage. Run required tools. When current facts or actual tool results suffice to answer with no further calls, return ANSWER: followed by the complete spoken answer, no planning commentary. Never invent success or treat pending work as completed. Otherwise return exactly READY for separate final speech. Set final_batch=true only on the last call if successful results suffice to answer; omit for dependent actions/checks or async completion. The flag is not proof of success.\"}]";
         static const char final_prompt[]=",{\"role\":\"system\",\"content\":\"Planning is complete. Return only a short plain spoken sentence from the actual tool results; never invent success. status.light is already a fresh color reading after the plan, so use it directly without another check. Continue the heard acknowledgement in its language without repeating greetings, questions or promises. Tools are disabled: never write or imitate a tool call, DSML/XML tags, function names, READY, or planning commentary.\"}]";
         static const char clarify_prompt[]=",{\"role\":\"system\",\"content\":\"ASR lacks details. Ask one short question; never guess from history or claim action.\"}]";
+        static const char close_prompt[]=",{\"role\":\"system\",\"content\":\"Device event: the user has been silent for ten seconds after playback. End this conversation with one natural, short farewell in the user's language, informed by the preceding conversation. At most twenty Chinese characters or twelve English words. No question, new task, greeting, tool call, or claim of unperformed work. Do not read this event aloud.\"}]";
         static const char budget_prompt[]=",{\"role\":\"system\",\"content\":\"Tool-call budget reached. Tools are disabled. Return only a short plain spoken sentence from actual results. If a job is active/pending, say it is still running and completion is unconfirmed; never claim success, restart it, or promise a later notification. Explain any failed or unverified part. Never write or imitate a tool call, DSML/XML tags, function names, READY, or planning commentary.\"}]";
         /* Phase directives are wire-only and mutually exclusive. The final
          * request never contains an earlier instruction to output READY. */
-        error=e->clarify_only?write(write_ctx,clarify_prompt,sizeof(clarify_prompt)-1):
+        error=e->session_close?write(write_ctx,close_prompt,sizeof(close_prompt)-1):
+              e->clarify_only?write(write_ctx,clarify_prompt,sizeof(clarify_prompt)-1):
               e->answer_final && e->core->tool_rounds>=AGENT_ROUNDS_MAX?write(write_ctx,budget_prompt,sizeof(budget_prompt)-1):
               e->answer_final?write(write_ctx,final_prompt,sizeof(final_prompt)-1):
                               write(write_ctx,planning_prompt,sizeof(planning_prompt)-1);
@@ -388,6 +408,19 @@ static agent_err_t snapshot_save(void *ctx,const char *text)
     agent_json_writer_t *w=ctx;
     agent_json_raw(w,",");
     return w->error?w->error:agent_message_write("system",text,NULL,agent_json_write_bytes,w);
+}
+static agent_err_t hardware_snapshot(agent_engine_t *e,snapshot_fn add,void *ctx)
+{
+#if AGENT_BOARD_P4
+    if(!e->tools->hardware)return AGENT_OK;
+    static const char prefix[]="Current hardware capabilities override prior chat: ";
+    memcpy(e->buffer,prefix,sizeof(prefix)-1);
+    agent_err_t error=e->tools->hardware(e->tools->ctx,e->buffer+sizeof(prefix)-1,
+                                       buffer_capacity(e)-sizeof(prefix)+1);
+    return error?error:add(ctx,e->buffer);
+#else
+    (void)e;(void)add;(void)ctx;return AGENT_OK;
+#endif
 }
 static agent_err_t display_snapshot(agent_engine_t *e,uint64_t now,snapshot_fn add,void *ctx)
 {
@@ -647,8 +680,8 @@ static agent_err_t turn(agent_engine_t *e,const char *input,bool stream,initial_
     if(!e->core || !e->transport || !e->llm || !e->tools || !e->context || !e->context->wal.ready) return AGENT_ERR_CONFIG;
     if(!e->gateway && !e->llm->compose) return AGENT_ERR_CONFIG;
     e->answer_stream=e->voice_mode && stream && !e->gateway && e->answer_write;
-    if(e->clarify_only && !e->answer_stream)return AGENT_ERR_CONFIG;
-    e->answer_final=e->clarify_only;e->answer_active=e->answer_prepared=false;
+    if((e->clarify_only || e->session_close) && !e->answer_stream)return AGENT_ERR_CONFIG;
+    e->answer_final=e->clarify_only || e->session_close;e->answer_active=e->answer_prepared=false;
     e->progress_active=false;
     e->progress_text=e->answer_stream?e->heard_ack:NULL;
     e->progress_language=e->progress_text?e->heard_ack_language:NULL;
@@ -685,6 +718,7 @@ static agent_err_t turn(agent_engine_t *e,const char *input,bool stream,initial_
         agent_json_writer_init(&snapshots,first->owner->snapshots,sizeof(first->owner->snapshots));
         error=display_snapshot(e,now,snapshot_save,&snapshots);
         if(!error)error=light_snapshot(e,now,snapshot_save,&snapshots);
+        if(!error)error=hardware_snapshot(e,snapshot_save,&snapshots);
         first->snapshots=snapshots.used;
         if(error==AGENT_ERR_LIMIT) {
             /* Optional compact staging never lowers the ordinary adapter's
@@ -693,7 +727,9 @@ static agent_err_t turn(agent_engine_t *e,const char *input,bool stream,initial_
         }
         if(error)return error;
     }
-    if(e->context_ops->append==agent_context_emit) {
+    if(e->session_close) {
+        strcpy(e->turn_id,"conversation-idle");
+    } else if(e->context_ops->append==agent_context_emit) {
         /* Native persistence can quote directly into its event envelope;
          * it does not need to keep a second copy in the messages workspace. */
         error=agent_context_emit_user(e->context,input,e->turn_id,sizeof(e->turn_id));
@@ -720,10 +756,15 @@ static agent_err_t turn(agent_engine_t *e,const char *input,bool stream,initial_
         size_t history_end=e->workspace->messages.used;
         if(!error)error=display_snapshot(e,now,snapshot_message,&e->workspace->messages);
         if(!error)error=light_snapshot(e,now,snapshot_message,&e->workspace->messages);
+        if(!error)error=hardware_snapshot(e,snapshot_message,&e->workspace->messages);
         turn_start=e->workspace->messages.used;snapshot_bytes=turn_start-history_end;
         if(!error)error=agent_messages_add(&e->workspace->messages,"user",input,NULL);
     }
     unsigned repairs=0;
+#if AGENT_BOARD_P4
+    unsigned spoken_repairs=0;
+    size_t spoken_repair_used=0;
+#endif
     while(!error) {
         /* Finish within the existing action budget. Never solicit a fifth
          * batch only to abort after the prior four have already taken effect. */
@@ -732,6 +773,27 @@ static agent_err_t turn(agent_engine_t *e,const char *input,bool stream,initial_
         }
         error=complete(e,stream,turn_start,first);
         error=initial_resume(e,first,error);first=NULL;
+#if AGENT_BOARD_P4
+        if(spoken_repair_used) {
+            // The repair instruction belongs to this request, not the saved
+            // user/tool conversation (whose roles are strictly validated).
+            e->workspace->messages.used=spoken_repair_used;
+            e->workspace->messages.data[spoken_repair_used-1]=']';
+            e->workspace->messages.data[spoken_repair_used]=0;spoken_repair_used=0;
+        }
+        if(error==AGENT_ERR_PROTOCOL && e->answer_stream && e->answer_final &&
+           e->workspace->reply.text[strspn(e->workspace->reply.text," \t\r\n")]=='<' &&
+           spoken_repairs++==0 && !atomic_load(&e->core->cancelled)) {
+            // Only retry speech. Keep the real call/result pairs and never
+            // repeat their hardware effects or paid model submissions.
+            spoken_repair_used=e->workspace->messages.used;
+            error=agent_messages_add(&e->workspace->messages,"system",
+                "The previous reply leaked internal markup and was not spoken. The hardware calls are already executed. "
+                "Reply with one natural spoken sentence using existing results. Do not call or imitate tools or tags. "
+                "If a job is pending, say it is being prepared; do not claim completion.",NULL);
+            continue;
+        }
+#endif
         if(error) break;
         if(!e->workspace->reply.call_count) {
             if(e->answer_stream && !e->answer_final) {
@@ -775,7 +837,7 @@ static agent_err_t turn(agent_engine_t *e,const char *input,bool stream,initial_
         e->answer_active=false;
         if(!error) error=ended;
     }
-    if(!error) {
+    if(!error && !e->session_close) {
         size_t n=strlen(e->workspace->messages.data+turn_start);
         if(n+15>=sizeof(e->workspace->messages.data)) error=AGENT_ERR_LIMIT;
         else {
@@ -784,6 +846,15 @@ static agent_err_t turn(agent_engine_t *e,const char *input,bool stream,initial_
             e->workspace->messages.data[13+n]='}'; e->workspace->messages.data[14+n]=0;
             error=e->context_ops->append(e->context,"turn","assistant",e->workspace->messages.data,NULL,0);
         }
+    }
+    if(error==AGENT_ERR_CANCELLED && e->preserve_interrupted && !e->session_close && e->workspace) {
+        /* answer_end above has joined all borrowers. Keep the user's question
+         * in the normal history index even though no complete answer existed.
+         * Never store the unplayed generated answer as something they heard. */
+        agent_json_writer_t w;agent_json_writer_init(&w,e->workspace->messages.data,sizeof(e->workspace->messages.data));
+        agent_json_raw(&w,"{\"messages\":[{\"role\":\"user\",\"content\":");agent_json_quote(&w,input);
+        agent_json_raw(&w,"},{\"role\":\"assistant\",\"content\":\"[Reply interrupted before completion; the user may have heard only part. Use the original question with their next input; do not assume the answer was heard.]\"}]}");
+        if(!w.error)(void)e->context_ops->append(e->context,"turn","assistant",e->workspace->messages.data,NULL,0);
     }
     if(error) {
         char content[192]; snprintf(content,sizeof(content),"{\"turn_id\":\"%s\",\"error\":\"%s\",\"partial\":%s,\"effects\":%s}",

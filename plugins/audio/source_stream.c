@@ -45,6 +45,13 @@ agent_err_t source_stream_feed(source_stream_t *s,int16_t sample)
         return AGENT_OK;
     }
 #endif
+#if AGENT_BOARD_P4
+    /* Acquisition must cover every possible weak/ASR-supported vote below.
+     * The old noise*1.5 bound could stop PCM while the consumer still heard
+     * quiet speech. This permissive bound never admits a turn; the consumer
+     * retains spectral/text checks, its silence timer and the 10-second cap. */
+    if(s->fast_guard)s->bound.threshold=169;
+#endif
     return source_bound_feed(&s->bound,level);
 }
 agent_err_t source_stream_read(const uint8_t *records,size_t bytes,unsigned published,unsigned frame,source_frame_t *out)
@@ -88,8 +95,63 @@ agent_err_t source_stream_endpoint(agent_endpoint_t *endpoint,const uint8_t *rec
     unsigned threshold=noise*2;
     if(threshold<240)threshold=240;
     unsigned weak=noise*3/2;if(weak<240)weak=240;
+    unsigned clean=threshold,weak_clean=weak;
+#if AGENT_BOARD_P4
+    /* ES8311 quiet speech can remain below the C3 radio-noise guard even while
+     * the independent ASR has words. Retain spectral/clean-energy evidence,
+     * onset votes and the original deadline; empty/noise-only turns keep the
+     * strict threshold. This does not change keyword recognition thresholds. */
+    if(endpoint->asr_notice&AGENT_EP_TEXT) {
+        threshold=noise*11/10;if(threshold<180)threshold=180;
+        weak=noise*21/20;if(weak<170)weak=170;
+        clean=noise*3/4;if(clean<140)clean=140;
+        weak_clean=clean;
+    }
+#endif
     agent_endpoint_feed_supported(endpoint,
-        frame.spectral && frame.level>threshold && frame.clean_level>threshold,
-        frame.spectral && frame.level>weak && frame.clean_level>weak);
+        frame.spectral && frame.level>threshold && frame.clean_level>clean,
+        frame.spectral && frame.level>weak && frame.clean_level>weak_clean);
     *out=frame;return AGENT_OK;
+}
+unsigned source_stream_endpoint_notice(agent_endpoint_t *e,const uint8_t *records,unsigned published,unsigned noise,unsigned notice)
+{
+#if AGENT_BOARD_P4
+    /* Recognition usually arrives after a quiet syllable. Recheck immutable
+     * metadata, never PCM or elapsed wall time. This keeps the original end
+     * deadline and still requires a sustained, local acoustic onset. */
+    if(e && (notice&AGENT_EP_TEXT) && !(e->asr_notice&AGENT_EP_TEXT) &&
+       !e->local_onset && e->elapsed_ms<e->wait_ms && e->state<AGENT_EP_DONE) {
+        // The pre-wake floor can include the wake word/cue and exceed the
+        // current background. Correct it once, only with ASR corroboration
+        // and at least 160 ms classified as non-speech; cap the drop at 25%.
+        unsigned sum=0,count=0;
+        for(unsigned i=0;i<e->elapsed_ms/20;++i) {
+            source_frame_t f;
+            if(source_stream_read(records,SOURCE_METADATA_BYTES,published,i,&f)){count=0;break;}
+            if(!f.spectral){sum+=f.level;++count;}
+        }
+        if(count>=8) {
+            unsigned current=sum/count,minimum=noise*3/4;
+            if(current<minimum)current=minimum;
+            if(current<noise)noise=current;
+        }
+        agent_endpoint_t retry;
+        if(!agent_endpoint_init(&retry,e->end_ms,e->wait_ms,e->maximum_ms)) {
+            agent_endpoint_observe(&retry,notice);
+            while(retry.elapsed_ms<e->elapsed_ms && retry.state<AGENT_EP_DONE) {
+                source_frame_t f;
+                if(source_stream_endpoint(&retry,records,published,noise,&f))break;
+                agent_endpoint_observe(&retry,notice);
+            }
+            /* Retain sub-threshold vote history too: an early partial may
+             * arrive after 80 ms, with the remaining 40 ms still to come.
+             * The endpoint itself continues to require 120 ms/current text. */
+            if(retry.elapsed_ms==e->elapsed_ms) *e=retry;
+        }
+    }
+#else
+    (void)records;(void)published;(void)noise;
+#endif
+    agent_endpoint_observe(e,notice);
+    return noise;
 }

@@ -12,7 +12,7 @@ from serial_link import connect
 class Device:
     QUERY_FIELDS={'agent status':'firmware','agent wifi status':'firmware',
                   'agent audio status':'audio_ready','agent mic status':'audio_ready',
-                  'agent wake status':'state','agent voice status':'voice_enabled',
+                  'agent wake status':'state','agent voice status':'voice_enabled','agent voice dialogue':'duplex',
                   'agent context stats':'history_budget','agent context summary':'present','agent light get':'r',
                   'agent kws profile':'trained','agent voice noise-clock':'noise_clock_ms'}
     def __init__(self, out, port='COM5'):
@@ -42,9 +42,11 @@ class Device:
         self.link.write((text+'\n').encode())
         self.rows.append(dict(command='[credential provision]' if secret else text, started=time.time()))
 
-    def command(self,text,query=False,timeout=30,secret=False):
+    def command(self,text,query=False,timeout=30,secret=False,cancelled_ok=False):
         self.send(text,secret); row=self.rows[-1];row['lines']=[]
         field=self.QUERY_FIELDS.get(text)
+        tool_query=query and text.startswith('agent tool ')
+        tool_value=None
         if text.startswith('agent audio clip read '):field='offset'
         end=time.monotonic()+timeout
         while time.monotonic()<end:
@@ -52,12 +54,26 @@ class Device:
             for index,line in enumerate(lines):
                 row['lines'].append(line)
                 if line.startswith('@error'):
-                    if line=='@error cancelled' and text in ('agent cancel','agent voice off'):
+                    if line=='@error cancelled' and (cancelled_ok or text in ('agent cancel','agent voice off')):
                         row['cancelled_job']=True;continue
                     row['error']=line;raise RuntimeError(line)
                 try:value=json.loads(line)
-                except ValueError:value=None
+                except ValueError:
+                    value=None
+                    # Streaming answer text need not end in a newline before
+                    # a command-loop status object. Keep the raw line, but
+                    # accept its JSON suffix only for a known query schema.
+                    start=line.find('{')
+                    if query and field and start>0:
+                        try:value,_=json.JSONDecoder().raw_decode(line[start:])
+                        except ValueError:pass
                 matches=query and isinstance(value,dict) and (field is None or field in value)
+                if tool_query:
+                    if matches:tool_value=value
+                    if line.startswith('@ok') and tool_value is not None:
+                        self.unread.extend(lines[index+1:])
+                        row['finished']=time.time();return tool_value
+                    continue
                 if matches or (not query and (line.startswith('@ok') or line.startswith('@done'))):
                     self.unread.extend(lines[index+1:])
                     row['finished']=time.time();return value if query else row

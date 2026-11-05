@@ -1,0 +1,164 @@
+{
+  "status": "DEVELOPMENT CANDIDATE; acoustic acceptance pending",
+  "topology": [
+    96,
+    96,
+    48
+  ],
+  "training": "ESP32-P4-WIFI6-Touch-LCD-3.5/wake_training/20261101/wide95/train-mega",
+  "features": "ESP32-P4-WIFI6-Touch-LCD-3.5/wake_training/20261101/wide95/features-live-c",
+  "training_report": {
+    "complete": true,
+    "method": "joint primary-average and verifier two-of-three confirmation",
+    "heads": [
+      {
+        "head": "first",
+        "best_step": 4000,
+        "checkpoint_sha256": "ac50fac43b641312713fcfaadb56288d17f6a0e233c42369e13d1a5253613bf1",
+        "model_c_sha256": "1ada51ac6118c3bb8cc028cc77bee988636e6c93c2b861133319d008462a2038"
+      },
+      {
+        "head": "second",
+        "best_step": 4000,
+        "checkpoint_sha256": "f0ec60a50776a9f868d3a21f4f2c37aafac926306a8f97751e8c08d6955ca5e9",
+        "model_c_sha256": "623ea481e3998c148c131df21c8ff8bdd8f1d92cf522fc62a4e54dccc9579706"
+      },
+      {
+        "head": "verifier",
+        "best_step": 4000,
+        "checkpoint_sha256": "272f3f6991c6ea826fe990f4df8e1d247dd5e4b3547b574a304eb16da35d757f",
+        "model_c_sha256": "9580c208975f3585bca9622bce6a8f2f941e1ffc5014cec330b09a81b0a1e1b5"
+      }
+    ],
+    "seconds": 744.875,
+    "evaluation_scope": "training_monitor",
+    "round1_test_reused_for_training": true,
+    "round2_audio_used_for_training": true,
+    "round3_audio_read": false,
+    "training_device": "cuda"
+  },
+  "feature_hashes": {
+    "train.npz": "0df600347ca8ac3ff048524b2966afe13cbd2e6112ab0a1771bf7e9e019c11b9",
+    "validation.npz": "ae1d39d18b3fccef26daf80d98032cef2456e2e013a99c8e0aea34298b660550",
+    "features.json": "223bf1f95fca30b8f5fbb5d7db3d03e6e7138d25a7ab961c86c64ec23eede56a",
+    "normalization.json": "b3b8ff45e18a52fabd32543cf90b838d6150c61676fcaae75b9dcf7e7013e5d4"
+  },
+  "parity": [
+    {
+      "head": "first",
+      "frames": 300,
+      "integer_values": 317100,
+      "exact": true
+    },
+    {
+      "head": "second",
+      "frames": 300,
+      "integer_values": 317100,
+      "exact": true
+    },
+    {
+      "head": "verifier",
+      "frames": 300,
+      "integer_values": 158700,
+      "exact": true
+    }
+  ],
+  "training_monitor": {
+    "nihao_zh": {
+      "clips": 297,
+      "hits": 295,
+      "false_events": 0
+    },
+    "negative": {
+      "clips": 2267,
+      "hits": 0,
+      "false_events": 1
+    },
+    "nihao_yue": {
+      "clips": 131,
+      "hits": 127,
+      "false_events": 0
+    },
+    "hi_zh": {
+      "clips": 350,
+      "hits": 347,
+      "false_events": 0
+    },
+    "hi_yue": {
+      "clips": 194,
+      "hits": 194,
+      "false_events": 0
+    },
+    "p4_nihao_zh": {
+      "clips": 77,
+      "hits": 76,
+      "false_events": 0
+    },
+    "p4_negative": {
+      "clips": 593,
+      "hits": 0,
+      "false_events": 0
+    },
+    "p4_nihao_yue": {
+      "clips": 51,
+      "hits": 50,
+      "false_events": 0
+    },
+    "p4_hi_zh": {
+      "clips": 60,
+      "hits": 57,
+      "false_events": 0
+    },
+    "p4_hi_yue": {
+      "clips": 48,
+      "hits": 48,
+      "false_events": 0
+    }
+  },
+  "test_used_for_training": false,
+  "runtime": {
+    "temporal_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/sync_kws_temporal_owner.c",
+    "sha256": "3c824db38591c571b0ccc09dfe1b0cd503c20487ee1ddcb2e730e2fd4395afdf",
+    "base_owner_sha256": "e4e55cc5228e7b2678a50e33b3afd4363eef0c165708d6d61572193784d4c55a",
+    "policy": "P4 only: current two-of-three primary AND verifier support must overlap; pending 256ms, accepted-only cooldown preserved",
+    "wide_runtime_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/mega_kws_verified.c",
+    "wide_header_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/mega_kws_verified_internal.h",
+    "topology": [
+      96,
+      96,
+      48
+    ],
+    "wide_runtime_sha256": "4a3e1ebfe4054b1b9205fd23bf69efd524ea7c1c231e28d48c9377b4b957cd9b",
+    "wide_header_sha256": "328cebafaa4e763ee8907e6cbef2fd2f411b524ef6387a24d2e29bab71679b39",
+    "temporal_header_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/sync_kws_temporal_owner.h",
+    "seed_exporter_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/tools/export_mega_silence.c",
+    "temporal_header_sha256": "cc7d9d5eecf5fd1e8b7210d2971aea30a9ff12d725c269c166507ae63e630109",
+    "private_kernel_dir": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/kws96",
+    "private_kernel_hashes": {
+      "kws_buffers.h": "16834fd387bf61493d16d0f865759aa2d8f1e3dc13780a5f654d60758a7677da",
+      "kws_frontend.c": "0b05a161a9c38ff7058c7814a6b892a913e30fe55ee80340f6229d51a7d531cb",
+      "kws_internal.h": "450c7549e1194f53c0ba020e761a59b47c2a55bc836ada0c8943e15b4be7e108",
+      "kws_nn.c": "f2372295037d45b1e4d1b790ff3c2f1f68f749ef0ff288b4d7e867232f912668",
+      "origin.json": "5d922fc7c6928095853306ffbd06959bc223f40a3ed7b1b3b2f10f21d36c5186",
+      "include/kws.h": "fab23c5d5a507d418a0dbdb88a568ae1d6094e3b7bc9f03e96cf4ea279f268c7",
+      "include/kws_confirmation.h": "12132fe89203b542c468437f6b1c113c86388b3acd12ed81ff2e7dc0ae40251c",
+      "include/kws_ctc.h": "0a4fe18bf75bea613f8ef1df7e23ca9d128bf6a00f7696172cf3856d13325317",
+      "include/kws_ctc_head.h": "c6b139be718cc9b13947e554dc647dc16a4309866e71649b9c09f6f262adebca",
+      "include/kws_ctc_runtime.h": "556b8b52fbde9ca691ba086c9e51d0e0cd4d02f88a6d591579fb95bbde65e0f4",
+      "include/kws_ctc_suffix.h": "cea8cedf3402583217ee17742d08246d7949e5fc6fa96d314d0db71dce4ad730",
+      "include/kws_fusion.h": "cd3f5921013e5df125748f3c6f7050dd59b0c35db1dd827c78882053c8f0b067",
+      "include/kws_gru32.h": "b83013900894442fdecff86a63d4dd9f7ce0888eb14ef66efdec8baef152a4b1",
+      "include/kws_gru32_q6.h": "efa97c6f1c3d018a7e0b3a3a54ed960e6b68c33ad496c42481105ba92730d403",
+      "include/kws_gru64.h": "b83ec90975626d5acc41bd8617a89ec0e3659a4c051fb8c556c88efa685c5131",
+      "include/kws_gru64_q6.h": "3ba02b688b175944337c67000ce934a95e98959af1cf433b0f8c55dc28ede6a7",
+      "include/kws_gru_pcm.h": "375b019538e59087c5d7f653869aebf08a6fac4f04be13450596611fb84089ad",
+      "include/kws_owner.h": "8f4158a1550c942443a0837f16dfad5be65d72e7a0537e3de796779b39c4745f",
+      "include/kws_pcen.h": "15d6e1f36dfa1ad843a7fb81f0220218d7d3203f7b7633af4177c39915a54350",
+      "include/kws_runtime.h": "d5b20b0a0161ac5e3cc86e57791d232cba7b3d852dd62e67f5c0123cf1159a67",
+      "include/kws_temporal_owner.h": "48ceb0b74ddff9d621c594a4aaf118f7cf9df0bd81e335aef755f1286df48504",
+      "include/kws_verified.h": "13942fe993a94dafdea3e2719292ebc341a5b9c77f25cbeece36c1da9b1bcf7c",
+      "include/kws_word_event.h": "822f5b78449fae75e444e944efd8ab8df99db7d68a58a6b577663fe0fa007441"
+    },
+    "workspace_measurement": "pending resource check"
+  }
+}

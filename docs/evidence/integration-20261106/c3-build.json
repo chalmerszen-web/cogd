@@ -1,0 +1,47 @@
+{
+  "build": "PASS",
+  "target": "esp32c3",
+  "version": "0.13.0-c3-xiaozhi",
+  "command": "tools/build_clock.ps1 -BuildDir build-c3-xiaozhi",
+  "app_bytes": 1569184,
+  "app_slot_bytes": 1572864,
+  "free_app_bytes": 3680,
+  "app_sha256": "addfc5b39223bea84b0a2f18c10bb716a99f6a07f012ef3cf225caaa72b97193",
+  "partition_sha256": "03135fff90b8a4983a4a7a758018626dc296756ac79578e5df9c7b8eb64b3179",
+  "partition_matches_legacy_build_clock": true,
+  "wake_model": {
+    "model": "wn9s_nihaoxiaozhi",
+    "files": {
+      "_MODEL_INFO_": "95a971d4b3230cf79a22045ba392b55443df2f6728636685ddc61d06db987121",
+      "wn9_data": "0f4bb04e16afee0503c2842029f399c318e4ab07f46d883c93ed7fb443c918ab",
+      "wn9_index": "6260eb6cbab109db5823399c301059f9b805abca34db8c7b2b6c399820ada1d4"
+    },
+    "bytes": 125968,
+    "sha256": "52c58b0000c6f58a7d216442e6cd172373d27ad7f32f8c113f068ae8b3431102"
+  },
+  "compile_definitions": {
+    "AGENT_BOARD_P4": "0",
+    "AGENT_C3_WAKENET9S": "1",
+    "AGENT_WAKE_DEFAULT_THRESHOLD": "0",
+    "AGENT_TEXT_PREFETCH": "0",
+    "AGENT_CONTEXTUAL_CACHED_ACK": "0"
+  },
+  "compact_progress_test": "PASS",
+  "hardware_validation": "NOT_RUN",
+  "flashed": false,
+  "c3_policy": "Official WakeNet9s, no speculative text prefetch, 100ms progress cues; cloud ASR/LLM/TTS/context/tools retained",
+  "source_sha256": {
+    "CMakeLists.txt": "f88d0692c978c946f272b807f82dd49a6097fbcc35ffa212cf3a8f834c3c985c",
+    "main/CMakeLists.txt": "3fa5a1b6baa428a986dbbf0b74dedae8942f9b8daa6ad561cd8af115f088c3ba",
+    "components/agent_speech/CMakeLists.txt": "5be982cf92a4ed95ce6d5fa57f67b4e8faca3d6414ca7357b8d12cb0cd23e57e",
+    "components/agent_speech/speech_backend.c": "d60a1314b1d5a7ac20d3bcc0525a4119aab9dddf7e648e9675b9c7e442a40468",
+    "components/agent_speech/speech_backend.h": "f0ab69cc595820f53ddafe0f7f23efda8ce3756e10dec9bcb930d83113970764",
+    "boards/esp_hi/audio_board.c": "3d7de73b554703b8f29c6c98a3f62d00472b22e705685fd98deb28e5e32e0069",
+    "platform/espidf/runtime.c": "648d10d4a699f28c0013b8e247abf3a28dab5e2a3bb5820c35ba471129aae48c",
+    "plugins/audio/progress.c": "2cbce8de651b564d2d2de7706bb71d4707e57ad45da5f8d7d8b48a3afca82f31",
+    "plugins/audio/progress.h": "28def4550d3562a2aa5fee382d55c6307b11a3324e68cbb91921820af2722a90",
+    "tools/build_clock.ps1": "a62360856c7621f893d594a5f98acc34390d7d3c7552e97dd0a57b3d289ad423",
+    "tools/build_voice_test.ps1": "73133d156f53ae7e11b3509b7192f1eca103d70277b3c9397169cac39bb17b66",
+    "partitions.csv": "519725e76cc24039da9fc092662e414d717b990d340cca244162c3b4ad58615f"
+  }
+}

@@ -161,6 +161,10 @@ bool agent_activity_feed(agent_activity_t *a,const int16_t *pcm,size_t n,bool le
     /* Hysteresis preserves quiet syllables within an accepted utterance while
      * keeping the stricter onset guard against stationary microphone noise. */
     unsigned threshold=speaking?a->noise*3u/2u:a->noise*2u;
+#if AGENT_BOARD_P4
+    if(threshold<120) threshold=120;
+#else
     if(threshold<240) threshold=240;
+#endif
     return spectral && a->level>threshold;
 }

@@ -8,9 +8,14 @@
 #endif
 #if AGENT_ENABLE_AUDIO
 #include "audio.h"
-#define AGENT_TOOL_COUNT 25u
+#define AGENT_BASE_TOOL_COUNT 25u
 #else
-#define AGENT_TOOL_COUNT 17u
+#define AGENT_BASE_TOOL_COUNT 17u
+#endif
+#if AGENT_BOARD_P4
+#define AGENT_TOOL_COUNT (AGENT_BASE_TOOL_COUNT+7u)
+#else
+#define AGENT_TOOL_COUNT AGENT_BASE_TOOL_COUNT
 #endif
 
 typedef struct {

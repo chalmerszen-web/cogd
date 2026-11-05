@@ -4,7 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-/* Fixed 16-kHz mono progress speech. Owns no memory or device resources. */
+/* Fixed 16-kHz mono progress: speech, or short cues for the official C3
+ * profile. Owns no memory or device resources. */
 typedef struct {
     const uint8_t *data;
     unsigned bytes, samples, position, offset, block_bytes;

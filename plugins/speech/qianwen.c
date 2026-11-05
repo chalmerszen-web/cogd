@@ -1,4 +1,5 @@
 #include "qianwen.h"
+#include "../model_usage.h"
 #include "json.h"
 #include <stdio.h>
 #include <string.h>
@@ -55,6 +56,8 @@ static agent_err_t text_event(agent_qwen_t *q)
     if(!root)return AGENT_ERR_JSON;
     const cJSON *header=cJSON_GetObjectItemCaseSensitive(root,"header");
     const char *id=agent_json_string(header,"task_id"),*kind=agent_json_string(header,"event");
+    agent_model_usage(q->asr?AGENT_QWEN_ASR_MODEL:AGENT_QWEN_TTS_MODEL,root,
+                      kind && (!strcmp(kind,"task-finished") || !strcmp(kind,"task-failed")));
     agent_err_t error=AGENT_OK;
     if(!id || strcmp(id,q->speech->task_id) || !kind)error=AGENT_ERR_PROTOCOL;
     else if(!strcmp(kind,"task-failed")) {

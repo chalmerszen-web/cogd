@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.16)
+set(IDF_TARGET esp32p4)
+set(EXTRA_COMPONENT_DIRS "../../managed_components/espressif__esp_h264")
+include($ENV{IDF_PATH}/tools/cmake/project.cmake)
+project(cogd_video_probe)

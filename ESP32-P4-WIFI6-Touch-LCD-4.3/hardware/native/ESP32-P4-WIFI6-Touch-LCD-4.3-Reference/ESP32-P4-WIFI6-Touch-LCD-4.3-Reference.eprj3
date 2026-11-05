@@ -1,0 +1,193 @@
+{
+  "name": "ESP32-P4-WIFI6-Touch-LCD-4.3-Reference",
+  "format": "folder",
+  "content": "",
+  "ticket": 1,
+  "g_ticket": 1,
+  "boards": [],
+  "config": {
+    "defaultSheet": "38c485e887735ba6",
+    "settings": {}
+  },
+  "profile": {
+    "boards": {
+      "2c40a692c6c659ff": {
+        "uuid": "2c40a692c6c659ff",
+        "title": "Reference",
+        "zIndex": 1
+      }
+    },
+    "schematics": {
+      "088210f52c3252aa": {
+        "uuid": "088210f52c3252aa",
+        "name": "Reference",
+        "board": "",
+        "source": "",
+        "version": "1793460111741",
+        "updateTime": 1793460111741
+      }
+    },
+    "sheets": {
+      "38c485e887735ba6": {
+        "uuid": "38c485e887735ba6",
+        "title": "01 USB",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 1,
+        "source": "",
+        "version": "1793460101382",
+        "updateTime": 1793460101382
+      },
+      "3ac8f4c362f75571": {
+        "uuid": "3ac8f4c362f75571",
+        "title": "02 Power - 1",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 2,
+        "source": "",
+        "version": "1793460102051",
+        "updateTime": 1793460102051
+      },
+      "1b51e4abbbae5aed": {
+        "uuid": "1b51e4abbbae5aed",
+        "title": "02 Power - 2",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 3,
+        "source": "",
+        "version": "1793460102703",
+        "updateTime": 1793460102703
+      },
+      "fd6336a50e0d53d1": {
+        "uuid": "fd6336a50e0d53d1",
+        "title": "03 MicroSD",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 4,
+        "source": "",
+        "version": "1793460103358",
+        "updateTime": 1793460103358
+      },
+      "2068756785465abf": {
+        "uuid": "2068756785465abf",
+        "title": "04 ESP32-C6 WiFi",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 5,
+        "source": "",
+        "version": "1793460104001",
+        "updateTime": 1793460104001
+      },
+      "1ce5d5fcf24b5edf": {
+        "uuid": "1ce5d5fcf24b5edf",
+        "title": "05 USB UART",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 6,
+        "source": "",
+        "version": "1793460104648",
+        "updateTime": 1793460104648
+      },
+      "ce11fee57b3e5d63": {
+        "uuid": "ce11fee57b3e5d63",
+        "title": "06 ESP32-P4 - 1",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 7,
+        "source": "",
+        "version": "1793460105292",
+        "updateTime": 1793460105292
+      },
+      "aa365973be2c5c9c": {
+        "uuid": "aa365973be2c5c9c",
+        "title": "06 ESP32-P4 - 2",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 8,
+        "source": "",
+        "version": "1793460105943",
+        "updateTime": 1793460105943
+      },
+      "14a613837fcb5b25": {
+        "uuid": "14a613837fcb5b25",
+        "title": "07 Battery",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 9,
+        "source": "",
+        "version": "1793460106583",
+        "updateTime": 1793460106583
+      },
+      "2fd4cfc5e3e35aec": {
+        "uuid": "2fd4cfc5e3e35aec",
+        "title": "08 Camera and buttons",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 10,
+        "source": "",
+        "version": "1793460107225",
+        "updateTime": 1793460107225
+      },
+      "2793aa43b6495b78": {
+        "uuid": "2793aa43b6495b78",
+        "title": "09 Display and backlight",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 11,
+        "source": "",
+        "version": "1793460107863",
+        "updateTime": 1793460107863
+      },
+      "15805b029e74564c": {
+        "uuid": "15805b029e74564c",
+        "title": "10 Audio - 1",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 12,
+        "source": "",
+        "version": "1793460108518",
+        "updateTime": 1793460108518
+      },
+      "fdd07ff73fe05f1a": {
+        "uuid": "fdd07ff73fe05f1a",
+        "title": "10 Audio - 2",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 13,
+        "source": "",
+        "version": "1793460109168",
+        "updateTime": 1793460109168
+      },
+      "e22a14de9f2f516a": {
+        "uuid": "e22a14de9f2f516a",
+        "title": "10 Audio - 3",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 14,
+        "source": "",
+        "version": "1793460109813",
+        "updateTime": 1793460109813
+      },
+      "e525cf1147f35ec4": {
+        "uuid": "e525cf1147f35ec4",
+        "title": "10 Audio - 4",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 15,
+        "source": "",
+        "version": "1793460110461",
+        "updateTime": 1793460110461
+      },
+      "677c2ebd69b15063": {
+        "uuid": "677c2ebd69b15063",
+        "title": "11 Expansion",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 16,
+        "source": "",
+        "version": "1793460111102",
+        "updateTime": 1793460111102
+      },
+      "2a18f52b3d6650d8": {
+        "uuid": "2a18f52b3d6650d8",
+        "title": "12 Other",
+        "schematic_uuid": "088210f52c3252aa",
+        "zIndex": 17,
+        "source": "",
+        "version": "1793460111741",
+        "updateTime": 1793460111741
+      }
+    },
+    "pcbs": {},
+    "panels": {},
+    "blockSymbols": {},
+    "owner": {},
+    "simSchematics": {},
+    "simulations": {}
+  },
+  "default_sheet": "38c485e887735ba6"
+}

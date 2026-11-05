@@ -23,4 +23,11 @@ int kws_verified_step_features_armed(kws_verified_t *state, const int8_t input[4
 int kws_verified_feed_512_armed(kws_verified_t *state, const int16_t pcm[512],
     uint64_t end, bool armed, kws_event_t *event);
 void kws_verified_scores(const kws_verified_t *state, int16_t heads[3], int16_t filtered[2]);
+typedef struct {
+    uint64_t sample_end, pending, cooldown_until;
+    int16_t primary, verifier, threshold;
+    bool primary_confirmed;
+} kws_verified_observation_t;
+/* Read only; call on the inference owner, never concurrently with feed/reset. */
+bool kws_verified_observe(const kws_verified_t *state, kws_verified_observation_t *out);
 #endif

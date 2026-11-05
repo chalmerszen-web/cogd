@@ -1,3 +1,19 @@
+idf_build_get_property(agent_target IDF_TARGET)
+if(agent_target STREQUAL "esp32p4")
+  # Cache options are not visible during IDF's early requirements expansion.
+  idf_build_get_property(agent_profile_root PROJECT_DIR)
+  if(NOT EXISTS "${agent_profile_root}/board/hardware.c" OR
+     NOT EXISTS "${agent_profile_root}/components/p4_board/p4_agent.h")
+    message(FATAL_ERROR "Use the Waveshare P4 project via tools/build.ps1 -Board waveshare-p4-3.5")
+  endif()
+  set(AGENT_BOARD_P4 ON)
+elseif(agent_target STREQUAL "esp32c3")
+  if(AGENT_BOARD_P4)
+    message(FATAL_ERROR "The P4 board profile cannot target ESP32-C3")
+  endif()
+else()
+  message(FATAL_ERROR "No COGD board profile for ${agent_target}; see docs/PORTING.md before adding a target")
+endif()
 option(AGENT_MIC_OVERSAMPLE "32-kHz ADC with anti-aliasing to 16 kHz" ON)
 option(AGENT_USER_TEST "Packaged voice test release with a stable version and fast-mode default" OFF)
 option(AGENT_CLOCK_BOOT "Boot into the 24-hour HH:MM and corner-seconds clock" OFF)
@@ -154,20 +170,29 @@ if(AGENT_VOICE_HEAP_DIAGNOSTICS)
   endif()
   list(APPEND audio_sources "../platform/espidf/voice_heap.c")
 endif()
+set(agent_board_dir "../boards/esp_hi")
+set(agent_board_requires espressif__led_strip esp_driver_usb_serial_jtag)
+if(AGENT_BOARD_P4)
+  list(APPEND audio_sources "../plugins/speech/audio_session.c" "../platform/espidf/p4_conversation.c")
+  idf_build_get_property(agent_project_dir PROJECT_DIR)
+  set(agent_board_dir "${agent_project_dir}/board")
+  set(agent_board_requires p4_board esp_driver_uart esp_pm)
+endif()
 idf_component_register(
   SRCS "app_main.c" "../core/agent.c" "../core/json.c" "../core/crc.c" "../plugins/llm/engine.c"
-       "../plugins/control/resources.c" "../plugins/control/plan.c" "../plugins/control/control.c" "../plugins/control/devices.c" "../boards/esp_hi/control_board.c"
+       "../plugins/control/resources.c" "../plugins/control/plan.c" "../plugins/control/control.c" "../plugins/control/devices.c" "${agent_board_dir}/control_board.c"
        "../third_party/cjson/cJSON.c" "../platform/espidf/runtime.c" "../platform/espidf/http.c"
-       "../plugins/llm/deepseek.c" "../plugins/llm/sse.c" "../plugins/llm/transport.c" "../plugins/tool/tools.c" "../boards/esp_hi/board.c"
+       "../plugins/llm/deepseek.c" "../plugins/llm/sse.c" "../plugins/llm/transport.c" "../plugins/tool/tools.c" "${agent_board_dir}/board.c"
        "../plugins/context/wal.c" "../plugins/context/context.c" "../plugins/context/recall.c" "../plugins/context/sync.c" "../platform/espidf/store.c" ${audio_sources}
-       "../plugins/display/display.c" "../boards/esp_hi/display_board.c" "../boards/esp_hi/hardware.c"
+       "../plugins/display/display.c" "${agent_board_dir}/display_board.c" "${agent_board_dir}/hardware.c"
   INCLUDE_DIRS "." "../core" "../third_party/cjson" "../platform/espidf" "../plugins/llm" "../plugins/tool" "../boards/esp_hi" "../plugins/context" "../plugins/audio" "../plugins/control" "../plugins/display" "../plugins/speech"
-  REQUIRES esp_driver_usb_serial_jtag esp_system esp_wifi esp_event esp_netif nvs_flash esp_partition esp_timer esp_http_client esp-tls tcp_transport mbedtls espressif__led_strip
+  REQUIRES ${agent_board_requires} esp_system esp_wifi esp_event esp_netif nvs_flash esp_partition esp_timer esp_http_client esp-tls tcp_transport mbedtls
   PRIV_REQUIRES esp_driver_i2s esp_adc esp_driver_gpio esp_driver_ledc esp_driver_spi esp_lcd agent_speech agent_vad spi_flash ${agent_adc_clock_requires})
 target_compile_definitions(${COMPONENT_LIB} PRIVATE
+  AGENT_BOARD_P4=$<BOOL:${AGENT_BOARD_P4}>
   AGENT_USER_TEST=$<BOOL:${AGENT_USER_TEST}>
   AGENT_CLOCK_BOOT=$<BOOL:${AGENT_CLOCK_BOOT}>
-  AGENT_WAKE_DEFAULT_THRESHOLD=$<IF:$<OR:$<BOOL:${AGENT_KWS_TRAINED}>,$<BOOL:${AGENT_KWS_WIDE_PROBE}>>,${AGENT_TRAINED_WAKE_THRESHOLD},550>
+  AGENT_WAKE_DEFAULT_THRESHOLD=$<IF:$<OR:$<BOOL:${AGENT_P4_WAKENET10}>,$<AND:$<STREQUAL:${agent_target},esp32c3>,$<NOT:$<BOOL:${AGENT_KWS_C11}>>>>,0,$<IF:$<OR:$<BOOL:${AGENT_KWS_TRAINED}>,$<BOOL:${AGENT_KWS_WIDE_PROBE}>>,${AGENT_TRAINED_WAKE_THRESHOLD},550>>
   AGENT_ENABLE_AUDIO=$<BOOL:${CONFIG_AGENT_AUDIO}> AGENT_PACKED_CLIP=$<BOOL:${AGENT_PACKED_CLIP}>
   AGENT_WS_TIMING=$<BOOL:${AGENT_WS_TIMING}>
   AGENT_WS_CONNECT_TRACE=$<BOOL:${AGENT_WS_CONNECT_TRACE}>
@@ -250,6 +275,9 @@ if(AGENT_TLS_PUBLIC_PERF)
 endif()
 set_target_properties(${COMPONENT_LIB} PROPERTIES C_STANDARD 11 C_STANDARD_REQUIRED YES C_EXTENSIONS OFF)
 target_compile_options(${COMPONENT_LIB} PRIVATE -Wall -Wextra -Werror)
+if(AGENT_BOARD_P4)
+  target_compile_definitions(${COMPONENT_LIB} PRIVATE asm=__asm__ AGENT_P4_RUNTIME_VERSION="${PROJECT_VER}")
+endif()
 if(CONFIG_AGENT_AUDIO)
   # A PCM/Base64 frame fits 1536 bytes. The default half-window select
   # threshold stalls this duplex stream while usable TCP space remains.

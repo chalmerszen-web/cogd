@@ -2,6 +2,40 @@
 #include "ima.h"
 #include <string.h>
 
+#ifdef AGENT_C3_WAKENET9S
+/* The C3 official-wake profile reserves Flash for WakeNet9s. Progress uses a
+ * 100-ms cue through the existing owner/cancel/drain path, without PCM assets. */
+enum { C3_CUE_SAMPLES=1600, C3_CUE_RAMP=80 };
+unsigned agent_progress_samples(bool yue) { (void)yue; return C3_CUE_SAMPLES; }
+unsigned agent_progress_search_samples(bool yue) { return agent_progress_samples(yue); }
+unsigned agent_progress_memory_samples(bool yue) { return agent_progress_samples(yue); }
+const char *agent_progress_text(bool yue) { (void)yue; return "已接收请求（提示音）。"; }
+const char *agent_progress_search_text(bool yue) { (void)yue; return "正在查询历史记录（提示音）。"; }
+const char *agent_progress_memory_text(bool yue) { (void)yue; return "正在保存（提示音）。"; }
+const char *agent_progress_light_text(bool yue) { (void)yue; return "灯光设置好了（提示音）。"; }
+void agent_progress_init(agent_progress_t *s,bool yue)
+{
+    (void)yue;
+    if(s) *s=(agent_progress_t){.samples=C3_CUE_SAMPLES};
+}
+void agent_progress_search_init(agent_progress_t *s,bool yue) { agent_progress_init(s,yue); }
+void agent_progress_memory_init(agent_progress_t *s,bool yue) { agent_progress_init(s,yue); }
+void agent_progress_light_init(agent_progress_t *s,bool yue) { agent_progress_init(s,yue); }
+size_t agent_progress_render(agent_progress_t *s,int16_t *pcm,size_t capacity)
+{
+    if(!s || !pcm) return 0;
+    size_t n=0;
+    while(n<capacity && s->position<s->samples) {
+        unsigned position=s->position++,phase=position%16;
+        unsigned ramp=position<C3_CUE_RAMP?position:C3_CUE_RAMP;
+        unsigned remaining=s->samples-1-position;
+        if(remaining<ramp) ramp=remaining;
+        int wave=phase<4?(int)phase:phase<12?8-(int)phase:(int)phase-16;
+        pcm[n++]=(int16_t)(wave*400*(int)ramp/C3_CUE_RAMP);
+    }
+    return n;
+}
+#else
 /* BEGIN GENERATED PROGRESS ASSETS */
 /* Qwen qwen3-tts-flash-2025-11-27, built-in Cherry/Kiki. Reproduce: tools/voice/generate_progress.py */
 /* 收到，我来处理。 SHA256 bc947c06a15f3cc637e78267abe99af692695d569f523b9f491b5f22aac8b5c2 */
@@ -1064,3 +1098,4 @@ size_t agent_progress_render(agent_progress_t *s, int16_t *pcm, size_t capacity)
     }
     return n;
 }
+#endif

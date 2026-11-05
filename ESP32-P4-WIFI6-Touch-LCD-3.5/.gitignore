@@ -1,0 +1,20 @@
+build/
+managed_components/
+.local/
+sdkconfig
+sdkconfig.old
+hardware/references/*.pdf
+wake_training/
+tools/__pycache__/
+
+# Keep source, licensed font assets, and model inputs; omit local test output.
+/evidence/
+/firmware/
+/experiments/**/samples/
+/experiments/**/*.bin
+/experiments/**/*.log
+/experiments/**/*.wav
+/experiments/**/*.pcm
+/experiments/**/*.mp4
+/experiments/**/*.mkv
+/experiments/multinet_probe/failed-root-build-v1/

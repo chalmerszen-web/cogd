@@ -11,7 +11,20 @@
 #include "asr_end.h"
 #include "realtime.h"
 #include "intent.h"
+#if AGENT_BOARD_P4
+#include "p4_audio.h"
+#include "p4_media.h"
+#include "esp_heap_caps.h"
+static atomic_bool media_lease;
+static atomic_uint media_clock;
+enum { SESSION_INPUT_SAMPLES=16000*6 };
+static int16_t *session_input;
+static atomic_uint session_read,session_write,session_lost,stream_clock;
+static atomic_bool session_ready,session_running;
+static _Atomic(bool (*)(void)) session_start;
+#else
 #include "audio_irq.h"
+#endif
 #ifdef AGENT_MIC_EXACT_CLOCK
 #include "adc_clock.h"
 #endif
@@ -34,8 +47,10 @@ static agent_decimate_t decimator;
 #include "vad_backend.h"
 #endif
 #include "driver/gpio.h"
+#if !AGENT_BOARD_P4
 #include "driver/i2s_pdm.h"
 #include "esp_adc/adc_continuous.h"
+#endif
 #include "esp_rom_gpio.h"
 #include "esp_partition.h"
 #include "esp_timer.h"
@@ -58,8 +73,12 @@ typedef struct { audio_kind_t kind; union { agent_score_t score; unsigned ms; };
 static QueueHandle_t score_queue;
 static SemaphoreHandle_t control_lock;
 static TaskHandle_t audio_task_handle;
+#if AGENT_BOARD_P4
+static void *speaker,*mic;
+#else
 static i2s_chan_handle_t speaker;
 static adc_continuous_handle_t mic;
+#endif
 static bool speaker_enabled,mic_started;
 static unsigned speaker_rate; /* Driver state: audio task only. */
 static atomic_bool output_held;
@@ -77,8 +96,12 @@ static atomic_uint volume = 80, job_id, rendered, total, mic_samples, mic_rms, m
 static atomic_int play_error, mic_error, sdk_error;
 static agent_mic_meter_t meter;
 static int16_t pcm[PCM_CHUNK];
+#if AGENT_BOARD_P4
+static int16_t digital_pcm[ADC_SAMPLES];
+#else
 static uint8_t adc_raw[ADC_SAMPLES * SOC_ADC_DIGI_RESULT_BYTES];
 static adc_continuous_data_t adc_data[ADC_SAMPLES];
+#endif
 static const esp_partition_t *clip_partition;
 static agent_clip_t clip;
 static esp_hi_audio_work_t audio_work;
@@ -103,6 +126,34 @@ static void clip_timed(unsigned kind,int64_t start)
 enum { WAKE_OFF,WAKE_LOADING,WAKE_LISTENING,WAKE_DING,WAKE_RECORDING,WAKE_FINISHING,WAKE_COOLDOWN,WAKE_PAUSED,WAKE_FAILED };
 static atomic_bool wake_requested,wake_loaded,wake_network_busy;
 static atomic_bool voice_auto,voice_pending,clip_reserved;
+#if AGENT_BOARD_P4
+enum { FOLLOWUP_SAMPLES=7680, FOLLOWUP_MS=10000 };
+static atomic_bool voice_duplex;
+static atomic_uint dialogue_events,continue_request,followup_deadline;
+static atomic_uint dialogue_interrupts,dialogue_followups,dialogue_expired;
+/* The audio owner alone writes this 480 ms onset ring. The network never
+ * borrows it. Replaying it uses the ordinary capture/endpoint/ASR pipeline. */
+static int16_t followup_pcm[FOLLOWUP_SAMPLES];
+static unsigned followup_write,followup_count,followup_read,followup_left,followup_vad_at;
+static bool followup_trigger;
+void esp_hi_voice_duplex(bool enabled)
+{
+    if(enabled) {atomic_store(&followup_deadline,0);atomic_store(&continue_request,0);}
+    atomic_store(&voice_duplex,enabled);
+}
+unsigned esp_hi_voice_dialogue_event(void) {return atomic_exchange(&dialogue_events,0);}
+void esp_hi_voice_continue(bool wake_cue) {atomic_store(&continue_request,wake_cue?2:1);}
+agent_err_t esp_hi_voice_dialogue_status(char *out,size_t cap)
+{
+    unsigned echo[7];p4_audio_echo_stats(echo);
+    unsigned until=atomic_load(&followup_deadline),now=(unsigned)(esp_timer_get_time()/1000);
+    int n=snprintf(out,cap,"{\"duplex\":%s,\"followup_ms\":%u,\"interrupts\":%u,\"followups\":%u,\"idle_closes\":%u,\"echo_v1\":[%u,%u,%u,%u,%u,%u,%u]}",
+        atomic_load(&voice_duplex)?"true":"false",until && (int32_t)(until-now)>0?until-now:0,
+        atomic_load(&dialogue_interrupts),atomic_load(&dialogue_followups),atomic_load(&dialogue_expired),
+        echo[0],echo[1],echo[2],echo[3],echo[4],echo[5],echo[6]);
+    return n>0 && (size_t)n<cap?AGENT_OK:AGENT_ERR_LIMIT;
+}
+#endif
 static atomic_bool live_enabled,live_active,live_ready,live_eof;
 static bool live_fast,live_configuring; /* Audio owner; frozen after live_start. */
 static bool live_capture_cue=true;
@@ -128,10 +179,14 @@ static size_t live_offset;
 static atomic_uint live_samples,live_bytes;
 static struct {
     int16_t *data;
-    unsigned capacity,rate;
+    unsigned capacity,prebuffer;
+    atomic_uint rate;
     bool cue; /* Published before enqueue; audio owner only afterwards. */
     atomic_uint cue_started,cue_ended;
     atomic_uint read,write,underruns,started_at;
+#if AGENT_BOARD_P4
+    atomic_uint gap_max_ms,deadline_misses;
+#endif
     atomic_bool eof,active;
     atomic_bool cached,deferred;
     const atomic_bool *cancelled;
@@ -188,6 +243,11 @@ static esp_err_t speaker_close(void)
 {
     uint64_t start=now_ms();
     speaker_rate=0; /* A failed close must never qualify for warm reuse. */
+#if AGENT_BOARD_P4
+    esp_err_t error=p4_audio_mute();
+    if(error)return error;
+    speaker=NULL;speaker_enabled=false;atomic_store(&output_held,false);
+#else
     gpio_set_level(PA, 0);
     esp_err_t error;
     if (speaker_enabled) {
@@ -199,6 +259,7 @@ static esp_err_t speaker_close(void)
     speaker_enabled = false;
     atomic_store(&output_held,false);
     gpio_reset_pin(PDM_N);
+#endif
     duration(&speaker_max_close,start);
     return ESP_OK;
 }
@@ -214,6 +275,11 @@ static esp_err_t speaker_open_rate(unsigned rate)
         }
         if((error=speaker_close()))return error;
     }
+#if AGENT_BOARD_P4
+    if((error=p4_audio_output(rate)))return error;
+    speaker=(void *)1;speaker_enabled=true;speaker_rate=rate;
+    duration(&speaker_max_open,start);return ESP_OK;
+#else
     i2s_chan_config_t channel = I2S_CHANNEL_DEFAULT_CONFIG(I2S_NUM_0, I2S_ROLE_MASTER);
     channel.dma_desc_num = 4;
     channel.dma_frame_num = PCM_CHUNK;
@@ -241,20 +307,30 @@ static esp_err_t speaker_open_rate(unsigned rate)
     speaker_rate=rate;
     duration(&speaker_max_open,start);
     return gpio_set_level(PA, 1);
+#endif
 }
 static esp_err_t speaker_open(void) { return speaker_open_rate(AGENT_AUDIO_RATE); }
 
 static esp_err_t speaker_write(size_t samples)
 {
     uint64_t start=now_ms();
+#if AGENT_BOARD_P4
+    esp_err_t error=p4_audio_write(pcm,samples);
+    duration(&speaker_max_write,start);return error;
+#else
     size_t bytes = 0;
     esp_err_t error = i2s_channel_write(speaker, pcm, samples * sizeof(*pcm), &bytes, 100);
     duration(&speaker_max_write,start);
     return error ? error : bytes == samples * sizeof(*pcm) ? ESP_OK : ESP_ERR_TIMEOUT;
+#endif
 }
 
 static esp_err_t mic_close(void)
 {
+#if AGENT_BOARD_P4
+    p4_audio_capture(false);mic=NULL;mic_started=false;
+    atomic_store(&mic_valid,false);atomic_store(&mic_enabled,false);return ESP_OK;
+#else
     esp_err_t error;
     atomic_store(&mic_valid,false);
     if(mic_started) {
@@ -265,10 +341,14 @@ static esp_err_t mic_close(void)
     mic = NULL;
     atomic_store(&mic_enabled, false);
     return ESP_OK;
+#endif
 }
 
 static esp_err_t mic_open(void)
 {
+#if AGENT_BOARD_P4
+    mic=(void *)1;p4_audio_capture(true);
+#else
     adc_continuous_handle_cfg_t handle = { .max_store_buf_size = MIC_POOL_BYTES,
         .conv_frame_size = sizeof(adc_raw), .flags.flush_pool = true };
     esp_err_t error = adc_continuous_new_handle(&handle, &mic);
@@ -292,6 +372,7 @@ static esp_err_t mic_open(void)
         return error?error:ESP_ERR_INVALID_STATE;
     }
 #endif
+#endif /* C3 ADC / P4 codec */
     memset(&meter, 0, sizeof(meter));
 #ifdef AGENT_MIC_OVERSAMPLE
     memset(&decimator,0,sizeof(decimator));
@@ -308,15 +389,23 @@ static esp_err_t mic_open(void)
 static esp_err_t mic_pause(void)
 {
     if(!mic || !mic_started) return ESP_ERR_INVALID_STATE;
+#if AGENT_BOARD_P4
+    p4_audio_capture(false);mic_started=false;return ESP_OK;
+#else
     esp_err_t error=adc_continuous_stop(mic);
     if(!error) mic_started=false;
     return error;
+#endif
 }
 static esp_err_t mic_resume(void)
 {
     if(!mic || mic_started) return ESP_ERR_INVALID_STATE;
+#if AGENT_BOARD_P4
+    p4_audio_capture(true);esp_err_t error=ESP_OK;
+#else
     esp_err_t error=adc_continuous_flush_pool(mic);
     if(!error) error=adc_continuous_start(mic);
+#endif
     if(!error) {
         mic_started=true; mic_received=mic_polled=now_ms();
 #ifdef AGENT_MIC_OVERSAMPLE
@@ -366,6 +455,11 @@ static agent_err_t capture_flush(void)
 
 static void wake_feed(int16_t value)
 {
+#ifdef AGENT_KEYWORD_PCM
+    /* The ADC reader calls this once per sample. A completed probe stops the
+     * request mid-read, before wake_update can unload the model. */
+    if(!atomic_load(&wake_requested) && !wake_capture)return;
+#endif
 #ifdef AGENT_BACKGROUND_VERIFY
     /* Producer preprocessing runs through confirmation_source; do not feed twice. */
     if(wake_capture) return;
@@ -398,9 +492,30 @@ static void wake_feed(int16_t value)
             atomic_store(&wake_speech_ms,endpoint.speech_ms);
         }
     } else if((stage==WAKE_LISTENING || stage==WAKE_COOLDOWN) && !wake_hit) {
+#if AGENT_BOARD_P4
+        bool following=atomic_load(&followup_deadline)!=0;
+        if(following) {
+            followup_pcm[followup_write++%FOLLOWUP_SAMPLES]=value;
+            if(followup_count<FOLLOWUP_SAMPLES)++followup_count;
+        }
+#endif
         audio_work.input.vad[vad_used++]=filtered;
         if(vad_used==320) {
+#if AGENT_BOARD_P4
+            /* Retain onset PCM immediately, but do not interpret the cue's
+             * queued acoustic tail as a new user turn. The 480 ms ring still
+             * preserves speech that starts right after the audible cue. */
+            bool ready=(int32_t)((unsigned)now_ms()-followup_vad_at)>=0;
+            bool speech=following && ready && esp_hi_speech_vad(audio_work.input.vad);
+            speech=agent_activity_feed(&activity,audio_work.input.vad,320,!following,speech,false);
+            /* Reuse the ordinary endpoint's seven-of-eight onset rule;
+             * short spectral/noise impulses must not open an ASR turn. */
+            if(following && agent_endpoint_feed(&endpoint,speech)==AGENT_EP_SPEECH)
+                {followup_trigger=true;wake_hit=true;}
+            vad_used=0;
+#else
             agent_activity_feed(&activity,audio_work.input.vad,320,true,false,false);vad_used=0;
+#endif
 #if AGENT_CAPTURE_PROBE
             noise_trace_record(&prewake_noise_trace,(uint32_t)now_ms(),activity.level,activity.noise);
 #endif
@@ -430,17 +545,32 @@ static void wake_feed(int16_t value)
             }
 #endif
             int64_t started=esp_timer_get_time();
-#ifdef AGENT_KWS_C11
+#if defined(AGENT_KWS_C11) || defined(AGENT_P4_WAKENET10) || defined(AGENT_C3_WAKENET9S)
             bool detected=esp_hi_speech_wake_armed(audio_work.input.wake,stage==WAKE_LISTENING);
 #else
             bool detected=esp_hi_speech_wake(audio_work.input.wake);
 #endif
-            wake_hit=detected && stage==WAKE_LISTENING; wake_used=0;
+            wake_hit=wake_hit || (detected && stage==WAKE_LISTENING); wake_used=0;
+#if AGENT_BOARD_P4
+            if(detected && stage==WAKE_LISTENING && atomic_load(&voice_duplex)) {
+                /* Stop PCM here, without calling stop()/joining our own task.
+                 * The runtime cancels and joins the network before a new cue. */
+                atomic_store(&stop_requested,true);atomic_store(&voice_duplex,false);
+                atomic_fetch_or(&dialogue_events,1);atomic_fetch_add(&dialogue_interrupts,1);
+                atomic_fetch_add(&wake_count,1);atomic_store(&wake_detected_at,(unsigned)now_ms());
+                atomic_store(&wake_stage,WAKE_PAUSED);wake_hit=false;
+            }
+#endif
             unsigned us=(unsigned)(esp_timer_get_time()-started);
             if(us>atomic_load(&wake_infer_us)) atomic_store(&wake_infer_us,us);
 #ifdef AGENT_KEYWORD_PCM
             if(observing) {
                 esp_hi_kws_input_t after;esp_hi_kws_input(&after);
+#ifdef AGENT_P4_KWS_NS
+                /* The diagnostic exports the exact samples used by KWS.
+                 * Noise suppression changes the mutable keyword-only buffer. */
+                memcpy(frame->data,audio_work.input.wake,sizeof(frame->data));
+#endif
                 unsigned flags=(detected?KEYWORD_PCM_DETECTED:0) |
                     (wake_hit?KEYWORD_PCM_ACCEPTED:0) |
                     (after.error?KEYWORD_PCM_ERROR:0) |
@@ -453,11 +583,24 @@ static void wake_feed(int16_t value)
                 /* Explicit observation only: the borrowed region belongs to
                  * USB, so no ding/recording/background verifier can start. */
                 wake_hit=false;
-                if(keyword_pcm_reason(&pcm_observation)!=KEYWORD_PCM_NONE) atomic_store(&wake_requested,false);
+                if(keyword_pcm_reason(&pcm_observation)!=KEYWORD_PCM_NONE) {
+                    atomic_store(&wake_requested,false);
+                    /* Do not infer an unobserved extra block from the rest of
+                     * this I2S read after the explicit capture has finished. */
+                    return;
+                }
             }
 #endif
         }
     }
+#if AGENT_BOARD_P4
+    else if(followup_trigger && atomic_load(&followup_deadline)) {
+        /* The onset may be recognized halfway through mic_update's batch.
+         * Preserve its remaining PCM too, until wake_cycle freezes the ring. */
+        followup_pcm[followup_write++%FOLLOWUP_SAMPLES]=value;
+        if(followup_count<FOLLOWUP_SAMPLES)++followup_count;
+    }
+#endif
 }
 
 static bool wake_recording_active(void)
@@ -485,13 +628,26 @@ static void mic_update(void)
      * a task yield and sector erases accumulate an unbounded backlog.
      * This is at most one complete pool; USB/I2S get the usual yields. */
     for (unsigned batch = 0; !error && batch < 8u*MIC_ADC_RATE/AGENT_MIC_RATE; ++batch) {
-        uint32_t bytes = 0, samples = 0;
+        uint32_t samples = 0;
         phase_stamp_t phase_read=phase_enter();
+#if AGENT_BOARD_P4
+        unsigned lost=0;
+        if(followup_left && capture_collecting) {
+            samples=followup_left<ADC_SAMPLES?followup_left:ADC_SAMPLES;
+            for(unsigned i=0;i<samples;++i)digital_pcm[i]=followup_pcm[followup_read++%FOLLOWUP_SAMPLES];
+            followup_left-=samples;error=ESP_OK;
+        } else error=p4_audio_read(digital_pcm,&samples,&lost);
+        if(lost) {atomic_fetch_add(&mic_overruns,lost);atomic_fetch_add(&wake_dma_lost,lost);}
+#else
+        uint32_t bytes=0;
         error = adc_continuous_read(mic, adc_raw, sizeof(adc_raw), &bytes, 0);
+#endif
         phase_leave(PH_READ,phase_read);
         if (error == ESP_ERR_TIMEOUT) { error = ESP_OK; break; }
         phase_stamp_t phase_parse=phase_enter();
+#if !AGENT_BOARD_P4
         if (!error) error = adc_continuous_parse_data(mic, adc_raw, bytes, adc_data, &samples);
+#endif
         phase_leave(PH_PARSE,phase_parse);
         if (error) break;
         if(samples) {
@@ -505,8 +661,12 @@ static void mic_update(void)
             (!wake_capture || (wake_recording_active() && !esp_hi_confirmation_capture_done()));
         unsigned produced=0;
         for (unsigned i = 0; i < samples; ++i) {
+#if AGENT_BOARD_P4
+            uint16_t raw=(uint16_t)(((int32_t)digital_pcm[i]+32768)/16);
+#else
             if (!adc_data[i].valid || adc_data[i].unit != ADC_UNIT_1 || adc_data[i].channel != MIC_CHANNEL) continue;
             uint16_t raw=(uint16_t)adc_data[i].raw_data;
+#endif
 #ifdef AGENT_MIC_OVERSAMPLE
             bool clipped;
             bool delivered=agent_decimate_feed(&decimator,raw,&raw,&clipped);
@@ -521,7 +681,19 @@ static void mic_update(void)
 #endif
             unsigned limited=meter.clipped-before_clipped;
             if(limited && cue_collecting) atomic_fetch_add(&start_cue_adc_clipped,limited);
+#if AGENT_BOARD_P4
+            int32_t value=digital_pcm[i];
+            if(atomic_load(&session_ready)) {
+                unsigned w=atomic_load_explicit(&session_write,memory_order_relaxed);
+                unsigned r=atomic_load_explicit(&session_read,memory_order_acquire);
+                if(w-r<SESSION_INPUT_SAMPLES) {
+                    session_input[w%SESSION_INPUT_SAMPLES]=(int16_t)value;
+                    atomic_store_explicit(&session_write,w+1,memory_order_release);
+                } else atomic_fetch_add(&session_lost,1);
+            }
+#else
             int32_t value=((int32_t)raw-meter.bias_q8/256)*16;
+#endif
             if(value>32767) value=32767;
             if(value< -32768) value=-32768;
             if(collect && captured<clip.samples) {
@@ -665,6 +837,37 @@ static agent_err_t live_capture_stop(void)
 #endif
 static void wake_cycle(void)
 {
+#if AGENT_BOARD_P4
+    bool (*start)(void)=atomic_load(&session_start);
+    if(start && atomic_load(&voice_auto)) {
+        wake_hit=false;
+        if(atomic_load(&session_running))return;
+        atomic_store(&session_ready,false);atomic_store(&session_read,0);
+        atomic_store(&session_write,0);atomic_store(&session_lost,0);
+        atomic_store(&session_running,true);
+        if(!start()){atomic_store(&session_running,false);return;}
+        atomic_fetch_add(&wake_count,1);atomic_store(&wake_detected_at,(unsigned)now_ms());
+        atomic_store(&wake_network_busy,true);atomic_store(&mic_requested,true);
+        atomic_store(&stop_requested,false);atomic_store(&followup_deadline,0);
+        if(atomic_load(&wake_loaded)){esp_hi_speech_close();atomic_store(&wake_loaded,false);}
+        wake_used=vad_used=0;atomic_store(&wake_stage,WAKE_DING);
+        agent_err_t error=wake_cue(false);
+        uint32_t sent=p4_audio_tx_samples();uint64_t until=now_ms()+400;
+        while(!error && now_ms()<until && p4_audio_tx_samples()-sent<P4_AUDIO_DMA_FRAMES*P4_AUDIO_DMA_COUNT) {
+            mic_update();vTaskDelay(1);
+        }
+        if(speaker)speaker_close();
+        atomic_store(&wake_cue_end_at,(unsigned)now_ms());atomic_store(&wake_error,error);
+        atomic_store(&wake_stage,WAKE_PAUSED);
+        if(!error && atomic_load(&session_running))atomic_store(&session_ready,true);
+        return;
+    }
+    bool continuing=followup_trigger;
+    followup_trigger=false;atomic_store(&followup_deadline,0);
+    if(!continuing)followup_left=0;
+#else
+    const bool continuing=false;
+#endif
     wake_hit=false;
     if(xSemaphoreTake(control_lock,pdMS_TO_TICKS(50))!=pdTRUE) return;
     if(atomic_load(&playing) || atomic_load(&recording) || atomic_load(&wake_network_busy) || !atomic_load(&wake_requested)) {
@@ -674,7 +877,11 @@ static void wake_cycle(void)
     live_fast=live_configuring=false;live_capture_cue=true;
     capture_input_reset();
     esp_hi_speech_disarm();
-    atomic_store(&wake_detected_at,(unsigned)now_ms()); atomic_fetch_add(&wake_count,1);
+    atomic_store(&wake_detected_at,(unsigned)now_ms());
+    if(!continuing)atomic_fetch_add(&wake_count,1);
+#if AGENT_BOARD_P4
+    else {atomic_fetch_add(&dialogue_followups,1);followup_read=followup_write-followup_count;followup_left=followup_count;}
+#endif
     atomic_store(&wake_record_at,0); atomic_store(&wake_end_at,0); atomic_store(&wake_cue_end_at,0);
     atomic_store(&wake_last_samples,0); atomic_store(&wake_speech_ms,0);
     atomic_store(&wake_reason,AGENT_EP_WAIT); atomic_store(&wake_error,AGENT_OK);
@@ -690,7 +897,7 @@ static void wake_cycle(void)
     for(unsigned i=0;i<3;++i) {
         atomic_store(&clip_io[i].calls,0); atomic_store(&clip_io[i].total_us,0); atomic_store(&clip_io[i].max_us,0);
     }
-    if(!error) error=audio_error(mic_pause());
+    if(!error && !continuing) error=audio_error(mic_pause());
     if(!error) error=esp_hi_confirmation_open(&clip,activity.noise,audio_work.input.wake,audio_work.input.vad);
     /* The ADC is paused and the worker has not started. Prepare only four
      * sectors before the ding; the post-cue raw clock remains unchanged.
@@ -711,7 +918,7 @@ static void wake_cycle(void)
         atomic_store(&preparation_us,(unsigned)(esp_timer_get_time()-began));
         if(!error && atomic_load(&stop_requested))error=AGENT_ERR_CANCELLED;
     }
-    if(!error) error=audio_error(mic_resume());
+    if(!error && !continuing) error=audio_error(mic_resume());
 #endif
 #ifdef AGENT_VOICE_VERIFY
     atomic_store(&verify_peak,0); atomic_store(&verify_sum,0); atomic_store(&verify_confirmed,false);
@@ -750,7 +957,7 @@ static void wake_cycle(void)
             } else {live_fast=false;atomic_store(&live_active,false);error=AGENT_ERR_BUSY;}
         }
     }
-    if(!error) error=wake_cue(false);
+    if(!error && !continuing) error=wake_cue(false);
 #ifndef AGENT_BACKGROUND_VERIFY
     if(!error) {
 #if AGENT_PACKED_CLIP
@@ -762,11 +969,11 @@ static void wake_cycle(void)
 #endif
     /* Drop ADC samples produced before the recording boundary (the cue), not
      * newly spoken samples. Stop/flush/restart retains the warmed DC estimate. */
-    if(!error) error=audio_error(mic_pause());
+    if(!error && !continuing) error=audio_error(mic_pause());
     /* Release PDM/PA inside the existing ADC reset boundary. The hold override
      * remains available for diagnosis; no speech samples are discarded. */
     if(!error && !atomic_load(&capture_output_hold) && speaker) error=audio_error(speaker_close());
-    if(!error) error=audio_error(mic_resume());
+    if(!error && !continuing) error=audio_error(mic_resume());
     mic_received=mic_polled=now_ms(); agent_voice_init(&vad_filter);
     memset(&cue_filter,0,sizeof(cue_filter));
     if(!error) {
@@ -906,6 +1113,15 @@ static void wake_cycle(void)
     if(error && error!=AGENT_ERR_TIMEOUT && error!=AGENT_ERR_CANCELLED) atomic_store(&wake_requested,false);
 }
 
+static bool wake_paused(void)
+{
+    bool paused=atomic_load(&wake_network_busy) || atomic_load(&voice_pending) || atomic_load(&playing);
+#if AGENT_BOARD_P4
+    if(atomic_load(&voice_duplex) && atomic_load(&voice_auto))paused=false;
+    paused=paused || atomic_load(&media_lease);
+#endif
+    return paused || atomic_load(&recording);
+}
 static void wake_update(void)
 {
     /* Only the audio owner touches the channel. Retained DMA auto-clears to
@@ -919,7 +1135,7 @@ static void wake_update(void)
         if(error) {atomic_store(&play_error,audio_error(error));return;}
     }
     bool requested=atomic_load(&wake_requested);
-    bool paused=atomic_load(&wake_network_busy) || atomic_load(&voice_pending) || atomic_load(&playing) || atomic_load(&recording);
+    bool paused=wake_paused();
     if(!requested || paused) {
         if(atomic_load(&wake_loaded)) {
             esp_hi_speech_close(); atomic_store(&wake_loaded,false); wake_used=0; wake_hit=false;
@@ -931,7 +1147,10 @@ static void wake_update(void)
         /* Publish model admission under the same lock as network admission.
          * Without this recheck TLS can start between paused=false and create. */
         if(xSemaphoreTake(control_lock,0)!=pdTRUE) return;
-        if(!atomic_load(&wake_requested) || atomic_load(&wake_network_busy) || atomic_load(&voice_pending) || atomic_load(&playing) || atomic_load(&recording)) {
+#if AGENT_BOARD_P4
+        if(atomic_load(&media_lease)){xSemaphoreGive(control_lock);return;}
+#endif
+        if(!atomic_load(&wake_requested) || wake_paused()) {
             xSemaphoreGive(control_lock); return;
         }
         atomic_store(&wake_stage,WAKE_LOADING);
@@ -966,6 +1185,40 @@ static void wake_update(void)
         applied_threshold=threshold;
     }
     atomic_store(&wake_stage,now_ms()<wake_rearm_at?WAKE_COOLDOWN:WAKE_LISTENING);
+#if AGENT_BOARD_P4
+    unsigned request=atomic_exchange(&continue_request,0);
+    if(request) {
+        followup_write=followup_count=followup_left=0;followup_trigger=false;
+        if(request==2) {
+            atomic_store(&wake_stage,WAKE_DING);
+            agent_err_t error=wake_cue(false);
+            uint32_t sent=p4_audio_tx_samples();uint64_t limit=now_ms()+500;
+            while(!error && !atomic_load(&stop_requested) &&
+                  (uint32_t)(p4_audio_tx_samples()-sent)<P4_AUDIO_DMA_FRAMES*P4_AUDIO_DMA_COUNT && now_ms()<limit) {
+                mic_update();vTaskDelay(1);
+            }
+            if(!error && (uint32_t)(p4_audio_tx_samples()-sent)<P4_AUDIO_DMA_FRAMES*P4_AUDIO_DMA_COUNT)
+                error=atomic_load(&stop_requested)?AGENT_ERR_CANCELLED:AGENT_ERR_TIMEOUT;
+            if(speaker) {agent_err_t closed=audio_error(speaker_close());if(!error)error=closed;}
+            atomic_store(&wake_cue_end_at,(unsigned)now_ms());
+            if(error) {atomic_store(&wake_error,error);return;}
+        }
+        {
+            atomic_store(&followup_deadline,(unsigned)now_ms()+FOLLOWUP_MS);
+            followup_vad_at=(unsigned)now_ms()+(request==2?200:0);
+            (void)agent_endpoint_init(&endpoint,1000,FOLLOWUP_MS,FOLLOWUP_MS);
+            /* A new speech onset must not inherit the preceding response's
+             * spectral hangover. Model weights and KWS history stay owned. */
+            esp_hi_speech_vad_fast();
+            atomic_store(&wake_stage,WAKE_LISTENING);
+        }
+    }
+    unsigned until=atomic_load(&followup_deadline);
+    if(until && (int32_t)((unsigned)now_ms()-until)>=0 && !wake_hit) {
+        atomic_store(&followup_deadline,0);atomic_fetch_or(&dialogue_events,2);
+        atomic_fetch_add(&dialogue_expired,1);followup_count=0;
+    }
+#endif
 }
 
 #ifdef AGENT_CAPTURE_WARM_PDM
@@ -1120,7 +1373,7 @@ static agent_err_t play_stream(void)
             atomic_store(&speech_stream.cue_ended,(unsigned)now_ms());
             speech_stream.cue=false;memset(pcm,0,sizeof(pcm));
         }
-        if(warm>=warm_samples && (eof || (!atomic_load(&speech_stream.deferred) && available>=speech_stream.capacity/2)))break;
+        if(warm>=warm_samples && (eof || (!atomic_load(&speech_stream.deferred) && available>=speech_stream.prebuffer)))break;
         if(now_ms()>=deadline)return AGENT_ERR_TIMEOUT;
         /* Preserve the original 200ms warmup, then keep PDM running at zero
          * until the first prebuffer arrives. Each DMA write has a 100-ms bound. */
@@ -1130,13 +1383,32 @@ static agent_err_t play_stream(void)
         warm+=count;
     }
     deadline=now_ms()+8000; bool starved=false;
+#if AGENT_BOARD_P4
+    uint64_t last_submit=0;
+#endif
     while(!error && !atomic_load(&stop_requested)) {
         if(atomic_load(&speech_stream.cached) && speech_stream.cancelled &&
            atomic_load(speech_stream.cancelled))return AGENT_ERR_CANCELLED;
         bool eof=atomic_load(&speech_stream.eof);
         unsigned read=atomic_load(&speech_stream.read),available=atomic_load(&speech_stream.write)-read;
         if(!available) {
-            if(eof) break;
+            if(eof) {
+#if AGENT_BOARD_P4
+                /* Let the last queued DMA samples reach the DAC before mute. */
+                uint64_t drain_deadline=now_ms()+500;
+                uint32_t drain_samples=p4_audio_tx_samples()+P4_AUDIO_DMA_FRAMES*P4_AUDIO_DMA_COUNT;
+                while(!atomic_load(&media_lease) && !atomic_load(&stop_requested) &&
+                      (int32_t)(p4_audio_tx_samples()-drain_samples)<0 && now_ms()<drain_deadline) {
+                    mic_update();vTaskDelay(pdMS_TO_TICKS(1));
+                }
+                while(atomic_load(&media_lease) && !atomic_load(&stop_requested) &&
+                      p4_media_audio_position()<atomic_load(&speech_stream.write) && now_ms()<drain_deadline)
+                    vTaskDelay(pdMS_TO_TICKS(1));
+                if(atomic_load(&media_lease) && !atomic_load(&stop_requested) &&
+                   p4_media_audio_position()<atomic_load(&speech_stream.write))return AGENT_ERR_TIMEOUT;
+#endif
+                break;
+            }
             if(!starved) { atomic_fetch_add(&speech_stream.underruns,1);starved=true; }
             if(now_ms()>deadline) return AGENT_ERR_TIMEOUT;
             mic_update();
@@ -1153,7 +1425,22 @@ static agent_err_t play_stream(void)
             for(unsigned i=0;i<available;++i)pcm[i]=agent_pcm_gain(speech_stream.data[(read+i)%speech_stream.capacity],gain);
         }
         atomic_store(&speech_stream.read,read+available);
-        if(!atomic_load(&speech_stream.started_at))atomic_store(&speech_stream.started_at,(unsigned)now_ms());
+        if(!atomic_load(&speech_stream.started_at)) {
+#if AGENT_BOARD_P4
+            atomic_store(&stream_clock,p4_audio_tx_samples()+P4_AUDIO_DMA_FRAMES*P4_AUDIO_DMA_COUNT);
+            if(atomic_load(&media_lease))atomic_store(&media_clock,atomic_load(&stream_clock));
+#endif
+            atomic_store(&speech_stream.started_at,(unsigned)now_ms());
+        }
+#if AGENT_BOARD_P4
+        uint64_t submitting=now_ms();
+        if(last_submit) {
+            unsigned gap=(unsigned)(submitting-last_submit);
+            if(gap>atomic_load(&speech_stream.gap_max_ms))atomic_store(&speech_stream.gap_max_ms,gap);
+            if(gap>P4_AUDIO_DMA_FRAMES*P4_AUDIO_DMA_COUNT*1000u/16000)atomic_fetch_add(&speech_stream.deadline_misses,1);
+        }
+        last_submit=submitting;
+#endif
         error=audio_error(speaker_write(available)); atomic_fetch_add(&rendered,available);mic_update();
     }
     return error;
@@ -1341,19 +1628,38 @@ uint64_t esp_hi_progress_started_at(void) { return atomic_load(&progress.started
 
 static agent_err_t stream_open(unsigned rate,void *memory,size_t bytes,bool cue)
 {
-    if(!memory || bytes<4096 || bytes>16384 || (uintptr_t)memory%2 || (rate!=16000 && rate!=24000 && rate!=48000)) return AGENT_ERR_ARGUMENT;
-    if(!audio_task_handle || !atomic_load(&wake_network_busy)) return AGENT_ERR_CONFIG;
+    size_t maximum=16384;
+#if AGENT_BOARD_P4
+    if(atomic_load(&media_lease))maximum=16000*2*15+1024;
+    else if(atomic_load(&session_running))maximum=24000*2*45;
+#endif
+    if(!memory || bytes<4096 || bytes>maximum || (uintptr_t)memory%2 || (rate!=16000 && rate!=24000 && rate!=48000)) return AGENT_ERR_ARGUMENT;
+    bool reserved=atomic_load(&wake_network_busy);
+#if AGENT_BOARD_P4
+    reserved=reserved || atomic_load(&media_lease);
+#endif
+    if(!audio_task_handle || !reserved) return AGENT_ERR_CONFIG;
     if(xSemaphoreTake(control_lock,pdMS_TO_TICKS(50))!=pdTRUE) return AGENT_ERR_BUSY;
     agent_err_t error=AGENT_OK;
     if(atomic_load(&playing) || atomic_load(&recording) || atomic_load(&speech_stream.active)) error=AGENT_ERR_BUSY;
     else {
         speech_stream.data=memory; speech_stream.capacity=(unsigned)(bytes/2); speech_stream.rate=rate;
+        speech_stream.prebuffer=speech_stream.capacity/2;
+#if AGENT_BOARD_P4
+        /* Capacity absorbs cloud bursts; startup depends on time, not on half
+         * a large receive ring. The audio owner consumes this ring directly. */
+        if(atomic_load(&session_running) && !atomic_load(&media_lease) && speech_stream.prebuffer>rate*80/1000)
+            speech_stream.prebuffer=rate*80/1000;
+#endif
         speech_stream.cue=cue;
         /* A plain replacement stream retains this turn's already-played cue
          * timestamps. Runtime excludes stamps older than the current turn. */
         if(cue) {atomic_store(&speech_stream.cue_started,0);atomic_store(&speech_stream.cue_ended,0);}
         atomic_store(&speech_stream.cached,false);atomic_store(&speech_stream.deferred,false);speech_stream.cancelled=NULL;
         atomic_store(&speech_stream.read,0);atomic_store(&speech_stream.write,0);atomic_store(&speech_stream.underruns,0);
+#if AGENT_BOARD_P4
+        atomic_store(&speech_stream.gap_max_ms,0);atomic_store(&speech_stream.deadline_misses,0);
+#endif
         atomic_store(&speech_stream.started_at,0);
         atomic_store(&speech_stream.eof,false);atomic_store(&speech_stream.active,true);
         atomic_store(&stop_requested,false);atomic_store(&playing,true);atomic_store(&play_error,AGENT_OK);
@@ -1452,6 +1758,105 @@ agent_err_t esp_hi_stream_finish(agent_err_t error)
 }
 unsigned esp_hi_stream_underruns(void) { return atomic_load(&speech_stream.underruns); }
 uint64_t esp_hi_stream_started_at(void) { return atomic_load(&speech_stream.started_at); }
+#if AGENT_BOARD_P4
+agent_err_t esp_hi_voice_session_configure(bool (*start)(void))
+{
+    if(atomic_load(&session_running))return AGENT_ERR_BUSY;
+    if(start && !session_input)session_input=heap_caps_malloc(SESSION_INPUT_SAMPLES*sizeof(int16_t),MALLOC_CAP_SPIRAM);
+    if(start && !session_input)return AGENT_ERR_MEMORY;
+    atomic_store(&session_start,start);return AGENT_OK;
+}
+bool esp_hi_voice_session_ready(void){return atomic_load(&session_ready);}
+agent_err_t esp_hi_voice_session_read(int16_t *out,size_t cap,size_t *count)
+{
+    *count=0;if(!atomic_load(&session_ready))return AGENT_OK;
+    if(atomic_load(&session_lost))return AGENT_ERR_LIMIT;
+    unsigned r=atomic_load_explicit(&session_read,memory_order_relaxed);
+    unsigned n=atomic_load_explicit(&session_write,memory_order_acquire)-r;
+    if(n>cap)n=(unsigned)cap;
+    for(unsigned i=0;i<n;++i)out[i]=session_input[(r+i)%SESSION_INPUT_SAMPLES];
+    atomic_store_explicit(&session_read,r+n,memory_order_release);*count=n;return AGENT_OK;
+}
+void esp_hi_voice_session_end(void)
+{
+    atomic_store(&session_ready,false);atomic_store(&session_running,false);
+    atomic_store(&mic_requested,false);
+}
+void esp_hi_voice_session_discard(void)
+{
+    atomic_store_explicit(&session_read,atomic_load_explicit(&session_write,memory_order_acquire),memory_order_release);
+    atomic_store(&session_lost,0);
+}
+unsigned esp_hi_voice_session_cursor(void)
+{return atomic_load_explicit(&session_read,memory_order_acquire);}
+bool esp_hi_voice_session_rewind(unsigned cursor)
+{
+    unsigned w=atomic_load_explicit(&session_write,memory_order_acquire);
+    if(w-cursor>SESSION_INPUT_SAMPLES-16000 || atomic_load(&session_lost))return false;
+    atomic_store_explicit(&session_read,cursor,memory_order_release);return true;
+}
+unsigned esp_hi_stream_space(void)
+{return atomic_load(&speech_stream.active)?speech_stream.capacity-esp_hi_stream_remaining():0;}
+#if AGENT_BOARD_P4
+agent_err_t esp_hi_stream_publish(unsigned samples)
+{
+    if(!atomic_load(&speech_stream.active) || atomic_load(&speech_stream.cached))return AGENT_ERR_CONFIG;
+    if(atomic_load(&stop_requested))return AGENT_ERR_CANCELLED;
+    if(samples>esp_hi_stream_space())return AGENT_ERR_LIMIT;
+    unsigned write=atomic_load_explicit(&speech_stream.write,memory_order_relaxed);
+    atomic_store_explicit(&speech_stream.write,write+samples,memory_order_release);
+    return AGENT_OK;
+}
+#endif
+unsigned esp_hi_stream_played(void)
+{
+    if(!esp_hi_stream_started_at())return 0;
+    int32_t n=(int32_t)(p4_audio_tx_samples()-atomic_load(&stream_clock));
+    unsigned result=n>0?(unsigned)((uint64_t)n*speech_stream.rate/16000):0;
+    unsigned sent=atomic_load(&rendered);return result<sent?result:sent;
+}
+int p4_media_audio_open(void *memory,size_t bytes)
+{
+    if(xSemaphoreTake(control_lock,pdMS_TO_TICKS(50))!=pdTRUE)return AGENT_ERR_BUSY;
+    bool busy=(atomic_load(&wake_network_busy) && !atomic_load(&session_ready)) || atomic_load(&voice_pending) || atomic_load(&recording) ||
+        atomic_load(&playing) || atomic_load(&media_lease);
+    if(!busy){atomic_store(&media_lease,true);atomic_store(&media_clock,0);}
+    xSemaphoreGive(control_lock);
+    if(busy)return AGENT_ERR_BUSY;
+    agent_err_t error=esp_hi_stream_open(16000,memory,bytes);
+    if(error)atomic_store(&media_lease,false);
+    return error;
+}
+int p4_media_audio_write(const int16_t *data,size_t count){return esp_hi_stream_write(data,count,NULL);}
+unsigned p4_media_audio_underruns(void){return esp_hi_stream_underruns();}
+void p4_media_audio_timing(unsigned v[2])
+{v[0]=atomic_load(&speech_stream.gap_max_ms);v[1]=atomic_load(&speech_stream.deadline_misses);}
+int p4_media_audio_reserve(void)
+{
+    return atomic_load(&speech_stream.active) && !atomic_load(&media_lease) &&
+        atomic_load(&speech_stream.started_at) && !atomic_load(&speech_stream.eof) &&
+        esp_hi_stream_remaining()<speech_stream.rate/2;
+}
+int p4_media_audio_started(void)
+{
+    unsigned start=atomic_load(&media_clock);
+    return start && (int32_t)(p4_audio_tx_samples()-start)>=0;
+}
+unsigned p4_media_audio_position(void)
+{
+    unsigned start=atomic_load(&media_clock);if(!start)return 0;
+    int32_t elapsed=(int32_t)(p4_audio_tx_samples()-start);
+    unsigned written=atomic_load(&speech_stream.write);
+    return elapsed<=0?0:(unsigned)elapsed>written?written:(unsigned)elapsed;
+}
+void p4_media_audio_seal(void)
+{atomic_store(&total,atomic_load(&speech_stream.write));atomic_store(&speech_stream.eof,true);}
+int p4_media_audio_finish(int error)
+{
+    int result=esp_hi_stream_finish((agent_err_t)error);
+    atomic_store(&media_lease,false);return result;
+}
+#endif
 
 static agent_err_t play_song(void *ctx,const agent_song_t *song)
 {
@@ -1513,19 +1918,39 @@ agent_err_t esp_hi_wake_network(bool active)
 {
     if(!audio_task_handle) return AGENT_OK;
     if(xSemaphoreTake(control_lock,pdMS_TO_TICKS(50))!=pdTRUE) return busy_result(BUSY_NETWORK_LOCK,AGENT_ERR_BUSY);
+#if AGENT_BOARD_P4
+    if(active && atomic_load(&media_lease)) {xSemaphoreGive(control_lock);return AGENT_ERR_BUSY;}
+#endif
     if(active && atomic_load(&recording) && atomic_load(&wake_requested)) {
         xSemaphoreGive(control_lock); return busy_result(BUSY_NETWORK_CAPTURE,AGENT_ERR_BUSY);
     }
     atomic_store(&wake_network_busy,active);
     xSemaphoreGive(control_lock);
-    if(active) {
+    if(active
+#if AGENT_BOARD_P4
+       && !atomic_load(&voice_duplex)
+#endif
+    ) {
         for(unsigned i=0;i<100 && (atomic_load(&wake_loaded) || atomic_load(&wake_stage)==WAKE_LOADING);++i) vTaskDelay(pdMS_TO_TICKS(10));
         if(atomic_load(&wake_loaded)) { atomic_store(&wake_network_busy,false); return AGENT_ERR_TIMEOUT; }
     }
     return AGENT_OK;
 }
+bool esp_hi_wake_ready(void)
+{
+    return atomic_load(&wake_requested) && atomic_load(&wake_loaded) &&
+        atomic_load(&mic_valid) && !atomic_load(&wake_network_busy) &&
+        !atomic_load(&voice_pending) && !atomic_load(&playing) &&
+        !atomic_load(&recording) && atomic_load(&wake_stage)==WAKE_LISTENING;
+}
 agent_err_t esp_hi_voice_enable(bool enabled)
 {
+#if AGENT_BOARD_P4
+    if(!enabled) {
+        atomic_store(&voice_duplex,false);atomic_store(&followup_deadline,0);
+        atomic_store(&continue_request,0);atomic_store(&dialogue_events,0);
+    }
+#endif
     atomic_store(&voice_auto,enabled);
     if(!enabled) atomic_store(&voice_pending,false);
     agent_err_t error=listen(NULL,enabled);
@@ -1642,7 +2067,11 @@ agent_err_t esp_hi_voice_live_join(agent_err_t error)
 }
 agent_err_t esp_hi_wake_threshold(unsigned value)
 {
+#ifdef AGENT_C3_WAKENET9S
+    if(value && (value<500 || value>950)) return AGENT_ERR_ARGUMENT;
+#else
     if(value<500 || value>950) return AGENT_ERR_ARGUMENT;
+#endif
     atomic_store(&wake_threshold,value); return AGENT_OK;
 }
 agent_err_t esp_hi_voice_capture_output(bool hold)
@@ -1852,9 +2281,13 @@ const agent_audio_ops_t esp_hi_audio_ops = { .status = status, .play = play, .st
 agent_err_t esp_hi_audio_init(void)
 {
     if (audio_task_handle) return AGENT_OK;
+#if AGENT_BOARD_P4
+    esp_err_t error=p4_audio_init();
+#else
     gpio_config_t config = { .pin_bit_mask = 1ULL << PA, .mode = GPIO_MODE_OUTPUT };
     esp_err_t error = gpio_config(&config);
     if (!error) error = gpio_set_level(PA, 0);
+#endif
     if (error) return audio_error(error);
     clip_partition=esp_partition_find_first(ESP_PARTITION_TYPE_DATA,0x41,"clip");
     if(clip_partition) {
@@ -1867,7 +2300,12 @@ agent_err_t esp_hi_audio_init(void)
     control_lock = xSemaphoreCreateMutex();
     score_queue = xQueueCreate(1, sizeof(audio_command_t));
     /* Bounded DMA work must run before the Wi-Fi/TCP tasks on this single core. */
-    if (control_lock && score_queue && xTaskCreate(audio_task, "agent_audio", 4096, NULL, configMAX_PRIORITIES-1, &audio_task_handle) == pdPASS)
+#if AGENT_BOARD_P4
+    const unsigned task_stack=6144;
+#else
+    const unsigned task_stack=4096;
+#endif
+    if (control_lock && score_queue && xTaskCreate(audio_task, "agent_audio", task_stack, NULL, configMAX_PRIORITIES-1, &audio_task_handle) == pdPASS)
         return AGENT_OK;
     if (control_lock) vSemaphoreDelete(control_lock);
     if (score_queue) vQueueDelete(score_queue);

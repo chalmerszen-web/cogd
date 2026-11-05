@@ -11,6 +11,7 @@ static srmodel_list_t *models;
 static const esp_wn_iface_t *wake;
 static model_iface_data_t *state;
 static vad_handle_t vad;
+static bool was_armed;
 extern const esp_wn_iface_t esp_sr_wakenet9s_quantized;
 static atomic_uint chunk;
 static unsigned allocated;
@@ -129,7 +130,7 @@ enum { threshold_minimum=500 };
 void esp_hi_speech_disarm(void)
 {
     if(state) wake->destroy(state);
-    state=NULL; chunk=0;
+    state=NULL; chunk=0; was_armed=false;
 #ifdef AGENT_KEYWORD_VERIFY
     keyword_gate_reset(&keyword);
 #endif
@@ -168,16 +169,19 @@ fail:
 }
 unsigned esp_hi_speech_chunk(void) { return chunk; }
 unsigned esp_hi_speech_heap(void) { return allocated; }
-bool esp_hi_speech_wake(int16_t *pcm)
+bool esp_hi_speech_wake_armed(int16_t *pcm,bool armed)
 {
     if(!state) return false;
+    /* A hit while the owner is rearming must not consume the next listen. */
+    if(armed && !was_armed) wake->clean(state);
+    was_armed=armed;
     bool hit=wake->detect(state,pcm)>0;
 #ifdef AGENT_KEYWORD_VERIFY
-    return verify_keyword(hit);
-#else
-    return hit;
+    hit=verify_keyword(hit);
 #endif
+    return armed && hit;
 }
+bool esp_hi_speech_wake(int16_t *pcm) { return esp_hi_speech_wake_armed(pcm,true); }
 bool esp_hi_speech_vad(int16_t *pcm) { return vad && vad_process(vad,pcm,16000,20)==VAD_SPEECH; }
 bool esp_hi_speech_vad_fast(void)
 {
@@ -186,6 +190,10 @@ bool esp_hi_speech_vad_fast(void)
     return vad!=NULL;
 }
 bool esp_hi_speech_threshold(unsigned value)
-{ return state && value>=threshold_minimum && value<=950 && wake->set_det_threshold(state,(float)value/1000,1)==1; }
+{
+    if(!state || (value && (value<threshold_minimum || value>950))) return false;
+    /* Zero preserves/restores the threshold supplied by this official model. */
+    return (value?wake->set_det_threshold(state,(float)value/1000,1):wake->reset_det_threshold(state))==1;
+}
 const char *esp_hi_speech_word(void) { return AGENT_WAKE_WORD; }
 const char *esp_hi_speech_model(void) { return AGENT_WAKE_MODEL_NAME; }

@@ -1,0 +1,135 @@
+{
+  "status": "DEVELOPMENT CANDIDATE; acoustic acceptance pending",
+  "topology": [
+    48,
+    48,
+    48
+  ],
+  "training": "ESP32-P4-WIFI6-Touch-LCD-3.5/wake_training/20261101/wide95/train-wide2",
+  "features": "ESP32-P4-WIFI6-Touch-LCD-3.5/wake_training/20261101/wide95/features-final-train",
+  "training_report": {
+    "complete": true,
+    "method": "joint primary-average and verifier two-of-three confirmation",
+    "heads": [
+      {
+        "head": "first",
+        "best_step": 4000,
+        "checkpoint_sha256": "4a6f7d45a6a4e73f0a31a8253fa053c961b99cbe43d4e14e39841c3a36ba656b",
+        "model_c_sha256": "e6765a960862bf8d6b1da3ed0d685c6611258f93c83760797c8b495214bd6e80"
+      },
+      {
+        "head": "second",
+        "best_step": 4000,
+        "checkpoint_sha256": "92a3c121e378c417d732fefe5eab1adf99e2f2ccdbb86725b1f8a1503d8564ab",
+        "model_c_sha256": "b581adac759b3daf0f07ea5cdfeaa7f65a095bc357dc1c4a507ca1d0619895ba"
+      },
+      {
+        "head": "verifier",
+        "best_step": 4000,
+        "checkpoint_sha256": "09c2f5374db17d5463195ca49557b43f0fa0e5bcf43478b5b8ea9632474150da",
+        "model_c_sha256": "738f8455c21590898dd095eaffa8e4138cc4d4056ebf248dc5cff6befc9b7f2d"
+      }
+    ],
+    "seconds": 456.875,
+    "evaluation_scope": "training_monitor",
+    "round1_test_reused_for_training": true,
+    "round2_audio_used_for_training": true,
+    "round3_audio_read": false,
+    "training_device": "cuda"
+  },
+  "feature_hashes": {
+    "train.npz": "549c634693a95498ff2581f33e9f897a8f32da8c2d2078a28d23e7ce6417de86",
+    "validation.npz": "0a4072d86b1a47a3c1db13137298540bfa4b2e0840b37846e0765543b743b63a",
+    "features.json": "b18c58fe9d3e62bdbb9eef92f171091e6d36211574691d1f7d8fb5dd0c640cd3",
+    "normalization.json": "b3b8ff45e18a52fabd32543cf90b838d6150c61676fcaae75b9dcf7e7013e5d4"
+  },
+  "parity": [
+    {
+      "head": "first",
+      "frames": 300,
+      "integer_values": 158700,
+      "exact": true
+    },
+    {
+      "head": "second",
+      "frames": 300,
+      "integer_values": 158700,
+      "exact": true
+    },
+    {
+      "head": "verifier",
+      "frames": 300,
+      "integer_values": 158700,
+      "exact": true
+    }
+  ],
+  "training_monitor": {
+    "nihao_zh": {
+      "clips": 212,
+      "hits": 208,
+      "false_events": 0
+    },
+    "negative": {
+      "clips": 1907,
+      "hits": 0,
+      "false_events": 0
+    },
+    "nihao_yue": {
+      "clips": 114,
+      "hits": 113,
+      "false_events": 0
+    },
+    "hi_zh": {
+      "clips": 252,
+      "hits": 251,
+      "false_events": 0
+    },
+    "hi_yue": {
+      "clips": 175,
+      "hits": 175,
+      "false_events": 0
+    },
+    "p4_nihao_zh": {
+      "clips": 61,
+      "hits": 59,
+      "false_events": 0
+    },
+    "p4_negative": {
+      "clips": 454,
+      "hits": 0,
+      "false_events": 0
+    },
+    "p4_nihao_yue": {
+      "clips": 47,
+      "hits": 47,
+      "false_events": 0
+    },
+    "p4_hi_zh": {
+      "clips": 45,
+      "hits": 44,
+      "false_events": 0
+    },
+    "p4_hi_yue": {
+      "clips": 40,
+      "hits": 40,
+      "false_events": 0
+    }
+  },
+  "test_used_for_training": false,
+  "runtime": {
+    "temporal_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/kws_temporal_owner.c",
+    "sha256": "8f44689ae5471c423add5e90ef7b7b619f2f736b5a7ec05119d3121de38224f2",
+    "base_owner_sha256": "e4e55cc5228e7b2678a50e33b3afd4363eef0c165708d6d61572193784d4c55a",
+    "policy": "P4 only: two of the latest three verifier scores >= threshold at confirmation (32 ms blocks); primary pending <=256 ms; cooldown only on final acceptance",
+    "workspace_change_bytes": 6016,
+    "wide_runtime_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/wide_kws_verified.c",
+    "wide_header_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/wide_kws_verified_internal.h",
+    "topology": [
+      48,
+      48,
+      48
+    ],
+    "wide_runtime_sha256": "6b3050b2e46db47bc1f7dc4d6d6a285a3b7a3f86c7fc61dbeaf4a85283a7b285",
+    "wide_header_sha256": "b638574ea8590e954f7f7ef2c2abae6a408dcc9329f652780b0db85f6cd26bc8"
+  }
+}

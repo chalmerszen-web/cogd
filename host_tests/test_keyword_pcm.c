@@ -99,6 +99,30 @@ static void concurrent_wrap(void)
     assert(info.generation==4 && info.produced==2000 && info.consumed==2000 && !info.discarded);
     assert(!info.active && !info.writing && info.reason==KEYWORD_PCM_COMPLETE);
 }
+#if AGENT_BOARD_P4
+static void deferred_full_capture(void)
+{
+    static keyword_pcm_frame_t full[270];
+    assert(keyword_pcm_open(&stream,full,sizeof(full),270));
+    assert(stream.slots==270);
+    for(unsigned n=0;n<270;++n) {
+        for(unsigned i=0;i<KEYWORD_PCM_SAMPLES;++i)input[i]=(int16_t)(n+i);
+        keyword_pcm_frame_t *f=keyword_pcm_begin(&stream,input,n*32);assert(f);
+        assert(keyword_pcm_commit(&stream,f,24000,KEYWORD_PCM_HEADS,32768+(n+1)*512,0,scores,heads));
+    }
+    assert(keyword_pcm_reason(&stream)==KEYWORD_PCM_COMPLETE);
+    assert(!keyword_pcm_close(&stream,false));
+    for(unsigned n=0;n<270;++n) {
+        const keyword_pcm_frame_t *f=keyword_pcm_peek(&stream);assert(f && f->sequence==n);
+        assert(f->checksum==agent_crc32(f->data,sizeof(f->data)));
+        for(unsigned i=0;i<KEYWORD_PCM_SAMPLES;++i) {
+            int16_t sample;memcpy(&sample,f->data+2*i,2);assert(sample==(int16_t)(n+i));
+        }
+        assert(keyword_pcm_pop(&stream,n));
+    }
+    assert(keyword_pcm_close(&stream,false));
+}
+#endif
 int main(void)
 {
     basics();full_and_cancel();concurrent_wrap();
@@ -108,6 +132,9 @@ int main(void)
     assert(!keyword_pcm_peek(&stream));
     assert(keyword_pcm_commit(&stream,f,1,0,512,0,scores,NULL));
     assert(keyword_pcm_pop(&stream,0) && keyword_pcm_close(&stream,false));
+#if AGENT_BOARD_P4
+    deferred_full_capture();
+#endif
     printf("keyword PCM lifecycle, ownership, publication, wrap, CRC and cancellation passed; frame=%zu state=%zu\n",
         sizeof(keyword_pcm_frame_t),sizeof(keyword_pcm_t));return 0;
 }

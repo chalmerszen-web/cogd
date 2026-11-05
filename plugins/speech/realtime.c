@@ -1,4 +1,5 @@
 #include "realtime.h"
+#include "../model_usage.h"
 #include "pcm_json.h"
 #include "crc.h"
 #include <string.h>
@@ -223,6 +224,7 @@ static agent_err_t complete_event(agent_realtime_t *q)
     cJSON *event=agent_json_parse(q->speech->scratch,q->used);
     if(!event)return AGENT_ERR_JSON;
     const char *type=agent_json_string(event,"type");agent_err_t e=AGENT_OK;
+    agent_model_usage(AGENT_RT_MODEL,event,type && !strcmp(type,"response.done"));
 #if defined(AGENT_RT_DIAGNOSTICS) && AGENT_RT_DIAGNOSTICS
     unsigned before=state_flags(q);
 #endif

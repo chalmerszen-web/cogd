@@ -21,6 +21,32 @@ agent_err_t esp_hi_wake_network(bool active);
 agent_err_t esp_hi_clip_export(unsigned offset,unsigned count,char *,size_t);
 agent_err_t esp_hi_audio_init(void);
 agent_err_t esp_hi_voice_enable(bool);
+/* Readiness snapshot: an enable request alone does not arm the listener. */
+bool esp_hi_wake_ready(void);
+#if AGENT_BOARD_P4
+/* The network owner enables wake interruption only for a voice response.
+ * Events: 1 = accepted wake interruption, 2 = ten seconds without speech. */
+void esp_hi_voice_duplex(bool enabled);
+unsigned esp_hi_voice_dialogue_event(void);
+void esp_hi_voice_continue(bool wake_cue);
+agent_err_t esp_hi_voice_dialogue_status(char *,size_t);
+/* Persistent audio session: the original audio task remains the sole I2S
+ * consumer/player. PCM is published without allocation or network work. */
+agent_err_t esp_hi_voice_session_configure(bool (*start)(void));
+bool esp_hi_voice_session_ready(void);
+agent_err_t esp_hi_voice_session_read(int16_t *,size_t,size_t *);
+void esp_hi_voice_session_discard(void);
+unsigned esp_hi_voice_session_cursor(void);
+bool esp_hi_voice_session_rewind(unsigned cursor);
+void esp_hi_voice_session_end(void);
+unsigned esp_hi_stream_space(void);
+#if AGENT_BOARD_P4
+/* Single producer has filled the borrowed ring at the current write cursor.
+ * Publish without copying; never overwrite samples still owned by playback. */
+agent_err_t esp_hi_stream_publish(unsigned samples);
+#endif
+unsigned esp_hi_stream_played(void);
+#endif
 /* Volatile diagnostic, configurable only with listening/capture stopped. */
 agent_err_t esp_hi_voice_capture_output(bool hold);
 /* Fixed progress speech, separate from the final answer; join is idempotent. */

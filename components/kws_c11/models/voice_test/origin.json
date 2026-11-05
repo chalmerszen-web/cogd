@@ -4,8 +4,8 @@
     "first.c": "286166f16a624c2989a88364bc165bdaa2fa0b579d12b4cf18d95607455a5091",
     "second.c": "1d6097c4c3fa6eca540dd460682b98468e8003195bb55522b8b3640d0b26cc99",
     "verifier.c": "1b5ac3abc6ab40c656aab3dd8de60e3fe7073aa676c3d31f50a5bdeedfa418c1",
-    "kws_verified_seed.inc": "89af1070cbe3a72e1e37f402442f1bec056bb554d7d2cd5cee8082aa066e9361",
-    "kws_verified_seed.json": "3695e6ba076809a125f40f2fdaac19233f98718e299081b67f689bcf8451ad13"
+    "kws_verified_seed.inc": "05d9b7e4b3ba5b3bb752f1ffcfa4b50db5bd20f09e3d4229e207269724afa47b",
+    "kws_verified_seed.json": "229e8234abd52bcde78a3ae5ff6c4d86edb6898740c7f50f8b3a8c5907139a92"
   },
-  "note": "Existing frozen weights and silence state, copied byte-for-byte. No training or threshold changes."
+  "note": "Frozen neural weights unchanged. Silence state regenerated on 2026-10-30 for cooldown committed only on final acceptance; no training or threshold changes."
 }

@@ -409,7 +409,7 @@ static const kws_verified_seed_t kws_verified_silence={
 .next={2,2,0,0,0,8,9,0,7,0,5,1,7,3,0,3,3,11,0,0,0,3,0,0,0,0,2,12,0,4,1,19
 ,0,0,0,0,2,0,11,0,8,3,3,0,0,7,0,4},
 },
-.decision={.original={.last_sample=32768,.cooldown_until=0,.blocks=64,.votes=0,.stable=0,.threshold_q8=0},.pending=0,.last_support=0,.verify_votes=0},
+.decision={.original={.last_sample=32768,.cooldown_until=0,.blocks=64,.votes=0,.stable=0,.threshold_q8=0},.pending=0,.last_support=0,.verify_votes=0,.release_blocks=0,.release_required=0},
 .last_sample=32768,
 .recent={{-2736,-2716,-2736},{-1270,-1281,-1300}},
 .heads={-2657,-2815,-1270},

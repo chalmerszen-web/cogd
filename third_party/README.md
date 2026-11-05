@@ -5,7 +5,7 @@
 | 目录 | 来源 |
 |---|---|
 | cjson | 项目固定cJSON，详情见目录内README.agent.md与LICENSE |
-| esp-sr | Espressif ESP-SR `efa8d907c6d457cd0f99dae6c6b493412d3078d4` 的C3头文件/库及wn9s_hilexin模型；保留LICENSE |
+| esp-sr | Espressif ESP-SR `efa8d907c6d457cd0f99dae6c6b493412d3078d4` 的C3头文件/库与默认 `wn9s_nihaoxiaozhi` 模型；`wn9s_hilexin` 保留供历史复现；保留LICENSE |
 | ten-vad | TEN-VAD `22a3bcd4509d0faaa8eef4881e8af5f39c178950` 的选定vendor源、固定生成表；保留LICENSE与NOTICES |
 | rvfplib | 接受版使用的3个单精度汇编实现；保留LICENSE.txt与LICENSE-EXCEPTION.txt |
 

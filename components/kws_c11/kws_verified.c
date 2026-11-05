@@ -44,6 +44,8 @@ static void clear_evidence(kws_verified_t *s)
 {
     s->decision.pending = s->decision.last_support = 0;
     s->decision.verify_votes = s->decision.original.votes = 0;
+    s->decision.release_blocks = 0;
+    s->decision.release_required = false;
 }
 void kws_verified_threshold(kws_verified_t *s, int16_t threshold)
 { s->decision.original.threshold_q8 = threshold; clear_evidence(s); }
@@ -56,7 +58,8 @@ uint64_t kws_verified_prime(kws_verified_t *s)
     if (!s || s->first.model != &kws_verified_primary || s->second_model != &kws_verified_secondary ||
         s->verifier_model != &kws_trained_model || s->last_sample || s->half || s->count || s->next ||
         s->decision.original.blocks || s->decision.original.threshold_q8 || s->decision.original.stable ||
-        s->decision.pending || s->decision.last_support || s->decision.verify_votes) return 0;
+        s->decision.pending || s->decision.last_support || s->decision.verify_votes ||
+        s->decision.release_blocks || s->decision.release_required) return 0;
     memcpy(s->first.previous, kws_verified_silence.previous, sizeof(s->first.previous));
     s->first_neural = kws_verified_silence.first;
     s->second = kws_verified_silence.second;
@@ -134,3 +137,17 @@ int kws_verified_feed_512_armed(kws_verified_t *s, const int16_t pcm[512],
 }
 void kws_verified_scores(const kws_verified_t *s, int16_t heads[3], int16_t filtered[2])
 { memcpy(heads, s->heads, sizeof(s->heads)); memcpy(filtered, s->score, sizeof(s->score)); }
+
+bool kws_verified_observe(const kws_verified_t *s, kws_verified_observation_t *out)
+{
+    if (!s || !out) return false;
+    const kws_detector_t *d = &s->decision.original;
+    unsigned votes = (d->votes & 1) + ((d->votes >> 1) & 1) + ((d->votes >> 2) & 1);
+    *out = (kws_verified_observation_t){
+        .sample_end = s->last_sample, .pending = s->decision.pending,
+        .cooldown_until = d->cooldown_until, .primary = s->score[0],
+        .verifier = s->score[1], .threshold = d->threshold_q8,
+        .primary_confirmed = d->blocks >= 64 && (d->stable ? d->votes == 15 : votes >= 2)
+    };
+    return true;
+}

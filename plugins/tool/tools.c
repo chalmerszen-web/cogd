@@ -3,6 +3,9 @@
 #include "context.h"
 #include <stdio.h>
 #include <string.h>
+#if AGENT_BOARD_P4
+#include "p4_agent.h"
+#endif
 
 enum {
     TOOL_STATUS, TOOL_LIGHT_GET, TOOL_LIGHT_SET, TOOL_CONTEXT,
@@ -12,6 +15,9 @@ enum {
     TOOL_SEARCH, TOOL_SUMMARY_GET, TOOL_SUMMARY_SET,
     TOOL_CAPABILITIES, TOOL_PLAN_VALIDATE, TOOL_PLAN_RUN, TOOL_PLAN_STATUS, TOOL_PLAN_CANCEL,
     TOOL_GPIO_GET, TOOL_GPIO_SET, TOOL_HARDWARE, TOOL_DISPLAY_GET, TOOL_DISPLAY_SET
+#if AGENT_BOARD_P4
+    ,TOOL_CAMERA,TOOL_DRAW,TOOL_IMAGE,TOOL_WEB_SEARCH,TOOL_QIANWEN,TOOL_VIDEO,TOOL_TUTOR
+#endif
 };
 
 const agent_tool_description_t agent_tool_descriptions[AGENT_TOOL_COUNT] = {
@@ -42,6 +48,15 @@ const agent_tool_description_t agent_tool_descriptions[AGENT_TOOL_COUNT] = {
     {"device.hardware.get", "device_hardware_get"},
     {"device.display.get", "device_display_get"},
     {"device.display.set", "device_display_set"},
+#if AGENT_BOARD_P4
+    {"device.camera.test", "device_camera_test"},
+    {"device.display.draw", "device_display_draw"},
+    {"device.display.image", "device_display_image"},
+    {"device.web.search", "device_web_search"},
+    {"qianwen.skill", "qianwen_skill"},
+    {"device.display.video", "device_display_video"},
+    {"device.tutor", "device_tutor"},
+#endif
 };
 
 #define EMPTY_SCHEMA "\"parameters\":{\"type\":\"object\",\"properties\":{},\"additionalProperties\":false}"
@@ -137,11 +152,24 @@ static const char *const schemas[AGENT_TOOL_COUNT] = {
     "{\"type\":\"function\",\"function\":{\"name\":\"device_hardware_get\",\"description\":\"Read this firmware's board wiring, managed peripherals, reserved IO and hardware uncertainties.\"," EMPTY_SCHEMA "}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"device_display_get\",\"description\":\"Read LCD mode, NTP validity, last rendered time, frame count and driver errors. Successful writes do not prove visible pixels.\"," EMPTY_SCHEMA "}}",
     "{\"type\":\"function\",\"function\":{\"name\":\"device_display_set\","
+#if AGENT_BOARD_P4
+    "\"description\":\"Control the ST7796 320x480 LCD clock/fill/off. Use device_display_draw for diagrams/text and device_display_image for generated artwork or HTTPS photos. Clock uses NTP; never invent current time. RGB565 colors white65535 black0 red63488 green2016 blue31. off stops drawing; it does not release shared hardware pins.\", "
+#else
     "\"description\":\"Control the onboard 160x80 LCD. clock starts persistent local once-per-second refresh until off/cancel/reboot, without repeated LLM calls. Default Beijing UTC+480 minutes, white on black. Use NTP time, never invent it. fill paints foreground; off stops and releases GPIO4/5/10 as inputs. Other GPIO access to them is busy while LCD owns them. Asynchronous: check pending=false,ready=true,rendered_job=job,frames increasing. RGB565 colors: white65535,black0,red63488,green2016,blue31. Omit all other fields for off, and offset/background for fill.\","
+#endif
     "\"parameters\":{\"type\":\"object\",\"properties\":{\"mode\":{\"type\":\"string\",\"enum\":[\"clock\",\"fill\",\"off\"]},"
     "\"utc_offset_minutes\":{\"type\":\"integer\",\"minimum\":-720,\"maximum\":840},"
     "\"foreground\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":65535},"
     "\"background\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":65535}},\"required\":[\"mode\"],\"additionalProperties\":false}}}"
+#if AGENT_BOARD_P4
+    ,"{\"type\":\"function\",\"function\":{\"name\":\"device_camera_test\",\"description\":\"Start onboard OV5647 live preview with local detection boxes and text logs. person=person detector; approach=monocular size trend; face=face boxes/landmarks; attention=face-toward candidate, NOT eye gaze; recognition=face foundation only, no enrolled identity. A request such as 请测试人脸望向摄像头 means start attention directly; person tests start person. Do not ask the user to enable it again. mode=status only reads the existing state and NEVER starts a test; use it only for a state question or after starting. off stops.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"mode\":{\"type\":\"string\",\"enum\":[\"preview\",\"person\",\"approach\",\"face\",\"attention\",\"recognition\",\"status\",\"off\"]},\"test_image_url\":{\"type\":\"string\",\"maxLength\":2048,\"description\":\"Optional authorized HTTP(S) image for explicitly labelled fixture replay, only person/face/attention/recognition. Omit for real camera.\"},\"brightness\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100}},\"required\":[\"mode\"],\"additionalProperties\":false}}}"
+    ,"{\"type\":\"function\",\"function\":{\"name\":\"device_display_draw\",\"description\":\"Draw freely on the 320x480 screen. Coordinates in pixels; colors are decimal RGB888 (red16711680,green65280,blue255,white16777215). rect:x,y,w,h; circle:center x,y,r; line:x,y,x2,y2,width; text:x,y,text. fill defaults true. Up to40 objects. Compose full scene in order, replacing prior content.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"background\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":16777215},\"objects\":{\"type\":\"array\",\"maxItems\":40,\"items\":{\"type\":\"object\",\"properties\":{\"type\":{\"type\":\"string\",\"enum\":[\"rect\",\"circle\",\"line\",\"text\"]},\"x\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":319},\"y\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":479},\"x2\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":319},\"y2\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":479},\"w\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":320},\"h\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":480},\"r\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":240},\"color\":{\"type\":\"integer\"},\"width\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":16},\"fill\":{\"type\":\"boolean\"},\"text\":{\"type\":\"string\"}},\"required\":[\"type\",\"x\",\"y\"],\"additionalProperties\":false}},\"brightness\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100}},\"required\":[\"objects\"],\"additionalProperties\":false}}}"
+    ,"{\"type\":\"function\",\"function\":{\"name\":\"device_display_image\",\"description\":\"Generate a Qwen image from prompt and display it, or display an existing HTTP(S) JPEG/PNG url. Exactly one of prompt,url. Preserves image aspect ratio. Async: query qianwen_skill status; do not claim displayed until rendered=true. Do not resubmit a running or uncertain generation.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"prompt\":{\"type\":\"string\",\"maxLength\":1600},\"url\":{\"type\":\"string\",\"maxLength\":4096},\"brightness\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100}},\"additionalProperties\":false}}}"
+    ,"{\"type\":\"function\",\"function\":{\"name\":\"device_web_search\",\"description\":\"Search the live internet through Qwen. Use for current facts, news, weather, prices and explicit requests to search. Returns answer and available source URLs; no fabricated sources.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"query\":{\"type\":\"string\",\"minLength\":1,\"maxLength\":900}},\"required\":[\"query\"],\"additionalProperties\":false}}}"
+    ,"{\"type\":\"function\",\"function\":{\"name\":\"qianwen_skill\",\"description\":\"Qianwen capability registry and model dispatch. models paginates20 model IDs; models_refresh refreshes the live API directory. list paginates10 profiles; describe(capability) returns endpoint, models, request example. run passes a provider request including selected model through that profile; async one job at a time. result(offset) returns provider JSON/SSE in bounded chunks. status wait_ms<=15000 waits for local job; poll checks a submitted provider task. Catalog is not proof of live/model permission. Optional path/method/transport override supports new official endpoints at the fixed Qianwen origin. WebSocket requests use ordered events: send JSON and wait for exact event type; at most16 steps and45 seconds. Use display_image for ordinary image requests.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"action\":{\"type\":\"string\",\"enum\":[\"list\",\"describe\",\"run\",\"status\",\"poll\",\"models\",\"models_refresh\",\"result\"]},\"capability\":{\"type\":\"string\"},\"offset\":{\"type\":\"integer\",\"minimum\":0},\"wait_ms\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":15000},\"request\":{\"type\":\"object\"},\"path\":{\"type\":\"string\",\"maxLength\":512},\"transport\":{\"type\":\"string\",\"enum\":[\"http\",\"websocket\"]},\"method\":{\"type\":\"string\",\"enum\":[\"GET\",\"POST\"]}},\"required\":[\"action\"],\"additionalProperties\":false}}}"
+    ,"{\"type\":\"function\",\"function\":{\"name\":\"device_display_video\",\"description\":\"Generate a WAN3 video then automatically prepare and play its original High/AAC MP4 on P4. No buttons or PC conversion. Exactly one of prompt,url,task_id; task_id resumes without new generation. Default 5 seconds,15 fps,320x480 display. Preparation can take minutes. Check qianwen_skill status; played means complete. Do not resubmit uncertain/running jobs.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"prompt\":{\"type\":\"string\",\"maxLength\":1600},\"url\":{\"type\":\"string\",\"maxLength\":4096},\"task_id\":{\"type\":\"string\",\"maxLength\":128},\"duration\":{\"type\":\"integer\",\"enum\":[5,10,15]},\"fps\":{\"type\":\"integer\",\"minimum\":10,\"maximum\":15},\"brightness\":{\"type\":\"integer\",\"minimum\":1,\"maximum\":100}},\"additionalProperties\":false}}}"
+    ,"{\"type\":\"function\",\"function\":{\"name\":\"device_tutor\",\"description\":\"Camera tutoring: start/refine reads a question and asks confirmation. Only a NEW user confirmation permits confirm with latest question_id; solves in background and shows a scrollable solution. On completion ask ONCE whether user wants a short overview or quiet reading. status gets lesson ID/state; context reads retained source (step 0 overview, steps 1..128; offset/next_offset for more). read means quiet reading; explain means explain the requested step based on the returned source; resume restores quiet reading after standby; done only on explicit understanding or no more explanation. recheck independently verifies the confirmed question with user prompt and updates full solution. Teaching waits five minutes without speech/touch, then pauses silently; resume retains lesson. cancel discards lesson; scroll uses pixels (positive down). test_image_url is ONLY an explicitly authorized test fixture, never camera observation.\",\"parameters\":{\"type\":\"object\",\"properties\":{\"action\":{\"type\":\"string\",\"enum\":[\"start\",\"refine\",\"confirm\",\"status\",\"cancel\",\"scroll\",\"context\",\"read\",\"explain\",\"resume\",\"done\",\"recheck\"]},\"prompt\":{\"type\":\"string\",\"maxLength\":900},\"question_id\":{\"type\":\"integer\",\"minimum\":1},\"step\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":128},\"offset\":{\"type\":\"integer\",\"minimum\":0,\"maximum\":131071},\"pixels\":{\"type\":\"integer\",\"minimum\":-1000000,\"maximum\":1000000},\"test_image_url\":{\"type\":\"string\",\"maxLength\":2048}},\"required\":[\"action\"],\"additionalProperties\":false}}}"
+#endif
 };
 
 static agent_err_t write_tools(bool voice,agent_write_fn write,void *write_ctx)
@@ -246,6 +274,9 @@ static agent_err_t validate(int index, const char *arguments, tool_arguments_t *
 {
     if (index < 0) return AGENT_ERR_TOOL;
     if (!arguments || strlen(arguments) > AGENT_ARGS_MAX) return AGENT_ERR_LIMIT;
+#if AGENT_BOARD_P4
+    if(index>=TOOL_CAMERA)return (agent_err_t)p4_agent_check(agent_tool_descriptions[index].wire_name,arguments);
+#endif
     if(index==TOOL_PLAN_VALIDATE || index==TOOL_PLAN_RUN) return agent_plan_parse(arguments,&args->plan);
     if(index==TOOL_DISPLAY_SET) return agent_display_parse(arguments,&args->display);
 #if AGENT_ENABLE_AUDIO
@@ -371,6 +402,10 @@ agent_err_t agent_tool_invoke(const agent_tool_ops_t *ops, const char *name, con
     if (error) return error;
     uint64_t start = ops->now_ms ? ops->now_ms(ops->ctx) : 0;
     switch (index) {
+#if AGENT_BOARD_P4
+    case TOOL_CAMERA: case TOOL_DRAW: case TOOL_IMAGE: case TOOL_WEB_SEARCH: case TOOL_QIANWEN: case TOOL_VIDEO: case TOOL_TUTOR:
+        return (agent_err_t)p4_agent_call(agent_tool_descriptions[index].wire_name,arguments,output,capacity);
+#endif
     case TOOL_HARDWARE: error=ops->hardware?ops->hardware(ops->ctx,output,capacity):AGENT_ERR_CONFIG;break;
     case TOOL_DISPLAY_GET: case TOOL_DISPLAY_SET:
         if(!ops->display || !ops->display->status) return AGENT_ERR_CONFIG;

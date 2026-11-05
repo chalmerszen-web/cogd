@@ -1,0 +1,21 @@
+{
+  "family": "Noto Sans SC",
+  "weight": 400,
+  "size_px": 16,
+  "bpp": 2,
+  "converter": "lv_font_conv@1.5.3",
+  "fonttools": "4.63.0",
+  "ranges": "0x20-0x7e,0xa0-0xff,0x370-0x3ff,0x2000-0x22ff,0x2460-0x24ff,0x3000-0x303f,0x4e00-0x9fff,0xff00-0xffef",
+  "source_url": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
+  "license": "FONT-LICENSE.txt",
+  "latin_runtime_font": "LVGL Montserrat 14; Chinese fallback is cjk16.bin",
+  "source": {
+    "bytes": 17772300,
+    "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
+  },
+  "binary": {
+    "bytes": 1345212,
+    "sha256": "1184fe451d80fc7e8b1eea62dcdf44952d2ff97b0e03bde1d265562b721ee1e8"
+  },
+  "requires": "CONFIG_LV_FONT_FMT_TXT_LARGE=y (bitmap offsets exceed 20 bits)"
+}

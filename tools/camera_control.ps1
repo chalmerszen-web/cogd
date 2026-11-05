@@ -1,5 +1,6 @@
-param([string]$Name='Insta360 Link',[switch]$ResetPose,[ValidateRange(-30,30)][int]$Tilt)
+param([string]$Name='Insta360 Link',[switch]$ResetPose,[ValidateRange(-30,30)][int]$Tilt,[ValidateRange(-30,30)][int]$Pan,[ValidateRange(0,100)][int]$Focus,[switch]$AutoFocus)
 $ErrorActionPreference='Stop'
+if ($AutoFocus -and $PSBoundParameters.ContainsKey('Focus')) { throw 'Choose manual Focus or AutoFocus' }
 Add-Type -TypeDefinition @'
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ interface ICameraControl {
  [PreserveSig] int Get(int property,out int value,out int flags);
 }
 public static class CameraControlProbe {
- public static string[] Run(string wanted,bool reset,bool setTilt,int tilt) {
+ public static string[] Run(string wanted,bool reset,bool setTilt,int tilt,bool setPan,int pan,bool setFocus,int focus,bool autoFocus) {
   var lines=new List<string>();
   object deviceEnum=Activator.CreateInstance(Type.GetTypeFromCLSID(new Guid("62BE5D10-60EB-11D0-BD3B-00A0C911CE86")));
   IEnumMoniker list=null;
@@ -49,6 +50,17 @@ public static class CameraControlProbe {
        if(tilt<min || tilt>max) throw new ArgumentOutOfRangeException("tilt");
        int set=camera.Set(p,tilt,2);lines.Add(String.Format("tilt target={0} hr={1:X8}",tilt,set));
       }
+      if(setPan && p==0 && range==0 && (caps&2)!=0) {
+       if(pan<min || pan>max) throw new ArgumentOutOfRangeException("pan");
+       int set=camera.Set(p,pan,2);lines.Add(String.Format("pan target={0} hr={1:X8}",pan,set));
+      }
+      if(setFocus && p==6 && range==0 && (caps&2)!=0) {
+       if(focus<min || focus>max) throw new ArgumentOutOfRangeException("focus");
+       int set=camera.Set(p,focus,2);lines.Add(String.Format("focus target={0} hr={1:X8}",focus,set));
+      }
+      if(autoFocus && p==6 && range==0 && (caps&1)!=0) {
+       int set=camera.Set(p,current,1);lines.Add(String.Format("autofocus hr={0:X8}",set));
+      }
      }
      return lines.ToArray();
     } finally {
@@ -62,4 +74,4 @@ public static class CameraControlProbe {
  }
 }
 '@
-[CameraControlProbe]::Run($Name,$ResetPose.IsPresent,$PSBoundParameters.ContainsKey('Tilt'),$Tilt)
+[CameraControlProbe]::Run($Name,$ResetPose.IsPresent,$PSBoundParameters.ContainsKey('Tilt'),$Tilt,$PSBoundParameters.ContainsKey('Pan'),$Pan,$PSBoundParameters.ContainsKey('Focus'),$Focus,$AutoFocus.IsPresent)

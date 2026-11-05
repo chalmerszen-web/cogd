@@ -70,11 +70,18 @@ typedef struct {
 /* A slot has one owning task. Classic TTS and Omni remain mutually exclusive.
  * Only isolated ASR has a second slot; enabling it does not open a connection. */
 static ws_owner_t primary;
+#if AGENT_BOARD_P4
+#include "audio_session.h"
+static ws_owner_t conversation;
+#endif
 static uint64_t tts_warm_until;
 #if AGENT_ISOLATED_ASR
 static ws_owner_t isolated;
 #endif
 static ws_owner_t *const owners[]={&primary,
+#if AGENT_BOARD_P4
+    &conversation,
+#endif
 #if AGENT_ISOLATED_ASR
     &isolated,
 #endif
@@ -263,7 +270,11 @@ static agent_err_t open_ws_path(void *ctx,const atomic_bool *flag,const char *pa
 #endif
     if(!error && watched)esp_agent_ws_connect_watch(connection->tls);
 #endif
-    int connected=error?-1:esp_transport_connect(connection->ws,"dashscope.aliyuncs.com",443,4000);
+    const char *host="dashscope.aliyuncs.com";
+#if AGENT_BOARD_P4
+    if(owner==&conversation)host="maas.qianwenaiapi.com";
+#endif
+    int connected=error?-1:esp_transport_connect(connection->ws,host,443,4000);
 #if AGENT_WS_CONNECT_TRACE
     if(watched)esp_agent_ws_connect_watch(NULL);
 #endif
@@ -424,7 +435,11 @@ static agent_err_t read_sdk(ws_owner_t *owner,char *data,size_t capacity,agent_w
      * through its reader until a complete frame and an observed empty poll.
      * Never skip or inspect private SDK buffers. The upper JSON state and
      * fragment flag continue unchanged when raw TLS reading takes ownership. */
-    if(!connection->remaining) {
+    if(!connection->remaining
+#if AGENT_BOARD_P4
+       || owner==&conversation
+#endif
+    ) {
         uint64_t began=measurement_start();int ready=esp_transport_poll_read(connection->ws,(int)timeout);
         probe_poll(owner,true,ready);
         measure_add(owner,M_RPOLL,began);if(ready<=0)return ready<0?AGENT_ERR_NETWORK:AGENT_OK;
@@ -458,6 +473,15 @@ static agent_err_t read_ws_inner(void *ctx,char *data,size_t capacity,agent_ws_c
     if(cancelled(flag))return AGENT_ERR_CANCELLED;
     if(!connection->ws)return AGENT_ERR_CONFIG;
 #if AGENT_WS_INCREMENTAL
+#if AGENT_BOARD_P4
+    /* Continuous audio may span many TLS records. Let the IDF WebSocket
+     * reader retain partial records and handle ping/close on this connection;
+     * legacy ASR/TTS keep their existing low-latency reader. */
+    if(owner==&conversation) {
+        agent_err_t error=read_sdk(owner,data,capacity,part,timeout);
+        return cancelled(flag)?AGENT_ERR_CANCELLED:error;
+    }
+#endif
     if(connection->bootstrap) {
         agent_err_t error=read_sdk(owner,data,capacity,part,timeout);
         return cancelled(flag)?AGENT_ERR_CANCELLED:error;
@@ -511,6 +535,24 @@ static agent_err_t read_ws(void *ctx,char *data,size_t capacity,agent_ws_chunk_t
 }
 const agent_ws_ops_t esp_agent_speech_ws={open_ws,send_ws,read_ws,close_ws,&primary};
 const agent_ws_ops_t esp_agent_realtime_ws={open_realtime_ws,send_realtime_ws,read_ws,close_ws,&primary};
+#if AGENT_BOARD_P4
+static agent_err_t open_conversation_ws(void *ctx,const atomic_bool *flag)
+{return open_ws_path(ctx,flag,"/api-ws/v1/realtime?model=" AGENT_AUDIO_MODEL,4);}
+static agent_err_t send_conversation_ws(void *ctx,bool binary,char *data,size_t length,const atomic_bool *flag)
+{
+    if(length<=AGENT_WS_FRAME_PAYLOAD_MAX)return send_realtime_ws(ctx,binary,data,length,flag);
+    ws_owner_t *owner=ctx;
+    if(length>49152 || binary)return AGENT_ERR_LIMIT;
+    if(cancelled(flag))return AGENT_ERR_CANCELLED;
+    if(!owner->connection.ws)return AGENT_ERR_CONFIG;
+    int ready=measured_poll_write(owner);
+    if(ready<0)return AGENT_ERR_NETWORK;
+    if(!ready)return AGENT_ERR_BUSY;
+    int n=esp_transport_ws_send_raw(owner->connection.ws,WS_TRANSPORT_OPCODES_TEXT|WS_TRANSPORT_OPCODES_FIN,data,length,500);
+    return n==(int)length?AGENT_OK:AGENT_ERR_NETWORK;
+}
+const agent_ws_ops_t esp_agent_conversation_ws={open_conversation_ws,send_conversation_ws,read_ws,close_ws,&conversation};
+#endif
 #if AGENT_TEXT_PREFETCH
 const agent_ws_ops_t esp_agent_candidate_ws={open_candidate_ws,send_realtime_ws,read_ws,close_ws,&primary};
 #endif

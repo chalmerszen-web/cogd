@@ -42,7 +42,8 @@ int main(void)
     }
     assert(s->last_sample == 32768 && s->decision.original.blocks == 64 &&
         !s->decision.original.votes && !s->decision.original.cooldown_until &&
-        !s->decision.pending && !s->decision.last_support && !s->decision.verify_votes);
+        !s->decision.pending && !s->decision.last_support && !s->decision.verify_votes &&
+        !s->decision.release_blocks && !s->decision.release_required);
     puts("/* Generated typed state; source/model hashes in kws_verified_seed.cmake. */");
     puts("static const kws_verified_seed_t kws_verified_silence={");
     i16("previous", s->first.previous, 256);
@@ -53,12 +54,13 @@ int main(void)
     neural("verifier", &(kws_neural_buffers_t){s->verifier.history,s->verifier.current,
         s->verifier.next,s->verifier.position}, 48);
     printf(".decision={.original={.last_sample=%llu,.cooldown_until=%llu,.blocks=%u,"
-           ".votes=%u,.stable=%u,.threshold_q8=%d},.pending=%llu,.last_support=%llu,.verify_votes=%u},\n",
+           ".votes=%u,.stable=%u,.threshold_q8=%d},.pending=%llu,.last_support=%llu,"
+           ".verify_votes=%u,.release_blocks=%u,.release_required=%u},\n",
         (unsigned long long)s->decision.original.last_sample,
         (unsigned long long)s->decision.original.cooldown_until, s->decision.original.blocks,
         s->decision.original.votes, s->decision.original.stable, s->decision.original.threshold_q8,
         (unsigned long long)s->decision.pending, (unsigned long long)s->decision.last_support,
-        s->decision.verify_votes);
+        s->decision.verify_votes, s->decision.release_blocks, s->decision.release_required);
     printf(".last_sample=%llu,\n", (unsigned long long)s->last_sample);
     printf(".recent={{%d,%d,%d},{%d,%d,%d}},\n", s->recent[0][0], s->recent[0][1],
         s->recent[0][2], s->recent[1][0], s->recent[1][1], s->recent[1][2]);

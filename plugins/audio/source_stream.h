@@ -37,4 +37,7 @@ agent_err_t source_stream_confirm(agent_confirmation_t *,const uint8_t *,unsigne
 /* Lightweight local endpoint for streamed input: spectral voice plus frozen
  * room-level and tonal-energy guards. No neural confirmation is implied. */
 agent_err_t source_stream_endpoint(agent_endpoint_t *,const uint8_t *,unsigned published_samples,unsigned noise,source_frame_t *);
+/* Returns the noise floor to use for subsequent frames. C3 retains its frozen
+ * floor; P4 may correct an overestimate using current non-speech metadata. */
+unsigned source_stream_endpoint_notice(agent_endpoint_t *,const uint8_t *,unsigned published_samples,unsigned noise,unsigned notice);
 #endif

@@ -42,8 +42,11 @@ static bool valid_tree(const cJSON *value)
 }
 
 cJSON *agent_json_parse(const char *text, size_t length)
+{return agent_json_parse_bounded(text,length,AGENT_REQUEST_MAX);}
+
+cJSON *agent_json_parse_bounded(const char *text,size_t length,size_t limit)
 {
-    if (!text || !length || length > AGENT_REQUEST_MAX || memchr(text, 0, length) ||
+    if (!text || !length || length > limit || memchr(text, 0, length) ||
         !agent_utf8_valid(text, length)) return NULL;
     unsigned depth = 0, tokens = 0;
     bool quoted = false;

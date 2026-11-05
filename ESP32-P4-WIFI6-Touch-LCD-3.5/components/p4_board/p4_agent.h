@@ -1,0 +1,40 @@
+#pragma once
+#include <stddef.h>
+#include <stdint.h>
+#include <stdbool.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+/* Return cogd agent_err_t values through this C ABI; the DL adapter is C++. */
+int p4_agent_check(const char *tool, const char *arguments);
+int p4_agent_call(const char *tool, const char *arguments, char *out, size_t cap);
+void p4_visual_init(void);
+const void *p4_visual_font(void);
+void p4_wifi_ui_init(void);
+void p4_wifi_configure(const char *ssid,const char *password);
+void p4_wifi_poll(bool online,bool paused);
+bool p4_wifi_visible(void);
+int p4_wifi_debug(const char *cmd,char *out,size_t cap);
+bool p4_visual_active(void);
+void p4_visual_stop(void);
+unsigned p4_visual_begin(int owner);
+bool p4_visual_current(unsigned generation);
+void p4_visual_message(unsigned generation, const char *message);
+void p4_visual_brightness(int percent);
+int p4_visual_image(unsigned generation, const uint8_t *data, size_t size);
+unsigned p4_camera_question_begin(void);
+int p4_camera_jpeg(unsigned generation, uint8_t **data, size_t *size);
+int p4_visual_document(unsigned generation, const char *text);
+int p4_document_scroll(int pixels, char *out, size_t cap);
+int p4_document_focus(unsigned step, char *out, size_t cap);
+unsigned p4_document_step(void);
+bool p4_tutor_waiting(void);
+void p4_tutor_activity(void);
+bool p4_tutor_pause_due(void);
+void p4_tutor_context(char *out, size_t cap);
+int p4_vision_fixture(unsigned generation, const char *mode, char *out, size_t cap);
+int p4_cloud_check(const char *tool, const char *arguments);
+int p4_cloud_call(const char *tool, const char *arguments, char *out, size_t cap);
+#ifdef __cplusplus
+}
+#endif

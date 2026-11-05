@@ -1,0 +1,13 @@
+{
+  "source_version": "2.6.1",
+  "files": {
+    "model-source\\fst\\commands_cn.txt": "876ff0c3f2f5ad6db45824c964d37a75485bcbb67b498f56f2801e8683afb970",
+    "model-source\\mn7_cn\\mn7_data": "21bf13f3dc4792bdac9a9d6d6d3e69c782ded4071bba24df3da98ee14151120f",
+    "model-source\\mn7_cn\\mn7_index": "8a018cc23671dcee23a80ff343c37e87f3b893f144198a2dba09bcb9f745af75",
+    "model-source\\mn7_cn\\vocab": "7505578a7543455554a3d0a45cad7e2fd2f258097ba3b5f381d18d20d3f7ed51",
+    "model-source\\mn7_cn\\_MODEL_INFO_": "251cee555d800867c5279cb5c88ef2cca10d0d250a17baf48f87830d502244aa",
+    "main/models.bin": "5db8ea708a01a6e1bb0b8bb3ecca9f1b8c53b10320ff8fa98f183780ee54671e"
+  },
+  "blob_bytes": 2671766,
+  "fst": "Six experiment commands; no default unrelated commands"
+}

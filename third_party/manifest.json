@@ -96,6 +96,9 @@
     "ten-vad/vendor/ten_vad.c": "a5240cbef29736a8fe4bee936cabc5d2d95b3c5ec6a9165b074cad09174eda7e",
     "ten-vad/vendor/ten_vad.h": "634f5ae12084a14147fb78d378750bfcff29678e8bb8122a8e22893fa505bd56",
     "esp-hi-lcd/LICENSE": "0a5a839033bfe18fe75d32b50d9d028912cf876f69ef59c2791aeb2971335d05",
-    "esp-hi-lcd/README.md": "432be8371bc69e8fa130875fb9935f1e754b613d08281b87df52e0a0f0710e62"
+    "esp-hi-lcd/README.md": "432be8371bc69e8fa130875fb9935f1e754b613d08281b87df52e0a0f0710e62",
+    "esp-sr/model/wakenet_model/wn9s_nihaoxiaozhi/_MODEL_INFO_": "95a971d4b3230cf79a22045ba392b55443df2f6728636685ddc61d06db987121",
+    "esp-sr/model/wakenet_model/wn9s_nihaoxiaozhi/wn9_index": "6260eb6cbab109db5823399c301059f9b805abca34db8c7b2b6c399820ada1d4",
+    "esp-sr/model/wakenet_model/wn9s_nihaoxiaozhi/wn9_data": "0f4bb04e16afee0503c2842029f399c318e4ab07f46d883c93ed7fb443c918ab"
   }
 }

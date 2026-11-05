@@ -1,0 +1,113 @@
+{
+  "firmware": "0.12.5-clock",
+  "date": "2026-10-30",
+  "ready_for_user_test": true,
+  "acceptance_scope": "Rejected-candidate cooldown repair and three single-attempt acoustic replay conversations; not independent human voice acceptance",
+  "application_sha256": "98c49b0d6020c2728a015a490945f6b4477bcba479bfa217614aed53c3220f0b",
+  "application_bytes": 1534112,
+  "application_verified": true,
+  "data_partitions_unchanged": true,
+  "host_tests": {
+    "passed": 96,
+    "failed": 0
+  },
+  "same_source_audio_verified": true,
+  "pair_before_triggered": false,
+  "pair_after_triggered": true,
+  "frozen_regression": {
+    "passed": true,
+    "streams": 961,
+    "negatives": 815,
+    "existing_negative_triggers": 3,
+    "new_negative_triggers": 0,
+    "retained_valid_positives": 141,
+    "scope": "Frozen known-development score replay only; not new model inference or field false-wake acceptance"
+  },
+  "three_turns": [
+    {
+      "round": 1,
+      "language": "zh",
+      "asr": "请用一句话介绍你自己。\n",
+      "complete": true,
+      "input_complete": true,
+      "core_task_complete": true,
+      "runtime_health": {
+        "passed": true,
+        "counts": {
+          "watchdog": 0,
+          "panic": 0,
+          "reboot": 0
+        }
+      },
+      "wake_attempts": 1,
+      "terminal": "@done"
+    },
+    {
+      "round": 2,
+      "language": "yue",
+      "asr": "请用一句话介绍你自己。\n",
+      "complete": true,
+      "input_complete": true,
+      "core_task_complete": true,
+      "runtime_health": {
+        "passed": true,
+        "counts": {
+          "watchdog": 0,
+          "panic": 0,
+          "reboot": 0
+        }
+      },
+      "wake_attempts": 1,
+      "terminal": "@done"
+    },
+    {
+      "round": 3,
+      "language": "zh",
+      "asr": "请用一句话介绍你自己。\n",
+      "complete": true,
+      "input_complete": true,
+      "core_task_complete": true,
+      "runtime_health": {
+        "passed": true,
+        "counts": {
+          "watchdog": 0,
+          "panic": 0,
+          "reboot": 0
+        }
+      },
+      "wake_attempts": 1,
+      "terminal": "@done"
+    }
+  ],
+  "readiness": {
+    "immediate": "rearming",
+    "settled": "listening"
+  },
+  "final_device": {
+    "wifi": true,
+    "time_valid": true,
+    "voice_enabled": true,
+    "wake_state": "listening",
+    "turns": 5,
+    "failures": 0,
+    "dma_lost": 0,
+    "display_mode": "clock",
+    "display_ready": true
+  },
+  "limitations": [
+    "Fixed speaker/headset playback only; no independent human or varied-room acceptance.",
+    "Existing false wake and other voice quality limitations remain outside this repair.",
+    "Clock status checked; physical display was not re-inspected in this test."
+  ],
+  "evidence_sha256": {
+    "flash-fix.json": "d2c40fd9e9abdb26bab07d79dca08211914940535d033006d35e18c2efb18c45",
+    "host-fix.log": "43db9fbbc2b94c026c54c1cd4501ad7f8d550ef12a1c11dc61f294889a31a507",
+    "build-fix.log": "7d989ad607b32e021df4bc613719424b10bdd87dc514f348e46ca51d0cc77542",
+    "pair-before/report.json": "01c402e78fe9cf85f593c9efc54ad1fe6aa5f2ec1018963978223b1e3fde379c",
+    "pair-after/report.json": "f30a4c96d6d40424c230417be92a9b564fb76d00d5c7bf230925038a741109b9",
+    "final-three-turns/report.json": "c0feac89d0f1ddd4c2e32b0aabd58826f81c1c9f5d6b74d606808592702f3177",
+    "final-three-turns/speaker.wav": "553ad10cda168274eb17d35e0a4ff60d9c0e618e73650497d6fa88cc0d9483e7",
+    "frozen-decision-regression/after-fix/report.json": "15c2f5ac82f1bda91210ae9eac9b1f9c6d4be807e6d95c991bbef2f7b5ec3d42",
+    "final-device/status.json": "2a2c896813460df446a2d99ad9991bf048239937851c7a16241518356d0e82b6"
+  }
+}

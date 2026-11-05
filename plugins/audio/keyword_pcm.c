@@ -20,7 +20,12 @@ bool keyword_pcm_open(keyword_pcm_t *s,void *memory,size_t bytes,unsigned limit)
        bytes/sizeof(keyword_pcm_frame_t)<2 || !limit || limit>KEYWORD_PCM_MAX_FRAMES ||
        s->generation==UINT_MAX || atomic_load(&s->writing))return false;
     size_t slots=bytes/sizeof(keyword_pcm_frame_t);
+#if AGENT_BOARD_P4
+    /* P4 diagnostics can reserve the complete bounded capture in PSRAM. */
+    s->slots=slots>KEYWORD_PCM_MAX_FRAMES?KEYWORD_PCM_MAX_FRAMES:(unsigned)slots;
+#else
     s->slots=slots>64?64:(unsigned)slots;
+#endif
     s->limit=limit;++s->generation;
     atomic_store(&s->produced,0);atomic_store(&s->consumed,0);atomic_store(&s->discarded,0);
     atomic_store(&s->reason,KEYWORD_PCM_NONE);s->frames=memory;return true;

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "scope": "Synthetic fixed fixtures only; no user recordings or credentials",
+  "files": {
+    "wake": {
+      "file": "wake.wav",
+      "bytes": 42712,
+      "sha256": "2e39739ed540abde478214d9215d35ea5b3b78887514e05a1074c8f494c69c9f",
+      "source": "evidence/smooth-20261105/voice-release-final/wake.wav",
+      "purpose": "Official wake phrase 你好小智"
+    },
+    "short": {
+      "file": "short.wav",
+      "bytes": 107598,
+      "sha256": "294c89c8c54289aa50904f5d5f64218e89165fe7b467fdf5fdc68d295d35e01f",
+      "source": "evidence/conversation-20261102/tts/short-play.wav",
+      "purpose": "First question with expected answer 蓝莓"
+    },
+    "recall": {
+      "file": "recall.wav",
+      "bytes": 115278,
+      "sha256": "37073d42f4a70ccb0762d615b1fc097a6ba8bf42e248bd1d9d5b7714c681b960",
+      "source": "evidence/conversation-20261102/tts/recall-play.wav",
+      "purpose": "Follow-up referring to the previous answer"
+    },
+    "newstory": {
+      "file": "newstory.wav",
+      "bytes": 156238,
+      "sha256": "4142dc2ebaf8a138ae41ec8a9bf0b20f13cb29541dbf1fc772671b21467a381f",
+      "source": "evidence/conversation-20261102/tts/newstory-play.wav",
+      "purpose": "Long story whose protagonist is 松果七号"
+    },
+    "interrupt2": {
+      "file": "interrupt2.wav",
+      "bytes": 218924,
+      "sha256": "d62e66c9f7bcab82a4abeb19efec35375b1bbd12659a873459ed39ae4a6cf7ad",
+      "source": "evidence/realtime-20261105/tts/interrupt2-play.wav",
+      "purpose": "换个问题，刚才故事的主角叫什么名字？只说名字。"
+    },
+    "end": {
+      "file": "end.wav",
+      "bytes": 76844,
+      "sha256": "367103e1309720114abca58860776ffbacb67e4383fe2d6d33cf8ba8f351fcf7",
+      "source": "evidence/realtime-20261105/tts/end-play.wav",
+      "purpose": "先聊到这里，再见。"
+    },
+    "movie": {
+      "file": "movie.mp4",
+      "bytes": 19773,
+      "sha256": "eb3feaf13564cdd2c38e16f51a36de31ad3e9bc8e0f4cbe819253d914f6660ff",
+      "source": "evidence/four-plans-20261103/av-sync-high.mp4",
+      "purpose": "Existing small H.264 High/AAC sync fixture; exact bytes, no paid generation"
+    },
+    "question": {
+      "file": "question.jpg",
+      "bytes": 49182,
+      "sha256": "f132440aeaaf92ab483940b2f35de5ba21eb0e9cb361f302503897388c7f4c0b",
+      "source": "evidence/async-tutor-20261105/fixtures/questions.jpg",
+      "purpose": "Explicit test image, never a real camera observation"
+    },
+    "question_status": {
+      "file": "question_status.wav",
+      "bytes": 148558,
+      "sha256": "b98d01c179f12e04ae4d494e18028491074559af8f11ecdb02de99c21b814b73",
+      "source": "evidence/async-tutor-20261105/tts/question_status-play.wav",
+      "purpose": "Ask what question the tutor read before confirming"
+    },
+    "confirm": {
+      "file": "confirm.wav",
+      "bytes": 112718,
+      "sha256": "bb424612940b9322be69fa4d8b16b2b962d1ffafa5276d410094c249c29d5438",
+      "source": "evidence/async-tutor-20261105/tts/confirm-play.wav",
+      "purpose": "Spoken confirmation of the read question"
+    },
+    "step2": {
+      "file": "step2.wav",
+      "bytes": 215084,
+      "sha256": "1e079fa34ee8ed0307b612009c187ae45e327812dbefffa5f569efc7dbc3e27a",
+      "source": "evidence/tutor-dialogue-20261106/tts/step2-play.wav",
+      "purpose": "第二步为什么要这样算？请解释理由，不要重新解题。"
+    },
+    "tutor_done": {
+      "file": "tutor_done.wav",
+      "bytes": 157484,
+      "sha256": "bb0616eefeb9f353dc04c953c4b323594206d91d539e69c554a4cd6dae645dcf",
+      "source": "evidence/tutor-dialogue-20261106/tts/done-play.wav",
+      "purpose": "这道题的思路我已经弄明白了，不用再讲了。"
+    }
+  }
+}

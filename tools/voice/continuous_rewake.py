@@ -31,11 +31,12 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def read_wakes():
-    rows = [json.loads(line) for line in WAKE_MANIFEST.read_text(encoding="utf8").splitlines()]
+def read_wakes(manifest=WAKE_MANIFEST, groups=("zh", "yue", "zh")):
+    rows = [json.loads(line) for line in manifest.read_text(encoding="utf8").splitlines()]
     chosen = {}
-    for language in ("zh", "yue"):
-        chosen[language] = next(row for row in rows if row["label"] == 1 and row["language"] == language)
+    for language in groups:
+        chosen[language] = next(row for row in rows if row["label"] == 1 and
+                               row.get("wake_group", row["language"]) == language)
     return chosen
 
 
@@ -81,8 +82,12 @@ def drain_events(device, trial):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument("--port", default="COM5", help="Explicit device serial port")
     parser.add_argument("--mode", choices=("fast", "classic"), default="fast")
     parser.add_argument("--firmware")
+    parser.add_argument('--wake-manifest', type=Path, default=WAKE_MANIFEST)
+    parser.add_argument('--wake-groups', nargs='+', default=['zh', 'yue', 'zh'],
+                        help='One to four ordered groups from the frozen wake manifest')
     parser.add_argument('--max-attempts', type=int, choices=(1, 2, 3), default=3,
                         help='Preserve at most this many wake attempts per turn; use1 for a fixed no-retry group')
     parser.add_argument("--asr-model", help="Require this device-reported ASR model before playback")
@@ -110,6 +115,8 @@ def main():
     parser.add_argument('--check-content', choices=('greeting', 'correction', 'blue'),
                         help='Additional assertions for a fixed fixture; not subjective listening')
     args = parser.parse_args()
+    if not 1 <= len(args.wake_groups) <= 4:
+        parser.error('--wake-groups requires one to four turns')
     if not 0 <= args.prewake_quiet_ms <= 3000:
         parser.error('--prewake-quiet-ms must be0..3000')
     if args.retain_failed_capture or args.retain_all_captures:
@@ -119,7 +126,7 @@ def main():
     if args.tx_power is not None and not 8 <= args.tx_power <= 84:
         parser.error('--tx-power must be 8..84')
     args.out.mkdir(parents=True, exist_ok=False)
-    wakes = read_wakes()
+    wakes = read_wakes(args.wake_manifest, args.wake_groups)
     report = {
         "complete": False,
         "diagnostic": True,
@@ -128,8 +135,9 @@ def main():
         "prompt_gain": args.prompt_gain,
         "prompt": PROMPT_TEXT,
         "prompt_sha256": hashlib.sha256(PROMPT_TEXT.encode("utf8")).hexdigest(),
-        "wake_manifest": str(WAKE_MANIFEST),
-        "round_languages": ["zh", "yue", "zh"],
+        "wake_manifest": str(args.wake_manifest),
+        "wake_manifest_sha256": sha256(args.wake_manifest),
+        "round_languages": args.wake_groups,
         "trials": [],
         "started": time.time(),
         "script_sha256": sha256(Path(__file__)),
@@ -137,7 +145,7 @@ def main():
     }
     if args.check_content:
         report['content_checker_sha256'] = sha256(Path(__file__).with_name('fixture_acceptance.py'))
-    device = Device(args.out)
+    device = Device(args.out, port=args.port)
     group_deadline = time.monotonic() + MAX_GROUP_SECONDS
     recorder = None
     try:
@@ -238,7 +246,7 @@ def main():
         report['recorder_ready_monotonic']=recorder.started
         report['recorder_ready_note']='Recorder readiness is not WAV zero; use template alignment.'
         previous_terminal = None
-        for index, language in enumerate(("zh", "yue", "zh"), 1):
+        for index, language in enumerate(args.wake_groups, 1):
             if time.monotonic() >= group_deadline:
                 raise TimeoutError("continuous group exceeded four minute bound")
             row = wakes[language]
@@ -360,7 +368,7 @@ def main():
             print(json.dumps(dict(round=index,complete=trial['complete'],core_task_complete=trial['core_task_complete'],
                 input_complete=trial['input_complete'],asr=trial['asr'],runtime_health=trial['runtime_health'],
                 attempts=[a['triggered'] for a in trial['attempts']]),ensure_ascii=False),flush=True)
-        report['run_completed']=len(report['trials'])==3
+        report['run_completed']=len(report['trials'])==len(args.wake_groups)
         report['conversations_complete']=all(trial['complete'] for trial in report['trials'])
         report['functional_conversations_complete']=all(t['functional_complete'] for t in report['trials'])
         report['runtime_health_passed']=all(t['runtime_health']['passed'] for t in report['trials'])

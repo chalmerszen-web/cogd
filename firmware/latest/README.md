@@ -1,7 +1,13 @@
-# ESP-HI 0.12.4-clock
+# ESP-HI 0.12.5-clock
 
-本包含应用、分区表校验副本、完整源码快照 source.zip、manifest.json 与 verification.json。解压 source.zip 后，从 docs/ESP_HI_IO_DRIVER_MANUAL.md 阅读 IO/驱动/芯片手册，从 docs/CLOCK_LCD_REPAIR_REPORT.md 阅读实物验收与原始照片索引。
+历史 C3 回滚包：本目录仍使用旧自研唤醒词。2026-11-06 起常规源码构建改用官方“你好小智”，请通过根 `tools/build.ps1 -Board esp-hi-c3` 构建；此包不是新版官方唤醒固件，也不能烧入 P4。
 
-当前项目可运行 python tools/install_latest.py --check 只检查安装包；重新安装运行 python tools/install_latest.py --port COM5。安装器先完整备份并校验分区，再仅写应用并核对数据区域。独立使用源码快照时，先将本包应用、分区表和 manifest.json 放入 firmware/latest/。分区表仅用于核对，勿作为本次重写分区表的指令。
+2026-10-30。修复失败唤醒候选提前占用成功冷却的问题。模型权重和阈值不变，保留原时钟功能。
 
-构建入口为 tools/build_clock.ps1，所需 ESP-IDF 提交及选项见 manifest.json 和 source.zip 内 reproduce/。工具链本体需另行配置。冷断电后须联网校时；此次通过范围为 USB 请求到可见时钟。
+实机修复前失败的同音序列修复后成功；三轮连续对话均第一次呼叫唤醒、完整识别问题并正常回答。96/96 主机回归通过。固定耳机声学回放通过不等于真人、多房间或所有语音质量验收通过。
+
+设备已安装并恢复监听。项目根目录中的 `安装最新版.cmd` 使用 `firmware/latest`，只更新应用区并验证其他分区不变；`python tools/install_latest.py --check` 仅校验本地包。
+
+`source.zip` 含当前修复源码、SPEC、ACTIONLOG、报告、验证摘要、构建参数和逐文件哈希。解压源码后使用 `tools/build_clock.ps1` 构建；ESP-IDF 版本见 manifest.json。详细报告位于源码的 `docs/WAKE_REARM_FIX_20261030.md`。
+
+当前包没有包含设备凭据、私有 Flash 备份或现场录音，也未执行公开发布。

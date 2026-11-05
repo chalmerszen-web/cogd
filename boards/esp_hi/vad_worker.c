@@ -135,7 +135,9 @@ static agent_err_t run_fast(void)
             endpoint_notice_record(&notice_trace,confirmation.endpoint.elapsed_ms,notice);
 #endif
 #endif
-            agent_endpoint_observe(&confirmation.endpoint,notice);
+            frozen_noise=source_stream_endpoint_notice(&confirmation.endpoint,records,written,frozen_noise,notice);
+            atomic_store(&stats.noise,frozen_noise);
+            if(confirmation.endpoint.state>=AGENT_EP_DONE)break;
             agent_err_t error=source_stream_endpoint(&confirmation.endpoint,records,written,frozen_noise,&frame);
             if(error)return error;
             atomic_store(&stats.elapsed,confirmation.endpoint.elapsed_ms);

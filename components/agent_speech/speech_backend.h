@@ -3,7 +3,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stddef.h>
-#ifdef AGENT_KWS_C11
+#ifdef AGENT_C3_WAKENET9S
+bool esp_hi_speech_wake_armed(int16_t *pcm,bool armed);
+#endif
+#if defined(AGENT_KWS_C11) || defined(AGENT_P4_WAKENET10)
 /* Audio owner passes its current listening gate; acoustic history advances
  * while closed, but ignored hits must not consume the detector's cooldown. */
 bool esp_hi_speech_wake_armed(int16_t *pcm,bool armed);

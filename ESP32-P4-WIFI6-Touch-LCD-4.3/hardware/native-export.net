@@ -1,0 +1,12990 @@
+PROTEL NETLIST 2.0
+[
+DESIGNATOR
+H1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge1
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+H1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+H2
+FOOTPRINT
+
+PARTTYPE
+Type-C
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge2
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H2
+Device
+Type-C
+PCB Layer
+Default
+Symbol
+H2
+Name
+Type-C
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U3
+FOOTPRINT
+
+PARTTYPE
+MMDT3906DW
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge3
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U3
+Device
+MMDT3906DW
+PCB Layer
+Default
+Symbol
+U3
+Name
+MMDT3906DW
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U4
+FOOTPRINT
+
+PARTTYPE
+MMDT3906DW
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge4
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U4
+Device
+MMDT3906DW
+PCB Layer
+Default
+Symbol
+U4
+Name
+MMDT3906DW
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q2
+FOOTPRINT
+
+PARTTYPE
+AO3401
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge5
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q2
+Device
+AO3401
+PCB Layer
+Default
+Symbol
+Q2
+Name
+AO3401
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q3
+FOOTPRINT
+
+PARTTYPE
+AO3401
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge6
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q3
+Device
+AO3401
+PCB Layer
+Default
+Symbol
+Q3
+Name
+AO3401
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+TVS1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge7
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+TVS1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+TVS1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+TVS2
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge8
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+TVS2
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+TVS2
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R1
+FOOTPRINT
+
+PARTTYPE
+5.1K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge9
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R1
+Device
+5.1K
+PCB Layer
+Default
+Symbol
+R1
+Name
+5.1K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R2
+FOOTPRINT
+
+PARTTYPE
+5.1K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge10
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R2
+Device
+5.1K
+PCB Layer
+Default
+Symbol
+R2
+Name
+5.1K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R3
+FOOTPRINT
+
+PARTTYPE
+5.1K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge11
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R3
+Device
+5.1K
+PCB Layer
+Default
+Symbol
+R3
+Name
+5.1K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R4
+FOOTPRINT
+
+PARTTYPE
+5.1K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge12
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R4
+Device
+5.1K
+PCB Layer
+Default
+Symbol
+R4
+Name
+5.1K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R24
+FOOTPRINT
+
+PARTTYPE
+5.1K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge13
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R24
+Device
+5.1K
+PCB Layer
+Default
+Symbol
+R24
+Name
+5.1K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C13
+FOOTPRINT
+
+PARTTYPE
+1uF/16V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge14
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C13
+Device
+1uF/16V
+PCB Layer
+Default
+Symbol
+C13
+Name
+1uF/16V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C15
+FOOTPRINT
+
+PARTTYPE
+1uF/16V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge15
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C15
+Device
+1uF/16V
+PCB Layer
+Default
+Symbol
+C15
+Name
+1uF/16V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R27
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge16
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R27
+Device
+10K
+PCB Layer
+Default
+Symbol
+R27
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R31
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge17
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R31
+Device
+10K
+PCB Layer
+Default
+Symbol
+R31
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R29
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge18
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R29
+Device
+51K
+PCB Layer
+Default
+Symbol
+R29
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R30
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge19
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R30
+Device
+51K
+PCB Layer
+Default
+Symbol
+R30
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+LED1
+FOOTPRINT
+
+PARTTYPE
+Type-C UART
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge20
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+LED1
+Device
+Type-C UART
+PCB Layer
+Default
+Symbol
+LED1
+Name
+Type-C UART
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U17
+FOOTPRINT
+
+PARTTYPE
+SCT12A0DHKR
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge21
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U17
+Device
+SCT12A0DHKR
+PCB Layer
+Default
+Symbol
+U17
+Name
+SCT12A0DHKR
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U2
+FOOTPRINT
+
+PARTTYPE
+MP1658GTF-Z
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge22
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U2
+Device
+MP1658GTF-Z
+PCB Layer
+Default
+Symbol
+U2
+Name
+MP1658GTF-Z
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U16
+FOOTPRINT
+
+PARTTYPE
+MMDT3906DW
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge23
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U16
+Device
+MMDT3906DW
+PCB Layer
+Default
+Symbol
+U16
+Name
+MMDT3906DW
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U20
+FOOTPRINT
+
+PARTTYPE
+ECJ23001-4FCBD6
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge24
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U20
+Device
+ECJ23001-4FCBD6
+PCB Layer
+Default
+Symbol
+U20
+Name
+ECJ23001-4FCBD6
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U18
+FOOTPRINT
+
+PARTTYPE
+MMDT3906DW
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge25
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U18
+Device
+MMDT3906DW
+PCB Layer
+Default
+Symbol
+U18
+Name
+MMDT3906DW
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U13
+FOOTPRINT
+
+PARTTYPE
+RT9193-18GB
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge26
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U13
+Device
+RT9193-18GB
+PCB Layer
+Default
+Symbol
+U13
+Name
+RT9193-18GB
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q4
+FOOTPRINT
+
+PARTTYPE
+AO3401
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge27
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q4
+Device
+AO3401
+PCB Layer
+Default
+Symbol
+Q4
+Name
+AO3401
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q5
+FOOTPRINT
+
+PARTTYPE
+BSS138LT1G(
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge28
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q5
+Device
+BSS138LT1G(
+PCB Layer
+Default
+Symbol
+Q5
+Name
+BSS138LT1G(
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q6
+FOOTPRINT
+
+PARTTYPE
+DMP2066LSN
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge29
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q6
+Device
+DMP2066LSN
+PCB Layer
+Default
+Symbol
+Q6
+Name
+DMP2066LSN
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q8
+FOOTPRINT
+
+PARTTYPE
+DMP2066LSN
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge30
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q8
+Device
+DMP2066LSN
+PCB Layer
+Default
+Symbol
+Q8
+Name
+DMP2066LSN
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q7
+FOOTPRINT
+
+PARTTYPE
+AO3401
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge31
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q7
+Device
+AO3401
+PCB Layer
+Default
+Symbol
+Q7
+Name
+AO3401
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L1
+FOOTPRINT
+
+PARTTYPE
+4.7uH 4.4*4.2*2  2.8A
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge32
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L1
+Device
+4.7uH 4.4*4.2*2  2.8A
+PCB Layer
+Default
+Symbol
+L1
+Name
+4.7uH 4.4*4.2*2  2.8A
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R13
+FOOTPRINT
+
+PARTTYPE
+10R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge33
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R13
+Device
+10R
+PCB Layer
+Default
+Symbol
+R13
+Name
+10R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C3
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge34
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C3
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C3
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C7
+FOOTPRINT
+
+PARTTYPE
+22uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge35
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C7
+Device
+22uF
+PCB Layer
+Default
+Symbol
+C7
+Name
+22uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C8
+FOOTPRINT
+
+PARTTYPE
+22uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge36
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C8
+Device
+22uF
+PCB Layer
+Default
+Symbol
+C8
+Name
+22uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C9
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge37
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C9
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C9
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R17
+FOOTPRINT
+
+PARTTYPE
+40.2K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge38
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R17
+Device
+40.2K ±1%
+PCB Layer
+Default
+Symbol
+R17
+Name
+40.2K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R21
+FOOTPRINT
+
+PARTTYPE
+100K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge39
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R21
+Device
+100K
+PCB Layer
+Default
+Symbol
+R21
+Name
+100K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R23
+FOOTPRINT
+
+PARTTYPE
+20K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge40
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R23
+Device
+20K
+PCB Layer
+Default
+Symbol
+R23
+Name
+20K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R25
+FOOTPRINT
+
+PARTTYPE
+13K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge41
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R25
+Device
+13K ±1%
+PCB Layer
+Default
+Symbol
+R25
+Name
+13K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C26
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge42
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C26
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C26
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C77
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge43
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C77
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C77
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C78
+FOOTPRINT
+
+PARTTYPE
+22nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge44
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C78
+Device
+22nF
+PCB Layer
+Default
+Symbol
+C78
+Name
+22nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L8
+FOOTPRINT
+
+PARTTYPE
+贴片功率电感
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge45
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L8
+Device
+贴片功率电感
+PCB Layer
+Default
+Symbol
+L8
+Name
+贴片功率电感
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R67
+FOOTPRINT
+
+PARTTYPE
+1K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge46
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R67
+Device
+1K
+PCB Layer
+Default
+Symbol
+R67
+Name
+1K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C131
+FOOTPRINT
+
+PARTTYPE
+22uF/10V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge47
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C131
+Device
+22uF/10V
+PCB Layer
+Default
+Symbol
+C131
+Name
+22uF/10V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C93
+FOOTPRINT
+
+PARTTYPE
+22uF/10V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge48
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C93
+Device
+22uF/10V
+PCB Layer
+Default
+Symbol
+C93
+Name
+22uF/10V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C86
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge49
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C86
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C86
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C145
+FOOTPRINT
+
+PARTTYPE
+104
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge50
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C145
+Device
+104
+PCB Layer
+Default
+Symbol
+C145
+Name
+104
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C153
+FOOTPRINT
+
+PARTTYPE
+4.7uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge51
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C153
+Device
+4.7uF
+PCB Layer
+Default
+Symbol
+C153
+Name
+4.7uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R68
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge52
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R68
+Device
+10K
+PCB Layer
+Default
+Symbol
+R68
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R65
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge53
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R65
+Device
+10K
+PCB Layer
+Default
+Symbol
+R65
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R66
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge54
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R66
+Device
+51K
+PCB Layer
+Default
+Symbol
+R66
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C159
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge55
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C159
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C159
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C2
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge56
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C2
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C2
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R77
+FOOTPRINT
+
+PARTTYPE
+17.4K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge57
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R77
+Device
+17.4K
+PCB Layer
+Default
+Symbol
+R77
+Name
+17.4K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R78
+FOOTPRINT
+
+PARTTYPE
+270K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge58
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R78
+Device
+270K
+PCB Layer
+Default
+Symbol
+R78
+Name
+270K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C161
+FOOTPRINT
+
+PARTTYPE
+4.7uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge59
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C161
+Device
+4.7uF
+PCB Layer
+Default
+Symbol
+C161
+Name
+4.7uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C1
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge60
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C1
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C1
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R86
+FOOTPRINT
+
+PARTTYPE
+200K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge61
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R86
+Device
+200K
+PCB Layer
+Default
+Symbol
+R86
+Name
+200K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C162
+FOOTPRINT
+
+PARTTYPE
+22uF/10V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge62
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C162
+Device
+22uF/10V
+PCB Layer
+Default
+Symbol
+C162
+Name
+22uF/10V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C163
+FOOTPRINT
+
+PARTTYPE
+22uF/10V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge63
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C163
+Device
+22uF/10V
+PCB Layer
+Default
+Symbol
+C163
+Name
+22uF/10V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C165
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge64
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C165
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C165
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C164
+FOOTPRINT
+
+PARTTYPE
+22uF/10V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge65
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C164
+Device
+22uF/10V
+PCB Layer
+Default
+Symbol
+C164
+Name
+22uF/10V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R88
+FOOTPRINT
+
+PARTTYPE
+360K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge66
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R88
+Device
+360K
+PCB Layer
+Default
+Symbol
+R88
+Name
+360K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C166
+FOOTPRINT
+
+PARTTYPE
+47nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge67
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C166
+Device
+47nF
+PCB Layer
+Default
+Symbol
+C166
+Name
+47nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R89
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge68
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R89
+Device
+NC
+PCB Layer
+Default
+Symbol
+R89
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R92
+FOOTPRINT
+
+PARTTYPE
+110K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge69
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R92
+Device
+110K
+PCB Layer
+Default
+Symbol
+R92
+Name
+110K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R85
+FOOTPRINT
+
+PARTTYPE
+100K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge70
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R85
+Device
+100K
+PCB Layer
+Default
+Symbol
+R85
+Name
+100K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R98
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge71
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R98
+Device
+0R
+PCB Layer
+Default
+Symbol
+R98
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C167
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge72
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C167
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C167
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R93
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge73
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R93
+Device
+10K
+PCB Layer
+Default
+Symbol
+R93
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C171
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge74
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C171
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C171
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C172
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge75
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C172
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C172
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R95
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge76
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R95
+Device
+51K
+PCB Layer
+Default
+Symbol
+R95
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Key3
+FOOTPRINT
+
+PARTTYPE
+D
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge77
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Key3
+Device
+D
+PCB Layer
+Default
+Symbol
+Key3
+Name
+D
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+ED3
+FOOTPRINT
+
+PARTTYPE
+ESD5451N
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge78
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+ED3
+Device
+ESD5451N
+PCB Layer
+Default
+Symbol
+ED3
+Name
+ESD5451N
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+SD1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge79
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+SD1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+SD1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Q1
+FOOTPRINT
+
+PARTTYPE
+AO3401
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge80
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Q1
+Device
+AO3401
+PCB Layer
+Default
+Symbol
+Q1
+Name
+AO3401
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R5
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge81
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R5
+Device
+51K
+PCB Layer
+Default
+Symbol
+R5
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R6
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge82
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R6
+Device
+51K
+PCB Layer
+Default
+Symbol
+R6
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R7
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge83
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R7
+Device
+51K
+PCB Layer
+Default
+Symbol
+R7
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R8
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge84
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R8
+Device
+51K
+PCB Layer
+Default
+Symbol
+R8
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R9
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge85
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R9
+Device
+51K
+PCB Layer
+Default
+Symbol
+R9
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C11
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge86
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C11
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C11
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C12
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge87
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C12
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C12
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R105
+FOOTPRINT
+
+PARTTYPE
+NC/10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge88
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R105
+Device
+NC/10K
+PCB Layer
+Default
+Symbol
+R105
+Name
+NC/10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R26
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge89
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R26
+Device
+10K
+PCB Layer
+Default
+Symbol
+R26
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U1
+FOOTPRINT
+
+PARTTYPE
+ESP32-C6-MINI-1-N4
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge90
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U1
+Device
+ESP32-C6-MINI-1-N4
+PCB Layer
+Default
+Symbol
+U1
+Name
+ESP32-C6-MINI-1-N4
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+P1
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge91
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+P1
+Device
+NC
+PCB Layer
+Default
+Symbol
+P1
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R11
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge92
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R11
+Device
+10K
+PCB Layer
+Default
+Symbol
+R11
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C6
+FOOTPRINT
+
+PARTTYPE
+20pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge93
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C6
+Device
+20pF
+PCB Layer
+Default
+Symbol
+C6
+Name
+20pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R14
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge94
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R14
+Device
+51K
+PCB Layer
+Default
+Symbol
+R14
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C4
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge95
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C4
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C4
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C5
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge96
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C5
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C5
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R16
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge97
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R16
+Device
+51K
+PCB Layer
+Default
+Symbol
+R16
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R18
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge98
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R18
+Device
+51K
+PCB Layer
+Default
+Symbol
+R18
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R19
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge99
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R19
+Device
+51K
+PCB Layer
+Default
+Symbol
+R19
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C10
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge100
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C10
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C10
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R20
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge101
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R20
+Device
+51K
+PCB Layer
+Default
+Symbol
+R20
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R22
+FOOTPRINT
+
+PARTTYPE
+51K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge102
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R22
+Device
+51K
+PCB Layer
+Default
+Symbol
+R22
+Name
+51K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R28
+FOOTPRINT
+
+PARTTYPE
+10K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge103
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R28
+Device
+10K ±1%
+PCB Layer
+Default
+Symbol
+R28
+Name
+10K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R33
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge104
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R33
+Device
+0R
+PCB Layer
+Default
+Symbol
+R33
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R34
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge105
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R34
+Device
+0R
+PCB Layer
+Default
+Symbol
+R34
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U6
+FOOTPRINT
+
+PARTTYPE
+CH343P
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge106
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U6
+Device
+CH343P
+PCB Layer
+Default
+Symbol
+U6
+Name
+CH343P
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U7
+FOOTPRINT
+
+PARTTYPE
+EMH4T2R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge107
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U7
+Device
+EMH4T2R
+PCB Layer
+Default
+Symbol
+U7
+Name
+EMH4T2R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C19
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge108
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C19
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C19
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C22
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge109
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C22
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C22
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C23
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge110
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C23
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C23
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C25
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge111
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C25
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C25
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R44
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge112
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R44
+Device
+10K
+PCB Layer
+Default
+Symbol
+R44
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C30
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge113
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C30
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C30
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C37
+FOOTPRINT
+
+PARTTYPE
+NC/100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge114
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C37
+Device
+NC/100nF
+PCB Layer
+Default
+Symbol
+C37
+Name
+NC/100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R45
+FOOTPRINT
+
+PARTTYPE
+4.7K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge115
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R45
+Device
+4.7K
+PCB Layer
+Default
+Symbol
+R45
+Name
+4.7K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U8
+FOOTPRINT
+
+PARTTYPE
+ESP32-P4NRW32
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge116
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U8
+Device
+ESP32-P4NRW32
+PCB Layer
+Default
+Symbol
+U8
+Name
+ESP32-P4NRW32
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U10
+FOOTPRINT
+
+PARTTYPE
+GD25Q256EYIGR
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge117
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U10
+Device
+GD25Q256EYIGR
+PCB Layer
+Default
+Symbol
+U10
+Name
+GD25Q256EYIGR
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U5
+FOOTPRINT
+
+PARTTYPE
+MP1605GTF-Z
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge118
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U5
+Device
+MP1605GTF-Z
+PCB Layer
+Default
+Symbol
+U5
+Name
+MP1605GTF-Z
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Y1
+FOOTPRINT
+
+PARTTYPE
+40MHz(2.0*1.6)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge119
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Y1
+Device
+40MHz(2.0*1.6)
+PCB Layer
+Default
+Symbol
+Y1
+Name
+40MHz(2.0*1.6)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L2
+FOOTPRINT
+
+PARTTYPE
+1uH 2*1.6*1 4.2A
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge120
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L2
+Device
+1uH 2*1.6*1 4.2A
+PCB Layer
+Default
+Symbol
+L2
+Name
+1uH 2*1.6*1 4.2A
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C14
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge121
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C14
+Device
+NC
+PCB Layer
+Default
+Symbol
+C14
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C16
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge122
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C16
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C16
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C18
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge123
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C18
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C18
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C17
+FOOTPRINT
+
+PARTTYPE
+4.7uf
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge124
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C17
+Device
+4.7uf
+PCB Layer
+Default
+Symbol
+C17
+Name
+4.7uf
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R39
+FOOTPRINT
+
+PARTTYPE
+200K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge125
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R39
+Device
+200K ±1%
+PCB Layer
+Default
+Symbol
+R39
+Name
+200K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R40
+FOOTPRINT
+
+PARTTYPE
+10M
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge126
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R40
+Device
+10M
+PCB Layer
+Default
+Symbol
+R40
+Name
+10M
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C20
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge127
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C20
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C20
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Y2
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge128
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Y2
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+Y2
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C21
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge129
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C21
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C21
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C24
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge130
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C24
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C24
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R41
+FOOTPRINT
+
+PARTTYPE
+200K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge131
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R41
+Device
+200K ±1%
+PCB Layer
+Default
+Symbol
+R41
+Name
+200K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C27
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge132
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C27
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C27
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C28
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge133
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C28
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C28
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C29
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge134
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C29
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C29
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C31
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge135
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C31
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C31
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C32
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge136
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C32
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C32
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C33
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge137
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C33
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C33
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C34
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge138
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C34
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C34
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C35
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge139
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C35
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C35
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C36
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge140
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C36
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C36
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C38
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge141
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C38
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C38
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C39
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge142
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C39
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C39
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C40
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge143
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C40
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C40
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C41
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge144
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C41
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C41
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C42
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge145
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C42
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C42
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C43
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge146
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C43
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C43
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C44
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge147
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C44
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C44
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C45
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge148
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C45
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C45
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R46
+FOOTPRINT
+
+PARTTYPE
+10K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge149
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R46
+Device
+10K ±1%
+PCB Layer
+Default
+Symbol
+R46
+Name
+10K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C46
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge150
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C46
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C46
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C47
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge151
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C47
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C47
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C48
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge152
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C48
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C48
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C49
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge153
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C49
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C49
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R51
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge154
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R51
+Device
+NC
+PCB Layer
+Default
+Symbol
+R51
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C52
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge155
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C52
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C52
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C53
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge156
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C53
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C53
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C54
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge157
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C54
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C54
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C56
+FOOTPRINT
+
+PARTTYPE
+10nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge158
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C56
+Device
+10nF
+PCB Layer
+Default
+Symbol
+C56
+Name
+10nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C57
+FOOTPRINT
+
+PARTTYPE
+4.7uf
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge159
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C57
+Device
+4.7uf
+PCB Layer
+Default
+Symbol
+C57
+Name
+4.7uf
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C58
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge160
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C58
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C58
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C59
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge161
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C59
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C59
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C60
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge162
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C60
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C60
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C63
+FOOTPRINT
+
+PARTTYPE
+10nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge163
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C63
+Device
+10nF
+PCB Layer
+Default
+Symbol
+C63
+Name
+10nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C64
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge164
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C64
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C64
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C65
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge165
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C65
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C65
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R55
+FOOTPRINT
+
+PARTTYPE
+4.02K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge166
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R55
+Device
+4.02K ±1%
+PCB Layer
+Default
+Symbol
+R55
+Name
+4.02K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R56
+FOOTPRINT
+
+PARTTYPE
+4.02K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge167
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R56
+Device
+4.02K ±1%
+PCB Layer
+Default
+Symbol
+R56
+Name
+4.02K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C70
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge168
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C70
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C70
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R64
+FOOTPRINT
+
+PARTTYPE
+10K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge169
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R64
+Device
+10K ±1%
+PCB Layer
+Default
+Symbol
+R64
+Name
+10K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+H3
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge170
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H3
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+H3
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+H5
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge171
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H5
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+H5
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+H6
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge172
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H6
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+H6
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+H7
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge173
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H7
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+H7
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U19
+FOOTPRINT
+
+PARTTYPE
+ETA6098
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge174
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U19
+Device
+ETA6098
+PCB Layer
+Default
+Symbol
+U19
+Name
+ETA6098
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+J2
+FOOTPRINT
+
+PARTTYPE
+BATTERY
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge175
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+J2
+Device
+BATTERY
+PCB Layer
+Default
+Symbol
+J2
+Name
+BATTERY
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C168
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge176
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C168
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C168
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C169
+FOOTPRINT
+
+PARTTYPE
+47uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge177
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C169
+Device
+47uF
+PCB Layer
+Default
+Symbol
+C169
+Name
+47uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C170
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge178
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C170
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C170
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L9
+FOOTPRINT
+
+PARTTYPE
+2.2uH 2.5*2*1.2 ±20% 3A
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge179
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L9
+Device
+2.2uH 2.5*2*1.2 ±20% 3A
+PCB Layer
+Default
+Symbol
+L9
+Name
+2.2uH 2.5*2*1.2 ±20% 3A
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R97
+FOOTPRINT
+
+PARTTYPE
+820K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge180
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R97
+Device
+820K
+PCB Layer
+Default
+Symbol
+R97
+Name
+820K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R12
+FOOTPRINT
+
+PARTTYPE
+200K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge181
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R12
+Device
+200K ±1%
+PCB Layer
+Default
+Symbol
+R12
+Name
+200K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C173
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge182
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C173
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C173
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C174
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge183
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C174
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C174
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R15
+FOOTPRINT
+
+PARTTYPE
+100K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge184
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R15
+Device
+100K ±1%
+PCB Layer
+Default
+Symbol
+R15
+Name
+100K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+TP1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge185
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+TP1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+TP1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+J1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge186
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+J1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+J1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R47
+FOOTPRINT
+
+PARTTYPE
+10K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge187
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R47
+Device
+10K ±1%
+PCB Layer
+Default
+Symbol
+R47
+Name
+10K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C50
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge188
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C50
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C50
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C51
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge189
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C51
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C51
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R48
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge190
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R48
+Device
+NC
+PCB Layer
+Default
+Symbol
+R48
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R49
+FOOTPRINT
+
+PARTTYPE
+2.2K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge191
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R49
+Device
+2.2K
+PCB Layer
+Default
+Symbol
+R49
+Name
+2.2K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R50
+FOOTPRINT
+
+PARTTYPE
+2.2K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge192
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R50
+Device
+2.2K
+PCB Layer
+Default
+Symbol
+R50
+Name
+2.2K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R52
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge193
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R52
+Device
+10K
+PCB Layer
+Default
+Symbol
+R52
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+ED1
+FOOTPRINT
+
+PARTTYPE
+ESD5451N
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge194
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+ED1
+Device
+ESD5451N
+PCB Layer
+Default
+Symbol
+ED1
+Name
+ESD5451N
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Key1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge195
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Key1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+Key1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C61
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge196
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C61
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C61
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+ED2
+FOOTPRINT
+
+PARTTYPE
+ESD5451N
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge197
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+ED2
+Device
+ESD5451N
+PCB Layer
+Default
+Symbol
+ED2
+Name
+ESD5451N
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+Key2
+FOOTPRINT
+
+PARTTYPE
+TP_VDD
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge198
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+Key2
+Device
+TP_VDD
+PCB Layer
+Default
+Symbol
+Key2
+Name
+TP_VDD
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C62
+FOOTPRINT
+
+PARTTYPE
+NC/100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge199
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C62
+Device
+NC/100nF
+PCB Layer
+Default
+Symbol
+C62
+Name
+NC/100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+P2
+FOOTPRINT
+
+PARTTYPE
+排线插座
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge200
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+P2
+Device
+排线插座
+PCB Layer
+Default
+Symbol
+P2
+Name
+排线插座
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U9
+FOOTPRINT
+
+PARTTYPE
+AP3032KTR-G1
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge201
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U9
+Device
+AP3032KTR-G1
+PCB Layer
+Default
+Symbol
+U9
+Name
+AP3032KTR-G1
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+H8
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge202
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H8
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+H8
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+D3
+FOOTPRINT
+
+PARTTYPE
+1N5819
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge203
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+D3
+Device
+1N5819
+PCB Layer
+Default
+Symbol
+D3
+Name
+1N5819
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L3
+FOOTPRINT
+
+PARTTYPE
+10uH 2A 4*4*2
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge204
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L3
+Device
+10uH 2A 4*4*2
+PCB Layer
+Default
+Symbol
+L3
+Name
+10uH 2A 4*4*2
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C66
+FOOTPRINT
+
+PARTTYPE
+10uF/25V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge205
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C66
+Device
+10uF/25V
+PCB Layer
+Default
+Symbol
+C66
+Name
+10uF/25V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R57
+FOOTPRINT
+
+PARTTYPE
+100K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge206
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R57
+Device
+100K
+PCB Layer
+Default
+Symbol
+R57
+Name
+100K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R58
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge207
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R58
+Device
+0R
+PCB Layer
+Default
+Symbol
+R58
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C67
+FOOTPRINT
+
+PARTTYPE
+104/50V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge208
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C67
+Device
+104/50V
+PCB Layer
+Default
+Symbol
+C67
+Name
+104/50V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C68
+FOOTPRINT
+
+PARTTYPE
+1uF/50V
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge209
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C68
+Device
+1uF/50V
+PCB Layer
+Default
+Symbol
+C68
+Name
+1uF/50V
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R102
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge210
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R102
+Device
+10K
+PCB Layer
+Default
+Symbol
+R102
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R60
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge211
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R60
+Device
+0R
+PCB Layer
+Default
+Symbol
+R60
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R59
+FOOTPRINT
+
+PARTTYPE
+NC/0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge212
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R59
+Device
+NC/0R
+PCB Layer
+Default
+Symbol
+R59
+Name
+NC/0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R32
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge213
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R32
+Device
+0R
+PCB Layer
+Default
+Symbol
+R32
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R37
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge214
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R37
+Device
+0R
+PCB Layer
+Default
+Symbol
+R37
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+D2
+FOOTPRINT
+
+PARTTYPE
+B5819WS
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge215
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+D2
+Device
+B5819WS
+PCB Layer
+Default
+Symbol
+D2
+Name
+B5819WS
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R35
+FOOTPRINT
+
+PARTTYPE
+NC/0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge216
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R35
+Device
+NC/0R
+PCB Layer
+Default
+Symbol
+R35
+Name
+NC/0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R61
+FOOTPRINT
+
+PARTTYPE
+4.7K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge217
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R61
+Device
+4.7K ±1%
+PCB Layer
+Default
+Symbol
+R61
+Name
+4.7K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C69
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge218
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C69
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C69
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C55
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge219
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C55
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C55
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R43
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge220
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R43
+Device
+0R
+PCB Layer
+Default
+Symbol
+R43
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R62
+FOOTPRINT
+
+PARTTYPE
+5.1R ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge221
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R62
+Device
+5.1R ±1%
+PCB Layer
+Default
+Symbol
+R62
+Name
+5.1R ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R63
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge222
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R63
+Device
+NC
+PCB Layer
+Default
+Symbol
+R63
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R38
+FOOTPRINT
+
+PARTTYPE
+62K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge223
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R38
+Device
+62K ±1%
+PCB Layer
+Default
+Symbol
+R38
+Name
+62K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R42
+FOOTPRINT
+
+PARTTYPE
+10K ±1%
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge224
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R42
+Device
+10K ±1%
+PCB Layer
+Default
+Symbol
+R42
+Name
+10K ±1%
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C160
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge225
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C160
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C160
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+TP2
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge226
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+TP2
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+TP2
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U14
+FOOTPRINT
+
+PARTTYPE
+ES7210
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge227
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U14
+Device
+ES7210
+PCB Layer
+Default
+Symbol
+U14
+Name
+ES7210
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U12
+FOOTPRINT
+
+PARTTYPE
+ES8311
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge228
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U12
+Device
+ES8311
+PCB Layer
+Default
+Symbol
+U12
+Name
+ES8311
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U15
+FOOTPRINT
+
+PARTTYPE
+NS4150B
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge229
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U15
+Device
+NS4150B
+PCB Layer
+Default
+Symbol
+U15
+Name
+NS4150B
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+U11
+FOOTPRINT
+
+PARTTYPE
+RT9193-33PB
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge230
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+U11
+Device
+RT9193-33PB
+PCB Layer
+Default
+Symbol
+U11
+Name
+RT9193-33PB
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+MIC1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge231
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+MIC1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+MIC1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+MIC2
+FOOTPRINT
+
+PARTTYPE
+MIC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge232
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+MIC2
+Device
+MIC
+PCB Layer
+Default
+Symbol
+MIC2
+Name
+MIC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+H4
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge233
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+H4
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+H4
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C71
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge234
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C71
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C71
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C72
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge235
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C72
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C72
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C73
+FOOTPRINT
+
+PARTTYPE
+22nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge236
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C73
+Device
+22nF
+PCB Layer
+Default
+Symbol
+C73
+Name
+22nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C74
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge237
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C74
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C74
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C75
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge238
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C75
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C75
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C76
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge239
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C76
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C76
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L4
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge240
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L4
+Device
+0R
+PCB Layer
+Default
+Symbol
+L4
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C79
+FOOTPRINT
+
+PARTTYPE
+2.2uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge241
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C79
+Device
+2.2uF
+PCB Layer
+Default
+Symbol
+C79
+Name
+2.2uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C80
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge242
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C80
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C80
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C81
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge243
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C81
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C81
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C82
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge244
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C82
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C82
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C83
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge245
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C83
+Device
+NC
+PCB Layer
+Default
+Symbol
+C83
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C84
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge246
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C84
+Device
+NC
+PCB Layer
+Default
+Symbol
+C84
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C85
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge247
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C85
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C85
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R70
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge248
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R70
+Device
+NC
+PCB Layer
+Default
+Symbol
+R70
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R71
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge249
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R71
+Device
+NC
+PCB Layer
+Default
+Symbol
+R71
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C91
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge250
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C91
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C91
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C92
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge251
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C92
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C92
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R69
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge252
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R69
+Device
+10K
+PCB Layer
+Default
+Symbol
+R69
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C87
+FOOTPRINT
+
+PARTTYPE
+470nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge253
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C87
+Device
+470nF
+PCB Layer
+Default
+Symbol
+C87
+Name
+470nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C88
+FOOTPRINT
+
+PARTTYPE
+220nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge254
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C88
+Device
+220nF
+PCB Layer
+Default
+Symbol
+C88
+Name
+220nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R72
+FOOTPRINT
+
+PARTTYPE
+2.2k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge255
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R72
+Device
+2.2k
+PCB Layer
+Default
+Symbol
+R72
+Name
+2.2k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R73
+FOOTPRINT
+
+PARTTYPE
+10k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge256
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R73
+Device
+10k
+PCB Layer
+Default
+Symbol
+R73
+Name
+10k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R74
+FOOTPRINT
+
+PARTTYPE
+20k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge257
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R74
+Device
+20k
+PCB Layer
+Default
+Symbol
+R74
+Name
+20k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C89
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge258
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C89
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C89
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C90
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge259
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C90
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C90
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C94
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge260
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C94
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C94
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R75
+FOOTPRINT
+
+PARTTYPE
+4.3k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge261
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R75
+Device
+4.3k
+PCB Layer
+Default
+Symbol
+R75
+Name
+4.3k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R76
+FOOTPRINT
+
+PARTTYPE
+NC/3.3k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge262
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R76
+Device
+NC/3.3k
+PCB Layer
+Default
+Symbol
+R76
+Name
+NC/3.3k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C95
+FOOTPRINT
+
+PARTTYPE
+100pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge263
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C95
+Device
+100pF
+PCB Layer
+Default
+Symbol
+C95
+Name
+100pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R79
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge264
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R79
+Device
+0R
+PCB Layer
+Default
+Symbol
+R79
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R80
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge265
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R80
+Device
+0R
+PCB Layer
+Default
+Symbol
+R80
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C96
+FOOTPRINT
+
+PARTTYPE
+2.2nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge266
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C96
+Device
+2.2nF
+PCB Layer
+Default
+Symbol
+C96
+Name
+2.2nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C97
+FOOTPRINT
+
+PARTTYPE
+10nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge267
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C97
+Device
+10nF
+PCB Layer
+Default
+Symbol
+C97
+Name
+10nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C98
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge268
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C98
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C98
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C99
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge269
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C99
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C99
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C100
+FOOTPRINT
+
+PARTTYPE
+470nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge270
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C100
+Device
+470nF
+PCB Layer
+Default
+Symbol
+C100
+Name
+470nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C101
+FOOTPRINT
+
+PARTTYPE
+220nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge271
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C101
+Device
+220nF
+PCB Layer
+Default
+Symbol
+C101
+Name
+220nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R81
+FOOTPRINT
+
+PARTTYPE
+2.2k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge272
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R81
+Device
+2.2k
+PCB Layer
+Default
+Symbol
+R81
+Name
+2.2k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R82
+FOOTPRINT
+
+PARTTYPE
+10k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge273
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R82
+Device
+10k
+PCB Layer
+Default
+Symbol
+R82
+Name
+10k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R83
+FOOTPRINT
+
+PARTTYPE
+20k
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge274
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R83
+Device
+20k
+PCB Layer
+Default
+Symbol
+R83
+Name
+20k
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C102
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge275
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C102
+Device
+NC
+PCB Layer
+Default
+Symbol
+C102
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C103
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge276
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C103
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C103
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C104
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge277
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C104
+Device
+NC
+PCB Layer
+Default
+Symbol
+C104
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C105
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge278
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C105
+Device
+NC
+PCB Layer
+Default
+Symbol
+C105
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C108
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge279
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C108
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C108
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R84
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge280
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R84
+Device
+0R
+PCB Layer
+Default
+Symbol
+R84
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C106
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge281
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C106
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C106
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C107
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge282
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C107
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C107
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C113
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge283
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C113
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C113
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R87
+FOOTPRINT
+
+PARTTYPE
+51R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge284
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R87
+Device
+51R
+PCB Layer
+Default
+Symbol
+R87
+Name
+51R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R91
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge285
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R91
+Device
+NC
+PCB Layer
+Default
+Symbol
+R91
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C109
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge286
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C109
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C109
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C110
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge287
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C110
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C110
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C111
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge288
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C111
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C111
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C112
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge289
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C112
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C112
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L5
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge290
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L5
+Device
+0R
+PCB Layer
+Default
+Symbol
+L5
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C115
+FOOTPRINT
+
+PARTTYPE
+100nF R94
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge291
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C115
+Device
+100nF R94
+PCB Layer
+Default
+Symbol
+C115
+Name
+100nF R94
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R94
+FOOTPRINT
+
+PARTTYPE
+150K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge292
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R94
+Device
+150K
+PCB Layer
+Default
+Symbol
+R94
+Name
+150K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R90
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge293
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R90
+Device
+0R
+PCB Layer
+Default
+Symbol
+R90
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C114
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge294
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C114
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C114
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C119
+FOOTPRINT
+
+PARTTYPE
+NC/330pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge295
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C119
+Device
+NC/330pF
+PCB Layer
+Default
+Symbol
+C119
+Name
+NC/330pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C120
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge296
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C120
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C120
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C116
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge297
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C116
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C116
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C117
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge298
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C117
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C117
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C118
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge299
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C118
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C118
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C121
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge300
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C121
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C121
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C122
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge301
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C122
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C122
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C123
+FOOTPRINT
+
+PARTTYPE
+NC/330pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge302
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C123
+Device
+NC/330pF
+PCB Layer
+Default
+Symbol
+C123
+Name
+NC/330pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C129
+FOOTPRINT
+
+PARTTYPE
+NC/330pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge303
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C129
+Device
+NC/330pF
+PCB Layer
+Default
+Symbol
+C129
+Name
+NC/330pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C124
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge304
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C124
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C124
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C125
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge305
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C125
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C125
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C126
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge306
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C126
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C126
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C127
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge307
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C127
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C127
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C128
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge308
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C128
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C128
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R96
+FOOTPRINT
+
+PARTTYPE
+150K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge309
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R96
+Device
+150K
+PCB Layer
+Default
+Symbol
+R96
+Name
+150K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C133
+FOOTPRINT
+
+PARTTYPE
+100nF R96
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge310
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C133
+Device
+100nF R96
+PCB Layer
+Default
+Symbol
+C133
+Name
+100nF R96
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C130
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge311
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C130
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C130
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C134
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge312
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C134
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C134
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C132
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge313
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C132
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C132
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L6
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge314
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L6
+Device
+0R
+PCB Layer
+Default
+Symbol
+L6
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+L7
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge315
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+L7
+Device
+0R
+PCB Layer
+Default
+Symbol
+L7
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C136
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge316
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C136
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C136
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C135
+FOOTPRINT
+
+PARTTYPE
+2.2uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge317
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C135
+Device
+2.2uF
+PCB Layer
+Default
+Symbol
+C135
+Name
+2.2uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C137
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge318
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C137
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C137
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C140
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge319
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C140
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C140
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C138
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge320
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C138
+Device
+NC
+PCB Layer
+Default
+Symbol
+C138
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C139
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge321
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C139
+Device
+NC
+PCB Layer
+Default
+Symbol
+C139
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C144
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge322
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C144
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C144
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R100
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge323
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R100
+Device
+0R
+PCB Layer
+Default
+Symbol
+R100
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C141
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge324
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C141
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C141
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C142
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge325
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C142
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C142
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C143
+FOOTPRINT
+
+PARTTYPE
+22pF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge326
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C143
+Device
+22pF
+PCB Layer
+Default
+Symbol
+C143
+Name
+22pF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R101
+FOOTPRINT
+
+PARTTYPE
+10K
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge327
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R101
+Device
+10K
+PCB Layer
+Default
+Symbol
+R101
+Name
+10K
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C146
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge328
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C146
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C146
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C150
+FOOTPRINT
+
+PARTTYPE
+10uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge329
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C150
+Device
+10uF
+PCB Layer
+Default
+Symbol
+C150
+Name
+10uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C151
+FOOTPRINT
+
+PARTTYPE
+100nF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge330
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C151
+Device
+100nF
+PCB Layer
+Default
+Symbol
+C151
+Name
+100nF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C152
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge331
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C152
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C152
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R99
+FOOTPRINT
+
+PARTTYPE
+0R
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge332
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R99
+Device
+0R
+PCB Layer
+Default
+Symbol
+R99
+Name
+0R
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C147
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge333
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C147
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C147
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C148
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge334
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C148
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C148
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C149
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge335
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C149
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C149
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C154
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge336
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C154
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C154
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C155
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge337
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C155
+Device
+NC
+PCB Layer
+Default
+Symbol
+C155
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C156
+FOOTPRINT
+
+PARTTYPE
+1uF
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge338
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C156
+Device
+1uF
+PCB Layer
+Default
+Symbol
+C156
+Name
+1uF
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C157
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge339
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C157
+Device
+NC
+PCB Layer
+Default
+Symbol
+C157
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+C158
+FOOTPRINT
+
+PARTTYPE
+NC
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge340
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+C158
+Device
+NC
+PCB Layer
+Default
+Symbol
+C158
+Name
+NC
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+J3
+FOOTPRINT
+
+PARTTYPE
+GPIO24
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge341
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+J3
+Device
+GPIO24
+PCB Layer
+Default
+Symbol
+J3
+Name
+GPIO24
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+D1
+FOOTPRINT
+
+PARTTYPE
+SMF5.0CA
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge342
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+D1
+Device
+SMF5.0CA
+PCB Layer
+Default
+Symbol
+D1
+Name
+SMF5.0CA
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+R10
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge343
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+R10
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+R10
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+TP3
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge344
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+TP3
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+TP3
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+TP4
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge345
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+TP4
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+TP4
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+[
+DESIGNATOR
+logo1
+FOOTPRINT
+
+PARTTYPE
+UNSPECIFIED (PDF)
+DESCRIPTION
+Converted from Waveshare PDF; footprint not assigned
+Component Kind
+Standard
+Unique ID
+gge346
+Add into BOM
+yes
+Convert to PCB
+yes
+Designator
+logo1
+Device
+UNSPECIFIED (PDF)
+PCB Layer
+Default
+Symbol
+logo1
+Name
+UNSPECIFIED (PDF)
+Description
+Converted from Waveshare PDF; footprint not assigned
+
+*
+]
+(
+GND 
+H1-A1/B12 UNSPECIFIED (PDF)-A1/B12 Passive 
+H1-A12/B1 UNSPECIFIED (PDF)-A12/B1 Passive 
+H1-MTB UNSPECIFIED (PDF)-MTB Passive 
+H2-A1/B12 Type-C-A1/B12 Passive 
+H2-A12/B1 Type-C-A12/B1 Passive 
+H2-MTB Type-C-MTB Passive 
+TVS1-2 UNSPECIFIED (PDF)-2 Passive 
+TVS2-2 UNSPECIFIED (PDF)-2 Passive 
+R1-1 5.1K-1 Passive 
+R2-1 5.1K-1 Passive 
+R3-1 5.1K-1 Passive 
+R4-1 5.1K-1 Passive 
+C13-1 1uF/16V-1 Passive 
+C15-1 1uF/16V-1 Passive 
+R27-2 10K-2 Passive 
+R31-2 10K-2 Passive 
+R29-2 51K-2 Passive 
+R30-2 51K-2 Passive 
+LED1-K Type-C UART-K Passive 
+U17-11 SCT12A0DHKR-11 Passive 
+U17-12 SCT12A0DHKR-12 Passive 
+U17-20 SCT12A0DHKR-20 Passive 
+U17-21 SCT12A0DHKR-21 Passive 
+U2-3 MP1658GTF-Z-3 Passive 
+U20-2 ECJ23001-4FCBD6-2 Passive 
+U13-2 RT9193-18GB-2 Passive 
+Q5-2 BSS138LT1G(-2 Passive 
+Q8-3 DMP2066LSN-3 Passive 
+C3-2 100nF-2 Passive 
+C7-2 22uF-2 Passive 
+C8-2 22uF-2 Passive 
+C9-2 100nF-2 Passive 
+R25-2 13K ±1%-2 Passive 
+C26-1 1uF-1 Passive 
+C77-1 1uF-1 Passive 
+C78-1 22nF-1 Passive 
+C131-1 22uF/10V-1 Passive 
+C93-1 22uF/10V-1 Passive 
+C86-1 1uF-1 Passive 
+C153-1 4.7uF-1 Passive 
+R65-2 10K-2 Passive 
+R66-2 51K-2 Passive 
+C159-1 100nF-1 Passive 
+C2-2 10uF-2 Passive 
+C161-1 4.7uF-1 Passive 
+R86-1 200K-1 Passive 
+C162-2 22uF/10V-2 Passive 
+C163-2 22uF/10V-2 Passive 
+C165-2 1uF-2 Passive 
+C164-2 22uF/10V-2 Passive 
+C166-1 47nF-1 Passive 
+R89-1 NC-1 Passive 
+R92-1 110K-1 Passive 
+C167-1 1uF-1 Passive 
+R93-2 10K-2 Passive 
+C171-2 100nF-2 Passive 
+C172-2 10uF-2 Passive 
+R95-2 51K-2 Passive 
+Key3-1 D-1 Passive 
+ED3-2 ESD5451N-2 Passive 
+SD1-6 UNSPECIFIED (PDF)-6 Passive 
+SD1-10 UNSPECIFIED (PDF)-10 Passive 
+C11-1 10uF-1 Passive 
+C12-2 100nF-2 Passive 
+R26-1 10K-1 Passive 
+U1-1 ESP32-C6-MINI-1-N4-1 Passive 
+U1-2 ESP32-C6-MINI-1-N4-2 Passive 
+U1-11 ESP32-C6-MINI-1-N4-11 Passive 
+U1-14 ESP32-C6-MINI-1-N4-14 Passive 
+U1-36 ESP32-C6-MINI-1-N4-36 Passive 
+U1-37 ESP32-C6-MINI-1-N4-37 Passive 
+U1-38 ESP32-C6-MINI-1-N4-38 Passive 
+U1-39 ESP32-C6-MINI-1-N4-39 Passive 
+U1-40 ESP32-C6-MINI-1-N4-40 Passive 
+U1-41 ESP32-C6-MINI-1-N4-41 Passive 
+U1-42 ESP32-C6-MINI-1-N4-42 Passive 
+U1-43 ESP32-C6-MINI-1-N4-43 Passive 
+U1-44 ESP32-C6-MINI-1-N4-44 Passive 
+U1-45 ESP32-C6-MINI-1-N4-45 Passive 
+U1-46 ESP32-C6-MINI-1-N4-46 Passive 
+U1-47 ESP32-C6-MINI-1-N4-47 Passive 
+U1-48 ESP32-C6-MINI-1-N4-48 Passive 
+U1-49 ESP32-C6-MINI-1-N4-49 Passive 
+U1-50 ESP32-C6-MINI-1-N4-50 Passive 
+U1-51 ESP32-C6-MINI-1-N4-51 Passive 
+U1-52 ESP32-C6-MINI-1-N4-52 Passive 
+U1-53 ESP32-C6-MINI-1-N4-53 Passive 
+P1-4 NC-4 Passive 
+C4-1 10uF-1 Passive 
+C5-1 100nF-1 Passive 
+C10-1 1uF-1 Passive 
+U6-0 CH343P-0 Passive 
+U6-2 CH343P-2 Passive 
+C19-2 1uF-2 Passive 
+C22-2 1uF-2 Passive 
+C23-1 100nF-1 Passive 
+C25-1 100nF-1 Passive 
+C30-2 1uF-2 Passive 
+C37-2 NC/100nF-2 Passive 
+U8-105 ESP32-P4NRW32-105 Passive 
+U10-4 GD25Q256EYIGR-4 Passive 
+U10-9 GD25Q256EYIGR-9 Passive 
+U5-2 MP1605GTF-Z-2 Passive 
+Y1-2 40MHz(2.0*1.6)-2 Passive 
+Y1-4 40MHz(2.0*1.6)-4 Passive 
+C16-1 10uF-1 Passive 
+C18-1 22pF-1 Passive 
+C17-1 4.7uf-1 Passive 
+C20-1 22pF-1 Passive 
+C21-1 22pF-1 Passive 
+C24-1 22pF-1 Passive 
+R41-1 200K ±1%-1 Passive 
+C27-1 100nF-1 Passive 
+C28-1 100nF-1 Passive 
+C29-1 100nF-1 Passive 
+C31-1 100nF-1 Passive 
+C32-1 10uF-1 Passive 
+C33-1 10uF-1 Passive 
+C34-1 100nF-1 Passive 
+C35-1 10uF-1 Passive 
+C36-1 100nF-1 Passive 
+C38-1 100nF-1 Passive 
+C39-1 100nF-1 Passive 
+C40-1 10uF-1 Passive 
+C41-1 100nF-1 Passive 
+C42-1 1uF-1 Passive 
+C43-1 1uF-1 Passive 
+C44-1 1uF-1 Passive 
+C45-1 1uF-1 Passive 
+C46-1 100nF-1 Passive 
+C47-1 100nF-1 Passive 
+C48-1 1uF-1 Passive 
+C49-1 100nF-1 Passive 
+C52-1 10uF-1 Passive 
+C53-1 100nF-1 Passive 
+C54-1 100nF-1 Passive 
+C56-1 10nF-1 Passive 
+C57-1 4.7uf-1 Passive 
+C58-1 100nF-1 Passive 
+C59-1 1uF-1 Passive 
+C60-1 100nF-1 Passive 
+C63-1 10nF-1 Passive 
+C64-1 100nF-1 Passive 
+C65-1 1uF-1 Passive 
+R55-2 4.02K ±1%-2 Passive 
+R56-2 4.02K ±1%-2 Passive 
+C70-2 100nF-2 Passive 
+U19-3 ETA6098-3 Passive 
+U19-7 ETA6098-7 Passive 
+U19-10 ETA6098-10 Passive 
+U19-11 ETA6098-11 Passive 
+J2-0 BATTERY-0 Passive 
+J2-2 BATTERY-2 Passive 
+C168-1 1uF-1 Passive 
+C169-1 47uF-1 Passive 
+C170-2 10uF-2 Passive 
+R97-2 820K-2 Passive 
+C173-1 100nF-1 Passive 
+C174-2 100nF-2 Passive 
+R15-2 100K ±1%-2 Passive 
+J1-0 UNSPECIFIED (PDF)-0 Passive 
+J1-1 UNSPECIFIED (PDF)-1 Passive 
+J1-4 UNSPECIFIED (PDF)-4 Passive 
+J1-7 UNSPECIFIED (PDF)-7 Passive 
+J1-10 UNSPECIFIED (PDF)-10 Passive 
+C50-1 10uF-1 Passive 
+C51-2 100nF-2 Passive 
+ED1-2 ESD5451N-2 Passive 
+Key1-1 UNSPECIFIED (PDF)-1 Passive 
+C61-1 100nF-1 Passive 
+ED2-2 ESD5451N-2 Passive 
+Key2-1 TP_VDD-1 Passive 
+C62-2 NC/100nF-2 Passive 
+P2-0 排线插座-0 Passive 
+P2-3 排线插座-3 Passive 
+P2-5 排线插座-5 Passive 
+P2-8 排线插座-8 Passive 
+P2-11 排线插座-11 Passive 
+P2-14 排线插座-14 Passive 
+P2-17 排线插座-17 Passive 
+P2-20 排线插座-20 Passive 
+P2-24 排线插座-24 Passive 
+P2-30 排线插座-30 Passive 
+U9-2 AP3032KTR-G1-2 Passive 
+H8-0 UNSPECIFIED (PDF)-0 Passive 
+H8-1 UNSPECIFIED (PDF)-1 Passive 
+C66-1 10uF/25V-1 Passive 
+C67-1 104/50V-1 Passive 
+C68-1 1uF/50V-1 Passive 
+R102-2 10K-2 Passive 
+R59-1 NC/0R-1 Passive 
+C69-1 1uF-1 Passive 
+C55-2 1uF-2 Passive 
+R62-2 5.1R ±1%-2 Passive 
+R63-2 NC-2 Passive 
+C160-1 100nF-1 Passive 
+U11-2 RT9193-33PB-2 Passive 
+C71-1 10uF-1 Passive 
+C72-1 100nF-1 Passive 
+C73-1 22nF-1 Passive 
+C74-1 10uF-1 Passive 
+C75-1 100nF-1 Passive 
+R99-2 0R-2 Passive 
+J3-5 GPIO24-5 Passive 
+J3-10 GPIO24-10 Passive 
+J3-13 GPIO24-13 Passive 
+J3-19 GPIO24-19 Passive 
+J3-26 GPIO24-26 Passive 
+J3-29 GPIO24-29 Passive 
+J3-33 GPIO24-33 Passive 
+J3-40 GPIO24-40 Passive 
+D1-1 SMF5.0CA-1 Passive 
+)
+(
+USB0_5V 
+H1-A4/B9 UNSPECIFIED (PDF)-A4/B9 Passive 
+H1-A9/B4 UNSPECIFIED (PDF)-A9/B4 Passive 
+U4-1 MMDT3906DW-1 Passive 
+Q2-3 AO3401-3 Passive 
+TVS1-1 UNSPECIFIED (PDF)-1 Passive 
+C13-2 1uF/16V-2 Passive 
+U6-9 CH343P-9 Passive 
+C23-2 100nF-2 Passive 
+)
+(
+NetH1_A5 
+H1-A5 UNSPECIFIED (PDF)-A5 Passive 
+R4-2 5.1K-2 Passive 
+)
+(
+USB_DBG_D_P 
+H1-A6 UNSPECIFIED (PDF)-A6 Passive 
+H1-B6 UNSPECIFIED (PDF)-B6 Passive 
+U6-7 CH343P-7 Passive 
+)
+(
+USB_DBG_D_N 
+H1-A7 UNSPECIFIED (PDF)-A7 Passive 
+H1-B7 UNSPECIFIED (PDF)-B7 Passive 
+U6-8 CH343P-8 Passive 
+)
+(
+NetH1_A8 
+H1-A8 UNSPECIFIED (PDF)-A8 Passive 
+)
+(
+NetH1_B5 
+H1-B5 UNSPECIFIED (PDF)-B5 Passive 
+R1-2 5.1K-2 Passive 
+)
+(
+NetH1_B8 
+H1-B8 UNSPECIFIED (PDF)-B8 Passive 
+)
+(
+USB1_5V 
+H2-A4/B9 Type-C-A4/B9 Passive 
+H2-A9/B4 Type-C-A9/B4 Passive 
+U3-1 MMDT3906DW-1 Passive 
+Q3-3 AO3401-3 Passive 
+TVS2-1 UNSPECIFIED (PDF)-1 Passive 
+C15-2 1uF/16V-2 Passive 
+)
+(
+NetH2_A5 
+H2-A5 Type-C-A5 Passive 
+R3-2 5.1K-2 Passive 
+)
+(
+USBD_P 
+H2-A6 Type-C-A6 Passive 
+H2-B6 Type-C-B6 Passive 
+U8-50 ESP32-P4NRW32-50 Passive 
+J3-27 GPIO24-27 Passive 
+)
+(
+USBD_N 
+H2-A7 Type-C-A7 Passive 
+H2-B7 Type-C-B7 Passive 
+U8-49 ESP32-P4NRW32-49 Passive 
+J3-25 GPIO24-25 Passive 
+)
+(
+NetH2_A8 
+H2-A8 Type-C-A8 Passive 
+)
+(
+NetH2_B5 
+H2-B5 Type-C-B5 Passive 
+R2-2 5.1K-2 Passive 
+)
+(
+NetH2_B8 
+H2-B8 Type-C-B8 Passive 
+)
+(
+NetR31_1 
+U3-2 MMDT3906DW-2 Passive 
+U3-5 MMDT3906DW-5 Passive 
+U3-6 MMDT3906DW-6 Passive 
+R31-1 10K-1 Passive 
+)
+(
+NetQ3_1 
+U3-3 MMDT3906DW-3 Passive 
+Q3-1 AO3401-1 Passive 
+R30-1 51K-1 Passive 
+)
+(
+VCC'_5V 
+U3-4 MMDT3906DW-4 Passive 
+U4-4 MMDT3906DW-4 Passive 
+Q2-2 AO3401-2 Passive 
+Q3-2 AO3401-2 Passive 
+U16-1 MMDT3906DW-1 Passive 
+Q4-3 AO3401-3 Passive 
+R67-1 1K-1 Passive 
+C86-2 1uF-2 Passive 
+U19-1 ETA6098-1 Passive 
+C168-2 1uF-2 Passive 
+)
+(
+NetR27_1 
+U4-2 MMDT3906DW-2 Passive 
+U4-5 MMDT3906DW-5 Passive 
+U4-6 MMDT3906DW-6 Passive 
+R27-1 10K-1 Passive 
+)
+(
+NetQ2_1 
+U4-3 MMDT3906DW-3 Passive 
+Q2-1 AO3401-1 Passive 
+R29-1 51K-1 Passive 
+)
+(
+NetLED1_A 
+R24-1 5.1K-1 Passive 
+LED1-A Type-C UART-A Passive 
+)
+(
+CORE_5V 
+R24-2 5.1K-2 Passive 
+U2-1 MP1658GTF-Z-1 Passive 
+U13-1 RT9193-18GB-1 Passive 
+U13-3 RT9193-18GB-3 Passive 
+Q6-3 DMP2066LSN-3 Passive 
+C3-1 100nF-1 Passive 
+R21-2 100K-2 Passive 
+C26-2 1uF-2 Passive 
+C2-1 10uF-1 Passive 
+U9-6 AP3032KTR-G1-6 Passive 
+L3-1 10uH 2A 4*4*2-1 Passive 
+C66-2 10uF/25V-2 Passive 
+R57-2 100K-2 Passive 
+U15-6 NS4150B-6 Passive 
+U11-1 RT9193-33PB-1 Passive 
+U11-3 RT9193-33PB-3 Passive 
+C71-2 10uF-2 Passive 
+C72-2 100nF-2 Passive 
+C150-2 10uF-2 Passive 
+C151-2 100nF-2 Passive 
+C152-2 1uF-2 Passive 
+)
+(
+VCC1 
+U17-1 SCT12A0DHKR-1 Passive 
+C153-2 4.7uF-2 Passive 
+R68-1 10K-1 Passive 
+)
+(
+EN 
+U17-2 SCT12A0DHKR-2 Passive 
+Q5-3 BSS138LT1G(-3 Passive 
+R68-2 10K-2 Passive 
+)
+(
+NetR78_1 
+U17-3 SCT12A0DHKR-3 Passive 
+R78-1 270K-1 Passive 
+)
+(
+NetC145_1 
+U17-4 SCT12A0DHKR-4 Passive 
+U17-5 SCT12A0DHKR-5 Passive 
+U17-6 SCT12A0DHKR-6 Passive 
+U17-7 SCT12A0DHKR-7 Passive 
+L8-2 贴片功率电感-2 Passive 
+C145-1 104-1 Passive 
+R78-2 270K-2 Passive 
+)
+(
+NetC145_2 
+U17-8 SCT12A0DHKR-8 Passive 
+C145-2 104-2 Passive 
+)
+(
+BAT 
+U17-9 SCT12A0DHKR-9 Passive 
+L8-1 贴片功率电感-1 Passive 
+C131-2 22uF/10V-2 Passive 
+C93-2 22uF/10V-2 Passive 
+U19-6 ETA6098-6 Passive 
+J2-1 BATTERY-1 Passive 
+C170-1 10uF-1 Passive 
+L9-2 2.2uH 2.5*2*1.2 ±20% 3A-2 Passive 
+R12-1 200K ±1%-1 Passive 
+C174-1 100nF-1 Passive 
+)
+(
+NetC166_2 
+U17-10 SCT12A0DHKR-10 Passive 
+C166-2 47nF-2 Passive 
+)
+(
+NetR89_2 
+U17-13 SCT12A0DHKR-13 Passive 
+R89-2 NC-2 Passive 
+)
+(
+BOOST_5V 
+U17-14 SCT12A0DHKR-14 Passive 
+U17-15 SCT12A0DHKR-15 Passive 
+U17-16 SCT12A0DHKR-16 Passive 
+U18-1 MMDT3906DW-1 Passive 
+Q7-3 AO3401-3 Passive 
+C162-1 22uF/10V-1 Passive 
+C163-1 22uF/10V-1 Passive 
+C165-1 1uF-1 Passive 
+C164-1 22uF/10V-1 Passive 
+R88-2 360K-2 Passive 
+C167-2 1uF-2 Passive 
+)
+(
+NetR88_1 
+U17-17 SCT12A0DHKR-17 Passive 
+R88-1 360K-1 Passive 
+R92-2 110K-2 Passive 
+)
+(
+NetC159_2 
+U17-18 SCT12A0DHKR-18 Passive 
+C159-2 100nF-2 Passive 
+R77-2 17.4K-2 Passive 
+)
+(
+NetR86_2 
+U17-19 SCT12A0DHKR-19 Passive 
+R86-2 200K-2 Passive 
+)
+(
+NetC1_1 
+U2-2 MP1658GTF-Z-2 Passive 
+L1-1 4.7uH 4.4*4.2*2  2.8A-1 Passive 
+C1-1 1uF-1 Passive 
+)
+(
+NetR13_2 
+U2-4 MP1658GTF-Z-4 Passive 
+R13-2 10R-2 Passive 
+)
+(
+NetR21_1 
+U2-5 MP1658GTF-Z-5 Passive 
+R21-1 100K-1 Passive 
+)
+(
+FB2:0.8V 
+U2-6 MP1658GTF-Z-6 Passive 
+R23-1 20K-1 Passive 
+)
+(
+NetR65_1 
+U16-2 MMDT3906DW-2 Passive 
+U16-5 MMDT3906DW-5 Passive 
+U16-6 MMDT3906DW-6 Passive 
+R65-1 10K-1 Passive 
+)
+(
+NetQ4_1 
+U16-3 MMDT3906DW-3 Passive 
+Q4-1 AO3401-1 Passive 
+R66-1 51K-1 Passive 
+)
+(
+VCC_5V 
+U16-4 MMDT3906DW-4 Passive 
+U20-5 ECJ23001-4FCBD6-5 Passive 
+U18-4 MMDT3906DW-4 Passive 
+Q4-2 AO3401-2 Passive 
+Q6-2 DMP2066LSN-2 Passive 
+Q7-2 AO3401-2 Passive 
+R85-1 100K-1 Passive 
+C171-1 100nF-1 Passive 
+C172-1 10uF-1 Passive 
+J3-1 GPIO24-1 Passive 
+J3-3 GPIO24-3 Passive 
+D1-2 SMF5.0CA-2 Passive 
+)
+(
+NetR98_1 
+U20-1 ECJ23001-4FCBD6-1 Passive 
+R98-1 0R-1 Passive 
+)
+(
+NetED3_1 
+U20-3 ECJ23001-4FCBD6-3 Passive 
+Key3-2 D-2 Passive 
+ED3-1 ESD5451N-1 Passive 
+)
+(
+NetU20_4 
+U20-4 ECJ23001-4FCBD6-4 Passive 
+)
+(
+NetU20_6 
+U20-6 ECJ23001-4FCBD6-6 Passive 
+)
+(
+NetR93_1 
+U18-2 MMDT3906DW-2 Passive 
+U18-5 MMDT3906DW-5 Passive 
+U18-6 MMDT3906DW-6 Passive 
+R93-1 10K-1 Passive 
+)
+(
+NetQ7_1 
+U18-3 MMDT3906DW-3 Passive 
+Q7-1 AO3401-1 Passive 
+R95-1 51K-1 Passive 
+)
+(
+NetC78_2 
+U13-4 RT9193-18GB-4 Passive 
+C78-2 22nF-2 Passive 
+)
+(
+VCC_1.8V 
+U13-5 RT9193-18GB-5 Passive 
+C77-2 1uF-2 Passive 
+P2-21 排线插座-21 Passive 
+)
+(
+NetQ5_1 
+Q5-1 BSS138LT1G(-1 Passive 
+R67-2 1K-2 Passive 
+)
+(
+NetQ6_1 
+Q6-1 DMP2066LSN-1 Passive 
+Q8-2 DMP2066LSN-2 Passive 
+R85-2 100K-2 Passive 
+)
+(
+NetQ8_1 
+Q8-1 DMP2066LSN-1 Passive 
+R98-2 0R-2 Passive 
+)
+(
+ESP_3V3 
+L1-2 4.7uH 4.4*4.2*2  2.8A-2 Passive 
+C7-1 22uF-1 Passive 
+C8-1 22uF-1 Passive 
+C9-1 100nF-1 Passive 
+R17-1 40.2K ±1%-1 Passive 
+Q1-2 AO3401-2 Passive 
+R105-1 NC/10K-1 Passive 
+U1-3 ESP32-C6-MINI-1-N4-3 Passive 
+R11-2 10K-2 Passive 
+C6-1 20pF-1 Passive 
+R14-2 51K-2 Passive 
+C4-2 10uF-2 Passive 
+C5-2 100nF-2 Passive 
+R16-2 51K-2 Passive 
+R18-2 51K-2 Passive 
+R19-2 51K-2 Passive 
+R20-2 51K-2 Passive 
+R22-2 51K-2 Passive 
+R28-2 10K ±1%-2 Passive 
+U6-1 CH343P-1 Passive 
+U6-3 CH343P-3 Passive 
+U6-6 CH343P-6 Passive 
+C19-1 1uF-1 Passive 
+C22-1 1uF-1 Passive 
+C25-2 100nF-2 Passive 
+R44-2 10K-2 Passive 
+R45-1 4.7K-1 Passive 
+U8-9 ESP32-P4NRW32-9 Passive 
+U8-21 ESP32-P4NRW32-21 Passive 
+U8-51 ESP32-P4NRW32-51 Passive 
+U8-62 ESP32-P4NRW32-62 Passive 
+U8-75 ESP32-P4NRW32-75 Passive 
+U8-77 ESP32-P4NRW32-77 Passive 
+U8-96 ESP32-P4NRW32-96 Passive 
+U8-101 ESP32-P4NRW32-101 Passive 
+U5-3 MP1605GTF-Z-3 Passive 
+C17-2 4.7uf-2 Passive 
+C28-2 100nF-2 Passive 
+C29-2 100nF-2 Passive 
+C35-2 10uF-2 Passive 
+C36-2 100nF-2 Passive 
+C39-2 100nF-2 Passive 
+C40-2 10uF-2 Passive 
+C41-2 100nF-2 Passive 
+R46-2 10K ±1%-2 Passive 
+C46-2 100nF-2 Passive 
+C49-2 100nF-2 Passive 
+C56-2 10nF-2 Passive 
+C57-2 4.7uf-2 Passive 
+C58-2 100nF-2 Passive 
+J1-15 UNSPECIFIED (PDF)-15 Passive 
+R47-1 10K ±1%-1 Passive 
+C50-2 10uF-2 Passive 
+C51-1 100nF-1 Passive 
+R48-2 NC-2 Passive 
+R49-1 2.2K-1 Passive 
+R50-1 2.2K-1 Passive 
+P2-4 排线插座-4 Passive 
+P2-29 排线插座-29 Passive 
+D2-1 B5819WS-1 Passive 
+R84-1 0R-1 Passive 
+J3-2 GPIO24-2 Passive 
+J3-18 GPIO24-18 Passive 
+)
+(
+NetC1_2 
+R13-1 10R-1 Passive 
+C1-2 1uF-2 Passive 
+)
+(
+NetC6_2 
+R17-2 40.2K ±1%-2 Passive 
+R23-2 20K-2 Passive 
+R25-1 13K ±1%-1 Passive 
+C6-2 20pF-2 Passive 
+)
+(
+NetC161_2 
+R77-1 17.4K-1 Passive 
+C161-2 4.7uF-2 Passive 
+)
+(
+GPIO41 
+SD1-1 UNSPECIFIED (PDF)-1 Passive 
+R5-1 51K-1 Passive 
+U8-82 ESP32-P4NRW32-82 Passive 
+)
+(
+GPIO42 
+SD1-2 UNSPECIFIED (PDF)-2 Passive 
+R6-1 51K-1 Passive 
+U8-83 ESP32-P4NRW32-83 Passive 
+)
+(
+GPIO44 
+SD1-3 UNSPECIFIED (PDF)-3 Passive 
+R7-1 51K-1 Passive 
+U8-86 ESP32-P4NRW32-86 Passive 
+)
+(
+NetC11_2 
+SD1-4 UNSPECIFIED (PDF)-4 Passive 
+Q1-3 AO3401-3 Passive 
+C11-2 10uF-2 Passive 
+C12-1 100nF-1 Passive 
+)
+(
+GPIO43 
+SD1-5 UNSPECIFIED (PDF)-5 Passive 
+U8-84 ESP32-P4NRW32-84 Passive 
+)
+(
+GPIO39 
+SD1-7 UNSPECIFIED (PDF)-7 Passive 
+R8-1 51K-1 Passive 
+U8-80 ESP32-P4NRW32-80 Passive 
+)
+(
+GPIO40 
+SD1-8 UNSPECIFIED (PDF)-8 Passive 
+R9-1 51K-1 Passive 
+U8-81 ESP32-P4NRW32-81 Passive 
+)
+(
+NetR10_1 
+SD1-9 UNSPECIFIED (PDF)-9 Passive 
+R10-1 UNSPECIFIED (PDF)-1 Passive 
+)
+(
+GPIO45 
+Q1-1 AO3401-1 Passive 
+R105-2 NC/10K-2 Passive 
+R26-2 10K-2 Passive 
+U8-87 ESP32-P4NRW32-87 Passive 
+)
+(
+ESP_LDO_VO4 
+R5-2 51K-2 Passive 
+R6-2 51K-2 Passive 
+R7-2 51K-2 Passive 
+R8-2 51K-2 Passive 
+R9-2 51K-2 Passive 
+U8-74 ESP32-P4NRW32-74 Passive 
+U8-85 ESP32-P4NRW32-85 Passive 
+C31-2 100nF-2 Passive 
+C32-2 10uF-2 Passive 
+C45-2 1uF-2 Passive 
+R10-2 UNSPECIFIED (PDF)-2 Passive 
+)
+(
+NetU1_4 
+U1-4 ESP32-C6-MINI-1-N4-4 Passive 
+)
+(
+C6_IO2 
+U1-5 ESP32-C6-MINI-1-N4-5 Passive 
+R33-1 0R-1 Passive 
+)
+(
+NetU1_6 
+U1-6 ESP32-C6-MINI-1-N4-6 Passive 
+)
+(
+NetU1_7 
+U1-7 ESP32-C6-MINI-1-N4-7 Passive 
+)
+(
+C6_CHIP_PU 
+U1-8 ESP32-C6-MINI-1-N4-8 Passive 
+R11-1 10K-1 Passive 
+C10-2 1uF-2 Passive 
+R34-1 0R-1 Passive 
+)
+(
+NetU1_9 
+U1-9 ESP32-C6-MINI-1-N4-9 Passive 
+)
+(
+NetU1_10 
+U1-10 ESP32-C6-MINI-1-N4-10 Passive 
+)
+(
+NetU1_12 
+U1-12 ESP32-C6-MINI-1-N4-12 Passive 
+)
+(
+NetU1_13 
+U1-13 ESP32-C6-MINI-1-N4-13 Passive 
+)
+(
+NetU1_15 
+U1-15 ESP32-C6-MINI-1-N4-15 Passive 
+)
+(
+NetU1_16 
+U1-16 ESP32-C6-MINI-1-N4-16 Passive 
+)
+(
+C6_IO12 
+U1-17 ESP32-C6-MINI-1-N4-17 Passive 
+)
+(
+C6_IO13 
+U1-18 ESP32-C6-MINI-1-N4-18 Passive 
+)
+(
+NetU1_19 
+U1-19 ESP32-C6-MINI-1-N4-19 Passive 
+)
+(
+NetU1_20 
+U1-20 ESP32-C6-MINI-1-N4-20 Passive 
+)
+(
+NetU1_21 
+U1-21 ESP32-C6-MINI-1-N4-21 Passive 
+)
+(
+C6_IO8 
+U1-22 ESP32-C6-MINI-1-N4-22 Passive 
+R28-1 10K ±1%-1 Passive 
+)
+(
+C6_IO9 
+U1-23 ESP32-C6-MINI-1-N4-23 Passive 
+P1-3 NC-3 Passive 
+)
+(
+GPIO19 
+U1-24 ESP32-C6-MINI-1-N4-24 Passive 
+R22-1 51K-1 Passive 
+U8-20 ESP32-P4NRW32-20 Passive 
+)
+(
+GPIO18 
+U1-25 ESP32-C6-MINI-1-N4-25 Passive 
+R20-1 51K-1 Passive 
+U8-19 ESP32-P4NRW32-19 Passive 
+)
+(
+GPIO14 
+U1-26 ESP32-C6-MINI-1-N4-26 Passive 
+R19-1 51K-1 Passive 
+U8-15 ESP32-P4NRW32-15 Passive 
+)
+(
+GPIO15 
+U1-27 ESP32-C6-MINI-1-N4-27 Passive 
+R18-1 51K-1 Passive 
+U8-16 ESP32-P4NRW32-16 Passive 
+)
+(
+GPIO16 
+U1-28 ESP32-C6-MINI-1-N4-28 Passive 
+R16-1 51K-1 Passive 
+U8-17 ESP32-P4NRW32-17 Passive 
+)
+(
+GPIO17 
+U1-29 ESP32-C6-MINI-1-N4-29 Passive 
+R14-1 51K-1 Passive 
+U8-18 ESP32-P4NRW32-18 Passive 
+)
+(
+C6_U0RXD 
+U1-30 ESP32-C6-MINI-1-N4-30 Passive 
+P1-2 NC-2 Passive 
+)
+(
+C6_U0TXD 
+U1-31 ESP32-C6-MINI-1-N4-31 Passive 
+P1-1 NC-1 Passive 
+)
+(
+NetU1_32 
+U1-32 ESP32-C6-MINI-1-N4-32 Passive 
+)
+(
+NetU1_33 
+U1-33 ESP32-C6-MINI-1-N4-33 Passive 
+)
+(
+NetU1_34 
+U1-34 ESP32-C6-MINI-1-N4-34 Passive 
+)
+(
+NetU1_35 
+U1-35 ESP32-C6-MINI-1-N4-35 Passive 
+)
+(
+GPIO6 
+R33-2 0R-2 Passive 
+U8-6 ESP32-P4NRW32-6 Passive 
+)
+(
+GPIO54 
+R34-2 0R-2 Passive 
+U8-98 ESP32-P4NRW32-98 Passive 
+)
+(
+GPIO38 
+U6-4 CH343P-4 Passive 
+U8-70 ESP32-P4NRW32-70 Passive 
+J3-9 GPIO24-9 Passive 
+)
+(
+GPIO37 
+U6-5 CH343P-5 Passive 
+U8-69 ESP32-P4NRW32-69 Passive 
+J3-7 GPIO24-7 Passive 
+)
+(
+NetU6_10 
+U6-10 CH343P-10 Passive 
+)
+(
+NetU6_11 
+U6-11 CH343P-11 Passive 
+)
+(
+DTR 
+U6-12 CH343P-12 Passive 
+U7-2 EMH4T2R-2 Passive 
+U7-4 EMH4T2R-4 Passive 
+)
+(
+RTS 
+U6-13 CH343P-13 Passive 
+U7-1 EMH4T2R-1 Passive 
+U7-5 EMH4T2R-5 Passive 
+)
+(
+NetU6_14 
+U6-14 CH343P-14 Passive 
+)
+(
+NetU6_15 
+U6-15 CH343P-15 Passive 
+)
+(
+NetU6_16 
+U6-16 CH343P-16 Passive 
+)
+(
+GPIO35 
+U7-3 EMH4T2R-3 Passive 
+C37-1 NC/100nF-1 Passive 
+R45-2 4.7K-2 Passive 
+U8-66 ESP32-P4NRW32-66 Passive 
+ED1-1 ESD5451N-1 Passive 
+Key2-2 TP_VDD-2 Passive 
+C62-1 NC/100nF-1 Passive 
+J3-30 GPIO24-30 Passive 
+)
+(
+ESP_EN 
+U7-6 EMH4T2R-6 Passive 
+R44-1 10K-1 Passive 
+C30-1 1uF-1 Passive 
+U8-103 ESP32-P4NRW32-103 Passive 
+R52-1 10K-1 Passive 
+Key1-2 UNSPECIFIED (PDF)-2 Passive 
+C61-2 100nF-2 Passive 
+ED2-1 ESD5451N-1 Passive 
+)
+(
+GPIO1 
+U8-1 ESP32-P4NRW32-1 Passive 
+R40-2 10M-2 Passive 
+Y2-1 UNSPECIFIED (PDF)-1 Passive 
+C24-2 22pF-2 Passive 
+)
+(
+GPIO2 
+U8-2 ESP32-P4NRW32-2 Passive 
+R35-1 NC/0R-1 Passive 
+J3-8 GPIO24-8 Passive 
+)
+(
+GPIO3 
+U8-3 ESP32-P4NRW32-3 Passive 
+J3-12 GPIO24-12 Passive 
+)
+(
+GPIO4 
+U8-4 ESP32-P4NRW32-4 Passive 
+J3-14 GPIO24-14 Passive 
+)
+(
+GPIO5 
+U8-5 ESP32-P4NRW32-5 Passive 
+J3-11 GPIO24-11 Passive 
+)
+(
+ESP_I2C_SDA 
+U8-7 ESP32-P4NRW32-7 Passive 
+J1-14 UNSPECIFIED (PDF)-14 Passive 
+R50-2 2.2K-2 Passive 
+P2-26 排线插座-26 Passive 
+U14-3 ES7210-3 Passive 
+U12-19 ES8311-19 Passive 
+C91-2 22pF-2 Passive 
+C90-2 22pF-2 Passive 
+J3-4 GPIO24-4 Passive 
+)
+(
+ESP_I2C_SCL 
+U8-8 ESP32-P4NRW32-8 Passive 
+J1-13 UNSPECIFIED (PDF)-13 Passive 
+R49-2 2.2K-2 Passive 
+P2-27 排线插座-27 Passive 
+U14-4 ES7210-4 Passive 
+U12-1 ES8311-1 Passive 
+C92-2 22pF-2 Passive 
+C89-2 22pF-2 Passive 
+J3-6 GPIO24-6 Passive 
+)
+(
+GPIO9 
+U8-10 ESP32-P4NRW32-10 Passive 
+U12-9 ES8311-9 Passive 
+)
+(
+GPIO10 
+U8-11 ESP32-P4NRW32-11 Passive 
+U14-10 ES7210-10 Passive 
+U12-8 ES8311-8 Passive 
+C118-2 22pF-2 Passive 
+C143-2 22pF-2 Passive 
+)
+(
+GPIO11 
+U8-12 ESP32-P4NRW32-12 Passive 
+R87-1 51R-1 Passive 
+R91-1 NC-1 Passive 
+)
+(
+GPIO12 
+U8-13 ESP32-P4NRW32-13 Passive 
+U14-9 ES7210-9 Passive 
+U12-6 ES8311-6 Passive 
+C117-2 22pF-2 Passive 
+C142-2 22pF-2 Passive 
+)
+(
+GPIO13 
+U8-14 ESP32-P4NRW32-14 Passive 
+U14-5 ES7210-5 Passive 
+U12-2 ES8311-2 Passive 
+C116-2 22pF-2 Passive 
+C141-2 22pF-2 Passive 
+)
+(
+BAT_ADC 
+U8-22 ESP32-P4NRW32-22 Passive 
+R12-2 200K ±1%-2 Passive 
+C173-2 100nF-2 Passive 
+R15-1 100K ±1%-1 Passive 
+)
+(
+GPIO21 
+U8-23 ESP32-P4NRW32-23 Passive 
+J3-15 GPIO24-15 Passive 
+)
+(
+GPIO22 
+U8-24 ESP32-P4NRW32-24 Passive 
+J3-17 GPIO24-17 Passive 
+)
+(
+GPIO23 
+U8-25 ESP32-P4NRW32-25 Passive 
+R37-2 0R-2 Passive 
+)
+(
+ESP_VDD_HP 
+U8-26 ESP32-P4NRW32-26 Passive 
+U8-76 ESP32-P4NRW32-76 Passive 
+U8-91 ESP32-P4NRW32-91 Passive 
+U5-6 MP1605GTF-Z-6 Passive 
+L2-2 1uH 2*1.6*1 4.2A-2 Passive 
+C14-2 NC-2 Passive 
+C16-2 10uF-2 Passive 
+R39-2 200K ±1%-2 Passive 
+C27-2 100nF-2 Passive 
+C38-2 100nF-2 Passive 
+R51-2 NC-2 Passive 
+C52-2 10uF-2 Passive 
+C53-2 100nF-2 Passive 
+C54-2 100nF-2 Passive 
+)
+(
+FLASH_CS 
+U8-27 ESP32-P4NRW32-27 Passive 
+U10-1 GD25Q256EYIGR-1 Passive 
+R64-1 10K ±1%-1 Passive 
+)
+(
+FLASH_Q 
+U8-28 ESP32-P4NRW32-28 Passive 
+U10-2 GD25Q256EYIGR-2 Passive 
+)
+(
+FLASH_WP 
+U8-29 ESP32-P4NRW32-29 Passive 
+U10-3 GD25Q256EYIGR-3 Passive 
+)
+(
+ESP_LDO_VO1 
+U8-30 ESP32-P4NRW32-30 Passive 
+U8-71 ESP32-P4NRW32-71 Passive 
+U10-8 GD25Q256EYIGR-8 Passive 
+C42-2 1uF-2 Passive 
+C59-2 1uF-2 Passive 
+C60-2 100nF-2 Passive 
+C70-1 100nF-1 Passive 
+R64-2 10K ±1%-2 Passive 
+)
+(
+FLASH_HD 
+U8-31 ESP32-P4NRW32-31 Passive 
+U10-7 GD25Q256EYIGR-7 Passive 
+)
+(
+FLASH_CK 
+U8-32 ESP32-P4NRW32-32 Passive 
+U10-6 GD25Q256EYIGR-6 Passive 
+)
+(
+FLASH_D 
+U8-33 ESP32-P4NRW32-33 Passive 
+U10-5 GD25Q256EYIGR-5 Passive 
+)
+(
+DSI_REXT 
+U8-34 ESP32-P4NRW32-34 Passive 
+R56-1 4.02K ±1%-1 Passive 
+)
+(
+DSI_D1_P 
+U8-35 ESP32-P4NRW32-35 Passive 
+P2-9 排线插座-9 Passive 
+)
+(
+DSI_D1_N 
+U8-36 ESP32-P4NRW32-36 Passive 
+P2-10 排线插座-10 Passive 
+)
+(
+DSI_CLK_N 
+U8-37 ESP32-P4NRW32-37 Passive 
+P2-13 排线插座-13 Passive 
+)
+(
+DSI_CLK_P 
+U8-38 ESP32-P4NRW32-38 Passive 
+P2-12 排线插座-12 Passive 
+)
+(
+DSI_D0_P 
+U8-39 ESP32-P4NRW32-39 Passive 
+P2-6 排线插座-6 Passive 
+)
+(
+DSI_D0_N 
+U8-40 ESP32-P4NRW32-40 Passive 
+P2-7 排线插座-7 Passive 
+)
+(
+ESP_LDO_VO3 
+U8-41 ESP32-P4NRW32-41 Passive 
+U8-73 ESP32-P4NRW32-73 Passive 
+C44-2 1uF-2 Passive 
+C63-2 10nF-2 Passive 
+C64-2 100nF-2 Passive 
+C65-2 1uF-2 Passive 
+)
+(
+CSI_D0_N 
+U8-42 ESP32-P4NRW32-42 Passive 
+J1-2 UNSPECIFIED (PDF)-2 Passive 
+)
+(
+CSI_D0_P 
+U8-43 ESP32-P4NRW32-43 Passive 
+J1-3 UNSPECIFIED (PDF)-3 Passive 
+)
+(
+CSI_CLK_P 
+U8-44 ESP32-P4NRW32-44 Passive 
+J1-9 UNSPECIFIED (PDF)-9 Passive 
+)
+(
+CSI_CLK_N 
+U8-45 ESP32-P4NRW32-45 Passive 
+J1-8 UNSPECIFIED (PDF)-8 Passive 
+)
+(
+CSI_D1_N 
+U8-46 ESP32-P4NRW32-46 Passive 
+J1-5 UNSPECIFIED (PDF)-5 Passive 
+)
+(
+CSI_D1_P 
+U8-47 ESP32-P4NRW32-47 Passive 
+J1-6 UNSPECIFIED (PDF)-6 Passive 
+)
+(
+CSI_REXT 
+U8-48 ESP32-P4NRW32-48 Passive 
+R55-1 4.02K ±1%-1 Passive 
+)
+(
+USB1P1_N 
+U8-52 ESP32-P4NRW32-52 Passive 
+J3-21 GPIO24-21 Passive 
+)
+(
+USB1P1_P 
+U8-53 ESP32-P4NRW32-53 Passive 
+J3-23 GPIO24-23 Passive 
+)
+(
+NetR51_1 
+U8-54 ESP32-P4NRW32-54 Passive 
+R51-1 NC-1 Passive 
+)
+(
+GPIO26 
+U8-55 ESP32-P4NRW32-55 Passive 
+R43-2 0R-2 Passive 
+)
+(
+GPIO27 
+U8-56 ESP32-P4NRW32-56 Passive 
+R60-2 0R-2 Passive 
+)
+(
+GPIO28 
+U8-57 ESP32-P4NRW32-57 Passive 
+J3-16 GPIO24-16 Passive 
+)
+(
+GPIO29 
+U8-58 ESP32-P4NRW32-58 Passive 
+J3-20 GPIO24-20 Passive 
+)
+(
+ESP_LDO_VO2 
+U8-59 ESP32-P4NRW32-59 Passive 
+U8-67 ESP32-P4NRW32-67 Passive 
+U8-72 ESP32-P4NRW32-72 Passive 
+C43-2 1uF-2 Passive 
+C47-2 100nF-2 Passive 
+C48-2 1uF-2 Passive 
+)
+(
+GPIO30 
+U8-60 ESP32-P4NRW32-60 Passive 
+J3-22 GPIO24-22 Passive 
+)
+(
+GPIO31 
+U8-61 ESP32-P4NRW32-61 Passive 
+J3-24 GPIO24-24 Passive 
+)
+(
+GPIO32 
+U8-63 ESP32-P4NRW32-63 Passive 
+J3-31 GPIO24-31 Passive 
+)
+(
+GPIO33 
+U8-64 ESP32-P4NRW32-64 Passive 
+R32-2 0R-2 Passive 
+)
+(
+GPIO34 
+U8-65 ESP32-P4NRW32-65 Passive 
+J3-28 GPIO24-28 Passive 
+)
+(
+GPIO36 
+U8-68 ESP32-P4NRW32-68 Passive 
+R46-1 10K ±1%-1 Passive 
+)
+(
+FB_DCDC 
+U8-78 ESP32-P4NRW32-78 Passive 
+U5-1 MP1605GTF-Z-1 Passive 
+C14-1 NC-1 Passive 
+R39-1 200K ±1%-1 Passive 
+R41-2 200K ±1%-2 Passive 
+)
+(
+EN_DCDC 
+U8-79 ESP32-P4NRW32-79 Passive 
+U5-5 MP1605GTF-Z-5 Passive 
+)
+(
+GPIO46 
+U8-88 ESP32-P4NRW32-88 Passive 
+J3-35 GPIO24-35 Passive 
+)
+(
+GPIO47 
+U8-89 ESP32-P4NRW32-89 Passive 
+J3-37 GPIO24-37 Passive 
+)
+(
+GPIO48 
+U8-90 ESP32-P4NRW32-90 Passive 
+J3-39 GPIO24-39 Passive 
+)
+(
+GPIO49 
+U8-92 ESP32-P4NRW32-92 Passive 
+J3-32 GPIO24-32 Passive 
+)
+(
+GPIO50 
+U8-93 ESP32-P4NRW32-93 Passive 
+J3-34 GPIO24-34 Passive 
+)
+(
+GPIO51 
+U8-94 ESP32-P4NRW32-94 Passive 
+J3-36 GPIO24-36 Passive 
+)
+(
+GPIO52 
+U8-95 ESP32-P4NRW32-95 Passive 
+J3-38 GPIO24-38 Passive 
+)
+(
+GPIO53 
+U8-97 ESP32-P4NRW32-97 Passive 
+R100-2 0R-2 Passive 
+)
+(
+XTAL_N 
+U8-99 ESP32-P4NRW32-99 Passive 
+Y1-3 40MHz(2.0*1.6)-3 Passive 
+C21-2 22pF-2 Passive 
+)
+(
+XTAL_P 
+U8-100 ESP32-P4NRW32-100 Passive 
+Y1-1 40MHz(2.0*1.6)-1 Passive 
+C20-2 22pF-2 Passive 
+)
+(
+ESP_VBAT 
+U8-102 ESP32-P4NRW32-102 Passive 
+C33-2 10uF-2 Passive 
+C34-2 100nF-2 Passive 
+R52-2 10K-2 Passive 
+H8-2 UNSPECIFIED (PDF)-2 Passive 
+D2-2 B5819WS-2 Passive 
+C55-1 1uF-1 Passive 
+)
+(
+GPIO0 
+U8-104 ESP32-P4NRW32-104 Passive 
+C18-2 22pF-2 Passive 
+R40-1 10M-1 Passive 
+Y2-2 UNSPECIFIED (PDF)-2 Passive 
+)
+(
+NetL2_1 
+U5-4 MP1605GTF-Z-4 Passive 
+L2-1 1uH 2*1.6*1 4.2A-1 Passive 
+)
+(
+NetH3_0 
+H3-0 UNSPECIFIED (PDF)-0 Passive 
+)
+(
+NetH5_0 
+H5-0 UNSPECIFIED (PDF)-0 Passive 
+)
+(
+NetH6_0 
+H6-0 UNSPECIFIED (PDF)-0 Passive 
+)
+(
+NetH7_0 
+H7-0 UNSPECIFIED (PDF)-0 Passive 
+)
+(
+NetC169_2 
+U19-2 ETA6098-2 Passive 
+C169-2 47uF-2 Passive 
+)
+(
+NetL9_1 
+U19-5 ETA6098-5 Passive 
+L9-1 2.2uH 2.5*2*1.2 ±20% 3A-1 Passive 
+)
+(
+NetR97_1 
+U19-8 ETA6098-8 Passive 
+R97-1 820K-1 Passive 
+)
+(
+CHANGE 
+U19-9 ETA6098-9 Passive 
+TP1-1 UNSPECIFIED (PDF)-1 Passive 
+)
+(
+CSI_IO0 
+J1-11 UNSPECIFIED (PDF)-11 Passive 
+R47-2 10K ±1%-2 Passive 
+)
+(
+CSI_IO1 
+J1-12 UNSPECIFIED (PDF)-12 Passive 
+R48-1 NC-1 Passive 
+)
+(
+VLED- 
+P2-1 排线插座-1 Passive 
+R61-1 4.7K ±1%-1 Passive 
+R62-1 5.1R ±1%-1 Passive 
+R63-1 NC-1 Passive 
+)
+(
+VLED+ 
+P2-2 排线插座-2 Passive 
+D3-2 1N5819-2 Passive 
+R58-2 0R-2 Passive 
+C67-2 104/50V-2 Passive 
+C68-2 1uF/50V-2 Passive 
+)
+(
+NetP2_15 
+P2-15 排线插座-15 Passive 
+)
+(
+NetP2_16 
+P2-16 排线插座-16 Passive 
+)
+(
+NetP2_18 
+P2-18 排线插座-18 Passive 
+)
+(
+NetP2_19 
+P2-19 排线插座-19 Passive 
+)
+(
+TE 
+P2-22 排线插座-22 Passive 
+)
+(
+RESET 
+P2-23 排线插座-23 Passive 
+R102-1 10K-1 Passive 
+R60-1 0R-1 Passive 
+)
+(
+TP_RST 
+P2-25 排线插座-25 Passive 
+R37-1 0R-1 Passive 
+)
+(
+TP_INT 
+P2-28 排线插座-28 Passive 
+R35-2 NC/0R-2 Passive 
+TP2-1 UNSPECIFIED (PDF)-1 Passive 
+)
+(
+NetD3_1 
+U9-1 AP3032KTR-G1-1 Passive 
+D3-1 1N5819-1 Passive 
+L3-2 10uH 2A 4*4*2-2 Passive 
+)
+(
+NetR38_2 
+U9-3 AP3032KTR-G1-3 Passive 
+R61-2 4.7K ±1%-2 Passive 
+R38-2 62K ±1%-2 Passive 
+)
+(
+BL_EN 
+U9-4 AP3032KTR-G1-4 Passive 
+R57-1 100K-1 Passive 
+R32-1 0R-1 Passive 
+C69-2 1uF-2 Passive 
+)
+(
+NetR58_1 
+U9-5 AP3032KTR-G1-5 Passive 
+R58-1 0R-1 Passive 
+R59-2 NC/0R-2 Passive 
+)
+(
+LCD_BL_PWM 
+R43-1 0R-1 Passive 
+R42-2 10K ±1%-2 Passive 
+)
+(
+NetC160_2 
+R38-1 62K ±1%-1 Passive 
+R42-1 10K ±1%-1 Passive 
+C160-2 100nF-2 Passive 
+)
+(
+A0 
+U14-1 ES7210-1 Passive 
+R71-1 NC-1 Passive 
+R80-2 0R-2 Passive 
+)
+(
+A1 
+U14-2 ES7210-2 Passive 
+R70-1 NC-1 Passive 
+R79-2 0R-2 Passive 
+)
+(
+A3V3 
+U14-6 ES7210-6 Passive 
+U14-7 ES7210-7 Passive 
+U14-22 ES7210-22 Passive 
+U14-23 ES7210-23 Passive 
+U11-5 RT9193-33PB-5 Passive 
+C74-2 10uF-2 Passive 
+C75-2 100nF-2 Passive 
+C80-2 100nF-2 Passive 
+C81-2 100nF-2 Passive 
+C85-2 1uF-2 Passive 
+R70-2 NC-2 Passive 
+R71-2 NC-2 Passive 
+R90-2 0R-2 Passive 
+C147-1 1uF-1 Passive 
+C148-1 1uF-1 Passive 
+)
+(
+AGND 
+U14-8 ES7210-8 Passive 
+U14-21 ES7210-21 Passive 
+U14-33 ES7210-33 Passive 
+U12-5 ES8311-5 Passive 
+U12-10 ES8311-10 Passive 
+U12-21 ES8311-21 Passive 
+U15-7 NS4150B-7 Passive 
+MIC1-2 UNSPECIFIED (PDF)-2 Passive 
+MIC1-3 UNSPECIFIED (PDF)-3 Passive 
+MIC2-2 MIC-2 Passive 
+MIC2-3 MIC-3 Passive 
+H4-0 UNSPECIFIED (PDF)-0 Passive 
+C79-1 2.2uF-1 Passive 
+C80-1 100nF-1 Passive 
+C81-1 100nF-1 Passive 
+C82-1 100nF-1 Passive 
+C83-1 NC-1 Passive 
+C84-1 NC-1 Passive 
+C85-1 1uF-1 Passive 
+C91-1 22pF-1 Passive 
+C92-1 22pF-1 Passive 
+R69-1 10K-1 Passive 
+C89-1 22pF-1 Passive 
+C90-1 22pF-1 Passive 
+C94-1 1uF-1 Passive 
+R79-1 0R-1 Passive 
+R80-1 0R-1 Passive 
+C98-1 1uF-1 Passive 
+C99-1 1uF-1 Passive 
+C102-1 NC-1 Passive 
+C103-1 1uF-1 Passive 
+C104-1 NC-1 Passive 
+C105-1 NC-1 Passive 
+C109-1 100nF-1 Passive 
+C110-1 100nF-1 Passive 
+C111-1 22pF-1 Passive 
+C112-1 22pF-1 Passive 
+C114-2 1uF-2 Passive 
+C119-1 NC/330pF-1 Passive 
+C120-2 22pF-2 Passive 
+C116-1 22pF-1 Passive 
+C117-1 22pF-1 Passive 
+C118-1 22pF-1 Passive 
+C121-1 1uF-1 Passive 
+C122-1 1uF-1 Passive 
+C129-2 NC/330pF-2 Passive 
+C124-1 1uF-1 Passive 
+C125-1 1uF-1 Passive 
+C126-1 1uF-1 Passive 
+C127-1 1uF-1 Passive 
+C134-2 22pF-2 Passive 
+C136-2 1uF-2 Passive 
+C135-1 2.2uF-1 Passive 
+C137-1 100nF-1 Passive 
+C140-2 1uF-2 Passive 
+C138-1 NC-1 Passive 
+C139-1 NC-1 Passive 
+C144-2 1uF-2 Passive 
+C141-1 22pF-1 Passive 
+C142-1 22pF-1 Passive 
+C143-1 22pF-1 Passive 
+R101-1 10K-1 Passive 
+C150-1 10uF-1 Passive 
+C151-1 100nF-1 Passive 
+C152-1 1uF-1 Passive 
+R99-1 0R-1 Passive 
+C147-2 1uF-2 Passive 
+C148-2 1uF-2 Passive 
+C154-2 1uF-2 Passive 
+C155-1 NC-1 Passive 
+C156-1 1uF-1 Passive 
+C157-1 NC-1 Passive 
+C158-1 NC-1 Passive 
+)
+(
+NetR87_2 
+U14-11 ES7210-11 Passive 
+R87-2 51R-2 Passive 
+)
+(
+NetR91_2 
+U14-12 ES7210-12 Passive 
+R91-2 NC-2 Passive 
+)
+(
+NetTP3_1 
+U14-13 ES7210-13 Passive 
+TP3-1 UNSPECIFIED (PDF)-1 Passive 
+)
+(
+NetTP4_1 
+U14-14 ES7210-14 Passive 
+TP4-1 UNSPECIFIED (PDF)-1 Passive 
+)
+(
+NetC128_1 
+U14-15 ES7210-15 Passive 
+C128-1 1uF-1 Passive 
+)
+(
+NetC130_1 
+U14-16 ES7210-16 Passive 
+C130-1 1uF-1 Passive 
+)
+(
+NetC140_1 
+U14-17 ES7210-17 Passive 
+C140-1 1uF-1 Passive 
+)
+(
+NetC144_1 
+U14-18 ES7210-18 Passive 
+C144-1 1uF-1 Passive 
+)
+(
+NetC146_1 
+U14-19 ES7210-19 Passive 
+C146-1 1uF-1 Passive 
+)
+(
+NetC149_1 
+U14-20 ES7210-20 Passive 
+C149-1 1uF-1 Passive 
+)
+(
+ADC_MICBIAS12 
+U14-24 ES7210-24 Passive 
+MIC1-1 UNSPECIFIED (PDF)-1 Passive 
+MIC2-1 MIC-1 Passive 
+C79-2 2.2uF-2 Passive 
+C82-2 100nF-2 Passive 
+C136-1 1uF-1 Passive 
+C135-2 2.2uF-2 Passive 
+C137-2 100nF-2 Passive 
+)
+(
+NetC124_2 
+U14-25 ES7210-25 Passive 
+C124-2 1uF-2 Passive 
+)
+(
+NetC125_2 
+U14-26 ES7210-26 Passive 
+C125-2 1uF-2 Passive 
+)
+(
+NetC121_2 
+U14-27 ES7210-27 Passive 
+C121-2 1uF-2 Passive 
+)
+(
+NetC122_2 
+U14-28 ES7210-28 Passive 
+C122-2 1uF-2 Passive 
+)
+(
+NetC126_2 
+U14-29 ES7210-29 Passive 
+C126-2 1uF-2 Passive 
+)
+(
+NetC127_2 
+U14-30 ES7210-30 Passive 
+C127-2 1uF-2 Passive 
+)
+(
+NetC113_2 
+U14-31 ES7210-31 Passive 
+C113-2 1uF-2 Passive 
+)
+(
+NetC108_2 
+U14-32 ES7210-32 Passive 
+C108-2 1uF-2 Passive 
+)
+(
+DVDD 
+U12-3 ES8311-3 Passive 
+U12-4 ES8311-4 Passive 
+R84-2 0R-2 Passive 
+C109-2 100nF-2 Passive 
+C110-2 100nF-2 Passive 
+)
+(
+NetU12_7 
+U12-7 ES8311-7 Passive 
+)
+(
+AVDD 
+U12-11 ES8311-11 Passive 
+R90-1 0R-1 Passive 
+C114-1 1uF-1 Passive 
+)
+(
+NetC107_1 
+U12-12 ES8311-12 Passive 
+C107-1 1uF-1 Passive 
+C111-2 22pF-2 Passive 
+)
+(
+NetC106_1 
+U12-13 ES8311-13 Passive 
+C106-1 1uF-1 Passive 
+C112-2 22pF-2 Passive 
+)
+(
+DACVREF 
+U12-14 ES8311-14 Passive 
+C99-2 1uF-2 Passive 
+)
+(
+ADCVREF 
+U12-15 ES8311-15 Passive 
+C98-2 1uF-2 Passive 
+)
+(
+NetC94_2 
+U12-16 ES8311-16 Passive 
+C94-2 1uF-2 Passive 
+)
+(
+NetU12_17 
+U12-17 ES8311-17 Passive 
+)
+(
+NetU12_18 
+U12-18 ES8311-18 Passive 
+)
+(
+CODEC_CE 
+U12-20 ES8311-20 Passive 
+R69-2 10K-2 Passive 
+)
+(
+NetR100_1 
+U15-1 NS4150B-1 Passive 
+R100-1 0R-1 Passive 
+R101-2 10K-2 Passive 
+)
+(
+NetC154_1 
+U15-2 NS4150B-2 Passive 
+C154-1 1uF-1 Passive 
+)
+(
+PA_INL+ 
+U15-3 NS4150B-3 Passive 
+R94-1 150K-1 Passive 
+)
+(
+PA_INL- 
+U15-4 NS4150B-4 Passive 
+R96-1 150K-1 Passive 
+)
+(
+PA_OUTL- 
+U15-5 NS4150B-5 Passive 
+L7-1 0R-1 Passive 
+)
+(
+PA_OUTL+ 
+U15-8 NS4150B-8 Passive 
+L5-1 0R-1 Passive 
+)
+(
+NetC73_2 
+U11-4 RT9193-33PB-4 Passive 
+C73-2 22nF-2 Passive 
+)
+(
+NetC83_2 
+MIC1-4 UNSPECIFIED (PDF)-4 Passive 
+L4-1 0R-1 Passive 
+C83-2 NC-2 Passive 
+)
+(
+NetC138_2 
+MIC2-4 MIC-4 Passive 
+L6-1 0R-1 Passive 
+C138-2 NC-2 Passive 
+)
+(
+NetC119_2 
+H4-1 UNSPECIFIED (PDF)-1 Passive 
+L5-2 0R-2 Passive 
+C119-2 NC/330pF-2 Passive 
+C123-2 NC/330pF-2 Passive 
+)
+(
+NetC123_1 
+H4-2 UNSPECIFIED (PDF)-2 Passive 
+C123-1 NC/330pF-1 Passive 
+C129-1 NC/330pF-1 Passive 
+L7-2 0R-2 Passive 
+)
+(
+NetC76_1 
+C76-1 1uF-1 Passive 
+L4-2 0R-2 Passive 
+C84-2 NC-2 Passive 
+)
+(
+MIC2_P 
+C76-2 1uF-2 Passive 
+C104-2 NC-2 Passive 
+C105-2 NC-2 Passive 
+C146-2 1uF-2 Passive 
+)
+(
+NetC87_1 
+C87-1 470nF-1 Passive 
+R72-1 2.2k-1 Passive 
+C97-1 10nF-1 Passive 
+)
+(
+NetC87_2 
+C87-2 470nF-2 Passive 
+R73-2 10k-2 Passive 
+)
+(
+NetC88_1 
+C88-1 220nF-1 Passive 
+R74-1 20k-1 Passive 
+R75-1 4.3k-1 Passive 
+R76-1 NC/3.3k-1 Passive 
+C95-2 100pF-2 Passive 
+)
+(
+ADC_MIC3_P 
+C88-2 220nF-2 Passive 
+C113-1 1uF-1 Passive 
+)
+(
+OUTP 
+R72-2 2.2k-2 Passive 
+C107-2 1uF-2 Passive 
+C115-1 100nF R94-1 Passive 
+C120-1 22pF-1 Passive 
+)
+(
+NetC96_1 
+R73-1 10k-1 Passive 
+R74-2 20k-2 Passive 
+C96-1 2.2nF-1 Passive 
+)
+(
+NetC95_1 
+R75-2 4.3k-2 Passive 
+R76-2 NC/3.3k-2 Passive 
+C95-1 100pF-1 Passive 
+C101-1 220nF-1 Passive 
+R83-1 20k-1 Passive 
+)
+(
+NetC96_2 
+C96-2 2.2nF-2 Passive 
+R82-1 10k-1 Passive 
+R83-2 20k-2 Passive 
+)
+(
+NetC97_2 
+C97-2 10nF-2 Passive 
+C100-1 470nF-1 Passive 
+R81-1 2.2k-1 Passive 
+)
+(
+NetC100_2 
+C100-2 470nF-2 Passive 
+R82-2 10k-2 Passive 
+)
+(
+ADC_MIC3_N 
+C101-2 220nF-2 Passive 
+C108-1 1uF-1 Passive 
+)
+(
+OUTN 
+R81-2 2.2k-2 Passive 
+C106-2 1uF-2 Passive 
+C133-1 100nF R96-1 Passive 
+C134-1 22pF-1 Passive 
+)
+(
+MIC2_N 
+C102-2 NC-2 Passive 
+C103-2 1uF-2 Passive 
+C149-2 1uF-2 Passive 
+)
+(
+NetC115_2 
+C115-2 100nF R94-2 Passive 
+R94-2 150K-2 Passive 
+)
+(
+MIC1_N 
+C128-2 1uF-2 Passive 
+C155-2 NC-2 Passive 
+C156-2 1uF-2 Passive 
+)
+(
+NetC133_2 
+R96-2 150K-2 Passive 
+C133-2 100nF R96-2 Passive 
+)
+(
+MIC1_P 
+C130-2 1uF-2 Passive 
+C132-2 1uF-2 Passive 
+C157-2 NC-2 Passive 
+C158-2 NC-2 Passive 
+)
+(
+NetC132_1 
+C132-1 1uF-1 Passive 
+L6-2 0R-2 Passive 
+C139-2 NC-2 Passive 
+)

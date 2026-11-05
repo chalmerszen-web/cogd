@@ -1,0 +1,6 @@
+build/
+managed_components/
+.local/
+sdkconfig
+sdkconfig.old
+hardware/references/*.pdf

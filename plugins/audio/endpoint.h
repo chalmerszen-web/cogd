@@ -5,7 +5,13 @@
 /* The detector supplies one speech decision per 20 ms of PCM. Time is counted
  * in samples, never USB poll times, so scheduling jitter cannot shorten a word. */
 #define AGENT_VAD_FRAME_MS 20u
+#if AGENT_BOARD_P4
+/* The P4 ES8311 acoustic fixture needs more trailing-speech allowance than
+ * the ESP-HI ADC front end. The ten-second capture limit is unchanged. */
+#define AGENT_EP_FAST_END_MS 1600u
+#else
 #define AGENT_EP_FAST_END_MS 700u
+#endif
 #define AGENT_EP_RESUME_MS 60u
 #define AGENT_EP_SUPPORT_MS 320u
 #define AGENT_EP_WEAK_SUPPORT_MS 320u

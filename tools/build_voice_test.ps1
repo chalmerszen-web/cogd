@@ -1,20 +1,23 @@
-param([string]$BuildDir = 'build-voice-test', [switch]$Clock)
+param([string]$BuildDir = 'build-voice-test', [switch]$Clock, [switch]$LegacyWake)
 $ErrorActionPreference = 'Stop'
 $taskProject = Split-Path -Parent $PSScriptRoot
 $taskModels = Join-Path $taskProject 'components/kws_c11/models/voice_test'
 Push-Location $taskProject
 try {
     $taskOptions = @{
-        AGENT_USER_TEST='ON'; AGENT_APP_LTO='ON'; AGENT_KWS_C11='ON'
+        AGENT_USER_TEST='ON'; AGENT_APP_LTO='ON'; AGENT_KWS_C11=$(if ($LegacyWake) {'ON'} else {'OFF'})
+        AGENT_WAKE_MODEL='wn9s_nihaoxiaozhi'
         AGENT_CLOCK_BOOT=$(if ($Clock) {'ON'} else {'OFF'})
-        AGENT_KWS_TRAINED='ON'; AGENT_KWS_CHANNELS='48'; AGENT_KWS_VERIFIED='ON'
+        AGENT_KWS_TRAINED=$(if ($LegacyWake) {'ON'} else {'OFF'}); AGENT_KWS_CHANNELS=$(if ($LegacyWake) {'48'} else {'24'}); AGENT_KWS_VERIFIED=$(if ($LegacyWake) {'ON'} else {'OFF'})
         AGENT_KWS_VERIFIED_DIR=$taskModels; AGENT_KWS_FUSION='OFF'; AGENT_KWS_SILENCE_PRIME='ON'
         AGENT_KWS_STABLE_WAKE='OFF'; AGENT_TRAINED_WAKE_THRESHOLD='740'
         AGENT_KEYWORD_VERIFY='OFF'; AGENT_BACKGROUND_VERIFY='ON'; AGENT_PACKED_CLIP='ON'
         AGENT_MIC_OVERSAMPLE='ON'; AGENT_MIC_EXACT_CLOCK='ON'; AGENT_MIC_ATTEN_DB='12'
-        AGENT_WS_INCREMENTAL='ON'; AGENT_ISOLATED_ASR='ON'; AGENT_TEXT_PREFETCH='ON'
-        AGENT_LOCAL_FIRST_PREFETCH='ON'; AGENT_REQUEST_SCRATCH_COMPACT='ON'
-        AGENT_CONTEXTUAL_CACHED_ACK='ON'; AGENT_VOICE_HTTP_RELEASE='ON'; AGENT_VOICE_HTTP_FORGET='ON'
+        # Official WakeNet9s shares the unchanged 1.5-MiB app slot. Keep normal
+        # ASR/LLM/TTS and tools; speculative prefetch is a legacy-only profile.
+        AGENT_WS_INCREMENTAL='ON'; AGENT_ISOLATED_ASR='ON'; AGENT_TEXT_PREFETCH=$(if ($LegacyWake) {'ON'} else {'OFF'})
+        AGENT_LOCAL_FIRST_PREFETCH=$(if ($LegacyWake) {'ON'} else {'OFF'}); AGENT_REQUEST_SCRATCH_COMPACT=$(if ($LegacyWake) {'ON'} else {'OFF'})
+        AGENT_CONTEXTUAL_CACHED_ACK=$(if ($LegacyWake) {'ON'} else {'OFF'}); AGENT_VOICE_HTTP_RELEASE='ON'; AGENT_VOICE_HTTP_FORGET='ON'
         AGENT_VOICE_SCRATCH_LOANS='ON'
         AGENT_TLS_COOPERATE='OFF'; AGENT_TLS_ASYM_PERF='OFF'; AGENT_TLS_PUBLIC_PERF='OFF'
         AGENT_TLS_TX_COMPACT='OFF'; AGENT_TLS_PHASE_TRACE='OFF'; AGENT_VOICE_HEAP_DIAGNOSTICS='OFF'

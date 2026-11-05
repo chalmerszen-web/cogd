@@ -1,0 +1,12 @@
+{
+  "complete": true,
+  "synthetic": true,
+  "generator": "Windows SAPI / Microsoft Huihui Desktop / 16000 Hz mono PCM16",
+  "prompts": [{
+    "id": "knowledge",
+    "text": "请用一句话回答太阳系最大的行星是什么。",
+    "path": "ESP32-P4-WIFI6-Touch-LCD-3.5/fixtures/knowledge.wav",
+    "required": ["太阳系", "最大", "行星"],
+    "expected_reply": ["木星"]
+  }]
+}

@@ -45,10 +45,12 @@ def main():
                                    ('verifier', 'kws_trained_model', 'kws_trained_model')]:
         source = getattr(args, name).resolve()
         value = source.read_text(encoding='utf8')
-        if value.count(original) != 1:
+        if value.count(original) == 1 and (original == symbol or not value.count(symbol)):
+            value = value.replace(original, symbol)
+        elif original == symbol or value.count(original) or value.count(symbol) != 1:
             raise ValueError(f'Expected one exported descriptor in {source}')
         target = args.out / (name + '.c')
-        target.write_text(value.replace(original, symbol), encoding='utf8', newline='\n')
+        target.write_text(value, encoding='utf8', newline='\n')
         models.append(target)
     code = ['kws_quant.c', 'kws_detector.c', 'kws_nn.c', 'kws_frontend.c',
             'kws_fft.c', 'kws_pcen.c', 'kws_temporal_owner.c', 'kws_verified.c', 'generated/tables.c']

@@ -1,0 +1,16 @@
+{
+  "temporal_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/kws_temporal_owner.c",
+  "sha256": "8f44689ae5471c423add5e90ef7b7b619f2f736b5a7ec05119d3121de38224f2",
+  "base_owner_sha256": "e4e55cc5228e7b2678a50e33b3afd4363eef0c165708d6d61572193784d4c55a",
+  "policy": "P4 only: two of the latest three verifier scores >= threshold at confirmation (32 ms blocks); primary pending <=256 ms; cooldown only on final acceptance",
+  "workspace_change_bytes": 6016,
+  "wide_runtime_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/wide_kws_verified.c",
+  "wide_header_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/wide_kws_verified_internal.h",
+  "topology": [
+    48,
+    48,
+    48
+  ],
+  "wide_runtime_sha256": "6b3050b2e46db47bc1f7dc4d6d6a285a3b7a3f86c7fc61dbeaf4a85283a7b285",
+  "wide_header_sha256": "b638574ea8590e954f7f7ef2c2abae6a408dcc9329f652780b0db85f6cd26bc8"
+}

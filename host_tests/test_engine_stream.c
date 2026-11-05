@@ -25,6 +25,9 @@ static unsigned scenario,requests,effects,begins,ends,writes,pauses,turns_saved;
 static unsigned tool_joins;
 static unsigned tool_result_appends;
 static bool fail_tool_event;
+#if AGENT_BOARD_P4
+static bool markup_once,markup_always;
+#endif
 enum { HINT_OFF,HINT_OK,HINT_WHITESPACE,HINT_OTHER,HINT_EMPTY,HINT_EMPTY_OBJECT,HINT_PENDING,HINT_REJECTED,HINT_UNKNOWN,
        HINT_INVALID,HINT_META_BAD,HINT_CANCEL,HINT_TOOL_ERROR,HINT_WAL_ERROR,HINT_LAST_OF_FOUR,HINT_CASES };
 static unsigned batch_hint;
@@ -284,7 +287,7 @@ static void check_wire(bool final)
         assert(!!strstr(wire,"Continue this spoken answer in Cantonese.")==!!engine.progress_language);
         assert(!cJSON_GetObjectItemCaseSensitive(root,"tools"));
         assert(!strcmp(agent_json_string(root,"tool_choice"),"none"));
-        assert(strstr(wire,engine.clarify_only?"ASR lacks details":
+        assert(strstr(wire,engine.session_close?"silent for ten seconds":engine.clarify_only?"ASR lacks details":
             core.tool_rounds>=AGENT_ROUNDS_MAX?"Tool-call budget reached":"Planning is complete"));
         if(core.tool_rounds>=AGENT_ROUNDS_MAX)assert(strstr(wire,"completion is unconfirmed"));
         assert(!strstr(wire,"This is the planning stage"));
@@ -336,6 +339,13 @@ static agent_err_t http(void *p,const agent_http_request_t *r,agent_http_feed_fn
         assert(!begins && !spoken_used);return error;
     }
     if(scenario==LATE_TOOL)return tool(feed,ctx,false);
+#if AGENT_BOARD_P4
+    if(markup_once || markup_always) {
+        markup_once=false;
+        agent_err_t error=text_delta(feed,ctx," \n");
+        return error?error:text_delta(feed,ctx,"<"); // Split tag, preceded by whitespace.
+    }
+#endif
     char large[1201];
     for(size_t i=0;i<sizeof(large)-1;i+=6)memcpy(large+i,"你好",6);
     large[sizeof(large)-1]=0;
@@ -366,6 +376,9 @@ static void reset(void)
     memset(&context,0,sizeof(context));memset(flash,255,sizeof(flash));
     requests=effects=begins=ends=writes=pauses=turns_saved=tool_joins=0;wire_used=spoken_used=output_used=0;
     tool_result_appends=0;fail_tool_event=false;
+#if AGENT_BOARD_P4
+    markup_once=markup_always=false;
+#endif
     batch_hint=HINT_OFF;
     borrowed=body_sent=http_done=early=false;spoken[0]=output[0]=0;end_reason=AGENT_OK;
     progress_borrowed=progress_http_fail=progress_cancel=false;progress_begins=progress_ends=0;
@@ -623,6 +636,20 @@ static void light_snapshot_checks(void)
 }
 int main(void)
 {
+    scenario=CANCEL_WAIT;reset();engine.preserve_interrupted=true;
+    assert(agent_engine_turn(&engine,"USER_REQUEST original interrupted question",true)==AGENT_ERR_CANCELLED);
+    assert(turns_saved==1 && ends==1 && !borrowed && !context.prompt_locked);
+    assert(!agent_context_history(&context,&engine.workspace->messages,"test"));
+    assert(strstr(engine.workspace->messages.data,"original interrupted question"));
+    assert(strstr(engine.workspace->messages.data,"Reply interrupted before completion"));
+    agent_end_turn(&core);
+
+    scenario=PLAIN;reset();engine.session_close=true;
+    uint64_t sequence=context.wal.next_seq;
+    assert(!agent_engine_turn(&engine,"USER_REQUEST internal idle event",true));
+    assert(requests==1 && ends==1 && !turns_saved && !effects);
+    assert(context.wal.next_seq==sequence && !borrowed && !context.prompt_locked);
+    agent_end_turn(&core);
     static const agent_err_t errors[CASES]={
         AGENT_OK,AGENT_OK,AGENT_OK,AGENT_OK,AGENT_ERR_TIMEOUT,AGENT_ERR_CANCELLED,
         AGENT_ERR_MEMORY,AGENT_ERR_SERVER,AGENT_ERR_NETWORK,AGENT_ERR_PROTOCOL,AGENT_ERR_NETWORK,AGENT_ERR_LIMIT,
@@ -638,6 +665,9 @@ int main(void)
         assert(!strstr(output,"READY") && !strstr(output,"Temporary"));
         if(scenario==INVALID_TOOL || scenario==USB_STREAM || scenario==USB_NONSTREAM ||
            scenario==PROGRESS_JOIN_FAIL || scenario==PROGRESS_JOIN_CANCEL)assert(!begins && !ends);
+#if AGENT_BOARD_P4
+        else if(scenario==LATE_TOOL)assert(!begins && !ends);
+#endif
         else assert(begins==1 && ends==1);
         if(!error) {
             assert(turns_saved==1);
@@ -664,6 +694,19 @@ int main(void)
     assert(!tool_result_appends && !turns_saved && !begins && !ends && !spoken_used);
     assert(!borrowed && !context.prompt_locked);
     agent_end_turn(&core);
+#if AGENT_BOARD_P4
+    scenario=ONE_TOOL;reset();markup_once=true;
+    agent_err_t markup_result=agent_engine_turn(&engine,"USER_REQUEST",true);
+    if(markup_result)fprintf(stderr,"markup retry: %s requests=%u effects=%u begins=%u cancelled=%u reply=%s\n",agent_err_name(markup_result),requests,effects,begins,atomic_load(&core.cancelled),engine.workspace->reply.text);
+    assert(!markup_result);
+    assert(effects==1 && requests==4 && tool_result_appends==1 && begins==1 && ends==1);
+    assert(!strchr(spoken,'<') && !strchr(output,'<') && turns_saved==1);
+    agent_end_turn(&core);
+    scenario=ONE_TOOL;reset();markup_always=true;
+    assert(agent_engine_turn(&engine,"USER_REQUEST",true)==AGENT_ERR_PROTOCOL);
+    assert(effects==1 && requests==4 && !spoken_used && !output_used && !turns_saved);
+    assert(!borrowed && !context.prompt_locked);agent_end_turn(&core);
+#endif
     progress_checks();
     cached_owner_checks();
     final_batch_checks();

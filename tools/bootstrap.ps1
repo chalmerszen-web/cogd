@@ -1,3 +1,9 @@
+param(
+    [ValidateNotNullOrEmpty()]
+    [ValidateSet('esp32c3', 'esp32p4', 'esp32s3')]
+    [string[]]$Targets = @('esp32c3', 'esp32p4')
+)
+# esp32s3 installs its toolchain only; it does not add an S3 board firmware.
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $toolRoot = Join-Path $projectRoot '.toolchains'
@@ -16,12 +22,16 @@ if (-not (Test-Path -LiteralPath (Join-Path $idfRoot 'export.ps1'))) {
     git -c core.longpaths=true clone --depth 1 --branch v6.1 --recursive --shallow-submodules https://github.com/espressif/esp-idf.git $idfRoot
     if ($LASTEXITCODE) { throw 'ESP-IDF clone failed' }
 }
-# Use Espressif's existing Python, never modify the system Python installation.
+# ESP-IDF creates its own Python environment; firmware targets are selected later.
 Push-Location $idfRoot
 try {
-    & .\install.ps1 esp32c3
+    & .\install.ps1 ($Targets -join ',')
     if ($LASTEXITCODE) { throw 'ESP-IDF installation failed' }
 } finally { Pop-Location }
-& (Join-Path $PSScriptRoot 'bootstrap_speech.ps1')
-if (-not $?) { throw 'Speech backend setup failed' }
-Write-Output 'Ready. Use tools/build_agent.ps1 to build firmware.'
+& python (Join-Path $PSScriptRoot 'verify_dependencies.py')
+if ($LASTEXITCODE) { throw 'Restore the pinned third_party files before building' }
+Write-Output ('Ready. Installed toolchains: ' + ($Targets -join ', '))
+Write-Output 'Build C3 with tools/build_clock.ps1 or P4 with ESP32-P4-WIFI6-Touch-LCD-3.5/tools/build.ps1.'
+if ($Targets -contains 'esp32s3') {
+    Write-Output 'ESP32-S3 toolchain installed only; S3 board adaptation and validation are still required.'
+}

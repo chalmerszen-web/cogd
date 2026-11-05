@@ -1,0 +1,124 @@
+{
+  "status": "FAILED_ACCEPTANCE_DEVELOPMENT_CANDIDATE",
+  "stress_round": 2,
+  "training": "wake_training/20261101/three-rounds/train-r2",
+  "features": "wake_training/20261101/three-rounds/features-r2",
+  "parent_status": "DEVELOPMENT CANDIDATE: acoustic and dialogue checks pending",
+  "historical_round1_and_round2_reused_for_training": true,
+  "historical_round3_used_for_training": false,
+  "new_test_used_for_training": false,
+  "evaluation_scope": "training_monitor",
+  "parity": [
+    {
+      "head": "first",
+      "frames": 300,
+      "integer_values": 79500,
+      "exact": true
+    },
+    {
+      "head": "second",
+      "frames": 300,
+      "integer_values": 79500,
+      "exact": true
+    },
+    {
+      "head": "verifier",
+      "frames": 300,
+      "integer_values": 158700,
+      "exact": true
+    }
+  ],
+  "quantized_training_monitor": {
+    "nihao_zh": {
+      "clips": 136,
+      "hits": 135,
+      "false_events": 0
+    },
+    "negative": {
+      "clips": 1616,
+      "hits": 0,
+      "false_events": 0
+    },
+    "nihao_yue": {
+      "clips": 95,
+      "hits": 94,
+      "false_events": 0
+    },
+    "hi_zh": {
+      "clips": 174,
+      "hits": 174,
+      "false_events": 0
+    },
+    "hi_yue": {
+      "clips": 158,
+      "hits": 158,
+      "false_events": 0
+    },
+    "p4_nihao_zh": {
+      "clips": 39,
+      "hits": 39,
+      "false_events": 0
+    },
+    "p4_negative": {
+      "clips": 310,
+      "hits": 0,
+      "false_events": 0
+    },
+    "p4_nihao_yue": {
+      "clips": 41,
+      "hits": 41,
+      "false_events": 0
+    },
+    "p4_hi_zh": {
+      "clips": 19,
+      "hits": 19,
+      "false_events": 0
+    },
+    "p4_hi_yue": {
+      "clips": 34,
+      "hits": 34,
+      "false_events": 0
+    }
+  },
+  "training_report": {
+    "complete": true,
+    "method": "joint primary-average and verifier two-of-three confirmation",
+    "heads": [
+      {
+        "head": "first",
+        "best_step": 3600,
+        "checkpoint_sha256": "75388fec5a07b038e5cb1a1d8114d27cff52f62e85f95acb76c11cd37cd4d121",
+        "model_c_sha256": "c57cbcdc6f0991723ef1cebcf8ea0bafe38a69b9beee01466346e2b4bcf2bd3b"
+      },
+      {
+        "head": "second",
+        "best_step": 3600,
+        "checkpoint_sha256": "7a1e3b477ac4687bbda05c664f7d8dee560c009cfb2c52c5d8a05a2c5dba9147",
+        "model_c_sha256": "c4971e19efdf1677354f485d0e0c377ccdd65ce206ad05ebf830493433c85fcd"
+      },
+      {
+        "head": "verifier",
+        "best_step": 3600,
+        "checkpoint_sha256": "b49ea4a592881663d54f44a77f5a1ed2776861b6029dc77d2e5a17ab1c0809bc",
+        "model_c_sha256": "4d82f31e9cc2f6778bd92b2cae74ba03e86b68ee5fa0240e204c201b0d00b2bf"
+      }
+    ],
+    "seconds": 313.828,
+    "evaluation_scope": "training_monitor",
+    "round1_test_reused_for_training": true,
+    "round2_audio_used_for_training": true,
+    "round3_audio_read": false,
+    "training_device": "cuda"
+  },
+  "runtime": {
+    "temporal_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/kws_temporal_owner.c",
+    "sha256": "8f44689ae5471c423add5e90ef7b7b619f2f736b5a7ec05119d3121de38224f2",
+    "base_owner_sha256": "e4e55cc5228e7b2678a50e33b3afd4363eef0c165708d6d61572193784d4c55a",
+    "policy": "P4 only: two of the latest three verifier scores >= threshold at confirmation (32 ms blocks); primary pending <=256 ms; cooldown only on final acceptance",
+    "workspace_change_bytes": 0
+  },
+  "three_rounds_result": {
+    "path": "ESP32-P4-WIFI6-Touch-LCD-3.5/evidence/wake4-three-rounds-20261101/result.json",
+    "sha256": "623d72e7c7f96d7b611925136049503241e5cec8254a9680ccbfdf94823d15ca"
+  }
+}

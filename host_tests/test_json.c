@@ -85,6 +85,11 @@ int main(void)
     assert(!agent_utf8_valid("\xed\xa0\x80", 3));
     char deep[40]; memset(deep, '[', 20); memset(deep + 20, ']', 20);
     assert(!agent_json_parse(deep, sizeof(deep)));
+    /* A 400 ms realtime 24 kHz PCM delta carries 25,600 Base64 bytes. */
+    static char audio[25616];memcpy(audio,"{\"delta\":\"",10);memset(audio+10,'A',25600);
+    strcpy(audio+25610,"\"}");
+    assert(!agent_json_parse(audio,strlen(audio)));
+    json=agent_json_parse_bounded(audio,strlen(audio),262144);assert(json);cJSON_Delete(json);
     agent_json_writer_init(&w, output, 3); agent_json_quote(&w, "abcd");
     assert(w.error == AGENT_ERR_LIMIT);
     puts("json: escaping, UTF-8, strict numbers, duplicates, depth and size bounds PASS");

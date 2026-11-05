@@ -1,4 +1,5 @@
 #include "asr_realtime.h"
+#include "../model_usage.h"
 #include "json.h"
 #include "pcm_json.h"
 #include <stdio.h>
@@ -171,6 +172,8 @@ agent_err_t agent_asr_realtime_receive(agent_asr_realtime_t *q,const char *data,
     q->used+=part->length;
     if(part->final) {
         cJSON *root=agent_json_parse(q->speech->scratch,q->used);
+        const char *receipt_type=agent_json_string(root,"type");
+        agent_model_usage(AGENT_ASR_RT_MODEL,root,receipt_type && !strcmp(receipt_type,"session.finished"));
         error=root?dispatch(q,root):AGENT_ERR_JSON;
         cJSON_Delete(root);q->message=false;q->used=0;
     }
@@ -231,6 +234,10 @@ agent_err_t agent_asr_realtime_begin(agent_asr_realtime_t *q)
         agent_json_writer_t w;writer(q,&w,"session.update");
         agent_json_raw(&w,",\"session\":{\"input_audio_format\":\"pcm\",\"sample_rate\":16000,\"turn_detection\":");
         agent_json_raw(&w,q->segments?"{\"type\":\"server_vad\",\"threshold\":0.2,\"silence_duration_ms\":700}":"null");
+#if AGENT_BOARD_P4
+        /* Bias the recognizer itself; never rewrite arbitrary dictated names. */
+        agent_json_raw(&w,",\"input_audio_transcription\":{\"corpus\":{\"text\":\"设备助手名叫小言。领域词：小言、摄像头、人形检测、望向镜头、绘图、联网搜索。\"}}");
+#endif
         agent_json_raw(&w,"}}");
         error=send_json(q,&w);q->updating=!error;
     }

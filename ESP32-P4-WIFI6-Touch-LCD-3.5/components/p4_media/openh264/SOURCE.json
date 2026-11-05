@@ -1,0 +1,11 @@
+{
+  "source": "https://codeload.github.com/cisco/openh264/zip/refs/tags/v2.6.0",
+  "version": "v2.6.0",
+  "archive_sha256": "b1ca643eadbbf16f74c86a66ab487f38691d8dbdda435683b149b2ce2c8077ec",
+  "files": 162,
+  "local_adaptations": [
+    "ESP CPU count and unavailable pthread/sysctl portability guards",
+    "RISC-V int32_t return signatures in decoder buffer expansion",
+    "Decoder aligned allocations explicitly use PSRAM, retaining internal RAM for TLS/DMA"
+  ]
+}

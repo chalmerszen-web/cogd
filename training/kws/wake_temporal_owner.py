@@ -1,4 +1,9 @@
-"""One causal256ms evidence window; the original detector owns every output."""
+"""Historical UX277 controller, retained for reproducing its frozen reports.
+
+This uses candidate-owned cooldown and is not the decision oracle for firmware
+0.12.5 and later. Current firmware commits cooldown on final acceptance; compare
+its actual C controller against frozen scores when validating that change.
+"""
 from pair_qat import events
 
 

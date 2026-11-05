@@ -1,25 +1,38 @@
-# Porting contract
+# 将 COGD 移植到 ESP32-S3 或另一块开发板
 
-The C11 core, JSON/SSE, tool policy, NOR log, merge and sync modules contain no ESP-IDF includes. `platform/port_contract.h` collects platform, transport, Flash, input/output and optional model-runtime contracts. `agent_plugin_t` provides the versioned registry and lifecycle.
+2026-11-06。交接基线：P4 `0.9.2-p4-tutor` 产品设计、当前共享核心、官方“你好小智”。本仓库现有可构建目标为 ESP-HI C3 与 Waveshare P4 3.5；S3 的板型、引脚、Flash/PSRAM、外设与固件尚未验收。
 
-M2 changes operation tables and uses ABI major 2. DIRECT LLM adapters implement `compose` with synchronous message/schema producers. Transports call `agent_http_write_body` before delivering any response bytes; it splits writes into at most 4096 bytes, checks cancellation and enforces the exact declared length. Never retain a producer's chunk after its write callback returns. Each HTTP attempt owns a fixed context selection until the request finishes; context writes/compaction reject that interval. Single records and response buffers remain 24 KiB while the bounded outgoing wire request may exceed that size.
+既有公共平台契约仍见 `platform/port_contract.h`、各插件操作表与 [历史移植契约](history/PORTING_before_multiboard_20261106.md)。重编译所有插件以匹配当前 ABI；不能强制转换旧操作表。HTTP body producer 的数据只在同步写回调期间有效，Flash/context 写入必须遵守原有所有权和取消契约。
 
-ESP-IDF supplies time/random/KV, USB, one network worker/queue, Wi-Fi, verified HTTPS and NOR partition operations. Credential access is restricted to its HTTPS adapter. USB reserves GPIO18/19; the M0 board output initializes GPIO8 RMT after boot.
+## 先固定真实硬件
 
-The optional audio extension adds `agent_audio_ops_t` from `plugins/audio/audio.h`: asynchronous score/capture/replay acceptance, stop, volume, microphone enable, status and typed inspection. A port supplies lazy DMA lifecycles, a separate durable clip store and fresh level timestamps. Portable score, meter, clip and replay DSP are reused unchanged. ESP-Hi's PDM DAC/ADC configuration and high-priority bounded worker are board choices, not assumptions imposed on other chips.
+记录板名、芯片型号/修订、Flash/PSRAM、麦克风/编解码器/喇叭、LCD/触摸、摄像头、USB 与供电。建立独立工程和构建目录，保留 NVS/上下文等数据分区；不复制 P4 的 MIPI、C6 SDIO、引脚或分区假装它们存在于 S3。
 
-`agent_control_backend_t` supplies trusted pin capabilities, resource masks, GPIO/LED state access and managed audio operations. Reserve USB/Flash and every unverified pin before publishing capabilities; the model cannot enlarge this table. The board calls `agent_control_tick` regularly with monotonic milliseconds and shares one arbiter with direct tools. Keep claims during asynchronous cleanup until drivers stop and outputs are restored. A store that blocks DMA during erasure must coordinate admission with these resources.
+## 接入边界
 
-Context recall takes portable `now_ms`/`clock_ctx` callbacks and a cancellation flag. Provide monotonic time so the ten-second scan bound is enforced between records. This clock is unrelated to synchronized wall time used for TLS validation. M3 operation tables use ABI 3, including typed song admission/readback; older tables must not be cast into the new shape. `agent_song_t` remains independent of SDK handles, contains 710 bytes and never expands into a complete PCM allocation. One local identity must have exactly one monotonic sequence allocator; gateways may only echo already-issued local IDs.
+| 接口 | 现有参考 | S3 需要实现/核对 |
+|---|---|---|
+| 板型与工具能力 | C3 `boards/esp_hi/{board,hardware,control_board}.c`；P4 `board/` | 实际外设列表、IO 冲突、工具注册与不支持回执。不能把 C3 灯光或 P4 摄像头暴露成不存在的功能。 |
+| 音频 | 共用 `boards/esp_hi/audio_board.c`；P4 `p4_audio.c` | 独立采集/播放驱动、16 kHz 输入、24 kHz 云音频输出/重采样、DAC 参考、DMA 内存、采样时钟、取消和队列所有权。不能继承 C3 ADC 私有时钟。 |
+| 本地唤醒 | `speech_backend.h`；C3 WakeNet9s，P4 WakeNet10 | 官方支持该芯片的模型/库，默认词“你好小智”，测量堆与推理时长。P4 `wn10_nihaoxiaozhi` 是 PIE `p2` 权重，S3 应按官方选择 `p1`；当前 `pack_wake_model.py` 的 wn10 分支固定 P4，必须扩展显式目标选择后再用。 |
+| 网络/配置 | `runtime.c`、P4 `p4_wifi.cpp` | S3 原生 Wi-Fi 与适合本板的配网界面；重连不重复工具，不泄漏配置。不能依赖 P4 的 C6 固件和 SDIO。 |
+| 显示/触摸 | `display_board.c`、P4 `p4_vision.cpp` | 实际控制器、方向、分辨率、触摸坐标与 LVGL 资源预算。字体资产与分区需一同构建。 |
+| 摄像头/媒体 | P4 `p4_vision.cpp`、`p4_media/` | 根据 S3 资源单独评估采集与解码；缺少外设则不注册功能，不能照搬 P4 原片解码性能结论。 |
+| 实时对话/教学 | `p4_conversation.c`、`p4_agent.h`、`p4_cloud.cpp` | 抽取/实现所需能力 ABI，再接同一会话和工具协议；保持代数门控、音频优先、后台回执与教学状态语义。不要另建第二套 COGD 核心。 |
+| 持久上下文 | `plugins/context/`、`platform/espidf/store.c` | 复用 WAL/CRC、双 bank 与真实容量边界；常规升级不清 NVS、历史或录音。 |
 
-POSIX is the executable host verification target. `platform/posix/file_flash.c` models NOR with pread/pwrite, 1-to-0 checks, aligned erasure, fsync and restartable files. CTest also uses an in-memory NOR model for byte-level faults. Host tests run exactly the portable firmware modules under GCC C11, ASan and UBSan. This is not a claim that a desktop cloud agent has been shipped.
+先补板型配置和驱动，再扩展 `main/CMakeLists.txt` 的目标守卫与统一构建入口。不能把 `AGENT_BOARD_P4=ON` 当成 S3 开关；该宏仍包含 P4 专属 BSP、媒体、教学和 PSRAM 依赖。
 
-OpenWrt: provide monotonic time, entropy, durable KV sequence reservation, a verified HTTPS implementation, scheduling and a log-backed Flash adapter or equivalent durable contract. Board GPIO permissions and concrete distribution/TLS libraries must be selected for the target image. No OpenWrt binary is included.
+## 构建环境
 
-JieLi: a specific SKU/SDK, memory map, toolchain and TLS/network capability are required. Implement the same bounded callbacks without exposing SDK handles in the kernel. No JieLi binary or simulated hardware success is claimed.
+克隆完整仓库，安装 ESP-IDF 6.1.0 与 `esp32s3` 工具链；Windows 可运行 `tools/bootstrap.ps1 -Targets esp32s3`。第三方运行源码/模型清单需通过 `python tools/verify_dependencies.py`。各项目的 `dependencies.lock` 用于重建其自身依赖，不要将 P4 的锁文件当作 S3 已验证配置。
 
-M4 uses ABI major 4: the typed audio table adds `listen`, and `agent_audio_state_t` includes listening ownership. Rebuild every plugin against these headers; older operation tables and state layouts are rejected through the descriptor ABI. Keyword inference, ADC/I2S and model allocation remain in the board adapter. The portable endpoint consumes 20-ms boolean speech decisions and bounds pauses, no-speech waiting and total recording time.
+禁止提交凭据、NVS/完整 Flash 备份、录音、工具链、managed_components 或构建缓存。需要新模型时记录官方来源提交、许可证、逐文件 SHA256；提交构建必需资产而非指向某台开发机的文件路径。
 
-Model runtime is only `probe/load/infer/unload` with normalized events. Nothing registers or allocates it in M0. New tools must be statically described, parameter-validated and added to the allowlist; plugins cannot turn model text into shell commands.
+## 有界验收顺序
 
-The LCD extension uses ABI major 5. The typed tool table adds `hardware_prompt`, `hardware` and `display` operations. Supply board-specific facts; do not reuse ESP-HI wiring on other targets. Portable display parsing/time formatting/row rendering are in plugins/display; SPI, resource ownership and synchronized wall-clock acquisition are board responsibilities. A gateway must supply its own authoritative board prompt. Rebuild plugins; ABI 4 tables cannot be cast to ABI 5.
+1. 主机共享回归；新板编译、分区/资源检查，保留日志。
+2. 识别芯片与端口、备份数据、烧录该板专用镜像，读回校验应用/分区/必要资产。
+3. 复位联网、本地官方唤醒、完整问答与返回监听；先确认实际采播，再做续问与插话。
+4. 对本板存在的显示/触摸/相机/媒体/教学逐项验证；软件状态和现场可见行为分开记。
+5. 报告 PASS / FAIL / NOT RUN、镜像哈希与剩余问题。C3、P4 的结果不能转记为 S3 结果，P4 现存误打断问题也不能因移植自动标为解决。

@@ -1,0 +1,8 @@
+dependencies:
+  idf: "==6.1.0"
+  waveshare/esp32_p4_wifi6_touch_lcd_4_3: "==1.0.1"
+  espressif/esp_wifi_remote: ">=1.6,<2.0"
+  espressif/esp_hosted: ">=2.12,<3.0"
+  espressif/esp-sr:
+    version: ">=2.3,<3.0"
+    require: no

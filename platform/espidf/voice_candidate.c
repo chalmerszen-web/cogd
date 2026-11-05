@@ -49,9 +49,17 @@ typedef struct {
     uint8_t *cache[CACHE_BYTES/AGENT_DRAFT_PAGE_BYTES];
     unsigned cache_peak;
     char scratch[AGENT_RT_SCRATCH];
+#if !AGENT_BOARD_P4
     StaticTask_t tcb;
     _Alignas(16) StackType_t stack[WORKER_STACK_BYTES/sizeof(StackType_t)];
+#endif
 } candidate_work_t;
+#if AGENT_BOARD_P4
+/* The borrowed capture arena can be in PSRAM on P4. FreeRTOS requires an
+ * internal TCB/stack; the single joined candidate owner reuses these buffers. */
+static StaticTask_t p4_candidate_tcb;
+static _Alignas(16) StackType_t p4_candidate_stack[WORKER_STACK_BYTES/sizeof(StackType_t)];
+#endif
 _Static_assert(sizeof(candidate_work_t)+15<=ESP_AGENT_CANDIDATE_PREFIX_BYTES,"Candidate overlaps live source records");
 _Static_assert(sizeof(StackType_t)==1,"IDF task stack sizes are bytes");
 /* Small coordinator survives after the engine reclaims the borrowed arena. */
@@ -221,7 +229,11 @@ static void remember(candidate_work_t *w)
 {
     strcpy(owner.ack.text,w->reply.text);
     strcpy(owner.ack.language,(atomic_load(&w->gate.request)&AGENT_CANDIDATE_YUE)?"yue":"zh");
+#if AGENT_BOARD_P4
+    event("candidate_text",owner.ack.text);
+#else
     event("candidate_play",owner.ack.text);
+#endif
 }
 static agent_err_t start_stream(candidate_work_t *w,void *memory,size_t bytes)
 {
@@ -274,6 +286,11 @@ static bool reply_valid(candidate_work_t *w)
 }
 static agent_err_t release_ready(candidate_work_t *w)
 {
+#if AGENT_BOARD_P4
+    /* Final-ASR admission still applies. Speak accepted text through the
+     * ordinary configured TTS, not through the router's different voice. */
+    return AGENT_OK;
+#endif
     /* Worker alone owns parser/cache/speaker writes. Main publishes the
      * disjoint ASR tail after joining capture and admitting final input.
      * Never drain inside a JSON callback or across a partial WS message. */
@@ -521,7 +538,11 @@ void esp_agent_voice_candidate_ready(void)
     if(!owner.warm && atomic_load(owner.cancelled)) {atomic_store(&w->gate.cancelled,true);return;}
     /* Reply handling shares ASR upload priority. The transport temporarily
      * lowers only speculative TLS setup, then restores this priority. */
+#if AGENT_BOARD_P4
+    owner.task=xTaskCreateStatic(worker,"candidate",WORKER_STACK_BYTES,w,3,p4_candidate_stack,&p4_candidate_tcb);
+#else
     owner.task=xTaskCreateStatic(worker,"candidate",WORKER_STACK_BYTES,w,3,w->stack,&w->tcb);
+#endif
     if(!owner.task) {
         w->result=AGENT_ERR_MEMORY;atomic_store(&w->done,true);
         if(owner.warm)atomic_store(&idle_state,ESP_AGENT_CANDIDATE_EXPIRED);
@@ -605,8 +626,10 @@ static agent_err_t finish(agent_engine_t *e,const char *input,agent_err_t error,
     if(!w) {
         agent_err_t restored=esp_agent_workspace_restore();return error?error:restored;
     }
-    uint8_t rgb[3];
-    bool local=!resuming && !error && agent_speech_light_literal(input,rgb);
+    bool local=false;
+#if !AGENT_BOARD_P4
+    uint8_t rgb[3];local=!resuming && !error && agent_speech_light_literal(input,rgb);
+#endif
     bool agrees=resuming || (!local && agent_candidate_final(&w->gate,input,!error));
     /* One immutable nomination becomes authoritative only after full input.
      * A validated sentence may then stream while its remaining PCM arrives. */
@@ -746,7 +769,16 @@ static agent_err_t finish(agent_engine_t *e,const char *input,agent_err_t error,
     }
     bool task=!direct_answer(w->reply.guess);
     if(streaming) {if(!error)error=w->result;}
-    else error=start_stream(w,w->scratch,4096);
+#if AGENT_BOARD_P4
+    if(!streaming) {
+        remember(w);close_session(w);cache_release(w);owner.work=NULL;
+        agent_err_t restored=esp_agent_workspace_restore();if(!error)error=restored;
+        if(!task && !error){*handled=true;error=esp_agent_p4_speak(owner.ack.text);owner.ack.spoken=!error;
+            if(e->workspace && !resuming)error=persist(e,input,error);}
+        return error;
+    }
+#endif
+    if(!streaming)error=start_stream(w,w->scratch,4096);
     if(!error && !streaming)error=drain(w);
     if(!error && task) {error=esp_hi_stream_cache_seal();owner.ack.pending=!error;}
     if(atomic_load(&w->streaming) && !owner.ack.pending)error=esp_hi_stream_finish(error);

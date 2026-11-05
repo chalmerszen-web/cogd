@@ -6,6 +6,7 @@
 typedef struct { char *data; size_t used, capacity; agent_err_t error; } agent_json_writer_t;
 bool agent_utf8_valid(const char *text, size_t length);
 cJSON *agent_json_parse(const char *text, size_t length);
+cJSON *agent_json_parse_bounded(const char *text,size_t length,size_t limit);
 const char *agent_json_string(const cJSON *object, const char *key);
 bool agent_json_uint(const cJSON *value, uint64_t maximum, uint64_t *out);
 void agent_json_writer_init(agent_json_writer_t *writer, char *data, size_t capacity);

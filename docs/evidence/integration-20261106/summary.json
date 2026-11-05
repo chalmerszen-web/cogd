@@ -1,0 +1,482 @@
+{
+  "date": "2026-11-06",
+  "release_status": "development_candidate_with_known_failures",
+  "overall_acceptance_passed": false,
+  "product_baseline": "ESP32-P4 3.5 inch 0.9.2-p4-tutor candidate 06",
+  "wake_word": "你好小智",
+  "upstream_chat_finished_before_integration": true,
+  "upstream_chat_id": "01a19253-d090-7243-af3b-b519707de547",
+  "host_tests": {
+    "status": "PASS",
+    "passed": 102,
+    "failed": 0,
+    "elapsed_seconds": 80.14,
+    "log_sha256": "4fbdc2d034e5316f2dcaa95140f1bd779c8b383102e6554bbb98a6bf896f801e"
+  },
+  "c3": {
+    "report": "c3-build.json",
+    "build": "PASS",
+    "hardware": "NOT_RUN",
+    "flashed": false
+  },
+  "s3": {
+    "implementation": "NOT_IMPLEMENTED",
+    "hardware": "NOT_RUN",
+    "handoff": "../../PORTING.md"
+  },
+  "p4": {
+    "version": "0.9.2-p4-tutor",
+    "build": "PASS",
+    "app_bytes": 5751296,
+    "app_sha256": "75a4fc0fc4ca86da4c08db894a118e7af7c2eaf64bffd11187d08c5e2f23408a",
+    "readback_before_sha256": "75a4fc0fc4ca86da4c08db894a118e7af7c2eaf64bffd11187d08c5e2f23408a",
+    "readback_after_sha256": "75a4fc0fc4ca86da4c08db894a118e7af7c2eaf64bffd11187d08c5e2f23408a",
+    "flashed_app_only": true,
+    "flash_offset": "0x10000",
+    "preflash_backup_sha256": "3bc045b5c11a2c922fefbbc8e8286ddada282162ac3d8b0170a980d36229cd93",
+    "protected_ranges_verified": [
+      [
+        0,
+        65536
+      ],
+      [
+        6356992,
+        16777216
+      ]
+    ],
+    "protected_ranges_timing": "After app flash, before tests. Tests intentionally update context/media cache.",
+    "protected_verify_log_sha256": "05c8383fdf38aab1fce177a67c36539500aee0dace8daefe585cceb1675dff32",
+    "upstream_binary_comparison": {
+      "upstream_sha256": "95dbfd9454545d55fc86e09e81d680325a665862e4e3ef2c3b5b162358112a29",
+      "different_bytes": 84,
+      "error_line_immediate_bytes": 15,
+      "error_line_sites": 12,
+      "source_line_delta": 4,
+      "build_time_bytes": 4,
+      "elf_sha_bytes": 32,
+      "image_tail_checksum_and_sha_bytes": 33,
+      "other_bytes_identical": true,
+      "method": "Byte comparison and paired ELF disassembly of esp_agent_run: addi a2,a2,imm supplies line to _esp_error_check_failed.",
+      "causality": "Does not explain stream underruns or change FAIL status."
+    },
+    "final_after_reboot": {
+      "passed": true,
+      "host_clock_injection": false,
+      "port_released": true,
+      "status": {
+        "version": "0.9.2-p4-tutor",
+        "busy": false,
+        "wifi": true,
+        "time_valid": true,
+        "free_heap": 24968315,
+        "internal_free": 181751,
+        "psram_free": 24786564
+      },
+      "wake": {
+        "enabled": true,
+        "state": "listening",
+        "word": "你好小智",
+        "model": "wn10_nihaoxiaozhi",
+        "error": "ok"
+      },
+      "realtime": {
+        "active": false,
+        "ready": false,
+        "turns": 0,
+        "interrupts": 0,
+        "stream_underruns": 0,
+        "tx_deadline_misses": 0,
+        "tx_gap_max_ms": 0,
+        "error": "ok"
+      }
+    }
+  },
+  "tests": {
+    "voice-01": {
+      "status": "FAIL",
+      "error": "RuntimeError: Device has not synchronized its own clock",
+      "elapsed_seconds": 3.74,
+      "raw_report_sha256": "5972b09a57b50337b023e8da616603787eea598003271f374c8241212515712d",
+      "scope": "Harness precondition failed before acoustic cases: bounded SNTP wait added afterward."
+    },
+    "voice-02": {
+      "status": "FAIL",
+      "error": "TimeoutError: Realtime session did not close",
+      "elapsed_seconds": 81.57,
+      "raw_report_sha256": "3c939e6a345abc079899fc258ea020fce3d96924f0f698ac99e41c12a2d97c4a",
+      "scope": "Serial log interleaving corrupted realtime_closed JSON; device returned listening. Harness now requires actual closed state and retains event_missing."
+    },
+    "voice-03": {
+      "status": "PASS",
+      "error": null,
+      "elapsed_seconds": 89.45,
+      "raw_report_sha256": "5c49ebbb48b777ff848d57d664b526412b12273dfb10543bc5a89223e962a811",
+      "cases": {
+        "chat_followup": {
+          "passed": true,
+          "closed_event_missing": false,
+          "final": {
+            "status": {
+              "version": "0.9.2-p4-tutor",
+              "busy": false,
+              "wifi": true,
+              "time_valid": true,
+              "free_heap": 24914775,
+              "internal_free": 173071,
+              "psram_free": 24741704
+            },
+            "wake": {
+              "enabled": true,
+              "state": "listening",
+              "word": "你好小智",
+              "model": "wn10_nihaoxiaozhi",
+              "error": "ok"
+            },
+            "realtime": {
+              "active": false,
+              "ready": false,
+              "turns": 3,
+              "interrupts": 0,
+              "stream_underruns": 0,
+              "tx_deadline_misses": 0,
+              "tx_gap_max_ms": 15,
+              "error": "ok"
+            }
+          }
+        },
+        "barge": {
+          "passed": true,
+          "source_start_to_observed_cut_ms": 686,
+          "closed_event_missing": true,
+          "final": {
+            "status": {
+              "version": "0.9.2-p4-tutor",
+              "busy": false,
+              "wifi": true,
+              "time_valid": true,
+              "free_heap": 24914715,
+              "internal_free": 173071,
+              "psram_free": 24741644
+            },
+            "wake": {
+              "enabled": true,
+              "state": "listening",
+              "word": "你好小智",
+              "model": "wn10_nihaoxiaozhi",
+              "error": "ok"
+            },
+            "realtime": {
+              "active": false,
+              "ready": false,
+              "turns": 2,
+              "interrupts": 1,
+              "stream_underruns": 0,
+              "tx_deadline_misses": 0,
+              "tx_gap_max_ms": 15,
+              "error": "ok"
+            }
+          }
+        }
+      },
+      "explicit_end_recheck": {
+        "explicit_end_passed": true,
+        "evidence": "voice-03/report.json",
+        "source": "saved physical events, not a new acoustic run",
+        "idle_fallback_rejected": true,
+        "no_user_rejected": true,
+        "no_reply_rejected": true
+      }
+    },
+    "media-01": {
+      "status": "PASS",
+      "error": null,
+      "elapsed_seconds": 46.63,
+      "raw_report_sha256": "364f859359097d9b58a310ecec00728d79a340efe7e4d12c3e7ff23602aa9793",
+      "result": {
+        "state": "played",
+        "error": 0,
+        "source": "original_mp4_high_aac",
+        "processor": "p4_only",
+        "frames": 60,
+        "cached_frames": 60,
+        "decoded_frames": 100,
+        "width": 320,
+        "height": 480,
+        "duration_ms": 3999,
+        "prepare_ms": 14864,
+        "play_ms": 4233,
+        "play_fps": 15.3,
+        "schedule_late_max_ms": 45,
+        "schedule_early_max_ms": 75,
+        "presentation_lead_ms": 80,
+        "paint_max_ms": 47,
+        "audio_underruns": 0,
+        "cache_bytes": 317808,
+        "min_heap": 17053215,
+        "min_internal_heap": 141303,
+        "audio_rate": 16000,
+        "profile_ms": {
+          "network": 23,
+          "decode": 4459,
+          "convert": 3510,
+          "jpeg": 154,
+          "flash": 5936
+        },
+        "skipped_nonref": 20,
+        "rendered": true,
+        "job_id": 3
+      },
+      "software_taps": [
+        {
+          "paused": {
+            "state": "paused",
+            "running": true,
+            "position_ms": 180,
+            "generation": 5,
+            "replays": 1
+          },
+          "held": {
+            "state": "paused",
+            "running": true,
+            "position_ms": 180,
+            "generation": 5,
+            "replays": 1
+          },
+          "ended": {
+            "state": "ended",
+            "running": false,
+            "position_ms": 3999,
+            "generation": 5,
+            "replays": 1
+          }
+        },
+        {
+          "paused": {
+            "state": "paused",
+            "running": true,
+            "position_ms": 240,
+            "generation": 5,
+            "replays": 2
+          },
+          "held": {
+            "state": "paused",
+            "running": true,
+            "position_ms": 240,
+            "generation": 5,
+            "replays": 2
+          },
+          "ended": {
+            "state": "ended",
+            "running": false,
+            "position_ms": 3999,
+            "generation": 5,
+            "replays": 2
+          }
+        },
+        {
+          "paused": {
+            "state": "paused",
+            "running": true,
+            "position_ms": 180,
+            "generation": 5,
+            "replays": 3
+          },
+          "held": {
+            "state": "paused",
+            "running": true,
+            "position_ms": 180,
+            "generation": 5,
+            "replays": 3
+          },
+          "ended": {
+            "state": "ended",
+            "running": false,
+            "position_ms": 3999,
+            "generation": 5,
+            "replays": 3
+          }
+        }
+      ],
+      "physical_touch_tested": false,
+      "concurrent_media_voice_tested": false
+    },
+    "tutor-01": {
+      "status": "FAIL",
+      "error": "RuntimeError: Audio continuity check failed: stream_underruns",
+      "elapsed_seconds": 111.23,
+      "raw_report_sha256": "3168993392a3e15fc6ac85e2a211fb52e2afcdfd422daf47c5583a6416d3afc6",
+      "functional_sequence_observed": true,
+      "overall_audio_continuity_passed": false,
+      "question_source": "test_image_not_camera",
+      "question": {
+        "question_summary": "第1题：解方程 2x + 5 = 17。",
+        "question_id": 1
+      },
+      "solution": {
+        "tutor_state": "complete",
+        "teaching_state": "choice",
+        "revision": 1,
+        "step_numbers": [
+          1,
+          2
+        ]
+      },
+      "step2": {
+        "question_id": 1,
+        "revision": 1,
+        "current_step": 2,
+        "visible_step": 2
+      },
+      "done_state": {
+        "question_id": 1,
+        "revision": 1,
+        "teaching_state": "done",
+        "tutor_state": "complete"
+      },
+      "final": {
+        "status": {
+          "version": "0.9.2-p4-tutor",
+          "busy": false,
+          "wifi": true,
+          "time_valid": true,
+          "free_heap": 24841275,
+          "internal_free": 172407,
+          "psram_free": 24668868
+        },
+        "wake": {
+          "enabled": true,
+          "state": "listening",
+          "word": "你好小智",
+          "model": "wn10_nihaoxiaozhi",
+          "error": "ok"
+        },
+        "realtime": {
+          "active": false,
+          "ready": false,
+          "turns": 7,
+          "interrupts": 0,
+          "stream_underruns": 2,
+          "tx_deadline_misses": 0,
+          "tx_gap_max_ms": 88,
+          "error": "ok"
+        }
+      },
+      "explicit_end_recheck": {
+        "passed": true,
+        "source": "saved physical events, not a new run",
+        "events": [
+          {
+            "stage": "realtime_user",
+            "time_ms": 436524,
+            "text": "先聊到这里，再见。"
+          },
+          {
+            "stage": "realtime_answer",
+            "time_ms": 437978,
+            "text": "好的，再见！"
+          },
+          {
+            "stage": "realtime_playback_done",
+            "time_ms": 438725
+          }
+        ]
+      }
+    },
+    "tutor-02": {
+      "status": "FAIL",
+      "error": "RuntimeError: Audio continuity check failed: stream_underruns",
+      "elapsed_seconds": 110.86,
+      "raw_report_sha256": "7688cd0b3a284d0d6464583fbe124245d84664b94fb7c2794c9f3c830211fea6",
+      "functional_sequence_observed": true,
+      "overall_audio_continuity_passed": false,
+      "question_source": "test_image_not_camera",
+      "question": {
+        "question_summary": "第1题：解方程 2x + 5 = 17。",
+        "question_id": 2
+      },
+      "solution": {
+        "tutor_state": "complete",
+        "teaching_state": "choice",
+        "revision": 1,
+        "step_numbers": [
+          1,
+          2
+        ]
+      },
+      "step2": {
+        "question_id": 2,
+        "revision": 1,
+        "current_step": 2,
+        "visible_step": 2
+      },
+      "done_state": {
+        "question_id": 2,
+        "revision": 1,
+        "teaching_state": "done",
+        "tutor_state": "complete"
+      },
+      "final": {
+        "status": {
+          "version": "0.9.2-p4-tutor",
+          "busy": false,
+          "wifi": true,
+          "time_valid": true,
+          "free_heap": 24837771,
+          "internal_free": 171287,
+          "psram_free": 24666484
+        },
+        "wake": {
+          "enabled": true,
+          "state": "listening",
+          "word": "你好小智",
+          "model": "wn10_nihaoxiaozhi",
+          "error": "ok"
+        },
+        "realtime": {
+          "active": false,
+          "ready": false,
+          "turns": 6,
+          "interrupts": 0,
+          "stream_underruns": 5,
+          "tx_deadline_misses": 3,
+          "tx_gap_max_ms": 2012,
+          "error": "ok"
+        }
+      },
+      "explicit_end_recheck": {
+        "passed": true,
+        "source": "saved physical events, not a new run",
+        "events": [
+          {
+            "stage": "realtime_user",
+            "time_ms": 709237,
+            "text": "先聊到这里，再见。"
+          },
+          {
+            "stage": "realtime_answer",
+            "time_ms": 710786,
+            "text": "好的，再见！"
+          },
+          {
+            "stage": "realtime_playback_done",
+            "time_ms": 711485
+          }
+        ]
+      }
+    }
+  },
+  "not_run": [
+    "physical finger touch in this integration",
+    "real paper/camera recognition accuracy in this integration",
+    "concurrent voice and video in this integration",
+    "five minute pause/resume in this integration",
+    "human far-field/noise acceptance",
+    "long duration endurance"
+  ],
+  "private_evidence": "Raw serial logs, recordings, flash backups and full reports remain in .local/integration-20261106; these are not distributed.",
+  "known_issues": [
+    "Upstream intermittent local_vad false interruptions during video work and lesson ending remain unresolved.",
+    "Integration tutor runs recorded stream_underruns 2 and 5; second run also tx_deadline_misses 3 and tx_gap_max_ms 2012. Root cause unestablished.",
+    "C3 official build has only 3680 bytes application headroom and no current physical validation."
+  ]
+}

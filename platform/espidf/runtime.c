@@ -1,9 +1,19 @@
 #include "runtime.h"
+#if AGENT_BOARD_P4
+#include "p4_conversation.h"
+#include "p4_agent.h"
+#include "audio_session.h"
+static atomic_bool voice_natural=true;
+static bool voice_session_start(void);
+#endif
 #include "voice_heap.h"
 #if AGENT_ENABLE_AUDIO
 #include "phase.h"
 #endif
 #include "busy_trace.h"
+#ifdef AGENT_P4_WAKENET10
+#include "speech_backend.h"
+#endif
 #ifdef AGENT_KWS_C11
 #include "speech_backend.h"
 #include "kws_usb.h"
@@ -122,7 +132,15 @@
 #endif
 #if AGENT_CLOCK_BOOT
 #undef AGENT_RUNTIME_VERSION
-#define AGENT_RUNTIME_VERSION "0.12.4-clock"
+#define AGENT_RUNTIME_VERSION "0.12.5-clock"
+#endif
+#ifdef AGENT_C3_WAKENET9S
+#undef AGENT_RUNTIME_VERSION
+#define AGENT_RUNTIME_VERSION AGENT_C3_RUNTIME_VERSION
+#endif
+#if AGENT_BOARD_P4
+#undef AGENT_RUNTIME_VERSION
+#define AGENT_RUNTIME_VERSION AGENT_P4_RUNTIME_VERSION
 #endif
 #ifdef AGENT_KEYWORD_TRACE
 #include "trace.h"
@@ -171,7 +189,12 @@ extern const agent_ws_ops_t esp_agent_asr_ws;
 #include <string.h>
 #include <time.h>
 #include <sys/time.h>
+#if AGENT_BOARD_P4
+#include "p4_console.h"
+#include "esp_log.h"
+#else
 #include "driver/usb_serial_jtag.h"
+#endif
 #include "esp_event.h"
 #include "esp_heap_caps.h"
 #include "esp_mac.h"
@@ -199,6 +222,9 @@ static settings_t settings;
 typedef struct { char key[193],voice[97]; } speech_settings_t;
 static speech_settings_t speech_settings,qianwen_settings;
 static atomic_bool voice_enabled,voice_rearm,speech_qianwen,voice_handoff;
+#if AGENT_BOARD_P4
+static bool voice_interrupt_capture,voice_idle_closing; /* Command-loop owner only. */
+#endif
 static atomic_bool voice_fast=AGENT_USER_TEST; /* Packaged test route; legacy builds start in classic mode. */
 static bool voice_first_text;
 extern const agent_ws_ops_t esp_agent_speech_ws;
@@ -227,7 +253,7 @@ static atomic_uint_fast64_t wifi_retry_at;
 static QueueHandle_t jobs;
 static TaskHandle_t network_handle;
 typedef struct {
-    const char *text; bool stream, control, upload,voice,say,live,fast,candidate;
+    const char *text; bool stream, control, upload,voice,say,live,fast,candidate,closing,natural;
 #if AGENT_HANDOFF_PROBE
     bool probe,probe_join,probe_hold,probe_reserve;
 #endif
@@ -254,7 +280,16 @@ static atomic_bool sync_active,sync_cancel,sync_more;
 static atomic_int sync_error=AGENT_ERR_CONFIG;
 static SemaphoreHandle_t work_lock;
 static uint64_t sync_at;
+#if !AGENT_BOARD_P4
 static uint64_t wifi_deadline;
+#else
+extern void p4_wifi_configure(const char *,const char *);
+extern void p4_wifi_poll(bool,bool);
+extern int p4_wifi_debug(const char *,char *,size_t);
+extern void p4_media_control_status(char *,size_t);
+extern void p4_media_touch(unsigned);
+extern int p4_audio_probe(const char *,char *,size_t);
+#endif
 #if AGENT_ENABLE_AUDIO
 static agent_upload_t music_upload;
 #endif
@@ -394,6 +429,16 @@ agent_err_t esp_agent_http_auth(agent_http_target_t target, char *base, size_t b
 uint64_t esp_agent_now(void) { return (uint64_t)esp_timer_get_time() / 1000; }
 
 enum { USB_TX_BYTES = 2048 };
+#if AGENT_BOARD_P4
+/* SDK logs use a different UART path from command replies. A FILE lock alone
+ * cannot keep a Wi-Fi diagnostic out of the middle of a usage JSON event. */
+static int console_log(const char *format,va_list args)
+{
+    if(!output_lock || xSemaphoreTake(output_lock,pdMS_TO_TICKS(2000))!=pdTRUE)return 0;
+    int n=vprintf(format,args);fflush(stdout);
+    xSemaphoreGive(output_lock);return n;
+}
+#endif
 void esp_agent_write(const char *data, size_t size)
 {
     if (!output_lock || xSemaphoreTake(output_lock, pdMS_TO_TICKS(2000)) != pdTRUE) return;
@@ -408,6 +453,13 @@ void esp_agent_write(const char *data, size_t size)
 }
 
 static void say(const char *text) { esp_agent_write(text, strlen(text)); }
+#if AGENT_BOARD_P4
+void esp_agent_model_receipt(const char *json) {
+    /* Transient event for the future uplink; no billing history is retained. */
+    size_t n=strlen(json);char *event=malloc(n+14);
+    if(event){snprintf(event,n+14,"\r\n@usage %s\r\n",json);say(event);free(event);}
+}
+#endif
 #if AGENT_ENABLE_AUDIO
 /* Voice has no dependency on an open serial terminal. The IDF driver enqueues
  * each write all-or-nothing; zero timeout cannot stall speech on a full TX ring.
@@ -448,6 +500,22 @@ void esp_agent_status(char *output, size_t capacity)
         atomic_load(&route_gateway) ? "GATEWAY" : "DIRECT",
         atomic_load(&sync_active)?"true":"false",atomic_load(&sync_more)?"true":"false",agent_err_name(atomic_load(&sync_error)));
     agent_json_quote(&w, settings.device_id);
+#if AGENT_BOARD_P4
+    agent_json_printf(&w,",\"internal_heap_total\":%u,\"psram_heap_total\":%u",
+        (unsigned)heap_caps_get_total_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
+        (unsigned)heap_caps_get_total_size(MALLOC_CAP_SPIRAM));
+    agent_json_printf(&w,",\"internal_free\":%u,\"internal_min\":%u,\"internal_largest\":%u,\"psram_free\":%u,\"psram_min\":%u,\"psram_largest\":%u",
+        (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
+        (unsigned)heap_caps_get_minimum_free_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
+        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
+        (unsigned)heap_caps_get_free_size(MALLOC_CAP_SPIRAM),
+        (unsigned)heap_caps_get_minimum_free_size(MALLOC_CAP_SPIRAM),
+        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_SPIRAM));
+    agent_json_printf(&w,",\"dma_free\":%u,\"dma_min\":%u,\"dma_largest\":%u",
+        (unsigned)heap_caps_get_free_size(MALLOC_CAP_DMA),
+        (unsigned)heap_caps_get_minimum_free_size(MALLOC_CAP_DMA),
+        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_DMA));
+#endif
     esp_netif_ip_info_t ip={0};
     esp_netif_t *netif=esp_netif_get_handle_from_ifkey("WIFI_STA_DEF");
     if(netif && esp_netif_get_ip_info(netif,&ip)==ESP_OK)
@@ -459,7 +527,7 @@ void esp_agent_status(char *output, size_t capacity)
     if(esp_wifi_get_max_tx_power(&tx_power)==ESP_OK)
         agent_json_printf(&w,",\"wifi_tx_quarter_dbm\":%d",(int)tx_power);
     wifi_ap_record_t ap;
-    if(esp_wifi_sta_get_ap_info(&ap)==ESP_OK)
+    if(atomic_load(&wifi_up) && esp_wifi_sta_get_ap_info(&ap)==ESP_OK)
         agent_json_printf(&w,",\"wifi_rssi_dbm\":%d",(int)ap.rssi);
     unsigned flash_ms[4]; esp_agent_store_metrics(flash_ms);
     agent_json_printf(&w,",\"control_stack\":%u,\"plan_active\":%s,\"flash_max_ms\":[%u,%u,%u,%u]}",esp_hi_control_stack(),
@@ -486,6 +554,9 @@ static void wifi_event(void *arg, esp_event_base_t base, int32_t id, void *data)
 
 static agent_err_t wifi_apply(void)
 {
+#if AGENT_BOARD_P4
+    p4_wifi_configure(settings.ssid,settings.password);return AGENT_OK;
+#else
     if (!settings.ssid[0]) return AGENT_OK;
     wifi_config_t config = {0};
     memcpy(config.sta.ssid, settings.ssid, strlen(settings.ssid));
@@ -498,6 +569,7 @@ static agent_err_t wifi_apply(void)
     if (esp_wifi_set_config(WIFI_IF_STA, &config) != ESP_OK) return AGENT_ERR_CONFIG;
     atomic_store(&wifi_retry_at, esp_agent_now() + 250);
     return AGENT_OK;
+#endif
 }
 
 static agent_err_t provision(const char *line)
@@ -799,6 +871,9 @@ static void audio_scratch_release(void *ctx)
 static bool pcm_reserved,pcm_discard,pcm_io_error;
 static uint64_t pcm_deadline;
 static agent_err_t pcm_cleanup_error;
+#if AGENT_BOARD_P4
+static void *p4_pcm_memory;
+#endif
 
 static void pcm_status(void)
 {
@@ -821,6 +896,9 @@ static void pcm_poll(void)
     agent_audio_state_t audio={0};pcm_cleanup_error=esp_hi_audio_ops.inspect(esp_hi_audio_ops.ctx,&audio);
     if(pcm_cleanup_error || audio.listening || audio.playing || audio.recording) return;
     if(keyword_pcm_close(stream,pcm_discard)) {
+#if AGENT_BOARD_P4
+        heap_caps_free(p4_pcm_memory);p4_pcm_memory=NULL;
+#endif
         audio_scratch_release(NULL);pcm_reserved=false;pcm_deadline=0;pcm_discard=false;
     }
 }
@@ -878,9 +956,30 @@ static void pcm_command(const char *text)
         if(fast)error=AGENT_ERR_BUSY;
         agent_audio_state_t audio={0};if(!error)error=esp_hi_audio_ops.inspect(esp_hi_audio_ops.ctx,&audio);
         if(audio.listening || audio.playing || audio.recording || audio.mic_requested || audio.mic_enabled) error=AGENT_ERR_BUSY;
+#if AGENT_BOARD_P4
+        if(!error) {
+            capacity=(size_t)(limit>1?limit:2)*sizeof(keyword_pcm_frame_t);
+            p4_pcm_memory=heap_caps_aligned_alloc(_Alignof(keyword_pcm_frame_t),capacity,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+            memory=p4_pcm_memory;
+            if(!memory)error=AGENT_ERR_MEMORY;
+        }
+#endif
         if(!error && !keyword_pcm_open(stream,memory,capacity,limit)) error=AGENT_ERR_MEMORY;
-        if(error) audio_scratch_release(NULL);
-        else { pcm_reserved=true;pcm_discard=pcm_io_error=false;pcm_cleanup_error=AGENT_OK;pcm_deadline=esp_agent_now()+(uint64_t)limit*32+2000; }
+        if(error) {
+#if AGENT_BOARD_P4
+            heap_caps_free(p4_pcm_memory);p4_pcm_memory=NULL;
+#endif
+            audio_scratch_release(NULL);
+        }
+        else {
+            pcm_reserved=true;pcm_discard=pcm_io_error=false;pcm_cleanup_error=AGENT_OK;
+            pcm_deadline=esp_agent_now()+(uint64_t)limit*32+
+#if AGENT_BOARD_P4
+                10000;
+#else
+                2000;
+#endif
+        }
     }
     report(error);
 }
@@ -1009,6 +1108,14 @@ static agent_err_t voice_connections_probe(void)
 #endif
 __attribute__((noinline)) static agent_err_t context_command(const char *text)
 {
+#if AGENT_BOARD_P4
+    if(!strncmp(text,"tool ",5)) {
+        const char *space=strchr(text+5,' ');if(!space || space-text-5>127)return AGENT_ERR_ARGUMENT;
+        char name[128],output[4096];memcpy(name,text+5,(size_t)(space-text-5));name[space-text-5]=0;
+        agent_err_t e=agent_tool_invoke(&tool_ops,name,space+1,output,sizeof(output));
+        if(!e){say(output);say("\r\n");}return e;
+    }
+#endif
 #if AGENT_WS_OWNER_PROBE
     if(!strcmp(text,"voice connections-probe"))return voice_connections_probe();
 #endif
@@ -1303,11 +1410,52 @@ static agent_err_t voice_pcm_open(void *ctx,unsigned rate)
 }
 static agent_err_t voice_pcm_write(void *ctx,const int16_t *data,size_t count)
 { (void)ctx;return esp_hi_stream_write(data,count,&kernel->cancelled); }
+#if AGENT_BOARD_P4
+agent_err_t esp_agent_p4_speak(const char *text)
+{
+    agent_speech_t speech={.transport=engine.transport,.cancelled=&kernel->cancelled,
+        .scratch=engine.buffer,.capacity=AGENT_ENGINE_BUFFER_SIZE,.now_ms=tool_now,.wait_ms=pause_ms,
+        .event=voice_event,.nonce=esp_random(),.random_u32=esp_random};
+    agent_qwen_t session;agent_qwen_init(&session,&speech,&esp_agent_speech_ws);
+    const agent_pcm_sink_t sink={.open=voice_pcm_open,.write=voice_pcm_write};
+    voice_event(NULL,"tts_voice",qianwen_settings.voice);
+    agent_err_t error=agent_qianwen_tts.speak(&speech,qianwen_settings.voice,text,&sink);
+    return esp_hi_stream_finish(error);
+}
+#endif
 typedef struct {
     esp_agent_voice_progress_t cached;
     const esp_agent_voice_ack_t *ack;
     bool dynamic_active,notice_active,notice_attempted,candidate;
+#if AGENT_BOARD_P4
+    esp_agent_voice_ack_t local_ack;
+#endif
 } voice_progress_t;
+#if AGENT_BOARD_P4
+static void p4_receipt(voice_progress_t *progress,const char *input)
+{
+    static unsigned turn;
+    if(progress->ack && (progress->ack->pending||progress->ack->spoken))return;
+    bool yue=(progress->ack && !strcmp(progress->ack->language,"yue")) ||
+        strstr(input,"粤语")||strstr(input,"嘅")||strstr(input,"唔")||strstr(input,"喺");
+    /* Keep a natural model receipt; replace the legacy fixed thinking phrase. */
+    if(progress->ack && progress->ack->text[0] && !strstr(progress->ack->text,"我想想") &&
+       !strstr(progress->ack->text,"我諗諗"))return;
+    unsigned variant=turn++;
+    const char *text;
+    if(strstr(input,"联网")||strstr(input,"搜索")||strstr(input,"查询")||strstr(input,"查找")||
+       strstr(input,"查一下")||strstr(input,"今天")||strstr(input,"最新"))
+        text=yue?"我搵下最新资料先。":variant%2?"我查一下最新资料。":"我先找几个来源核对一下。";
+    else if(strstr(input,"生成")||strstr(input,"图片"))text=yue?"我准备下张图先。":variant%2?"我来准备这张图片。":"好，我来处理这张图片。";
+    else if(strstr(input,"绘制")||strstr(input,"画一")||strstr(input,"画个")||strstr(input,"画出")||strstr(input,"画张"))text=yue?"等我画出来。":variant%2?"我来把它画出来。":"好，我试着画给你看。";
+    else if(strstr(input,"摄像")||strstr(input,"人脸"))text=yue?"我睇下镜头先。":variant%2?"我来检查一下画面。":"我看看摄像头拍到了什么。";
+    // Ordinary answers warm TTS directly. A generic thinking sentence must
+    // not own the speaker while an already available answer waits to start.
+    else {progress->ack=NULL;return;}
+    snprintf(progress->local_ack.text,sizeof(progress->local_ack.text),"%s",text);
+    strcpy(progress->local_ack.language,yue?"yue":"zh");progress->ack=&progress->local_ack;
+}
+#endif
 static void voice_progress_event(void *ctx,const char *stage,const char *text)
 {
     (void)ctx;char name[64];
@@ -1316,6 +1464,9 @@ static void voice_progress_event(void *ctx,const char *stage,const char *text)
 }
 static void voice_stream_prepare(bool progress)
 {
+#if AGENT_BOARD_P4
+    voice_event(NULL,progress?"progress_voice":"tts_voice",qianwen_settings.voice);
+#endif
     esp_agent_voice_stream_prepare(&kernel->cancelled,qianwen_settings.voice,
         work_buffer.input,sizeof(work_buffer.input),engine.buffer+AGENT_ENGINE_ANSWER_SCRATCH,
         AGENT_ENGINE_BUFFER_SIZE-AGENT_ENGINE_ANSWER_SCRATCH,progress?voice_progress_event:voice_event);
@@ -1408,6 +1559,11 @@ static agent_err_t voice_before_tools(void *ctx)
     agent_err_t error=voice_progress_join(ctx);
     if(error || progress->notice_attempted)return error;
     if(!engine.workspace->reply.call_count)return AGENT_OK;
+#if AGENT_BOARD_P4
+    /* The request-specific receipt already uses the configured TTS. Avoid
+     * inserting legacy Cherry/Kiki clips between it and the answer. */
+    progress->notice_attempted=true;return AGENT_OK;
+#endif
     /* Announce only an admitted homogeneous context batch. Hardware/audio
      * tools may need the speaker; no timer-driven or speculative notices. */
     const char *name=engine.workspace->reply.calls[0].name;
@@ -1456,6 +1612,9 @@ static agent_err_t voice_candidate_resume(void *ctx,agent_err_t error)
 #endif
 static agent_err_t voice_run(const turn_job_t *job,agent_err_t error)
 {
+#if AGENT_BOARD_P4
+    esp_hi_voice_duplex(!error && atomic_load(&voice_enabled));
+#endif
     voice_progress_t progress={0};
     agent_engine_deferred_t *deferred=NULL;
     if(!job->live)atomic_store(&voice_started,(unsigned)esp_agent_now());
@@ -1547,8 +1706,12 @@ static agent_err_t voice_run(const turn_job_t *job,agent_err_t error)
     if(!error && (job->fast || progress.candidate)) {
         /* Both settled routes can reach DeepSeek without a generated receipt.
          * Deferred/native owners remain joined by their existing path. */
+#if AGENT_BOARD_P4
+        if(!engine.clarify_only)p4_receipt(&progress,work_buffer.input);
+#else
         error=esp_agent_voice_progress_fallback(&progress.cached,progress.ack,
             deferred!=NULL,engine.clarify_only,work_buffer.input,&kernel->cancelled);
+#endif
         if(error)goto finished;
         if(progress.cached.active)
 #if AGENT_CONTEXTUAL_CACHED_ACK
@@ -1566,7 +1729,7 @@ static agent_err_t voice_run(const turn_job_t *job,agent_err_t error)
     const char *reply=job->text;
     if(!error && !voice_configured())error=AGENT_ERR_CONFIG;
     if(!error && !job->say) {
-        if(!job->live) {
+        if(!job->live && !job->closing) {
             agent_speech_input_t input;error=esp_hi_voice_input(&input);
             if(!error) {char value[64];snprintf(value,sizeof(value),"%lu samples at 16000 Hz",(unsigned long)input.samples);voice_event(NULL,"vad_end",value);}
 #if AGENT_ISOLATED_ASR
@@ -1581,6 +1744,9 @@ static agent_err_t voice_run(const turn_job_t *job,agent_err_t error)
         }
         if(!error) {
             voice_event(NULL,"llm",NULL);engine.voice_mode=true;voice_first_text=false;
+#if AGENT_BOARD_P4
+            engine.session_close=job->closing;engine.preserve_interrupted=true;
+#endif
             if(overlap) {
                 engine.answer_begin=voice_answer_begin;
                 engine.answer_prepare=voice_answer_prepare;
@@ -1605,6 +1771,7 @@ static agent_err_t voice_run(const turn_job_t *job,agent_err_t error)
             error=deferred?agent_engine_turn_deferred(&engine,work_buffer.input,true,deferred):
                 agent_engine_turn(&engine,work_buffer.input,true);
             engine.voice_mode=false;
+            engine.session_close=engine.preserve_interrupted=false;
             engine.request_trace=NULL;engine.request_trace_ctx=NULL;
             engine.answer_begin=NULL;engine.answer_prepare=NULL;engine.answer_write=NULL;engine.answer_end=NULL;
             engine.answer_ctx=NULL;engine.before_tools=NULL;engine.before_tools_ctx=NULL;
@@ -1684,7 +1851,15 @@ static agent_err_t voice_handoff_probe(const char *mode)
 #endif
 static void voice_status(void)
 {
+#if AGENT_BOARD_P4
+    if(atomic_load(&voice_natural)) {
+        char info[1024],out[1200];esp_agent_conversation_status(info,sizeof(info));
+        snprintf(out,sizeof(out),"{\"voice_enabled\":%s,\"mode\":\"natural\",\"realtime\":%s}\r\n",atomic_load(&voice_enabled)?"true":"false",info);say(out);return;
+    }
+#endif
     bool rt=atomic_load(&speech_qianwen);
+    unsigned stage=atomic_load(&voice_stage);
+    const char *stage_name=stage==1 && !esp_hi_wake_ready()?"rearming":voice_stages[stage];
     bool fast=atomic_load(&voice_fast),frontend=fast && rt && !atomic_load(&route_gateway);
     unsigned candidate_idle=0;
 #if AGENT_TEXT_PREFETCH
@@ -1693,14 +1868,18 @@ static void voice_status(void)
     candidate_idle=esp_agent_voice_candidate_idle_state();
 #endif
     char out[864];snprintf(out,sizeof(out),"{\"voice_enabled\":%s,\"configured\":%s,\"stage\":\"%s\",\"turns\":%u,\"failures\":%u,\"elapsed_ms\":%u,\"underruns\":%u,\"error\":\"%s\",\"provider\":\"%s\",\"asr_streaming\":%s,\"tts_streaming_text\":%s,\"pcm_streaming\":true,\"llm_streaming\":true,\"llm_to_tts_overlap\":%s,\"tts_stack\":%u,\"usb_dropped_bytes\":%u,\"asr_model\":\"%s\",\"tts_model\":\"%s\",\"mode\":\"%s\",\"frontend_model\":\"%s\",\"fast_ready\":%s,\"preconnect\":\"%s\",\"candidate_idle\":%u}\r\n",
-        atomic_load(&voice_enabled)?"true":"false",voice_configured()?"true":"false",voice_stages[atomic_load(&voice_stage)],
+        atomic_load(&voice_enabled)?"true":"false",voice_configured()?"true":"false",stage_name,
         atomic_load(&voice_turns),atomic_load(&voice_failures),atomic_load(&voice_elapsed),esp_hi_stream_underruns(),agent_err_name(atomic_load(&voice_error)),
         rt?"qianwen":"vocalign",rt?"true":"false",rt && !frontend?"true":"false",rt && !frontend && !atomic_load(&route_gateway)?"true":"false",esp_agent_voice_stream_stack(),atomic_load(&voice_usb_dropped),frontend?AGENT_RT_MODEL:rt?AGENT_CLASSIC_ASR_MODEL:"qwen-asr",frontend?AGENT_RT_MODEL:rt?AGENT_QWEN_TTS_MODEL:"gpt-4o-mini-tts",fast?"fast":"classic",frontend?AGENT_RT_MODEL:"",esp_agent_voice_fast_ready()?"true":"false",atomic_load(&fast_prime_idle)?"idle":"capture",candidate_idle);
     say(out);
 }
 static agent_err_t voice_mode_set(const char *mode)
 {
-    if(strcmp(mode,"fast") && strcmp(mode,"classic"))return AGENT_ERR_ARGUMENT;
+    if(strcmp(mode,"fast") && strcmp(mode,"classic")
+#if AGENT_BOARD_P4
+       && strcmp(mode,"natural")
+#endif
+       )return AGENT_ERR_ARGUMENT;
     agent_err_t error=agent_begin_turn(kernel);if(error)return error;
     if(xSemaphoreTake(work_lock,0)!=pdTRUE) {agent_end_turn(kernel);return AGENT_ERR_BUSY;}
     agent_audio_state_t audio={0};error=esp_hi_audio_ops.inspect(NULL,&audio);
@@ -1709,6 +1888,11 @@ static agent_err_t voice_mode_set(const char *mode)
     if(!error) {
         esp_agent_voice_fast_discard();
         atomic_store(&voice_fast,!strcmp(mode,"fast"));fast_retry_at=0;
+#if AGENT_BOARD_P4
+        bool natural=!strcmp(mode,"natural");
+        error=esp_hi_voice_session_configure(natural?voice_session_start:NULL);
+        if(!error)atomic_store(&voice_natural,natural);
+#endif
     }
     xSemaphoreGive(work_lock);agent_end_turn(kernel);return error;
 }
@@ -1772,8 +1956,46 @@ static void voice_submit(const char *text,bool say_only)
     turn_job_t job={.text=work_buffer.input,.voice=true,.say=say_only};
     if(xQueueSend(jobs,&job,0)!=pdTRUE) {agent_end_turn(kernel);report(AGENT_ERR_BUSY);}
 }
+#if AGENT_BOARD_P4
+static bool voice_session_start(void)
+{
+    if(!atomic_load(&voice_natural) || !atomic_load(&voice_enabled) || !esp_agent_online() || !voice_configured())return false;
+    if(agent_begin_turn(kernel))return false;
+    if(atomic_load(&sync_active))atomic_store(&sync_cancel,true);
+    turn_job_t job={.text=work_buffer.input,.voice=true,.natural=true};
+    if(xQueueSend(jobs,&job,0)!=pdTRUE){agent_end_turn(kernel);return false;}
+    return true;
+}
+static void voice_dialogue_poll(void)
+{
+    unsigned events=esp_hi_voice_dialogue_event();
+    if(!atomic_load(&voice_enabled)) {voice_interrupt_capture=voice_idle_closing=false;return;}
+    if(events&1) {
+        voice_interrupt_capture=true;voice_idle_closing=false;
+        agent_cancel(kernel);voice_event(NULL,"wake_interrupt",NULL);
+    }
+    if(events&2)voice_idle_closing=true;
+    if(atomic_load(&kernel->busy))return;
+    if(voice_interrupt_capture) {
+        agent_err_t error=esp_hi_voice_enable(true);
+        if(error==AGENT_ERR_BUSY)return;
+        voice_interrupt_capture=false;atomic_store(&voice_rearm,false);
+        if(!error) {esp_hi_voice_continue(true);voice_event(NULL,"interrupt_listen",NULL);}
+        else voice_event(NULL,"error",agent_err_name(error));
+    } else if(voice_idle_closing) {
+        if(agent_begin_turn(kernel))return;
+        strcpy(work_buffer.input,"[Device event: no speech for ten seconds after the last complete answer. Close this conversation now.]");
+        turn_job_t job={.text=work_buffer.input,.voice=true,.closing=true};
+        if(xQueueSend(jobs,&job,0)!=pdTRUE) {agent_end_turn(kernel);return;}
+        voice_idle_closing=false;voice_event(NULL,"idle_farewell",NULL);
+    }
+}
+#endif
 __attribute__((noinline)) static void voice_fast_idle(void)
 {
+#if AGENT_BOARD_P4
+    if(atomic_load(&voice_natural))return;
+#endif
     if(atomic_load(&kernel->busy))return;
     bool wanted=atomic_load(&voice_enabled) && atomic_load(&voice_fast) &&
         atomic_load(&speech_qianwen) && !atomic_load(&route_gateway) && voice_configured() && esp_agent_online();
@@ -1910,6 +2132,12 @@ static void network_task(void *arg)
         if(!job.fast)esp_agent_voice_fast_discard();
         if(!error)error=esp_hi_wake_network(true);
         if(job.voice) {
+#if AGENT_BOARD_P4
+            if(job.natural) {
+                if(!error)error=esp_agent_conversation_run(&tool_ops,&context,&kernel->cancelled,voice_event);
+                else esp_hi_voice_session_end();
+            } else
+#endif
 #if AGENT_HANDOFF_PROBE
             if(job.probe && !error)error=voice_handoff_probe(job.text+20);
             else
@@ -1943,6 +2171,9 @@ static void network_task(void *arg)
         esp_agent_voice_heap_mark(VOICE_HEAP_REARM_BEGIN);
         esp_hi_wake_network(false);
         esp_agent_voice_heap_mark(VOICE_HEAP_REARM_END);
+#if AGENT_BOARD_P4
+        if(job.voice)esp_hi_voice_duplex(false);
+#endif
         if(job.voice && atomic_load(&voice_enabled)) atomic_store(&voice_rearm,true);
         fast_retry_at=0;
 #endif
@@ -1961,6 +2192,12 @@ static void network_task(void *arg)
 #endif
         xSemaphoreGive(work_lock);
         agent_end_turn(kernel);
+#if AGENT_BOARD_P4
+        if(job.voice && !job.natural && !job.say && !job.closing && !error && atomic_load(&voice_enabled)) {
+            esp_hi_voice_continue(false);voice_event(NULL,"followup_begin","10000 ms after playback");
+        }
+        if(job.closing)voice_event(NULL,"conversation_closed",error?agent_err_name(error):NULL);
+#endif
 #if AGENT_ENABLE_AUDIO
         if(job.voice) {
             char message[96];int n=snprintf(message,sizeof(message),"\r\n@%s%s%s\r\n",
@@ -2113,6 +2350,21 @@ static void command(char *line)
             report(error);
         }
         else if(!strncmp(arg,"configure ",10)) report(voice_configure(arg+10));
+#if AGENT_BOARD_P4
+        else if(!strncmp(arg,"endpoint ",9)) {
+            unsigned ms;char extra;
+            agent_err_t error=sscanf(arg+9,"%u %c",&ms,&extra)!=1?AGENT_ERR_ARGUMENT:
+                atomic_load(&voice_enabled) || atomic_load(&kernel->busy)?AGENT_ERR_BUSY:esp_agent_conversation_endpoint(ms);
+            report(error);
+        }
+        else if(!strcmp(arg,"realtime")) {
+            char out[1024];esp_agent_conversation_status(out,sizeof(out));say(out);say("\r\n");
+        }
+        else if(!strcmp(arg,"dialogue")) {
+            char out[384];agent_err_t error=esp_hi_voice_dialogue_status(out,sizeof(out));
+            if(!error) {say(out);say("\r\n");}else report(error);
+        }
+#endif
         else if(!strncmp(arg,"say ",4)) voice_submit(arg+4,true);
         else if(!strcmp(arg,"run")) voice_submit("",false);
         else if(!strcmp(arg,"on") || !strcmp(arg,"off")) {
@@ -2139,6 +2391,21 @@ static void command(char *line)
 #endif
 #ifdef AGENT_KWS_C11
     if(kws_command(line)) return;
+#endif
+#ifdef AGENT_P4_WAKENET10
+    if(!strcmp(line,"agent kws profile")) {
+        char output[1024];
+        if(esp_hi_kws_profile(output,sizeof(output))) {say(output);say("\r\n");}
+        else report(AGENT_ERR_LIMIT);
+        return;
+    }
+    if(!strcmp(line,"agent kws reset-profile")) {
+        agent_audio_state_t audio={0};
+        agent_err_t error=esp_hi_audio_ops.inspect(esp_hi_audio_ops.ctx,&audio);
+        if(audio.listening || esp_hi_speech_chunk())error=AGENT_ERR_BUSY;
+        if(!error)esp_hi_kws_profile_reset();
+        report(error);return;
+    }
 #endif
 #ifdef AGENT_KEYWORD_PCM
     if(!strncmp(line,"agent keyword pcm ",18)) { pcm_command(line+18);return; }
@@ -2169,7 +2436,7 @@ static void command(char *line)
     }
 #endif
     if (!strcmp(line, "agent status") || !strcmp(line, "agent wifi status")) {
-        char output[768]; esp_agent_status(output, sizeof(output)); say(output); say("\r\n");
+        char output[1280]; esp_agent_status(output, sizeof(output)); say(output); say("\r\n");
     } else if(!strcmp(line,"agent hardware") || !strcmp(line,"agent display status")) {
         char output[1536];
         agent_err_t error=!strcmp(line,"agent hardware")?esp_hi_hardware_status(NULL,output,sizeof(output)):
@@ -2179,6 +2446,12 @@ static void command(char *line)
         esp_hi_display_cancel();report(AGENT_OK);
     } else if(!strncmp(line,"agent display set ",18)) {
         submit(line+6,false,true);
+#if AGENT_BOARD_P4
+    } else if(!strcmp(line,"agent tutor status")) {
+        char output[1800];p4_tutor_context(output,sizeof(output));say(output);say("\r\n");
+    } else if(!strncmp(line,"agent tool ",11)) {
+        submit(line+6,false,true);
+#endif
 #ifdef AGENT_KEYWORD_TRACE
     } else if (!strcmp(line, "agent keyword trace arm") || !strcmp(line, "agent keyword trace off")) {
         agent_audio_state_t audio = {0};
@@ -2218,6 +2491,18 @@ static void command(char *line)
         agent_err_t error = provision(line + 11); if (error) report(error);
     } else if (!strncmp(line, "agent wifi set ", 15)) {
         report(provision(line + 15));
+#if AGENT_BOARD_P4
+    } else if(!strncmp(line,"agent wifi ui ",14)) {
+        char out[2304]={0};agent_err_t e=p4_wifi_debug(line+14,out,sizeof(out));if(out[0])say(out);report(e);
+    } else if(!strcmp(line,"agent media status")) {
+        char out[400];p4_media_control_status(out,sizeof(out));say(out);report(AGENT_OK);
+    } else if(!strncmp(line,"agent audio probe ",18)) {
+        char *out=calloc(1,16400);int e=out?p4_audio_probe(line+18,out,16400):AGENT_ERR_MEMORY;
+        if(out && out[0])say(out);
+        free(out);report(e);
+    } else if(!strcmp(line,"agent media tap")) {
+        p4_media_touch(0);report(AGENT_OK); /* Diagnostic dispatch through the same state machine. */
+#endif
     } else if(!strcmp(line,"agent wifi pause")) {
         atomic_store(&wifi_paused,true); esp_wifi_disconnect(); report(AGENT_OK);
     } else if(!strcmp(line,"agent wifi resume")) {
@@ -2419,6 +2704,9 @@ void esp_agent_run(agent_core_t *core)
      * Audio DMA keeps its existing higher priority; this loop blocks on USB. */
     vTaskPrioritySet(NULL,5);
     output_lock = xSemaphoreCreateMutex();
+#if AGENT_BOARD_P4
+    esp_log_set_vprintf(console_log);
+#endif
     context_cache_lock=xSemaphoreCreateMutex();
     work_lock=xSemaphoreCreateMutex();
     usb_serial_jtag_driver_config_t usb = { .tx_buffer_size = USB_TX_BYTES, .rx_buffer_size = 1024 };
@@ -2427,7 +2715,11 @@ void esp_agent_run(agent_core_t *core)
     agent_err_t workspace_error=esp_agent_workspace_restore();
     if(workspace_error) {report(workspace_error);return;}
     uint8_t mac[6];
+#if AGENT_BOARD_P4
+    ESP_ERROR_CHECK(esp_efuse_mac_get_default(mac));
+#else
     ESP_ERROR_CHECK(esp_read_mac(mac, ESP_MAC_WIFI_STA));
+#endif
     snprintf(settings.device_id, sizeof(settings.device_id), "esp-hi-%02x%02x%02x%02x%02x%02x",
              mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
     strcpy(settings.user_id, "local-user"); strcpy(settings.session_id, "default");
@@ -2526,12 +2818,16 @@ void esp_agent_run(agent_core_t *core)
     jobs = xQueueCreate(1, sizeof(turn_job_t));
     /* 16-KiB stack retained 3596 bytes in measured long-context TLS/tool runs.
      * Recover 1 KiB; reverify the remaining margin with real requests. */
-    if (!jobs || xTaskCreate(network_task, "agent_net", 9216, NULL, 4, &network_handle) != pdPASS) {
+    const unsigned network_stack = AGENT_BOARD_P4 ? 16384 : 9216;
+    if (!jobs || xTaskCreate(network_task, "agent_net", network_stack, NULL, 4, &network_handle) != pdPASS) {
         report(AGENT_ERR_MEMORY); return;
     }
     say("ESP-HI ready: agent help\r\n");
 #if AGENT_ENABLE_AUDIO
     esp_hi_voice_live_configure(atomic_load(&speech_qianwen),voice_capture_start);
+#if AGENT_BOARD_P4
+    report(esp_hi_voice_session_configure(voice_session_start));
+#endif
     if(atomic_load(&voice_enabled)) {report(esp_hi_voice_enable(true));atomic_store(&voice_stage,1);}
 #endif
     static char line[AGENT_ARGS_MAX + 65];
@@ -2554,6 +2850,9 @@ void esp_agent_run(agent_core_t *core)
             else if (used < sizeof(line) - 1) line[used++] = (char)ch;
             else overflow = true;
         }
+#if AGENT_BOARD_P4
+        p4_wifi_poll(atomic_load(&wifi_up),atomic_load(&wifi_paused));
+#else
         if (settings.ssid[0] && !atomic_load(&wifi_paused) && !atomic_load(&wifi_up) && !atomic_load(&wifi_connecting) &&
             esp_agent_now() >= atomic_load(&wifi_retry_at)) {
             atomic_store(&wifi_connecting, true);
@@ -2564,8 +2863,12 @@ void esp_agent_run(agent_core_t *core)
             }
         }
         if(atomic_load(&wifi_connecting) && esp_agent_now()>wifi_deadline) esp_wifi_disconnect();
+#endif
 #if AGENT_ENABLE_AUDIO
         if(music_upload.active && esp_agent_now()>=music_upload.deadline) { upload_release(); report(AGENT_ERR_TIMEOUT); }
+#if AGENT_BOARD_P4
+        voice_dialogue_poll();
+#endif
         if(atomic_load(&voice_enabled) && atomic_load(&voice_rearm) && !atomic_load(&kernel->busy)) {
             agent_err_t error=esp_hi_voice_enable(true);
             if(error!=AGENT_ERR_BUSY) {

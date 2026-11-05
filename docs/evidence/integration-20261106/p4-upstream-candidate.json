@@ -1,0 +1,133 @@
+{
+  "acceptance_status": "candidate_with_known_voice_interruption",
+  "teaching_function_passed": true,
+  "overall_acceptance_passed": false,
+  "noise_robustness_passed": false,
+  "restored_build_matches_candidate": true,
+  "resources": {
+    "app_bytes": 5751296,
+    "app_partition_bytes": 6291456,
+    "app_free_bytes": 540160,
+    "app_delta_from_091": 14160,
+    "idle_internal_free": 181751,
+    "idle_psram_free": 24786568,
+    "observed_internal_min": 112780,
+    "observed_psram_min": 12406612,
+    "memory_cases": [
+      "controls-06",
+      "diagnostic-video-06",
+      "full-06",
+      "idle-06",
+      "stress-camera-06",
+      "stress-image-06",
+      "stress-video-06"
+    ],
+    "memory_note": "Only candidate 06 historical heap minima; not simultaneous/model allocations. Diagnostic 07 excluded."
+  },
+  "residual_issues": [
+    {
+      "kind": "unexpected_voice_interruption",
+      "status": "unresolved",
+      "case": "stress-video-06",
+      "description": "Local VAD incorrectly interrupted the long spoken story during video work. Trigger mechanism observed; acoustic root cause not established.",
+      "report": "evidence/tutor-dialogue-20261106/stress-video-06/report.json"
+    },
+    {
+      "kind": "unexpected_interrupt_after_lesson",
+      "status": "unresolved",
+      "case": "idle-06",
+      "count": 1,
+      "description": "Local VAD interruption after explicit done. Room review heard nearby friction/tap sounds; causation not established.",
+      "report": "evidence/tutor-dialogue-20261106/idle-06/report.json",
+      "audio_review": "evidence/tutor-dialogue-20261106/idle-06/room-review/result.txt"
+    }
+  ],
+  "firmware": {
+    "file": "cogd_p4.bin",
+    "offset": "0x10000",
+    "bytes": 5751296,
+    "sha256": "95dbfd9454545d55fc86e09e81d680325a665862e4e3ef2c3b5b162358112a29",
+    "readback_sha256": "95dbfd9454545d55fc86e09e81d680325a665862e4e3ef2c3b5b162358112a29",
+    "written_this_release": true
+  },
+  "hardware_cases": {
+    "controls-06": {
+      "original_test_passed": true,
+      "original_error": null,
+      "report": "evidence/tutor-dialogue-20261106/controls-06/report.json",
+      "stream_underruns": 0,
+      "tx_deadline_misses": 0,
+      "tx_gap_max_ms": 16,
+      "interrupts": 1
+    },
+    "diagnostic-video-06": {
+      "original_test_passed": false,
+      "original_error": "AssertionError({'state': 'failed', 'error': 8, 'rendered': False, 'job_id': 6})",
+      "report": "evidence/tutor-dialogue-20261106/diagnostic-video-06/report.json",
+      "stream_underruns": 0,
+      "tx_deadline_misses": 0,
+      "tx_gap_max_ms": 16,
+      "interrupts": 0
+    },
+    "full-06": {
+      "original_test_passed": true,
+      "original_error": null,
+      "report": "evidence/tutor-dialogue-20261106/full-06/report.json",
+      "stream_underruns": 0,
+      "tx_deadline_misses": 0,
+      "tx_gap_max_ms": 16,
+      "interrupts": 1
+    },
+    "idle-06": {
+      "original_test_passed": true,
+      "original_error": null,
+      "report": "evidence/tutor-dialogue-20261106/idle-06/report.json",
+      "stream_underruns": 0,
+      "tx_deadline_misses": 0,
+      "tx_gap_max_ms": 16,
+      "interrupts": 1,
+      "teaching_function_passed": true,
+      "unexpected_interrupts_after_lesson": 1,
+      "noise_robustness_passed": false
+    },
+    "stress-camera-06": {
+      "original_test_passed": true,
+      "original_error": null,
+      "report": "evidence/tutor-dialogue-20261106/stress-camera-06/report.json",
+      "stream_underruns": 0,
+      "tx_deadline_misses": 0,
+      "tx_gap_max_ms": 16,
+      "interrupts": 0
+    },
+    "stress-image-06": {
+      "original_test_passed": true,
+      "original_error": null,
+      "report": "evidence/tutor-dialogue-20261106/stress-image-06/report.json",
+      "stream_underruns": 0,
+      "tx_deadline_misses": 0,
+      "tx_gap_max_ms": 16,
+      "interrupts": 0
+    },
+    "stress-video-06": {
+      "original_test_passed": false,
+      "original_error": "AssertionError('long story did not complete')",
+      "report": "evidence/tutor-dialogue-20261106/stress-video-06/report.json",
+      "stream_underruns": 0,
+      "tx_deadline_misses": 0,
+      "tx_gap_max_ms": 29,
+      "interrupts": 1
+    }
+  },
+  "overview_seconds": 29.812,
+  "pause_observed_idle_ms": 300888,
+  "retained_failed_reports": [
+    "diagnostic-video-06/report.json",
+    "diagnostic-watch-07/report.json",
+    "diagnostic-watch-07b/report.json",
+    "full-03/report.json",
+    "full-05/report.json",
+    "idle-04/report.json",
+    "stress-video-06/report.json"
+  ],
+  "scope": "Teaching candidate only. Known video/voice interruption regression unresolved. Original FAILs retained; diagnostic 07 observations do not change candidate 06 acceptance."
+}

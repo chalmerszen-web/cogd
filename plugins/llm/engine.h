@@ -82,6 +82,9 @@ typedef struct {
     bool gateway,output_started,effects,voice_mode,answer_prepared;
     /* Caller-owned for one voice turn; bypass tools and ask for missing input. */
     bool clarify_only;
+    /* Caller-owned for a single turn. Idle closure is a device event, never
+     * a fabricated durable user message. Interrupted voice preserves its ask. */
+    bool session_close,preserve_interrupted;
     unsigned failures;
     uint64_t circuit_until;
     char turn_id[64];

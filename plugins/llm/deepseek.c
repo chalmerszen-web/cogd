@@ -1,4 +1,5 @@
 #include "llm.h"
+#include "../model_usage.h"
 #include "json.h"
 #include <stdio.h>
 #include <string.h>
@@ -107,6 +108,12 @@ static agent_err_t compose(bool stream,agent_body_fn messages,void *messages_ctx
     if (n < 0 || (size_t)n >= sizeof(prefix)) return AGENT_ERR_LIMIT;
     agent_err_t error = write(write_ctx, prefix, (size_t)n);
     if (!error) error = messages(messages_ctx, write, write_ctx);
+#if AGENT_BOARD_P4
+    if (!error && stream) {
+        const char receipt[]=",\"stream_options\":{\"include_usage\":true}";
+        error=write(write_ctx,receipt,sizeof(receipt)-1);
+    }
+#endif
     if (!error && tools) error = write(write_ctx, ",\"tools\":", 9);
     if (!error && tools) error = tools(tools_ctx, write, write_ctx);
     if (!error && final) error = write(write_ctx, ",\"tool_choice\":\"none\"", 21);
@@ -219,6 +226,8 @@ agent_err_t agent_llm_parse(agent_llm_reply_t *reply, const char *data, size_t l
     agent_err_t error = AGENT_ERR_PROTOCOL;
     if (!root) return reply->error = AGENT_ERR_JSON;
     const cJSON *choices = cJSON_GetObjectItemCaseSensitive(root, "choices");
+    const char *receipt_finish=agent_json_string(cJSON_GetArrayItem(choices,0),"finish_reason");
+    agent_model_usage("deepseek-flash",root,!delta || receipt_finish || (cJSON_IsArray(choices) && !choices->child));
     if (!cJSON_IsArray(choices)) goto done;
     if (!choices->child && delta) { error = AGENT_OK; goto done; }
     if (reply->finished) goto done;

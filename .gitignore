@@ -3,6 +3,7 @@ build*/
 _ref/
 .venv/
 .local/
+private/
 artifacts/
 outputs/
 /firmware/*
@@ -17,7 +18,14 @@ __pycache__/
 *.pyc
 *.pem
 *.key
+*.key.txt
+*.elf
+*.map
 *.db
 .env
 .env.*
 !.env.example
+
+# Device recordings, readbacks, and archived binaries stay local.
+/ESP32-P4-WIFI6-Touch-LCD-*/evidence/
+/ESP32-P4-WIFI6-Touch-LCD-*/firmware/

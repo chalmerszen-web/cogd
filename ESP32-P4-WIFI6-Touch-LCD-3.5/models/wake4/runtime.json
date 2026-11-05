@@ -1,0 +1,7 @@
+{
+  "temporal_source": "ESP32-P4-WIFI6-Touch-LCD-3.5/board/kws_temporal_owner.c",
+  "sha256": "8f44689ae5471c423add5e90ef7b7b619f2f736b5a7ec05119d3121de38224f2",
+  "base_owner_sha256": "e4e55cc5228e7b2678a50e33b3afd4363eef0c165708d6d61572193784d4c55a",
+  "policy": "P4 only: two of the latest three verifier scores >= threshold at confirmation (32 ms blocks); primary pending <=256 ms; cooldown only on final acceptance",
+  "workspace_change_bytes": 0
+}
