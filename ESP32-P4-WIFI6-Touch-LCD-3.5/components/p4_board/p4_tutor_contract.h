@@ -61,33 +61,107 @@ inline bool photo_window(size_t total,unsigned offset,unsigned count,PhotoWindow
     out=window;return true;
 }
 struct Question {std::string key,question;bool requires_image=false;};
-struct Selection {std::vector<Question> questions;Question selected;};
+struct Selection {std::vector<Question> questions;Question selected;std::vector<std::string> incomplete_keys;};
 inline bool parse_selection(const cJSON *v,bool has_user_hint,Selection &out,std::string &reason) {
     Selection parsed;
-    if(!cJSON_IsTrue(cJSON_GetObjectItemCaseSensitive(v,"readable"))) {reason="question_not_readable";return false;}
-    const auto all=cJSON_GetObjectItemCaseSensitive(v,"questions");
-    int count=cJSON_GetArraySize(all);
+    if(!cJSON_IsObject(v)) {reason="invalid_reader_envelope";return false;}
+    const auto readable=cJSON_GetObjectItemCaseSensitive(v,"readable");
+    if(!cJSON_IsBool(readable)) {reason="invalid_readability";return false;}
+    // False never adopts any candidate text. An explicit cropped target can
+    // still be diagnosed precisely without accepting its readable neighbours.
+    if(cJSON_IsFalse(readable)) {
+        const char *target=text(v,"target_status"),*basis=text(v,"selection_basis");
+        const auto chosen=cJSON_GetObjectItemCaseSensitive(v,"selected_key");
+        bool empty=cJSON_IsNull(chosen) || (cJSON_IsString(chosen) && !*chosen->valuestring);
+        reason=has_user_hint && target && std::string(target)=="incomplete" && basis &&
+            std::string(basis)=="target_incomplete" && empty?"target_question_incomplete":"question_not_readable";
+        return false;
+    }
+    const auto all=cJSON_GetObjectItemCaseSensitive(v,"questions");int count=cJSON_GetArraySize(all);
     if(!cJSON_IsArray(all) || count<1 || count>12) {reason="invalid_question_candidates";return false;}
+    std::vector<std::string> keys;
     for(int i=0;i<count;++i) {
         const auto entry=cJSON_GetArrayItem(all,i);const char *key=text(entry,"key"),*question=text(entry,"question");
-        if(!bounded(key,64) || !bounded(question,16000)) {reason="invalid_question_candidate";return false;}
-        for(const auto &old:parsed.questions)if(old.key==key) {reason="duplicate_question_key";return false;}
+        if(!bounded(key,64)) {reason="invalid_question_key";return false;}
+        for(const auto &old:keys)if(old==key) {reason="duplicate_question_key";return false;}
+        keys.push_back(key);
+        const auto complete=cJSON_GetObjectItemCaseSensitive(entry,"complete");
+        if(!cJSON_IsBool(complete)) {reason="missing_question_completeness";return false;}
+        if(cJSON_IsFalse(complete)){parsed.incomplete_keys.push_back(key);continue;}
+        if(!bounded(question,16000)) {reason="invalid_question_candidate";return false;}
         const auto image=cJSON_GetObjectItemCaseSensitive(entry,"requires_image");
         if(!cJSON_IsBool(image)) {reason="missing_question_image_requirement";return false;}
         parsed.questions.push_back({key,question,cJSON_IsTrue(image)!=0});
     }
-    const char *key=text(v,"selected_key"),*basis=text(v,"selection_basis");
+    const auto chosen=cJSON_GetObjectItemCaseSensitive(v,"selected_key");
+    // Providers use explicit null for an unanswered selection. Missing fields
+    // and other types remain contract errors; null never selects a candidate.
+    const char *key=cJSON_IsNull(chosen)?"":text(v,"selected_key");
+    const char *basis=text(v,"selection_basis"),*target=text(v,"target_status");
     if(!key || !basis) {reason="missing_question_selection";return false;}
+    if(!target || (std::string(target)!="unspecified" && std::string(target)!="matched" &&
+       std::string(target)!="incomplete" && std::string(target)!="ambiguous")) {reason="invalid_target_status";return false;}
+    if(std::string(target)=="incomplete") {
+        if(!has_user_hint || *key || std::string(basis)!="target_incomplete") {reason="invalid_target_selection";return false;}
+        reason="target_question_incomplete";return false;
+    }
+    if(*key)for(const auto &partial:parsed.incomplete_keys)if(partial==key) {reason="target_question_incomplete";return false;}
+    if(parsed.questions.empty()) {reason="no_complete_question";return false;}
     if(!*key) {
-        if(std::string(basis)!="needs_user_selection") {reason="invalid_selection_basis";return false;}
+        if(std::string(basis)!="needs_user_selection" || std::string(target)=="matched") {reason="invalid_selection_basis";return false;}
         out=std::move(parsed);reason="needs_user_selection";return true;
     }
     if(std::string(basis)=="only_question") {
-        if(count!=1) {reason="ambiguous_question_selection";return false;}
-    } else if(std::string(basis)!="explicit_user" || !has_user_hint) {reason="unconfirmed_question_selection";return false;}
+        if(parsed.questions.size()!=1 || std::string(target)!="unspecified") {reason="ambiguous_question_selection";return false;}
+    } else if(std::string(basis)!="explicit_user" || !has_user_hint || std::string(target)!="matched") {
+        reason="unconfirmed_question_selection";return false;
+    }
     for(const auto &candidate:parsed.questions)if(candidate.key==key)parsed.selected=candidate;
     if(parsed.selected.key.empty()) {reason="selected_question_not_found";return false;}
     out=std::move(parsed);reason.clear();return true;
+}
+enum class CaptureFailure { image_quality,internal };
+inline CaptureFailure capture_failure(const std::string &reason) {
+    for(const char *quality:{"blurred","moving","exposure_or_low_contrast","insufficient_edges"})
+        if(reason==quality)return CaptureFailure::image_quality;
+    // Timing, initialization, audio/preview contention, resource failures and
+    // unknown reasons do not prove that the user moved or blurred the camera.
+    return CaptureFailure::internal;
+}
+enum class ReaderKind { ready,unreadable,target_incomplete,truncated,json_error,protocol_error,selection_error };
+inline const char *reader_kind_name(ReaderKind kind) {
+    switch(kind) {
+        case ReaderKind::ready:return "ready";
+        case ReaderKind::unreadable:return "unreadable";
+        case ReaderKind::target_incomplete:return "target_incomplete";
+        case ReaderKind::truncated:return "truncated";
+        case ReaderKind::json_error:return "json_error";
+        case ReaderKind::selection_error:return "selection_error";
+        default:return "protocol_error";
+    }
+}
+struct ReaderResult {
+    ReaderKind kind=ReaderKind::protocol_error;
+    Selection selection;
+    std::string reason,detail;
+    bool retry_same_photo() const {return kind==ReaderKind::json_error || kind==ReaderKind::protocol_error || kind==ReaderKind::selection_error;}
+    bool needs_target_view() const {return kind==ReaderKind::unreadable || kind==ReaderKind::target_incomplete;}
+};
+inline ReaderResult read_response(const char *answer,const std::string &finish,bool has_user_hint) {
+    ReaderResult result;
+    if(finish=="length") {result.kind=ReaderKind::truncated;result.reason="reader_truncated";return result;}
+    auto parsed=answer?cJSON_ParseWithOpts(answer,nullptr,true):nullptr;
+    if(!parsed) {result.kind=ReaderKind::json_error;result.reason="invalid_reader_json";return result;}
+    if(const char *detail=text(parsed,"reason"))result.detail=detail;
+    bool valid=parse_selection(parsed,has_user_hint,result.selection,result.reason);cJSON_Delete(parsed);
+    if(valid)result.kind=ReaderKind::ready;
+    else if(result.reason=="question_not_readable")result.kind=ReaderKind::unreadable;
+    else if(result.reason=="target_question_incomplete" || result.reason=="no_complete_question")result.kind=ReaderKind::target_incomplete;
+    else if(result.reason=="duplicate_question_key" || result.reason=="missing_question_selection" ||
+            result.reason=="invalid_selection_basis" || result.reason=="ambiguous_question_selection" ||
+            result.reason=="unconfirmed_question_selection" || result.reason=="selected_question_not_found" ||
+            result.reason=="invalid_target_selection")result.kind=ReaderKind::selection_error;
+    return result;
 }
 // A source identity, not an authentication primitive. IDs and revisions are checked too.
 inline std::string source_hash(const Question &q) {

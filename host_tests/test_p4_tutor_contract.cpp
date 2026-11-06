@@ -7,8 +7,8 @@ static unsigned checks;
 #define CHECK(x) do { ++checks; if(!(x)) { std::cerr << __LINE__ << ": " #x "\n"; std::exit(1); } } while(0)
 
 static cJSON *reader(const char *selected="二(1)",const char *basis="explicit_user") {
-    auto r=cJSON_Parse(R"JSON({"readable":true,"questions":[{"key":"二(1)","question":"求极限 lim(x->0+) x^a (ln x)^b，a>0，b>0。","requires_image":false},{"key":"二(2)","question":"计算另一道独立的极限 lim(x->0) sin(x)/x。","requires_image":false},{"key":"三","question":"求曲线围成的面积，已知图形与给定边界。","requires_image":true}],"reason":""})JSON");
-    cJSON_AddStringToObject(r,"selected_key",selected);cJSON_AddStringToObject(r,"selection_basis",basis);return r;
+    auto r=cJSON_Parse(R"JSON({"readable":true,"questions":[{"key":"二(1)","question":"求极限 lim(x->0+) x^a (ln x)^b，a>0，b>0。","requires_image":false,"complete":true},{"key":"二(2)","question":"计算另一道独立的极限 lim(x->0) sin(x)/x。","requires_image":false,"complete":true},{"key":"三","question":"求曲线围成的面积，已知图形与给定边界。","requires_image":true,"complete":true}],"reason":""})JSON");
+    cJSON_AddStringToObject(r,"selected_key",selected);cJSON_AddStringToObject(r,"selection_basis",basis);cJSON_AddStringToObject(r,"target_status",std::string(basis)=="explicit_user"?"matched":"unspecified");return r;
 }
 static cJSON *section(const Question &q,const char *value) {
     auto r=cJSON_CreateObject();cJSON_AddStringToObject(r,"key",q.key.c_str());cJSON_AddStringToObject(r,"text",value);return r;
@@ -60,6 +60,111 @@ static void scope_cases() {
     r=solution(q);cJSON_DeleteItemFromObjectCaseSensitive(r,"verification");
     output="retained previous lesson";CHECK(!parse_solution(r,q,7,1,output,reason));CHECK(output=="retained previous lesson");cJSON_Delete(r);
     r=cJSON_Parse("{\"scope\":");CHECK(!parse_solution(r,q,7,1,output,reason));cJSON_Delete(r);
+}
+static cJSON *partial_reader() {
+    return cJSON_Parse(R"JSON({"readable":true,"questions":[{"key":"例1(1)","complete":true,"question":"解方程：12-x=9。","requires_image":false},{"key":"例1(2)","complete":false,"question":"","requires_image":false},{"key":"例2(1)","complete":true,"question":"解方程：2.4+x=80%。","requires_image":false}],"selected_key":"例1(1)","selection_basis":"explicit_user","target_status":"matched","reason":""})JSON");
+}
+static ReaderResult classify(cJSON *r,const char *finish="stop",bool hint=true) {
+    char *json=cJSON_PrintUnformatted(r);CHECK(json);auto result=read_response(json,finish,hint);cJSON_free(json);return result;
+}
+static void reader_failure_cases() {
+    auto r=partial_reader();auto result=classify(r);
+    CHECK(result.kind==ReaderKind::ready && !result.retry_same_photo() && !result.needs_target_view());
+    CHECK(result.selection.questions.size()==2 && result.selection.incomplete_keys.size()==1);
+    CHECK(result.selection.selected.key=="例1(1)" && result.selection.selected.question=="解方程：12-x=9。");
+    CHECK(result.selection.questions[1].key=="例2(1)" && result.selection.questions[1].question=="解方程：2.4+x=80%。");
+    CHECK(result.selection.selected.question.find("80%") == std::string::npos);
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"selected_key",cJSON_CreateString(""));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"selection_basis",cJSON_CreateString("needs_user_selection"));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"target_status",cJSON_CreateString("unspecified"));
+    result=classify(r,"stop",false);CHECK(result.kind==ReaderKind::ready && result.selection.selected.key.empty());
+    cJSON_Delete(r);
+    // A cropped explicit target cannot silently become its complete neighbour.
+    r=partial_reader();cJSON_ReplaceItemInObjectCaseSensitive(r,"selected_key",cJSON_CreateString("例1(2)"));
+    result=classify(r);CHECK(result.kind==ReaderKind::target_incomplete && result.selection.selected.key.empty());
+    CHECK(!result.retry_same_photo() && result.needs_target_view());cJSON_Delete(r);
+    r=partial_reader();cJSON_ReplaceItemInObjectCaseSensitive(r,"selected_key",cJSON_CreateString(""));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"selection_basis",cJSON_CreateString("target_incomplete"));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"target_status",cJSON_CreateString("incomplete"));
+    result=classify(r);CHECK(result.kind==ReaderKind::target_incomplete && result.selection.questions.empty());cJSON_Delete(r);
+    // One complete independent question remains selectable beside a cut-off one.
+    r=partial_reader();auto questions=cJSON_GetObjectItemCaseSensitive(r,"questions");cJSON_DeleteItemFromArray(questions,2);
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"selection_basis",cJSON_CreateString("only_question"));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"target_status",cJSON_CreateString("unspecified"));
+    result=classify(r,"stop",false);CHECK(result.kind==ReaderKind::ready && result.selection.selected.key=="例1(1)");cJSON_Delete(r);
+    r=partial_reader();questions=cJSON_GetObjectItemCaseSensitive(r,"questions");
+    for(int i:{0,2})cJSON_ReplaceItemInObjectCaseSensitive(cJSON_GetArrayItem(questions,i),"complete",cJSON_CreateFalse());
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"selected_key",cJSON_CreateString(""));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"selection_basis",cJSON_CreateString("needs_user_selection"));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"target_status",cJSON_CreateString("unspecified"));
+    result=classify(r,"stop",false);CHECK(result.kind==ReaderKind::target_incomplete && result.reason=="no_complete_question");
+    CHECK(!result.retry_same_photo() && result.needs_target_view());cJSON_Delete(r);
+    // Hierarchical keys are distinct; collapsing them to (1) is a selection
+    // contract error, never evidence of a blurry camera frame.
+    r=partial_reader();questions=cJSON_GetObjectItemCaseSensitive(r,"questions");
+    for(int i:{0,2})cJSON_ReplaceItemInObjectCaseSensitive(cJSON_GetArrayItem(questions,i),"key",cJSON_CreateString("(1)"));
+    result=classify(r);CHECK(result.kind==ReaderKind::selection_error && result.reason=="duplicate_question_key");
+    CHECK(result.retry_same_photo() && !result.needs_target_view());cJSON_Delete(r);
+    r=partial_reader();questions=cJSON_GetObjectItemCaseSensitive(r,"questions");
+    cJSON_DeleteItemFromObjectCaseSensitive(cJSON_GetArrayItem(questions,0),"complete");
+    result=classify(r);CHECK(result.kind==ReaderKind::protocol_error && result.retry_same_photo() && !result.needs_target_view());cJSON_Delete(r);
+    r=partial_reader();cJSON_DeleteItemFromObjectCaseSensitive(r,"target_status");
+    result=classify(r);CHECK(result.kind==ReaderKind::protocol_error);cJSON_Delete(r);
+    r=partial_reader();cJSON_ReplaceItemInObjectCaseSensitive(r,"readable",cJSON_CreateString("true"));
+    result=classify(r);CHECK(result.kind==ReaderKind::protocol_error && result.reason=="invalid_readability");cJSON_Delete(r);
+    r=partial_reader();result=classify(r,"length");CHECK(result.kind==ReaderKind::truncated && !result.needs_target_view() && !result.retry_same_photo());cJSON_Delete(r);
+    for(const char *invalid:{"{\"readable\":true,","```json\n{}\n```","{} trailing", ""}) {
+        result=read_response(invalid,"stop",true);CHECK(result.kind==ReaderKind::json_error);
+        CHECK(result.retry_same_photo() && !result.needs_target_view());
+    }
+    for(const char *invalid:{"{}","[]","{\"readable\":null}"}) {
+        result=read_response(invalid,"stop",true);CHECK(result.kind==ReaderKind::protocol_error && !result.needs_target_view());
+    }
+    // The preserved failing-image replay returned false with null selection
+    // and no target_status. Its semantics must remain unreadable, not protocol.
+    result=read_response(R"({"readable":false,"questions":[],"selected_key":null,"selection_basis":null,"reason":"图片极度模糊且失焦"})","stop",false);
+    CHECK(result.kind==ReaderKind::unreadable && result.reason=="question_not_readable");
+    CHECK(result.needs_target_view() && !result.retry_same_photo() && result.detail=="图片极度模糊且失焦");
+    r=partial_reader();cJSON_ReplaceItemInObjectCaseSensitive(r,"readable",cJSON_CreateFalse());
+    result=classify(r);CHECK(result.kind==ReaderKind::unreadable && result.selection.questions.empty());cJSON_Delete(r);
+}
+static void actual_reader_shapes_cases() {
+    // Exact returned shapes from the three fixed-image provider runs. Keep
+    // their nulls/false semantics; no live model or image dependency in tests.
+    const char *clear=R"ACTUAL({"readable":true,"questions":[{"key":"例1(1)","complete":true,"question":"12 - x = 9","requires_image":false},{"key":"例1(2)","complete":false,"question":"","requires_image":false},{"key":"例2(1)","complete":true,"question":"2.4 + x = 80%","requires_image":false},{"key":"例2(2)","complete":false,"question":"","requires_image":false}],"selected_key":null,"selection_basis":"needs_user_selection","target_status":"ambiguous","reason":"图片中包含两个完整可读的子题（例1(1)和例2(1)）以及两个被裁切的不完整子题。用户未明确指定目标题目，且存在多个完整候选项，故目标状态为ambiguous，需用户进一步选择。"})ACTUAL";
+    const char *cropped=R"ACTUAL({"readable":false,"questions":[{"key":"例1(1)","complete":true,"question":"12 - x = 9","requires_image":false},{"key":"例1(2)","complete":false,"question":"","requires_image":false},{"key":"例2(1)","complete":true,"question":"2.4 + x = 80%","requires_image":false},{"key":"例2(2)","complete":false,"question":"","requires_image":false}],"selected_key":"","selection_basis":"target_incomplete","target_status":"incomplete","reason":"用户指定的目标题目“例1(2)”在图片右侧被裁切，仅可见“(2) 7 -”，后续算式内容缺失，无法辨认完整题干。"})ACTUAL";
+    const char *blurred=R"ACTUAL({"readable":false,"questions":[],"selected_key":null,"selection_basis":null,"target_status":null,"reason":"图片整体严重失焦且模糊，所有文字内容均无法辨认，无法识别任何完整的独立子题或题干信息。"})ACTUAL";
+    auto result=read_response(clear,"stop",false);
+    CHECK(result.kind==ReaderKind::ready && result.reason=="needs_user_selection");
+    CHECK(result.selection.selected.key.empty() && result.selection.questions.size()==2 && result.selection.incomplete_keys.size()==2);
+    CHECK(result.selection.questions[0].key=="例1(1)" && result.selection.questions[0].question=="12 - x = 9");
+    CHECK(result.selection.questions[1].key=="例2(1)" && result.selection.questions[1].question=="2.4 + x = 80%");
+    auto r=cJSON_Parse(clear);cJSON_DeleteItemFromObjectCaseSensitive(r,"selected_key");
+    result=classify(r,"stop",false);CHECK(result.kind==ReaderKind::selection_error && result.selection.selected.key.empty());cJSON_Delete(r);
+    for(const char *type:{"true","false","7","[]","{}"}) {
+        r=cJSON_Parse(clear);cJSON_ReplaceItemInObjectCaseSensitive(r,"selected_key",cJSON_Parse(type));
+        result=classify(r,"stop",false);CHECK(result.kind==ReaderKind::selection_error && result.selection.selected.key.empty());cJSON_Delete(r);
+    }
+    r=cJSON_Parse(clear);cJSON_ReplaceItemInObjectCaseSensitive(r,"target_status",cJSON_CreateString("matched"));
+    result=classify(r);CHECK(result.kind==ReaderKind::selection_error && result.selection.selected.key.empty());cJSON_Delete(r);
+    result=read_response(cropped,"stop",true);
+    CHECK(result.kind==ReaderKind::target_incomplete && result.reason=="target_question_incomplete");
+    CHECK(result.selection.questions.empty() && result.selection.selected.key.empty() && !result.retry_same_photo());
+    result=read_response(cropped,"stop",false);CHECK(result.kind==ReaderKind::unreadable && result.selection.questions.empty());
+    r=cJSON_Parse(cropped);cJSON_ReplaceItemInObjectCaseSensitive(r,"selected_key",cJSON_CreateNull());
+    result=classify(r);CHECK(result.kind==ReaderKind::target_incomplete && result.selection.questions.empty());
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"selected_key",cJSON_CreateString("例1(1)"));
+    result=classify(r);CHECK(result.kind==ReaderKind::unreadable && result.selection.questions.empty());cJSON_Delete(r);
+    result=read_response(blurred,"stop",false);CHECK(result.kind==ReaderKind::unreadable && result.selection.questions.empty());
+    result=read_response(blurred,"stop",true);CHECK(result.kind==ReaderKind::unreadable && result.selection.questions.empty());
+}
+static void capture_failure_cases() {
+    for(const char *reason:{"blurred","moving","exposure_or_low_contrast","insufficient_edges"})
+        CHECK(capture_failure(reason)==CaptureFailure::image_quality);
+    for(const char *reason:{"candidate_stale","sample_gap","camera_initializing","camera_initializing_timeout",
+        "no_frames","audio_busy","preview_unavailable","preview_allocation_failed","capture_allocation_failed",
+        "warming_up","image_acquisition_failed","capture_deadline","unknown","","blurred_then_timeout"})
+        CHECK(capture_failure(reason)==CaptureFailure::internal);
 }
 static void lifecycle_cases() {
     LessonState s;s.reset(7);s.begin_solve();
@@ -191,4 +296,4 @@ static void photo_window_cases() {
         CHECK(w.skip+w.count<=w.encoded_count/4*3 && w.encoded_count<=1368);
     }
 }
-int main() {acquisition_cases();photo_window_cases();selection_cases();scope_cases();lifecycle_cases();explicit_user_cases();explicit_user_priority_cases();std::cout << "PASS p4_tutor_contract " << checks << " checks\n";}
+int main() {acquisition_cases();photo_window_cases();selection_cases();scope_cases();reader_failure_cases();actual_reader_shapes_cases();capture_failure_cases();lifecycle_cases();explicit_user_cases();explicit_user_priority_cases();std::cout << "PASS p4_tutor_contract " << checks << " checks\n";}

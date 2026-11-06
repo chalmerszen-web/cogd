@@ -2447,8 +2447,12 @@ static void command(char *line)
     } else if(!strncmp(line,"agent display set ",18)) {
         submit(line+6,false,true);
 #if AGENT_BOARD_P4
+    } else if(!strcmp(line,"agent camera capture status")) {
+        char output[768];
+        if(p4_camera_capture_status(output,sizeof(output))) say("{}\r\n");
+        else {say(output);say("\r\n");}
     } else if(!strcmp(line,"agent tutor status")) {
-        char output[1800];p4_tutor_context(output,sizeof(output));say(output);say("\r\n");
+        char output[1800];p4_tutor_status(output,sizeof(output));say(output);say("\r\n");
     } else if(!strncmp(line,"agent tutor photo read ",sizeof("agent tutor photo read ")-1)) {
         const char *args=line+sizeof("agent tutor photo read ")-1;
         unsigned offset,count; char extra,output[1800];

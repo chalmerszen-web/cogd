@@ -1,0 +1,378 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-07",
+  "status": "PASS_BOUNDED_REAL_CAMERA_SCOPE",
+  "release_status": "candidate_not_full_voice_acceptance",
+  "full_voice_acceptance": "DEFERRED_BY_USER",
+  "baseline_commit": "e1aef56fbbfc4f79299b5ae232b58b7b57729318",
+  "candidate": "0.9.7-p4-tutor",
+  "wake_word": "你好小智",
+  "source_hashes": {
+    "ESP32-P4-WIFI6-Touch-LCD-3.5/CMakeLists.txt": "70ddf918fd2d666f62c5592f3309437fd5c67ad3c66b852ee3731b4443a67df6",
+    "ESP32-P4-WIFI6-Touch-LCD-3.5/components/p4_board/p4_agent.h": "35283522c663cb5d7dd43957242a507d12d469a72a5db73ca9e354a9c2011ca7",
+    "ESP32-P4-WIFI6-Touch-LCD-3.5/components/p4_board/p4_cloud.cpp": "daac3e622347891efdc84e4bd79d42927afbc0e6fff3249b6d18822b94bb4e79",
+    "ESP32-P4-WIFI6-Touch-LCD-3.5/components/p4_board/p4_tutor_contract.h": "b6f9d0a0664d4d2799c20b9eb218f462b166d4c5a0aca99caea910e84bc9673e",
+    "ESP32-P4-WIFI6-Touch-LCD-3.5/components/p4_board/p4_vision.cpp": "bc50afbe4bf00d5113d3c9e39a0a6efd121049feed0421ee454fef88c85bbde5",
+    "ESP32-P4-WIFI6-Touch-LCD-3.5/components/p4_board/p4_capture_quality.hpp": "3586d19209e2e89635a66bfe52003ba48c9f3634a64646380f15e9fe25deb237",
+    "host_tests/CMakeLists.txt": "932561a93a8be49bba46627ace9150af60bbaf168ab424a8e6987e7a2d37be65",
+    "host_tests/test_p4_tutor_contract.cpp": "06185b3f590e0035336e455a188a426d43c6f844f0fbb87f9301a2ba87b752b5",
+    "host_tests/test_p4_capture_quality.cpp": "027ca5b3388f0df598d6306aff7f6f97fc82e55725521976fe06d3cfecaf09b8",
+    "platform/espidf/runtime.c": "4b5c8838fe2d4158bcc45efc027db708815809401c82c1a2375d2be34012d6fe"
+  },
+  "artifacts": {
+    "app": {
+      "bytes": 5800464,
+      "sha256": "69466ec448baf2504117bc588a859f8987d6c9374c70f47ea231d6429074d634"
+    },
+    "assets": {
+      "bytes": 1349792,
+      "sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc"
+    },
+    "partition": {
+      "bytes": 3072,
+      "sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6"
+    },
+    "bootloader": {
+      "bytes": 22160,
+      "sha256": "c1ec55579f9f9b5817179f1026a27abbfc1a80c0bae4f942385f75de9e59fd92"
+    }
+  },
+  "incident": {
+    "retained_jpeg_sha256": "15e8c4127f123aed33021931080ad15771dc4c7ee6d0efcaa6279089474fd0aa",
+    "observed": "Retained/uploaded JPEG blurred; later live preview did not identify the uploaded frame.",
+    "old_prompt_same_model_replay": "readable=false",
+    "partial_neighbor_parser_changes": "defensive improvements, not proven primary cause of original blurred JPEG"
+  },
+  "candidate_0_9_5": {
+    "app_bytes": 5798064,
+    "app_sha256": "852c53907f5034791af0df7b623e86beb8ba25745a87b8ea9196aa48419f3fb1",
+    "install_readback": "PASS",
+    "physical01": "FAIL",
+    "paper_fixed": true,
+    "capture_attempt_reasons": [
+      "candidate_stale",
+      "sample_gap",
+      "sample_gap"
+    ],
+    "final_capture_id": 0,
+    "new_image_sent_to_model": false,
+    "failure_preserved": true
+  },
+  "software": {
+    "p4_build": "PASS",
+    "p4_image_integrity": "PASS",
+    "host_tests": {
+      "passed": 106,
+      "failed": 0,
+      "reference_candidate": "0.9.6-p4-tutor",
+      "rerun_for_0_9_7": false,
+      "reason": "Only reader prompt and P4 version changed; tested algorithms/contracts unchanged."
+    },
+    "capture_quality": {
+      "assertions_passed": 248,
+      "static_image_cases_passed": 4,
+      "scope": "offline_host_and_decoded_images_only_not_P4_timing_validation",
+      "reference_candidate": "0.9.6-p4-tutor",
+      "algorithm_unchanged_for_0_9_7": true
+    },
+    "fixed_model_cases": {
+      "passed": 3,
+      "failed": 0,
+      "scope": "Existing fixed responses checked by corrected production reader contract; not a new on-board run.",
+      "initial_parse_failures_preserved": [
+        "selected_key:null classified as missing selection",
+        "target cropped classified as unreadable before target_incomplete correction"
+      ],
+      "reference_candidate": "0.9.5 reader contract corrections, retained in 0.9.6",
+      "rerun_for_0_9_7": false
+    },
+    "numeric_real_photo_replay": {
+      "status": "PASS",
+      "model": "qwen3.7-plus",
+      "calls": 3,
+      "passed": 3,
+      "failed": 0,
+      "new_hardware_run": false,
+      "generic_prompt_only": true,
+      "system_prompt_sha256": "28feb61c016777e4cb11bf5bd7ca416c905da0e38fb6d72690d7dddd2db7f821",
+      "source_sha256": "daac3e622347891efdc84e4bd79d42927afbc0e6fff3249b6d18822b94bb4e79",
+      "cases": [
+        {
+          "id": "photo1-a",
+          "status": "PASS",
+          "photo_sha256": "36fc8d0fe823a110fc5dbe80ca3ccae3c4ec2aee875fef65a057d5b87ca13178",
+          "response_sha256": "ec7b79547c467223cd09c638536a65599912e2b4f8e5e01e90ac18bb77d8a5b5"
+        },
+        {
+          "id": "photo1-b",
+          "status": "PASS",
+          "photo_sha256": "36fc8d0fe823a110fc5dbe80ca3ccae3c4ec2aee875fef65a057d5b87ca13178",
+          "response_sha256": "dbad75c5154543ff2b3645b7adddf9e57172e85ff00663625666d0d1701dc99f"
+        },
+        {
+          "id": "photo2-a",
+          "status": "PASS",
+          "photo_sha256": "fd58262ebf850405d302b336d34a61c469a5cb57c47968464346613e16b8f9e8",
+          "response_sha256": "f6ca093a9635d21f461ccb7d151a79b2ab0b9df23f9c861f762ced798926ac00"
+        }
+      ],
+      "all_read_decimal_correctly": true,
+      "scope": "Three new bounded model calls on two retained real-camera photos; not new on-board capture or universal OCR acceptance."
+    }
+  },
+  "physical_0_9_6": {
+    "status": "PASS_LIMITED_CAPTURE_AND_SOURCE_WITH_NUMERIC_FAILURE",
+    "first_install": {
+      "status": "BLOCKED_PROTECTED_BASELINE_MISMATCH",
+      "nvs_different_bytes": 50,
+      "firmware_written": false
+    },
+    "second_install": {
+      "status": "PASS",
+      "installed": true,
+      "protected": true,
+      "readback": true,
+      "assets_written": false
+    },
+    "source_frame_and_screen": {
+      "status": "PASS_LIMITED_ROOT_VISUAL_REVIEW",
+      "scope": "LCD frozen content corresponds to exported current source; separate from exporter integrity result."
+    },
+    "captures": [
+      {
+        "question_id": 1,
+        "capture_id": 1,
+        "photo_source": "camera",
+        "photo_sha256": "36fc8d0fe823a110fc5dbe80ca3ccae3c4ec2aee875fef65a057d5b87ca13178",
+        "captured_at_ms": 115545,
+        "jpeg_bytes": 148876,
+        "width": 800,
+        "height": 640,
+        "export_status": "PASS_BYTE_AND_JPEG_INTEGRITY",
+        "export_identity_stable": true,
+        "samples": 11,
+        "max_measure_us": 28960,
+        "max_copy_us": 19876,
+        "last_frame_age_ms": 48,
+        "selected_frame_age_ms": 90,
+        "preview_frozen": true
+      },
+      {
+        "question_id": 3,
+        "capture_id": 2,
+        "photo_source": "camera",
+        "photo_sha256": "fd58262ebf850405d302b336d34a61c469a5cb57c47968464346613e16b8f9e8",
+        "captured_at_ms": 373787,
+        "jpeg_bytes": 148184,
+        "width": 800,
+        "height": 640,
+        "export_status": "PASS_BYTE_AND_JPEG_INTEGRITY",
+        "export_identity_stable": true,
+        "samples": 12,
+        "max_measure_us": 29676,
+        "max_copy_us": 19887,
+        "last_frame_age_ms": 48,
+        "selected_frame_age_ms": 49,
+        "preview_frozen": true
+      }
+    ],
+    "same_photo_refine": {
+      "status": "PASS",
+      "from_question_id": 1,
+      "to_question_id": 2,
+      "capture_id": 1,
+      "hash_and_captured_time_unchanged": true
+    },
+    "new_start": {
+      "status": "PASS",
+      "capture_id_before": 1,
+      "capture_id_after": 2,
+      "photo_hash_changed": true,
+      "captured_time_changed": true
+    },
+    "general_page_change": "NOT_RUN",
+    "numeric_recognition": {
+      "first_attempt": "FAIL",
+      "user_confirmed_value": "1.6",
+      "recognized_value": "16",
+      "later_explicit_crosscheck": "1.6",
+      "later_success_does_not_erase_initial_failure": true
+    },
+    "voice_smoke": {
+      "automated_wake": "PASS_REPORTED_BY_ROOT",
+      "sapi_retake": "NOT_PASSED_NO_ASR_EVENT",
+      "original_test_passed": false,
+      "manual_user_session": "DEFERRED_BY_USER",
+      "full_conversation": "DEFERRED_BY_USER"
+    },
+    "final_publication_readback": "NOT_REPEATED_SUPERSEDED_BY_0_9_7",
+    "normal_state": "HISTORICAL_NOT_FINAL_PUBLICATION_STATE",
+    "app_sha256": "2413aca41d6a7417cfb55025fdd1b2e3b097c3cda7a5acacfbcb29e171c1fe43",
+    "app_bytes": 5799936
+  },
+  "c3": {
+    "build": "PASS",
+    "target": "esp32c3",
+    "version": "0.13.0-c3-xiaozhi",
+    "idf_version": "v6.1",
+    "app_bytes": 1569184,
+    "free_app_bytes": 3680,
+    "app_sha256": "1fcad41d00d40ec1677e31c8a50c8f7a54cfe9b427d8eb5732ade5697fab2639",
+    "expected_app_sha256": "ad14f3cf28700cc2e241f195c78d64326820d80a047e58043b2aaea2f7d023f6",
+    "app_matches_baseline": false,
+    "partition_sha256": "03135fff90b8a4983a4a7a758018626dc296756ac79578e5df9c7b8eb64b3179",
+    "partition_matches_baseline": true,
+    "repository_compile_entries": 92,
+    "p4_compile_units": [],
+    "runtime_p4_is_zero": true,
+    "isolation_passed": true,
+    "hardware_validation": "NOT_RUN",
+    "flashed": false,
+    "reference_candidate": "0.9.6-p4-tutor",
+    "shared_source_unchanged_for_0_9_7": true
+  },
+  "c3_binary_comparison": {
+    "status": "PASS_EXPLAINED_DIAGNOSTIC_LINE_AND_INTEGRITY_DIFFERENCES",
+    "different_bytes": 79,
+    "app_descriptor_elf_sha_changed_bytes": 32,
+    "runtime_diagnostic_line_changed_bytes": 14,
+    "trailing_checksum_and_digest_changed_bytes": 33,
+    "all_other_image_bytes_identical": true,
+    "metadata_only_difference": false,
+    "reason": "P4-only CLI insertion adds four physical source lines; 12 C3 ESP_ERROR_CHECK diagnostic line immediates shift by +4 (14 bytes). The other changes are the 32-byte app descriptor ELF SHA and 33-byte image checksum/digest. No unexplained image byte differs."
+  },
+  "s3": "NOT_IMPLEMENTED",
+  "retained_limits": [
+    "No full voice acceptance; deferred by user.",
+    "No new C3 hardware validation.",
+    "0.9.4 ambiguous re-read routing failure remains known.",
+    "No general math-correctness, distant/noisy speech, video concurrency or endurance acceptance."
+  ],
+  "raw_evidence": {
+    "local_root": ".local/tutor-readable-20261106/",
+    "published": false,
+    "files": {
+      "candidate-result.json": "495b815e2132f549bdceacd6f39d86b4d89af4a8f74963c4125a80cc786b58f3",
+      "candidate-source.json": "955f4e245010bf6df3db8a751dd7a0b5b2ea1647583cb84f60ae47bec5092d28",
+      "candidate-0.9.6-result.json": "28060f246b8649154d15cdef05d8d5a75736048288fe2fac2e5b976aaeb1267c",
+      "physical01/install/receipt.json": "523487538abf6d08abdb82a2377dddb932f258eb9951b463c5395f1606f0c674",
+      "physical01/session/capture1-status.json": "a7d3b0402da5d05c1270fcf39efbc7932b146312bb1e690207291f5de4b3ed39",
+      "physical01/session/usb/serial.log": "615e70847959ec3b91890dd3b158b3827d40bedd318a2d4c3d3574fc93b17bb8",
+      "quality-timing-fix/validation.json": "39235b826a7da260a3eb63d08667e69ec2eaac8667edc8601cd039181007c4a1",
+      "fixed-image-validation.json": "b2ab1d5a0de3e031794b3ccbfa5ed4488f3ea2081e9904470db085c2f9f2e71a",
+      "host-0.9.6-final.log": "d83d67981199b4dd419bd08e6309948029853a401738a97bcfacdb0c150449b2",
+      "p4-0.9.6-build-final.log": "11a8305c6792f02ea7b3f2ebcad8d674d5980d7ba8dc48528da74361abae29e0",
+      "p4-0.9.6-image-info.log": "93c243f1c40572485d1dc88805aac4ba536b1a47dc0228ae5f9c51df945cc32d",
+      "c3-0.9.6-result.json": "136879454509e02de2579960b1b0d3409943e9b52e914748020f9a49e6d822e9",
+      "c3-0.9.6-build.log": "1bcbad2727836239fbf75dd42cd47638a287fc31a70951e31c352a22b927bdea",
+      "c3-0.9.6-runtime-disassembly.txt": "24644c3b181f841eaffbe5985b8cef661dcfaa6987b4b7f3bf8566bbcb37a1c1",
+      "old-reader-replay-run/result.txt": "a6305628f422ff51da1367f35ab4e3e5f3e65ebc79f7cb818a2a7bcb3d07cf8a",
+      "physical02/install/receipt.json": "ad0e15bac0754e0a54020ef45edc74b744e168e9722c7ffd865da303d47635f0",
+      "physical02/install02/receipt.json": "b31a3e56594a5ac0a663e5780ad1a00cabc2457c4a83d6ee7a9986e19b77efa3",
+      "physical02/session/capture1-status.json": "c8462ef4ab2962a7345e6a1b652c6efa48f81d4dc959ffde5018d30a80178284",
+      "physical02/session/refine2-status.json": "4311af9c4c56a14a71ca1ef7ae4b0a886a75041397bcaeb75c19a1677c570408",
+      "physical02/session/capture2-status.json": "ec4dc697f9dc66556a6ad5e3495b5eade3be179233a5080801d5bda5f3418d1c",
+      "physical02/session/capture1-metrics.json": "8f32eb3a4b5b03145f91d7fa05ad56237e2590f5db18cb58a1f90ae6393cb60a",
+      "physical02/session/capture2-metrics.json": "6c458c9798ea5d80cdce19832b3c0d9247314a3bfd7ceff6f72e78d287e6d3f5",
+      "physical02/session/photo1/receipt.json": "e6bba4d15ed8e36abdf2a9c62680379ba140da697242ccafa0622d0f5da4b2b6",
+      "physical02/session/photo2/receipt.json": "56d249c0949f7096425f4a635e9aef34489d72a7e7ba778f8fc404f75355c392",
+      "physical02/session/screen1.jpg": "47669568a25638d614e3cf784b72c3304f7e2c987bbe4f9c63fef3dffeb71f08",
+      "physical02/session/screen2.jpg": "620cdf61c488be84cc10937b55266ea14870fda182c96044fba0d28492529984",
+      "physical02/session/voice-retake-result.json": "dbe70bcc3cac11e499c96c049720ef1210575f1e9e3ff7a264a55305503e2192",
+      "candidate-0.9.7-result.json": "38d1e4675da457839e9ed5837b6fb65cc7b2c5cb41af49b88380002670d307f0",
+      "numeric-review-20261107/validation.json": "8607833a1dd3af056d246cd8e5a67c8c931b3a23868cc206f69aab172d7781ee",
+      "physical03/physical-result.json": "f99686313b7800768d722171c63f503b6ef6724f739d062d6ab8caf096659194",
+      "physical03/install/receipt.json": "b84da6dfe8e50f994cc66cea2057caaf1e60349a5e88064ed67f8473506aad0f",
+      "physical03/session/default-read-checks.json": "6ac7942148a96412dd0253495976073aac06ac8a18f09a1e5f543569339989bf",
+      "physical03/session/capture1-status.json": "b4a69879c28a3952d3b917d2f3f78ca1aa354408c03048ea7b114f9786bcd266",
+      "physical03/session/capture2-status.json": "5726fcef0bb3b9d8de0cd206fa5629a1ea23f080ce9f558a255800889a4d9dd7",
+      "physical03/session/capture1-metrics.json": "1cc4a6267de74c0877f44f3c95bf15bd20f66d6745cd4281b9f21772e7266fcf",
+      "physical03/session/capture2-metrics.json": "06668d247077abd530f323b43f1cb5014bc96d4a470b153bd1ae752cb6da04ab",
+      "physical03/session/photo1/receipt.json": "802c18232ea51812dfa7edeee1c6ca63de84c4368615b21a81971532f54d64a7",
+      "physical03/session/photo2/receipt.json": "1e3c793105d36c0e0e18671278cdaf07bbf6af4dfc7cc7da4a98ce700340f0ee",
+      "physical03/session/screen1.jpg": "1127683511db17b034f0306e1b81f4cc4ee8843214400faf534ac00c1d0261fb",
+      "physical03/session/screen2.jpg": "0cc93dab122abc7cb7615561fbf5347e8131be73a4fdfe2b8d49f7a471619338"
+    }
+  },
+  "updated_utc": "2026-11-06T16:33:03.792097+00:00",
+  "human_voice_retake": "DEFERRED_BY_USER",
+  "publication_scope": "Photo capture/readability only; user-deferred human/full voice does not block this scope.",
+  "physical_0_9_7": {
+    "status": "PASS_BOUNDED_REAL_CAMERA_SCOPE",
+    "app_sha256": "69466ec448baf2504117bc588a859f8987d6c9374c70f47ea231d6429074d634",
+    "installed_readback": "PASS_PRETEST_BYTE_COMPARISON",
+    "non_app_protection": "PASS",
+    "assets_written": false,
+    "tested_request": "Default full-page real-camera start, no fixture or supplied equations/decimal.",
+    "default_reads_passed": 2,
+    "default_reads_failed": 0,
+    "expected_equations": [
+      "12-x=9",
+      "1/2-2x=1/3",
+      "1.6*2-3x=40%"
+    ],
+    "captures": [
+      {
+        "capture_id": 1,
+        "captured_at_ms": 96854,
+        "jpeg_sha256": "e3e61c5d4338c4f5fa7d12e6ae123f4a4d37d568c41c5d7fa8178cf421af31f3",
+        "jpeg_bytes": 147930,
+        "width": 800,
+        "height": 640,
+        "all_three_equations_correct": true,
+        "source": "camera",
+        "samples": 10,
+        "max_measure_us": 29483,
+        "max_copy_us": 19737,
+        "last_frame_age_ms": 48,
+        "selected_frame_age_ms": 167,
+        "preview_frozen": true
+      },
+      {
+        "capture_id": 2,
+        "captured_at_ms": 139841,
+        "jpeg_sha256": "22fbae3c984a7cf9172ff806eaa1073f8a5c51f4476e74529dd4c013f4f689b7",
+        "jpeg_bytes": 152860,
+        "width": 800,
+        "height": 640,
+        "all_three_equations_correct": true,
+        "source": "camera",
+        "samples": 11,
+        "max_measure_us": 29526,
+        "max_copy_us": 19899,
+        "last_frame_age_ms": 48,
+        "selected_frame_age_ms": 93,
+        "preview_frozen": true
+      }
+    ],
+    "decoded_pixels_differ": true,
+    "lcd_review": {
+      "status": "PASS_VISIBLE_PREVIEW_ONLY",
+      "reviewer": "root_agent",
+      "scope": "Visible preview layout, paper edges, arrow and three equation rows match exported source.",
+      "lower_text": "NOT_FULLY_OBSERVED_STAND_OCCLUSION"
+    },
+    "same_photo_selection": {
+      "status": "PASS_REFERENCE_0_9_6_ONLY",
+      "algorithm_unchanged": true,
+      "rerun_on_0_9_7": false
+    },
+    "new_page_change": "NOT_RUN_SAME_FIXED_PAPER",
+    "touch": "NOT_RUN",
+    "post_test_flash_readback": "NOT_REPEATED",
+    "firmware_binding": "Pretest application byte readback, non-app protection, no flashing during tests, final version confirmation.",
+    "final_state": {
+      "version": "0.9.7-p4-tutor",
+      "voice_enabled": true,
+      "wake": "listening",
+      "realtime_active": false,
+      "tutor_cancelled": true,
+      "serial_released": true
+    },
+    "human_voice_retake": "DEFERRED_BY_USER",
+    "full_voice": "DEFERRED_BY_USER"
+  },
+  "started_date": "2026-11-06",
+  "completed_local": "2026-11-07T00:30:22.925501+08:00",
+  "prepared_utc": "2026-11-06T15:51:58.748942+00:00"
+}

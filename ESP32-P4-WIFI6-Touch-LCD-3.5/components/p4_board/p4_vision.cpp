@@ -12,6 +12,7 @@
 #include "human_face_detect.hpp"
 #include "p4_agent.h"
 #include "p4_document_state.h"
+#include "p4_capture_quality.hpp"
 #include "p4_math_text.hpp"
 #include "p4_media.h"
 #include "pedestrian_detect.hpp"
@@ -41,6 +42,7 @@ std::atomic<unsigned> epoch{0};
 std::atomic<int> owner{0}, cam_mode{0};
 std::atomic<unsigned> capture_frames{0}, inference_ms{0}, camera_errors{0};
 std::atomic<int> camera_width{0}, camera_height{0};
+std::atomic<unsigned> camera_frame_generation{0};
 lv_obj_t *surface = nullptr, *canvas = nullptr, *log_label = nullptr;
 lv_obj_t *document = nullptr;
 std::atomic<unsigned> document_step{0},document_manual_until{0};
@@ -53,7 +55,21 @@ p4_document_bookmark_t document_bookmark{};
 uint16_t *snapshot = nullptr; // state_lock; copied only by capture owner
 unsigned snapshot_generation = 0;
 bool snapshot_ready = false;
+bool snapshot_has_candidate = false;
+bool snapshot_measuring = false;
+unsigned snapshot_request = 0;
+uint64_t snapshot_started_ms = 0;
+struct CaptureStatus {
+    unsigned generation = 0, samples = 0, selected_elapsed_ms = 0;
+    unsigned elapsed_ms = 0, audio_skips = 0;
+    unsigned last_sample_elapsed_ms = 0, last_measure_us = 0, max_measure_us = 0;
+    unsigned last_copy_us = 0, max_copy_us = 0, last_frame_age_ms = 0, drain_ms = 0;
+    const char *state = "idle", *reason = "no_capture";
+    p4_capture::Metrics latest{}, selected{};
+    bool preview_frozen = false;
+} capture_status; // state_lock; no image data or dynamic allocations
 std::atomic<bool> question_camera{false};
+std::atomic<unsigned> question_frozen_generation{0};
 lv_font_t *cjk_font = nullptr;
 lv_font_t ui_font;
 int still_x = 0, still_y = 0, still_w = W, still_h = H;
@@ -192,7 +208,8 @@ void resize_camera(const uint16_t *src, int sw, int sh, uint16_t *dst, int dw, i
 }
 bool present_camera(const uint16_t *src, int sw, int sh, uint16_t *scaled,
                     const std::list<dl::detect::result_t> &boxes, const char *message,
-                    unsigned generation, unsigned &render_us, unsigned &lock_us) {
+                    unsigned generation, unsigned &render_us, unsigned &lock_us,
+                    bool captured_frame = false) {
     if (!p4_visual_current(generation)) return false;
     int dh = std::min(300, sh * W / sw), dw = sw * dh / sh, ox = (W - dw) / 2, oy = 20;
     int64_t began = esp_timer_get_time();
@@ -200,7 +217,8 @@ bool present_camera(const uint16_t *src, int sw, int sh, uint16_t *scaled,
     render_us = unsigned(esp_timer_get_time()-began);
     if (!bsp_display_lock(10)) return false;
     began = esp_timer_get_time();
-    if (owner.load() != 1 || !p4_visual_current(generation)) {
+    if (owner.load() != 1 || !p4_visual_current(generation) ||
+        (question_camera && question_frozen_generation.load()==generation && !captured_frame)) {
         bsp_display_unlock();
         return false;
     }
@@ -276,6 +294,7 @@ void inference_worker(void *arg) {
 }
 
 void capture_worker(void *) {
+    static p4_capture::Window capture_window; // two small grids stay off the task stack
     for (;;) {
         while (!cam_mode.load())
             vTaskDelay(pdMS_TO_TICKS(100));
@@ -379,7 +398,57 @@ void capture_worker(void *) {
                 int mode = cam_mode.load();
                 if (b.flags & V4L2_BUF_FLAG_DONE) {
                     ++received;
+                    camera_frame_generation=generation;
                     int iw = camera_width, ih = camera_height;
+                    unsigned request=0;uint64_t requested_at=0;
+                    if(xSemaphoreTake(state_lock,0)==pdTRUE) {
+                        if(snapshot && !snapshot_ready && snapshot_generation==generation) {
+                            if(p4_media_audio_reserve())++capture_status.audio_skips;
+                            else {
+                                request=snapshot_request;requested_at=snapshot_started_ms;
+                                // Finalization must not accept an older candidate while
+                                // a newer movement/blur sample is still being evaluated.
+                                snapshot_measuring=true;
+                            }
+                        }
+                        xSemaphoreGive(state_lock);
+                    }
+                    if(request) {
+                        if(capture_window.request!=request)capture_window.begin(request,requested_at);
+                        // Score before the expensive preview resize/display. Keep the
+                        // dequeue time as frame time, never the processing finish time.
+                        int64_t measure_at=esp_timer_get_time();
+                        auto decision=capture_window.observe(buffers[b.index],iw,ih,uint64_t(now/1000));
+                        unsigned measure_us=unsigned(esp_timer_get_time()-measure_at);
+                        xSemaphoreTake(state_lock,portMAX_DELAY);
+                        if(snapshot_request==request) {
+                            if(snapshot && snapshot_generation==generation && decision.sampled) {
+                                capture_status.samples=capture_window.samples;
+                                capture_status.latest=capture_window.latest;
+                                capture_status.reason=capture_window.reason;
+                                capture_status.last_sample_elapsed_ms=unsigned(uint64_t(now/1000)-requested_at);
+                                capture_status.last_measure_us=measure_us;
+                                capture_status.max_measure_us=std::max(capture_status.max_measure_us,measure_us);
+                                if(decision.discard) {
+                                    snapshot_has_candidate=false;capture_status.selected={};
+                                    capture_status.selected_elapsed_ms=0;
+                                }
+                                if(decision.replace) {
+                                    int64_t copy_at=esp_timer_get_time();
+                                    memcpy(snapshot,buffers[b.index],size_t(iw)*ih*2);
+                                    capture_status.last_copy_us=unsigned(esp_timer_get_time()-copy_at);
+                                    capture_status.max_copy_us=std::max(capture_status.max_copy_us,capture_status.last_copy_us);
+                                    snapshot_has_candidate=true;
+                                    capture_status.selected=capture_window.best;
+                                    capture_status.selected_elapsed_ms=capture_window.selected_elapsed_ms;
+                                }
+                                capture_status.last_frame_age_ms=unsigned((esp_timer_get_time()-now)/1000);
+                                capture_status.elapsed_ms=unsigned(uint64_t(esp_timer_get_time()/1000)-requested_at);
+                            }
+                            snapshot_measuring=false;
+                        }
+                        xSemaphoreGive(state_lock);
+                    }
                     auto quality = frame_quality(buffers[b.index],iw,ih);
                     if (pending && inference.finished.load()) {
                         results = std::move(inference.results);
@@ -463,7 +532,8 @@ void capture_worker(void *) {
                         if (mode > 0 && cam_mode.load() == mode && p4_visual_current(generation))
                             publish(state);
                     }
-                    if (now >= next_preview && !p4_media_audio_reserve()) {
+                    if (now >= next_preview && !p4_media_audio_reserve() &&
+                        !(question_camera && question_frozen_generation.load()==generation)) {
                         next_preview += 66667;
                         if (next_preview < now) next_preview = now+66667;
                         if (present_camera(buffers[b.index],iw,ih,scaled.get(),boxes,message,generation,render_us,lock_us)) {
@@ -471,12 +541,7 @@ void capture_worker(void *) {
                             max_lock_us = std::max(max_lock_us,lock_us);
                         }
                     }
-                    if (quality.usable() && xSemaphoreTake(state_lock,0)==pdTRUE) {
-                        if(snapshot && !snapshot_ready && snapshot_generation==generation) {
-                            memcpy(snapshot,buffers[b.index],size_t(iw)*ih*2);snapshot_ready=true;
-                        }
-                        xSemaphoreGive(state_lock);
-                    }
+
                 }
                 if (ioctl(fd, VIDIOC_QBUF, &b))
                     break;
@@ -594,7 +659,7 @@ extern "C" bool p4_visual_active(void) { return owner.load() != 0 || p4_wifi_vis
 extern "C" bool p4_visual_current(unsigned e) { return e && e == epoch.load(); }
 extern "C" unsigned p4_visual_begin(int mode) {
     unsigned e=p4_begin_transaction(epoch,owner,mode,[]{return surface && bsp_display_lock(1000);},[](unsigned){
-        cam_mode=0;question_camera=false;
+        cam_mode=0;question_camera=false;question_frozen_generation=0;
         clear_labels();
         std::fill(pixels,pixels+W*H,uint16_t(0));
         lv_obj_remove_flag(surface,LV_OBJ_FLAG_HIDDEN);
@@ -609,6 +674,7 @@ extern "C" unsigned p4_visual_begin(int mode) {
 extern "C" void p4_visual_stop(void) {
     cam_mode = 0;
     question_camera = false;
+    question_frozen_generation = 0;
     if(state_lock)publish("{\"state\":\"off\"}");
     owner = 0;
     ++epoch;
@@ -633,26 +699,115 @@ extern "C" unsigned p4_camera_question_begin(void) {
     unsigned e=p4_visual_begin(1);if(!e)return 0;question_camera=true;cam_mode=1;
     p4_visual_message(e,"请把题目放在镜头前\n保持文字清晰、光线充足");return e;
 }
+extern "C" int p4_camera_capture_status(char *out,size_t cap) {
+    if(!out || !cap || !state_lock)return 1;
+    xSemaphoreTake(state_lock,portMAX_DELAY);auto status=capture_status;xSemaphoreGive(state_lock);
+    const auto &q=!strcmp(status.state,"ready")?status.selected:status.latest;
+    int n=snprintf(out,cap,
+        "{\"state\":\"%s\",\"reason\":\"%s\",\"generation\":%u,\"samples\":%u,"
+        "\"elapsed_ms\":%u,\"selected_elapsed_ms\":%u,\"mean_luma\":%u,\"luma_range\":%u,"
+        "\"sharpness\":%u,\"edge_samples\":%u,\"sharp_edges\":%u,\"sharp_fraction\":%u,"
+        "\"motion\":%u,\"changed_permille\":%u,\"audio_skips\":%u,\"preview_frozen\":%s,"
+        "\"gradient_points\":%u,\"gradient_stride\":%u,\"last_sample_elapsed_ms\":%u,"
+        "\"last_measure_us\":%u,\"max_measure_us\":%u,\"last_copy_us\":%u,\"max_copy_us\":%u,"
+        "\"last_frame_age_ms\":%u,\"drain_ms\":%u}",
+        status.state,status.reason,status.generation,status.samples,status.elapsed_ms,status.selected_elapsed_ms,
+        q.mean,q.range,q.sharpness,q.edge_samples,q.sharp_edges,q.sharp_fraction,q.motion,q.changed_permille,
+        status.audio_skips,status.preview_frozen?"true":"false",q.gradient_points,q.stride,
+        status.last_sample_elapsed_ms,status.last_measure_us,status.max_measure_us,
+        status.last_copy_us,status.max_copy_us,status.last_frame_age_ms,status.drain_ms);
+    return n<0 || size_t(n)>=cap?5:0;
+}
 extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     *data=nullptr;*size=0;
-    int w=camera_width.load(),h=camera_height.load();
     if(!p4_visual_current(e) || !cam_mode)return 4;
-    if(w<=0 || h<=0)return 3;
+    xSemaphoreTake(state_lock,portMAX_DELAY);
+    if(snapshot){xSemaphoreGive(state_lock);return 3;}
+    capture_status={};capture_status.generation=e;capture_status.state="collecting";
+    capture_status.reason="camera_initializing";question_frozen_generation=0;xSemaphoreGive(state_lock);
+    int64_t init_until=esp_timer_get_time()+5000000;
+    while(p4_visual_current(e) && cam_mode && camera_frame_generation.load()!=e && esp_timer_get_time()<init_until)
+        vTaskDelay(pdMS_TO_TICKS(20));
+    if(!p4_visual_current(e))return 4;
+    int w=camera_width.load(),h=camera_height.load();
+    if(!cam_mode || camera_frame_generation.load()!=e || w<=0 || h<=0) {
+        xSemaphoreTake(state_lock,portMAX_DELAY);capture_status.state="rejected";
+        capture_status.reason="camera_initializing_timeout";xSemaphoreGive(state_lock);return 3;
+    }
     jpeg_encode_memory_alloc_cfg_t alloc={};alloc.buffer_direction=JPEG_ENC_ALLOC_INPUT_BUFFER;
     size_t capacity=0;
     auto rgb24=(uint8_t *)jpeg_alloc_encoder_mem(size_t(w)*h*3,&alloc,&capacity);
     auto copy=(uint16_t *)heap_caps_malloc(size_t(w)*h*2,MALLOC_CAP_SPIRAM);
-    if(!copy || !rgb24){free(copy);free(rgb24);return 19;}
+    if(!copy || !rgb24){free(copy);free(rgb24);xSemaphoreTake(state_lock,portMAX_DELAY);
+        capture_status.state="rejected";capture_status.reason="capture_allocation_failed";xSemaphoreGive(state_lock);return 19;}
     xSemaphoreTake(state_lock,portMAX_DELAY);
     if(snapshot){xSemaphoreGive(state_lock);free(copy);free(rgb24);return 3;}
-    snapshot=copy;snapshot_ready=false;snapshot_generation=e;xSemaphoreGive(state_lock);
+    snapshot=copy;snapshot_ready=false;snapshot_has_candidate=false;snapshot_measuring=false;snapshot_generation=e;
+    if(!++snapshot_request)++snapshot_request;
+    snapshot_started_ms=uint64_t(esp_timer_get_time()/1000);
+    capture_status={};capture_status.generation=e;capture_status.state="collecting";capture_status.reason="no_frames";
+    question_frozen_generation=0;
+    xSemaphoreGive(state_lock);
     bool ready=false;
     for(int i=0;i<100 && p4_visual_current(e);++i) {
-        vTaskDelay(pdMS_TO_TICKS(20));xSemaphoreTake(state_lock,portMAX_DELAY);
-        ready=snapshot_ready;xSemaphoreGive(state_lock);if(ready)break;
+        vTaskDelay(pdMS_TO_TICKS(20));
+        if(uint64_t(esp_timer_get_time()/1000)-snapshot_started_ms>=p4_capture::window_ms)break;
     }
-    xSemaphoreTake(state_lock,portMAX_DELAY);snapshot=nullptr;snapshot_ready=false;xSemaphoreGive(state_lock);
+    // Drain only a score that is already in flight at the window boundary.
+    // It may invalidate the old candidate. Its actual dequeue timestamp still
+    // has to pass the same age gate; waiting cannot make an old image fresh.
+    int64_t drain_started=esp_timer_get_time();
+    for(;;) {
+        xSemaphoreTake(state_lock,portMAX_DELAY);
+        if(!snapshot_measuring || !p4_visual_current(e) ||
+           esp_timer_get_time()-drain_started>=int64_t(p4_capture::measure_drain_ms)*1000)break;
+        xSemaphoreGive(state_lock);
+        vTaskDelay(pdMS_TO_TICKS(5));
+    }
+    capture_status.drain_ms=unsigned((esp_timer_get_time()-drain_started)/1000);
+    unsigned elapsed=unsigned(uint64_t(esp_timer_get_time()/1000)-snapshot_started_ms);
+    bool recent=capture_status.samples && p4_capture::fresh_frame_times(
+        elapsed,capture_status.last_sample_elapsed_ms,capture_status.selected_elapsed_ms);
+    bool sample_recent=capture_status.samples && p4_capture::fresh_frame_times(
+        elapsed,capture_status.last_sample_elapsed_ms,capture_status.last_sample_elapsed_ms);
+    ready=capture_status.samples && p4_capture::final_frame_ready(snapshot_has_candidate,snapshot_measuring,
+        elapsed,capture_status.last_sample_elapsed_ms,capture_status.selected_elapsed_ms) && p4_visual_current(e);
+    snapshot_ready=ready;snapshot=nullptr;
+    capture_status.elapsed_ms=elapsed;
+    capture_status.state=ready?"selected":"rejected";
+    if(!p4_visual_current(e))capture_status.reason="superseded";
+    else if(ready)capture_status.reason="ok";
+    else if(snapshot_measuring)capture_status.reason="measurement_timeout";
+    else if(!capture_status.samples)capture_status.reason=capture_status.audio_skips?"audio_busy":"no_frames";
+    else if(!sample_recent)capture_status.reason="sample_gap";
+    else if(snapshot_has_candidate && !recent)capture_status.reason="candidate_stale";
+    xSemaphoreGive(state_lock);
     if(!ready || !p4_visual_current(e)){free(copy);free(rgb24);return p4_visual_current(e)?3:4;}
+    if(question_camera) {
+        // The caller owns copy throughout this display operation. Never hold
+        // state_lock while acquiring the display lock. Freeze the exact source
+        // frame rather than a later live preview that the reader never received.
+        auto scaled=static_cast<uint16_t *>(heap_caps_malloc(W*300*2,MALLOC_CAP_SPIRAM));
+        bool allocated=scaled!=nullptr,shown=false;
+        unsigned render_us=0,lock_us=0;std::list<dl::detect::result_t> no_boxes;
+        if(allocated) {
+            question_frozen_generation=e;
+            for(unsigned retry=0;retry<3 && p4_visual_current(e);++retry) {
+                shown=present_camera(copy,w,h,scaled,no_boxes,"",e,render_us,lock_us,true);
+                if(shown)break;
+                vTaskDelay(pdMS_TO_TICKS(10));
+            }
+            free(scaled);
+        }
+        xSemaphoreTake(state_lock,portMAX_DELAY);
+        capture_status.preview_frozen=shown;
+        if(!shown){capture_status.state="rejected";capture_status.reason=allocated?"preview_unavailable":"preview_allocation_failed";}
+        xSemaphoreGive(state_lock);
+        if(!shown) {
+            unsigned held=e;question_frozen_generation.compare_exchange_strong(held,0);
+            free(copy);free(rgb24);return p4_visual_current(e)?(allocated?3:19):4;
+        }
+    }
     for(int i=0;i<w*h;++i){unsigned c=copy[i];rgb24[3*i]=((c>>11)&31)*255/31;rgb24[3*i+1]=((c>>5)&63)*255/63;rgb24[3*i+2]=(c&31)*255/31;}
     free(copy);alloc.buffer_direction=JPEG_ENC_ALLOC_OUTPUT_BUFFER;size_t out_size=0;
     auto jpg=(uint8_t *)jpeg_alloc_encoder_mem(size_t(w)*h*2,&alloc,&out_size);
@@ -664,7 +819,15 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     if(!error && jpeg_encoder_process(encoder,&format,rgb24,w*h*3,jpg,out_size,&used)!=ESP_OK)error=16;
     if(encoder)jpeg_del_encoder_engine(encoder);
     free(rgb24);
-    if(error){free(jpg);return error;}
+    if(!error && !p4_visual_current(e))error=4;
+    xSemaphoreTake(state_lock,portMAX_DELAY);
+    if(capture_status.generation==e) {
+        capture_status.state=error?"rejected":"ready";
+        capture_status.reason=error==4?"superseded":error?"jpeg_encode_failed":"ok";
+        if(error)capture_status.preview_frozen=false;
+    }
+    xSemaphoreGive(state_lock);
+    if(error){unsigned held=e;question_frozen_generation.compare_exchange_strong(held,0);free(jpg);return error;}
     *data=jpg;*size=used;return 0;
 }
 extern "C" int p4_visual_document(unsigned e,const char *text) {
