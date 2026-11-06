@@ -12,6 +12,7 @@
 #include "p4_media.h"
 #include "p4_tutor_contract.h"
 #include "mbedtls/base64.h"
+#include "psa/crypto.h"
 #include "../../../plugins/model_usage.h"
 #include <cctype>
 #include <algorithm>
@@ -28,6 +29,7 @@ constexpr const char *origin = "https://maas.qianwenaiapi.com";
 SemaphoreHandle_t job_lock = nullptr;
 std::atomic<bool> active{false};
 std::atomic<unsigned> job_counter{0};
+std::atomic<unsigned> capture_counter{0};
 char job_status[3072] = "{\"state\":\"idle\"}";
 std::string last_task;
 std::string response_body;
@@ -36,6 +38,7 @@ std::string tutor_phase="idle", tutor_question, tutor_image, tutor_summary, tuto
 // One retained lesson; unrelated cloud responses cannot overwrite its source.
 std::string tutor_solution, tutor_key, tutor_completion_action, tutor_error_reason;
 p4_tutor::LessonState tutor_lesson;
+p4_tutor::PhotoSource tutor_photo;
 std::string &tutor_mode=tutor_lesson.mode;
 bool tutor_completion_pending=false;
 bool tutor_requires_image=false;
@@ -55,6 +58,7 @@ struct Job {
     unsigned fps = 15;
     std::string fixture;
     std::string tutor, hint, question, photo;
+    p4_tutor::PhotoSource photo_source;
     std::string question_key;
     unsigned question_id=0,revision=0;
     bool question_requires_image=false,retry=false;
@@ -111,6 +115,10 @@ int lesson_status(char *out,size_t cap,bool content=false,unsigned step=0,unsign
     cJSON_AddStringToObject(r,"state",tutor_phase=="solving" || tutor_phase=="reading"?"running":tutor_phase=="failed" || tutor_phase=="incomplete"?"failed":"succeeded");
     cJSON_AddStringToObject(r,"tutor_state",tutor_phase.c_str());
     cJSON_AddNumberToObject(r,"question_id",tutor_id);
+    cJSON_AddNumberToObject(r,"capture_id",tutor_photo.capture_id);
+    cJSON_AddStringToObject(r,"photo_source",tutor_photo.kind.c_str());
+    cJSON_AddStringToObject(r,"photo_sha256",tutor_photo.sha256.c_str());
+    cJSON_AddNumberToObject(r,"captured_at_ms",double(tutor_photo.captured_at_ms));
     cJSON_AddStringToObject(r,"selection_key",tutor_key.c_str());
     cJSON_AddStringToObject(r,"teaching_state",tutor_mode.c_str());
     cJSON_AddNumberToObject(r,"revision",tutor_revision);cJSON_AddNumberToObject(r,"current_step",tutor_step);
@@ -594,7 +602,7 @@ void tutor_finish(Job *j,const char *phase,int error,const char *summary="") {
     cJSON_DeleteItemFromObjectCaseSensitive(r,"state");cJSON_AddStringToObject(r,"state",current?(error?"failed":"succeeded"):"superseded");
     cJSON_AddNumberToObject(r,"job_id",j->id);cJSON_AddNumberToObject(r,"error",error);
     if(!current){cJSON_DeleteItemFromObjectCaseSensitive(r,"tutor_state");cJSON_AddStringToObject(r,"tutor_state","superseded");}
-    cJSON_AddStringToObject(r,"source",j->fixture.empty()?"onboard_camera":"test_image_not_camera");
+    cJSON_AddStringToObject(r,"source",!j->photo_source.valid()?"none":j->photo_source.kind=="fixture"?"test_image_not_camera":"onboard_camera");
     if(*summary){cJSON_DeleteItemFromObjectCaseSensitive(r,"summary");cJSON_AddStringToObject(r,"summary",excerpt(summary,0,240).c_str());}
     char result[2304];if(copy_json(r,result,sizeof(result)))snprintf(result,sizeof(result),"{\"state\":\"failed\",\"error\":5,\"job_id\":%u}",j->id);
     if(current)snprintf(tutor_status,sizeof(tutor_status),"%s",result);
@@ -712,9 +720,23 @@ void run_tutor(Job *j) {
             }
             if(error==3){p4_visual_message(j->generation,"请把题目放在镜头前\n画面太暗或缺少细节时不会猜题");vTaskDelay(pdMS_TO_TICKS(300));continue;}
             if(error)break;
+            // The retained/exported source is exactly the JPEG passed to the reader.
+            // Do not label arbitrary fixture bytes as a camera JPEG.
+            uint8_t digest[32];size_t digest_size=0;
+            if(size<4 || jpg[0]!=0xff || jpg[1]!=0xd8 || jpg[size-2]!=0xff || jpg[size-1]!=0xd9)error=6;
+            else if(psa_crypto_init()!=PSA_SUCCESS || psa_hash_compute(PSA_ALG_SHA_256,jpg,size,digest,sizeof(digest),&digest_size)!=PSA_SUCCESS || digest_size!=sizeof(digest))error=16;
+            if(error){if(j->fixture.empty())free(jpg);break;}
+            char sha[65];for(size_t n=0;n<sizeof(digest);++n)snprintf(sha+2*n,3,"%02x",digest[n]);
+            unsigned capture=++capture_counter;if(!capture)capture=++capture_counter;
+            j->photo_source={capture,uint64_t(esp_timer_get_time()/1000),size,j->fixture.empty()?"camera":"fixture",sha};
             size_t capacity=(size+2)/3*4+1,used=0;std::string encoded(capacity,'\0');
             error=mbedtls_base64_encode((unsigned char *)encoded.data(),capacity,&used,jpg,size);if(j->fixture.empty())free(jpg);
             if(error){error=16;break;}encoded.resize(used);photo="data:image/jpeg;base64,"+encoded;
+            xSemaphoreTake(job_lock,portMAX_DELAY);
+            bool current=tutor_job_id==j->id && tutor_phase=="reading" && p4_visual_current(j->generation);
+            if(current){tutor_image=photo;tutor_fixture=j->fixture;tutor_photo=j->photo_source;}
+            xSemaphoreGive(job_lock);
+            if(!current){error=4;break;}
         }
         ++attempts;p4_visual_message(j->generation,"正在读题，请保持画面稳定…");
         error=tutor_model(*j,photo,j->hint,false,answer,length);
@@ -732,7 +754,7 @@ void run_tutor(Job *j) {
             tutor_question=selection.selected.question;tutor_key=selection.selected.key;
             tutor_requires_image=selection.selected.requires_image;
             tutor_candidates=std::move(selection.questions);tutor_summary=summary;tutor_image=std::move(photo);
-            tutor_fixture=j->fixture;tutor_lesson.reset(tutor_id+1);tutor_generation=j->generation;tutor_error_reason.clear();xSemaphoreGive(job_lock);
+            tutor_fixture=j->fixture;tutor_photo=j->photo_source;tutor_lesson.reset(tutor_id+1);tutor_generation=j->generation;tutor_error_reason.clear();xSemaphoreGive(job_lock);
             std::string note=summary+(selected?"\n\n是这道题吗？也可以告诉我题号或位置。":"");p4_visual_message(j->generation,note.c_str());
             tutor_finish(j,selected?"awaiting_confirmation":"needs_selection",0);cJSON_Delete(r);return;
         }
@@ -891,16 +913,35 @@ int launch(Job *j, char *out, size_t cap) {
         p4_visual_message(j->generation, j->video?"正在生成或加载视频…":"正在生成或加载图片…");
     }
     if(!j->tutor.empty()) {
-        bool solving=j->tutor=="confirm" || j->tutor=="recheck";
-        j->generation=solving?p4_visual_begin(5):p4_camera_question_begin();
-        if(!j->generation){memset(j->auth,0,sizeof(j->auth));delete j;active=false;return 15;}
+        bool solving=j->tutor=="confirm" || j->tutor=="recheck",same_photo=j->tutor=="refine";
+        xSemaphoreTake(job_lock,portMAX_DELAY);
+        // Recheck after winning the worker slot: cancel/new input may have changed
+        // the retained lesson since the caller took its photo snapshot.
+        if(same_photo && (!p4_tutor::refine_current(tutor_phase,tutor_id,tutor_revision,j->question_id,j->revision,
+                !tutor_image.empty() && tutor_photo.valid()) || tutor_photo.capture_id!=j->photo_source.capture_id)) {
+            xSemaphoreGive(job_lock);memset(j->auth,0,sizeof(j->auth));delete j;active=false;
+            snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"refine_requires_current_pending_photo\"}");return 0;
+        }
+        if(solving && (!tutor_lesson.matches(j->question_id,j->revision) || tutor_photo.capture_id!=j->photo_source.capture_id ||
+            (j->tutor=="confirm"?!((tutor_phase=="awaiting_confirmation" && p4_visual_current(tutor_generation)) || tutor_phase=="incomplete"):
+             !(tutor_phase=="complete" || tutor_phase=="incomplete")))) {
+            xSemaphoreGive(job_lock);memset(j->auth,0,sizeof(j->auth));delete j;active=false;
+            snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"confirm_latest_question_first\"}");return 0;
+        }
+        // Same-photo refinement must not show a new live camera frame while
+        // reading the retained JPEG. Only start acquires a new physical photo.
+        j->generation=solving || same_photo || !j->fixture.empty()?p4_visual_begin(5):p4_camera_question_begin();
+        if(!j->generation){xSemaphoreGive(job_lock);memset(j->auth,0,sizeof(j->auth));delete j;active=false;return 15;}
         if(!solving)p4_document_forget(0);
-        xSemaphoreTake(job_lock,portMAX_DELAY);tutor_generation=j->generation;tutor_job_id=j->id;
+        tutor_generation=j->generation;tutor_job_id=j->id;
         tutor_phase=solving?"solving":"reading";
         snprintf(tutor_status,sizeof(tutor_status),"{\"state\":\"running\",\"tutor_state\":\"%s\",\"job_id\":%u}",tutor_phase.c_str(),j->id);
         tutor_completion_pending=false;tutor_completion_action.clear();tutor_error_reason.clear();
         if(solving)tutor_lesson.begin_solve(j->retry);
-        else {tutor_question.clear();tutor_key.clear();tutor_image.clear();tutor_summary.clear();tutor_solution.clear();tutor_candidates.clear();tutor_lesson.reset(tutor_id);}
+        else {
+            tutor_question.clear();tutor_key.clear();tutor_summary.clear();tutor_solution.clear();tutor_candidates.clear();tutor_lesson.reset(tutor_id);
+            if(!same_photo){tutor_image.clear();tutor_fixture.clear();tutor_photo={};tutor_requires_image=false;}
+        }
         xSemaphoreGive(job_lock);
         if(solving)p4_visual_message(j->generation,j->tutor=="confirm"?"正在解题中…":"正在复核解法…");
     }
@@ -941,6 +982,39 @@ extern "C" void p4_tutor_context(char *out,size_t cap) {
     xSemaphoreTake(job_lock,portMAX_DELAY);
     if(lesson_status(out,cap))snprintf(out,cap,"{}");
     xSemaphoreGive(job_lock);
+}
+extern "C" int p4_tutor_photo_read(unsigned offset,unsigned count,char *out,size_t cap) {
+    if(!out || !cap)return 1;
+    snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"photo_not_available\"}");
+    if(!job_lock)return 7;
+    constexpr const char *prefix="data:image/jpeg;base64,";
+    constexpr size_t prefix_size=23;
+    p4_tutor::PhotoWindow window;std::string encoded;unsigned capture=0;size_t total=0;
+    xSemaphoreTake(job_lock,portMAX_DELAY);
+    if(!tutor_photo.valid() || tutor_image.compare(0,prefix_size,prefix)!=0) {
+        xSemaphoreGive(job_lock);return 7;
+    }
+    if(!p4_tutor::photo_window(tutor_photo.jpeg_bytes,offset,count,window)) {
+        xSemaphoreGive(job_lock);snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"invalid_photo_range\"}");return 1;
+    }
+    size_t encoded_size=tutor_image.size()-prefix_size;
+    if(encoded_size!=((tutor_photo.jpeg_bytes+2)/3)*4 || window.encoded_offset+window.encoded_count>encoded_size) {
+        xSemaphoreGive(job_lock);snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"invalid_photo_encoding\"}");return 6;
+    }
+    encoded=tutor_image.substr(prefix_size+window.encoded_offset,window.encoded_count);
+    capture=tutor_photo.capture_id;total=tutor_photo.jpeg_bytes;xSemaphoreGive(job_lock);
+    unsigned char decoded[1026],chunk[1369];size_t decoded_size=0,chunk_size=0;
+    if(mbedtls_base64_decode(decoded,sizeof(decoded),&decoded_size,(const unsigned char *)encoded.data(),encoded.size()) ||
+       decoded_size<window.skip+window.count ||
+       mbedtls_base64_encode(chunk,sizeof(chunk),&chunk_size,decoded+window.skip,window.count)) {
+        snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"invalid_photo_encoding\"}");return 6;
+    }
+    chunk[chunk_size]=0;
+    auto r=cJSON_CreateObject();cJSON_AddNumberToObject(r,"capture_id",capture);
+    cJSON_AddNumberToObject(r,"offset",offset);cJSON_AddNumberToObject(r,"count",window.count);cJSON_AddNumberToObject(r,"total",total);
+    cJSON_AddStringToObject(r,"data_base64",(const char *)chunk);int error=copy_json(r,out,cap);cJSON_Delete(r);
+    if(error)snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"photo_output_capacity\"}");
+    return error;
 }
 extern "C" void p4_tutor_user_text(const char *text) {
     if(!job_lock || !text)return;
@@ -993,8 +1067,8 @@ extern "C" int p4_cloud_check(const char *tool, const char *args) {
             else if(!strcmp(v->string,"offset"))ok=ok && cJSON_IsNumber(v) && v->valuedouble==v->valueint && v->valueint>=0 && v->valueint<128*1024;
             else ok=false;
         }
-        if(ok && (lesson || !strcmp(a,"confirm")))ok=field(r,"question_id")!=nullptr && field(r,"revision")!=nullptr;
-        if(ok && str(r,"test_image_url"))ok=!strcmp(a,"start") || !strcmp(a,"refine");
+        if(ok && (lesson || !strcmp(a,"confirm") || !strcmp(a,"refine")))ok=field(r,"question_id")!=nullptr && field(r,"revision")!=nullptr;
+        if(ok && str(r,"test_image_url"))ok=!strcmp(a,"start");
         cJSON_Delete(r);return ok?0:1;
     }
     if (!strcmp(tool, "device_camera_test"))
@@ -1058,20 +1132,15 @@ extern "C" int p4_cloud_call(const char *tool, const char *args, char *out, size
     int err = 0;
     if(!strcmp(tool,"device_tutor")) {
         lock_init();auto a=str(r,"action");
-        /* Re-entering tutoring must not discard an unconfirmed question.
-         * Models sometimes choose start when asked about the current camera.
-         * Explicit refine is the operation that captures another question. */
-        if(!strcmp(a,"start")) {
-            xSemaphoreTake(job_lock,portMAX_DELAY);
-            bool pending=(tutor_phase=="awaiting_confirmation" || tutor_phase=="needs_selection") && p4_visual_current(tutor_generation);
-            if(pending)err=lesson_status(out,cap);
-            xSemaphoreGive(job_lock);
-            if(pending){cJSON_Delete(r);return err;}
-        }
         if(!strcmp(a,"status")) {
             xSemaphoreTake(job_lock,portMAX_DELAY);
-            if(tutor_generation && !p4_visual_current(tutor_generation) && tutor_solution.empty() && tutor_phase!="cancelled")snprintf(out,cap,"{\"tutor_state\":\"superseded\"}");
-            else err=lesson_status(out,cap);
+            err=lesson_status(out,cap);
+            if(!err && tutor_generation && !p4_visual_current(tutor_generation) && tutor_solution.empty() && tutor_phase!="cancelled") {
+                auto status=cJSON_Parse(out);
+                if(status){cJSON_ReplaceItemInObjectCaseSensitive(status,"tutor_state",cJSON_CreateString("superseded"));err=copy_json(status,out,cap);}
+                else err=6;
+                cJSON_Delete(status);
+            }
             xSemaphoreGive(job_lock);
         } else if(!strcmp(a,"scroll"))err=p4_document_scroll(field(r,"pixels")?field(r,"pixels")->valueint:0,out,cap);
         else if(!strcmp(a,"context") || !strcmp(a,"read") || !strcmp(a,"explain") || !strcmp(a,"resume") || !strcmp(a,"done")) {
@@ -1135,30 +1204,33 @@ extern "C" int p4_cloud_call(const char *tool, const char *args, char *out, size
         }
         else if(!strcmp(a,"cancel")) {
             xSemaphoreTake(job_lock,portMAX_DELAY);bool visible=p4_visual_current(tutor_generation);tutor_phase="cancelled";tutor_job_id=0;
-            tutor_image.clear();tutor_question.clear();tutor_solution.clear();tutor_key.clear();tutor_candidates.clear();tutor_lesson.reset(tutor_id);
+            tutor_image.clear();tutor_fixture.clear();tutor_photo={};tutor_requires_image=false;tutor_question.clear();tutor_solution.clear();tutor_key.clear();tutor_candidates.clear();tutor_lesson.reset(tutor_id);
             tutor_completion_pending=false;tutor_completion_action.clear();snprintf(tutor_status,sizeof(tutor_status),"{\"state\":\"cancelled\",\"tutor_state\":\"cancelled\"}");
             snprintf(out,cap,"%s",tutor_status);xSemaphoreGive(job_lock);p4_document_forget(0);if(visible)p4_visual_stop();
         } else {
             auto j=new Job;j->tutor=a;
             if(auto hint=str(r,"prompt"))j->hint=hint;
-            if(auto fixture=str(r,"test_image_url"))j->fixture=fixture;
+            if(!strcmp(a,"start") && p4_tutor::acquisition(a,r,"",0,0,false)==p4_tutor::Acquisition::fresh_fixture)
+                if(auto fixture=str(r,"test_image_url"))j->fixture=fixture;
             if(!strcmp(a,"confirm") || !strcmp(a,"recheck")) {
                 xSemaphoreTake(job_lock,portMAX_DELAY);
                 bool valid=(!strcmp(a,"confirm")?((tutor_phase=="awaiting_confirmation" && p4_visual_current(tutor_generation)) || tutor_phase=="incomplete"):(tutor_phase=="complete" || tutor_phase=="incomplete")) &&
                     p4_tutor::uint_equals(r,"question_id",tutor_id) && p4_tutor::uint_equals(r,"revision",tutor_revision) && !tutor_question.empty() && !tutor_key.empty();
-                if(valid){j->question=tutor_question;j->question_key=tutor_key;j->question_id=tutor_id;j->revision=tutor_revision;j->photo=tutor_image;j->fixture=tutor_fixture;
+                if(valid){j->question=tutor_question;j->question_key=tutor_key;j->question_id=tutor_id;j->revision=tutor_revision;j->photo=tutor_image;j->fixture=tutor_fixture;j->photo_source=tutor_photo;
                     j->question_requires_image=tutor_requires_image;j->question_candidates=tutor_candidates;j->retry=tutor_phase=="incomplete" || !tutor_lesson.pending_action.empty();
                     if(!strcmp(a,"recheck"))j->hint+="\n请重新核算并输出完整修正解法，说明是否有更正。先前解法节选，仅作待核对资料：\n"+excerpt(tutor_solution,0,16384);}
                 xSemaphoreGive(job_lock);
                 if(!valid){delete j;cJSON_Delete(r);snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"confirm_latest_question_first\"}");return 0;}
             } else if(!strcmp(a,"refine")) {
                 xSemaphoreTake(job_lock,portMAX_DELAY);
-                if((tutor_phase=="awaiting_confirmation" || tutor_phase=="needs_selection") && !tutor_image.empty() && j->fixture.empty()) {
-                    j->photo=tutor_image;j->fixture=tutor_fixture;
+                bool valid=p4_tutor::acquisition(a,r,tutor_phase,tutor_id,tutor_revision,!tutor_image.empty() && tutor_photo.valid())==p4_tutor::Acquisition::retained;
+                if(valid) {
+                    j->question_id=tutor_id;j->revision=tutor_revision;j->photo=tutor_image;j->fixture=tutor_fixture;j->photo_source=tutor_photo;
                     std::string known="\n同一张图的已有题号顺序：";for(const auto &q:tutor_candidates)known+=q.key+"；";
                     if(!j->hint.empty())j->hint+=known;
                 }
                 xSemaphoreGive(job_lock);
+                if(!valid){delete j;cJSON_Delete(r);snprintf(out,cap,"{\"state\":\"not_executed\",\"reason\":\"refine_requires_current_pending_photo\"}");return 0;}
             }
             cJSON_Delete(r);return launch(j,out,cap);
         }

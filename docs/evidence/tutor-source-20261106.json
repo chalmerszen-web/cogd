@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-06",
+  "prepared_utc": "2026-11-06T08:54:30.309698+00:00",
+  "source_baseline_commit": "9348d06",
+  "version": "0.9.4-p4-tutor",
+  "wake_word": "你好小智",
+  "release_status": "candidate_not_full_voice_acceptance",
+  "candidate01": {
+    "app_bytes": 5781712,
+    "app_sha256": "9a245df9a4731a2cb32e6b7db19a92a7141918a66ce3bafa769c069708cac3c8",
+    "assets_bytes": 1349792,
+    "assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+    "partition_sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+    "installed": true,
+    "protected": true,
+    "readback": true,
+    "assets_written": false
+  },
+  "software": {
+    "p4_build": "PASS",
+    "host_full": {
+      "status": "PASS",
+      "passed": 105,
+      "failed": 0
+    },
+    "host_targeted": {
+      "status": "PASS",
+      "passed": 3,
+      "failed": 0,
+      "tests": [
+        "p4_response_owner",
+        "p4_tutor_contract",
+        "p4_document_state"
+      ]
+    }
+  },
+  "physical01": {
+    "status": "PASS_CAMERA_SOURCE_AND_REFINEMENT",
+    "request_path": "direct_USB_tool_calls_not_voice",
+    "old_fixture": {
+      "question_id": 1,
+      "revision": 0,
+      "capture_id": 1,
+      "photo_source": "fixture",
+      "captured_at_ms": 119503,
+      "tutor_state": "needs_selection",
+      "photo_sha256": "806b030d111f01fa6739ccf6a274b134bb5af1d5054292a0382aead7ee0fcc6c"
+    },
+    "new_camera": {
+      "question_id": 2,
+      "revision": 0,
+      "capture_id": 2,
+      "photo_source": "camera",
+      "captured_at_ms": 155801,
+      "tutor_state": "needs_selection",
+      "photo_sha256": "0d1bf684a9e80584c378c6ad3d97a5f81a60ce475fd20776646a7fe63f7e505b",
+      "jpeg_bytes": 114768,
+      "width": 800,
+      "height": 640
+    },
+    "jpeg_export": {
+      "status": "PASS_BYTE_AND_JPEG_INTEGRITY",
+      "read_only": true,
+      "capture_requested": false,
+      "identity_before_after_equal": true,
+      "raw_receipt_visual_question_match": "NOT_REVIEWED",
+      "raw_receipt_firmware_binding_verified_here": false
+    },
+    "manual_photo_review": {
+      "status": "PASS_LIMITED_QUESTION_CORRESPONDENCE",
+      "reviewer": "root_agent",
+      "observed_content": "Reference-answer explanation I(1): lim_{x->0} ln(cos x)/x^2 = -1/2",
+      "matches_recognition_summary": true,
+      "mathematical_correctness_certified": false,
+      "evidence": "physical01/manual-review.json"
+    },
+    "same_photo_refine": {
+      "status": "PASS",
+      "from_question_id": 2,
+      "to_question_id": 3,
+      "tutor_state": "awaiting_confirmation",
+      "capture_id": 2,
+      "photo_hash_and_time_unchanged": true
+    },
+    "stale_refine": {
+      "status": "PASS_REJECTED",
+      "requested_question_id": 1,
+      "state": "not_executed",
+      "reason": "refine_requires_current_pending_photo",
+      "current_question_id": 3,
+      "current_content_unchanged": true
+    },
+    "screen_visual": {
+      "status": "NOT_RUN",
+      "reason": "External Insta view showed desk, not LCD."
+    }
+  },
+  "voice_recapture": {
+    "full_acceptance": "DEFERRED_BY_USER",
+    "user_observation": {
+      "status": "USER_OBSERVED",
+      "statement": "现在新拍题是正常了"
+    },
+    "initial_ambiguous_request": {
+      "status": "FAIL_KNOWN_ISSUE",
+      "text": "重新读题。",
+      "user_times_ms": [
+        623115,
+        629239
+      ],
+      "actions_observed": [
+        "status",
+        "read",
+        "explain",
+        "confirm"
+      ],
+      "fresh_capture": false
+    },
+    "explicit_camera_request": {
+      "status": "PASS_LIMITED_SOURCE_FLOW",
+      "text": "不对不对，你打开摄像头重新读题，你摄像头黑了。",
+      "start_time_ms": 642727,
+      "question_id": 4,
+      "capture_id": 5,
+      "photo_source": "camera",
+      "captured_at_ms": 659612,
+      "photo_sha256": "8dc16cd908f5c2681be78538f5037d299f27b54a326e5bb477f2f83e3b6005fd"
+    },
+    "same_photo_selection": {
+      "status": "PASS",
+      "request": "选第三道题。",
+      "refine_question_id": 4,
+      "result_question_id": 5,
+      "capture_id": 5,
+      "source_identity_unchanged": true,
+      "spoken_current_subject": "integral (ln ln x)/x dx",
+      "first_stale_attempt": {
+        "time_ms": 714624,
+        "question_id": 3,
+        "status": "REJECTED"
+      },
+      "status_refresh_time_ms": 716228,
+      "successful_refine_time_ms": 719172,
+      "first_attempt_correct": false
+    },
+    "jpeg_export": {
+      "status": "PASS_BYTE_AND_JPEG_INTEGRITY",
+      "jpeg_bytes": 128082,
+      "width": 800,
+      "height": 640,
+      "identity_before_after_equal": true,
+      "raw_receipt_visual_question_match": "NOT_REVIEWED",
+      "raw_receipt_firmware_binding_verified_here": false
+    },
+    "scope": "Later explicit camera success does not erase initial ambiguous-request failure. Full conversation postponed at user request.",
+    "manual_photo_review": {
+      "status": "PASS_LIMITED_QUESTION_CORRESPONDENCE",
+      "reviewer": "root_agent",
+      "evidence": "physical01/manual-review.json",
+      "observed_content": "(3) integral (ln ln x)/x dx, t=ln x, result ln x ln ln x-ln x+C; (4) asymptote analysis below.",
+      "matches_recognition_and_spoken_content": true,
+      "distinct_from_A_and_B": true,
+      "mathematical_correctness_certified": false
+    }
+  },
+  "final_hardware_checks": {
+    "status": "PASS",
+    "readback": {
+      "valid": true,
+      "flash_written": false,
+      "finished_utc": "2026-11-06T09:03:32.630422+00:00",
+      "app": {
+        "bytes": 5781712,
+        "sha256": "9a245df9a4731a2cb32e6b7db19a92a7141918a66ce3bafa769c069708cac3c8",
+        "matches": true
+      },
+      "assets": {
+        "bytes": 1349792,
+        "sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc",
+        "matches": true
+      },
+      "partition": {
+        "bytes": 3072,
+        "sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+        "matches": true
+      }
+    },
+    "first_normal_state": {
+      "status": "FAIL_HARNESS_PARSE_TIMEOUT",
+      "valid": false,
+      "reason": "Boot Wi-Fi log interleaved with first agent status JSON; not evidence of a firmware fault.",
+      "preserved": true
+    },
+    "second_normal_state": {
+      "status": "PASS",
+      "valid": true,
+      "independent_run": true,
+      "source_changed_between_checks": false,
+      "reset_between_checks": false,
+      "version": "0.9.4-p4-tutor",
+      "wifi": true,
+      "time_valid": true,
+      "voice_enabled": true,
+      "mode": "natural",
+      "wake_state": "listening",
+      "wake_word": "你好小智",
+      "wake_model": "wn10_nihaoxiaozhi",
+      "wake_error": "ok",
+      "audio_ready": true,
+      "volume": 80,
+      "port_released": true,
+      "finished_utc": "2026-11-06T09:04:36.259220+00:00"
+    }
+  },
+  "c3": {
+    "build": "PASS",
+    "target": "esp32c3",
+    "version": "0.13.0-c3-xiaozhi",
+    "idf_version": "v6.1",
+    "app_bytes": 1569184,
+    "app_partition_bytes": 1572864,
+    "free_app_bytes": 3680,
+    "app_sha256": "ad14f3cf28700cc2e241f195c78d64326820d80a047e58043b2aaea2f7d023f6",
+    "expected_app_sha256": "addfc5b39223bea84b0a2f18c10bb716a99f6a07f012ef3cf225caaa72b97193",
+    "app_matches_baseline": false,
+    "partition_sha256": "03135fff90b8a4983a4a7a758018626dc296756ac79578e5df9c7b8eb64b3179",
+    "expected_partition_sha256": "03135fff90b8a4983a4a7a758018626dc296756ac79578e5df9c7b8eb64b3179",
+    "partition_matches_baseline": true,
+    "repository_compile_entries": 92,
+    "p4_compile_units": [],
+    "p4_enabled_compile_definitions": [],
+    "runtime_p4_is_zero": true,
+    "isolation_passed": true,
+    "hardware_validation": "NOT_RUN",
+    "flashed": false
+  },
+  "c3_binary_difference": {
+    "status": "UNPROVEN",
+    "previous_frozen_app_found": false,
+    "metadata_only_difference_proven": false,
+    "scope": "Checked 59 binaries in prior integration/tutor-fixes local snapshots and named application images in root build directories; no matching prior C3 image was found."
+  },
+  "s3": {
+    "implementation": "NOT_IMPLEMENTED",
+    "hardware": "NOT_RUN"
+  },
+  "retained_limits": [
+    "No new C3 hardware validation.",
+    "Prior 0.9.3 seven-bug acceptance remains bound to that image, not this candidate.",
+    "Global audio/video concurrency, false interruptions, far-field/noise, latency and endurance acceptance remain unresolved.",
+    "No broad paper-recognition, physical-touch or mathematical-correctness certification."
+  ],
+  "raw_evidence": {
+    "local_root": ".local/tutor-source-20261106/",
+    "published": false,
+    "files": {
+      "candidate01/receipt.json": "6d9afb802853ff9f51387c527f64847e1ba2e0eadc2af52fd39292559d49f10d",
+      "physical01/firmware-binding.json": "6d9afb802853ff9f51387c527f64847e1ba2e0eadc2af52fd39292559d49f10d",
+      "physical01/usb/commands.json": "6aed6e6256124d086323b939d90e7dc9db8cc61096dbfaada79a21440004bf73",
+      "physical01/responses.jsonl": "1c732eb1b443f5f9c609abe6a4e236d1f2c8029728b42f298a9190f92cb3e649",
+      "physical01/photo-b/receipt.json": "a41f5f0afe472edeafde7f04910e2d87ed0167a1aabbcd7d49359f83e69fd68b",
+      "host-full.log": "c21f0bf2df89a59bdb15da4df43fd1abddbaf66825be4164cbcb9f446ae2f091",
+      "host-targeted.log": "14f30a9f33dcb0ffff66b5f092a07f9c8a097341bb8eb6d06d6bccb330080bc0",
+      "p4-build.log": "9a0b559761210df2087b56e2299c1d2d7c2bd92def5826852f185eafcc641bdd",
+      "p4-build-result.json": "5b82402d3b1a82fb3fa677d4cc2954e3b0f82e05a9bbac5ffabf445dd95e4a84",
+      "c3-result.json": "3fac8a331ffd9ac1780eac8fae3249ac0fa3d910b678eebc176dbf0b419e3e6a",
+      "c3-build.log": "9361eb3790553e25bf462cc5b313f0fb81d88e2b3dadde82c8c91ff350a39c23",
+      "physical01/manual-review.json": "5bd1683aacfefd41ad77795e41eb57bca7cc382bd47ca97cc950df20bbacd43f",
+      "physical01/events.jsonl": "9660ed592e8fab093db5dbad2610f909f5d83bdb8caeaf5714037a500ce9ac6f",
+      "physical01/photo-c/receipt.json": "c45f62c8fcce7f5e306e87872f5d5eaef241aad5a34d6deaa161d8629d14594b",
+      "final-readback/receipt.json": "305ca8647fefcb81acc5a36458be31773251ab2ac787a5cd0f02c4680cac9930",
+      "final-normal-state/receipt.json": "5ea31eb0aa648eb128fbac9045eef6810d14120af5688917e16669a4a77726fb",
+      "final-normal-state-02/receipt.json": "26e97febc1b43b47e6fa72ac8a9d0edd8e584ff456c26b99ac148fb12b331032"
+    }
+  },
+  "full_voice_acceptance": "DEFERRED_BY_USER",
+  "photo_source_acceptance": "PASS_LIMITED"
+}

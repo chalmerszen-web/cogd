@@ -43,6 +43,8 @@ void p4_tutor_activity(void);
 bool p4_tutor_pause_due(void);
 void p4_tutor_context(char *out, size_t cap);
 void p4_tutor_user_text(const char *text);
+/* USB diagnostics only. JPEG byte offset/count (1..1024); each chunk carries capture_id. */
+int p4_tutor_photo_read(unsigned offset,unsigned count,char *out,size_t cap);
 bool p4_tutor_claim_notice(unsigned question_id,unsigned revision,char *out,size_t cap);
 int p4_vision_fixture(unsigned generation, const char *mode, char *out, size_t cap);
 int p4_cloud_check(const char *tool, const char *arguments);

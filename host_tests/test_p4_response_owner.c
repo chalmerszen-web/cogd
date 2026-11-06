@@ -5,6 +5,15 @@
 int main(void)
 {
     p4_response_owner_t s={0};
+    /* A field hidden from the voice schema is also rejected at execution,
+     * regardless of its value (URL, empty string or null). Ordinary tutor
+     * fields and unrelated tools retain their existing contracts. */
+    assert(!p4_voice_tool_field_allowed("device_tutor","test_image_url"));
+    assert(p4_voice_tool_field_allowed("device_tutor","action"));
+    assert(p4_voice_tool_field_allowed("device_tutor","question_id"));
+    assert(p4_voice_tool_field_allowed("device_tutor","revision"));
+    assert(p4_voice_tool_field_allowed("device_camera_test","test_image_url"));
+    assert(p4_voice_tool_field_allowed("device_display_image","url"));
     /* Either provider event ordering permits exactly one audible response. */
     for(unsigned auto_first=0;auto_first<2;++auto_first) {
         unsigned ticket=p4_response_begin(&s,false);

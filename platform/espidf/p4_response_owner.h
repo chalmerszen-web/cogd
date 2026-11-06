@@ -31,6 +31,12 @@ static inline unsigned p4_response_user(p4_response_owner_t *s)
 }
 static inline bool p4_response_tools(const p4_response_owner_t *s)
 { return s->tools_authorized; }
+/* The conversational schema and execution gate share this restriction.
+ * Direct USB/cloud fixture tools do not call this voice-only policy. */
+static inline bool p4_voice_tool_field_allowed(const char *tool,const char *field)
+{
+    return !tool || !field || strcmp(tool,"device_tutor") || strcmp(field,"test_image_url");
+}
 static inline void p4_response_obsolete(p4_response_owner_t *s)
 {
     ++s->ticket;s->pending=false;s->acknowledged=false;s->manual=false;

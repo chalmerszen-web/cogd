@@ -2449,6 +2449,13 @@ static void command(char *line)
 #if AGENT_BOARD_P4
     } else if(!strcmp(line,"agent tutor status")) {
         char output[1800];p4_tutor_context(output,sizeof(output));say(output);say("\r\n");
+    } else if(!strncmp(line,"agent tutor photo read ",sizeof("agent tutor photo read ")-1)) {
+        const char *args=line+sizeof("agent tutor photo read ")-1;
+        unsigned offset,count; char extra,output[1800];
+        agent_err_t error=!strchr(args,'-') && sscanf(args,"%u %u %c",&offset,&count,&extra)==2 && count && count<=1024?
+            (agent_err_t)p4_tutor_photo_read(offset,count,output,sizeof(output)):AGENT_ERR_ARGUMENT;
+        if(!error) {say(output);say("\r\n");}
+        report(error);
     } else if(!strncmp(line,"agent tool ",11)) {
         submit(line+6,false,true);
 #endif

@@ -1,6 +1,7 @@
 #pragma once
 // Pure lesson contracts shared with host tests. No hardware or model calls.
 #include "cJSON.h"
+#include <algorithm>
 #include <cstdint>
 #include <cstdio>
 #include <initializer_list>
@@ -26,6 +27,38 @@ inline bool exact_fields(const cJSON *v,std::initializer_list<const char *> name
         if(count!=1)return false;
     }
     return true;
+}
+// One acquired JPEG identity is retained across same-photo selection and solving.
+struct PhotoSource {
+    unsigned capture_id=0;
+    uint64_t captured_at_ms=0;
+    size_t jpeg_bytes=0;
+    std::string kind="none",sha256;
+    bool valid() const {return capture_id && jpeg_bytes && (kind=="camera" || kind=="fixture") && sha256.size()==64;}
+};
+enum class Acquisition { reject,fresh_camera,fresh_fixture,retained };
+inline bool refine_current(const std::string &phase,unsigned current_id,unsigned current_revision,
+                           unsigned requested_id,unsigned requested_revision,bool has_photo) {
+    return (phase=="awaiting_confirmation" || phase=="needs_selection") && has_photo && current_id &&
+        requested_id==current_id && requested_revision==current_revision;
+}
+inline Acquisition acquisition(const std::string &action,const cJSON *request,const std::string &phase,
+                               unsigned id,unsigned revision,bool has_photo) {
+    const bool fixture=cJSON_GetObjectItemCaseSensitive(request,"test_image_url")!=nullptr;
+    // A new question never inherits a previous photo, even while confirmation is pending.
+    if(action=="start")return fixture?Acquisition::fresh_fixture:Acquisition::fresh_camera;
+    if(action!="refine" || fixture || !uint_equals(request,"question_id",id) ||
+       !uint_equals(request,"revision",revision) || !refine_current(phase,id,revision,id,revision,has_photo))
+        return Acquisition::reject;
+    return Acquisition::retained;
+}
+struct PhotoWindow {size_t encoded_offset=0,encoded_count=0,skip=0,count=0;};
+// Decode only the aligned base64 span, never allocate another complete JPEG.
+inline bool photo_window(size_t total,unsigned offset,unsigned count,PhotoWindow &out) {
+    if(!total || offset>=total || !count || count>1024)return false;
+    PhotoWindow window;window.skip=offset%3;window.count=std::min<size_t>(count,total-offset);
+    window.encoded_offset=size_t(offset/3)*4;window.encoded_count=(window.skip+window.count+2)/3*4;
+    out=window;return true;
 }
 struct Question {std::string key,question;bool requires_image=false;};
 struct Selection {std::vector<Question> questions;Question selected;};

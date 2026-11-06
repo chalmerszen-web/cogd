@@ -136,4 +136,59 @@ static void explicit_user_priority_cases() {
     s.reset(16);s.begin_solve();CHECK(s.user_text("你讲一下吧",16,0));
     s.fail();s.begin_solve(false);CHECK(!s.pending_user_choice && s.pending_action.empty());CHECK(s.choose("read",16,0,0));
 }
-int main() {selection_cases();scope_cases();lifecycle_cases();explicit_user_cases();explicit_user_priority_cases();std::cout << "PASS p4_tutor_contract " << checks << " checks\n";}
+static void acquisition_cases() {
+    auto r=cJSON_Parse("{\"action\":\"start\"}");
+    // A fresh physical question B must never be rewritten as a query/refinement
+    // of retained A, regardless of A's confirmation or completion state.
+    for(const char *phase:{"awaiting_confirmation","needs_selection","complete","incomplete","reading","solving","cancelled"}) {
+        CHECK(acquisition("start",r,phase,41,0,true)==Acquisition::fresh_camera);
+        CHECK(acquisition("start",r,phase,41,0,false)==Acquisition::fresh_camera);
+    }
+    cJSON_AddStringToObject(r,"test_image_url","https://test.invalid/explicit-usb-fixture.jpg");
+    CHECK(acquisition("start",r,"awaiting_confirmation",41,0,true)==Acquisition::fresh_fixture);
+    CHECK(acquisition("refine",r,"awaiting_confirmation",41,0,true)==Acquisition::reject);cJSON_Delete(r);
+    r=cJSON_Parse("{\"action\":\"refine\",\"question_id\":41,\"revision\":0}");
+    CHECK(acquisition("refine",r,"awaiting_confirmation",41,0,true)==Acquisition::retained);
+    CHECK(acquisition("refine",r,"needs_selection",41,0,true)==Acquisition::retained);
+    CHECK(acquisition("refine",r,"awaiting_confirmation",42,0,true)==Acquisition::reject);
+    CHECK(acquisition("refine",r,"awaiting_confirmation",41,1,true)==Acquisition::reject);
+    CHECK(acquisition("refine",r,"awaiting_confirmation",41,0,false)==Acquisition::reject);
+    for(const char *phase:{"reading","solving","complete","cancelled","needs_clearer_view"})
+        CHECK(acquisition("refine",r,phase,41,0,true)==Acquisition::reject);
+    cJSON_DeleteItemFromObjectCaseSensitive(r,"revision");
+    CHECK(acquisition("refine",r,"awaiting_confirmation",41,0,true)==Acquisition::reject);
+    cJSON_AddNumberToObject(r,"revision",0);cJSON_DeleteItemFromObjectCaseSensitive(r,"question_id");
+    CHECK(acquisition("refine",r,"awaiting_confirmation",41,0,true)==Acquisition::reject);cJSON_Delete(r);
+    // Revalidation at worker admission rejects a request captured before a
+    // cancel/new lesson, even if the initial call had valid IDs.
+    CHECK(refine_current("awaiting_confirmation",41,0,41,0,true));
+    CHECK(!refine_current("cancelled",41,0,41,0,true));
+    CHECK(!refine_current("awaiting_confirmation",42,0,41,0,true));
+    CHECK(!refine_current("awaiting_confirmation",41,1,41,0,true));
+    CHECK(!refine_current("awaiting_confirmation",0,0,0,0,true));
+    PhotoSource source{12,123456,4097,"fixture",std::string(64,'a')};CHECK(source.valid());
+    auto same_photo=source;CHECK(same_photo.capture_id==12 && same_photo.kind=="fixture" && same_photo.sha256==source.sha256);
+    source={};CHECK(!source.valid() && source.capture_id==0 && source.kind=="none" && source.sha256.empty());
+    source={13,234567,2048,"camera",std::string(64,'b')};CHECK(source.valid() && source.capture_id!=same_photo.capture_id);
+    source.kind="https://test.invalid/photo.jpg";CHECK(!source.valid());
+    source.kind="camera";source.sha256.clear();CHECK(!source.valid());
+}
+static void photo_window_cases() {
+    PhotoWindow w;
+    CHECK(photo_window(4097,0,1024,w));CHECK(w.encoded_offset==0 && w.encoded_count==1368 && w.skip==0 && w.count==1024);
+    CHECK(photo_window(4097,1024,1024,w));CHECK(w.encoded_offset==1364 && w.encoded_count==1368 && w.skip==1 && w.count==1024);
+    CHECK(photo_window(4097,2048,1024,w));CHECK(w.encoded_offset==2728 && w.encoded_count==1368 && w.skip==2 && w.count==1024);
+    CHECK(photo_window(4097,4096,1024,w));CHECK(w.encoded_offset==5460 && w.encoded_count==4 && w.skip==1 && w.count==1);
+    auto previous=w;
+    CHECK(!photo_window(4097,4097,1,w));CHECK(!photo_window(4097,0,0,w));CHECK(!photo_window(4097,0,1025,w));
+    CHECK(!photo_window(0,0,1,w));CHECK(!photo_window(4097,UINT32_MAX,1024,w));
+    CHECK(w.count==previous.count && w.encoded_offset==previous.encoded_offset);
+    // Exercise every byte alignment and final padding; no requested raw byte
+    // can fall outside the bounded decoded span used by the USB exporter.
+    for(unsigned total=1;total<=33;++total)for(unsigned offset=0;offset<total;++offset) {
+        CHECK(photo_window(total,offset,1024,w));
+        CHECK(w.count==total-offset && w.encoded_offset+w.encoded_count==((total+2)/3)*4);
+        CHECK(w.skip+w.count<=w.encoded_count/4*3 && w.encoded_count<=1368);
+    }
+}
+int main() {acquisition_cases();photo_window_cases();selection_cases();scope_cases();lifecycle_cases();explicit_user_cases();explicit_user_priority_cases();std::cout << "PASS p4_tutor_contract " << checks << " checks\n";}
