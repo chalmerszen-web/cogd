@@ -9,4 +9,12 @@ agent_err_t esp_agent_conversation_run(const agent_tool_ops_t *,agent_context_t 
 void esp_agent_conversation_status(char *,size_t);
 /* Volatile A/B setting, between sessions: 0 semantic, 200..800 ms acoustic. */
 agent_err_t esp_agent_conversation_endpoint(unsigned silence_ms);
+/* AOQ diagnostic setting, between sessions. 50..1000 means 0.05..1.0. */
+agent_err_t esp_agent_conversation_vad_threshold(unsigned thousandths);
+/* Diagnostic-only AOQ replay pacing, between sessions: 5, 10 or 20 ms. */
+agent_err_t esp_agent_conversation_catchup(unsigned frame_interval_ms);
+/* AOQ multimodal input; change only with the conversation stopped. */
+agent_err_t esp_agent_conversation_video(bool enabled);
+/* Probe builds only, volatile and off at boot; change with voice stopped. */
+agent_err_t esp_agent_conversation_test_tools(bool enabled);
 #endif

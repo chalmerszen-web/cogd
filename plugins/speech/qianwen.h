@@ -4,7 +4,9 @@
 
 #define AGENT_QWEN_SCRATCH 8192u
 #define AGENT_QWEN_EVENT_MAX 6144u
+#ifndef AGENT_QWEN_ASR_MODEL
 #define AGENT_QWEN_ASR_MODEL "fun-asr-realtime"
+#endif
 #define AGENT_QWEN_TTS_MODEL "qwen-audio-3.0-tts-flash"
 #define AGENT_QWEN_VOICE "longanhuan_v3.6"
 

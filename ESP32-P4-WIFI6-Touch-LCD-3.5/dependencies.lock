@@ -689,6 +689,6 @@ direct_dependencies:
 - espressif/pedestrian_detect
 - idf
 - waveshare/esp32_p4_wifi6_touch_lcd_3_5
-manifest_hash: 5cc126f5657f0a0d93dabf2ed66b79dc1c3439ee5fb47cc3a7c4c7a764fcc3b1
+manifest_hash: 2433dc0871733bf48e078506dc7de27bf0a1756990fa88f9d276eb621e465c39
 target: esp32p4
 version: 3.0.0

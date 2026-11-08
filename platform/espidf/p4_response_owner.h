@@ -5,6 +5,46 @@
 #include <stdio.h>
 #include <string.h>
 
+/* A committed ASR item is only a candidate. Empty recognitions must not
+ * replace the user who owns a pending tutor result. Keep that identity until
+ * a nonempty, validated transcript actually accepts a new user request. */
+typedef struct { char item[129]; } p4_input_identity_t;
+static inline bool p4_input_identity_accept(p4_input_identity_t *s,const char *item,const char *text)
+{
+    if(!item || !*item || strlen(item)>=sizeof(s->item) || !text ||
+       !text[strspn(text," \t\r\n")])return false;
+    strcpy(s->item,item);return true;
+}
+static inline bool p4_input_identity_matches(const p4_input_identity_t *s,const char *item)
+{ return item && *item && !strcmp(s->item,item); }
+
+/* Bind a recognized Audio item to one appended text item before inference.
+ * The provider can otherwise answer a restored text turn instead of the
+ * latest committed audio. This is one human request, not a second turn. */
+typedef struct {
+    char item[64],source[129];
+    unsigned ticket;
+    uint64_t started;
+    bool pending;
+} p4_input_binding_t;
+static inline bool p4_input_binding_begin(p4_input_binding_t *s,const char *item,
+    const char *source,unsigned ticket,uint64_t now)
+{
+    if(s->pending || !ticket || !item || !*item || strlen(item)>=sizeof(s->item) ||
+       !source || !*source || strlen(source)>=sizeof(s->source))return false;
+    strcpy(s->item,item);strcpy(s->source,source);s->ticket=ticket;s->started=now;s->pending=true;
+    return true;
+}
+static inline bool p4_input_binding_ack(p4_input_binding_t *s,const char *item,
+    const char *source,unsigned ticket)
+{
+    if(!s->pending || !item || !source || strcmp(s->item,item) ||
+       strcmp(s->source,source) || s->ticket!=ticket)return false;
+    s->pending=false;return true;
+}
+static inline bool p4_input_binding_timeout(const p4_input_binding_t *s,uint64_t now)
+{ return s->pending && now>=s->started && now-s->started>=3000; }
+
 /* One response per user turn or delivered application item. An automatic
  * continuation and our manual fallback spend the same ticket, including when
  * response.created arrives before conversation.item.created. Actor-owned. */
@@ -31,6 +71,10 @@ static inline unsigned p4_response_user(p4_response_owner_t *s)
 }
 static inline bool p4_response_tools(const p4_response_owner_t *s)
 { return s->tools_authorized; }
+/* An ACK grace interval or queued manual fallback still owns a response.
+ * An idle speaker alone is therefore not a connection renewal boundary. */
+static inline bool p4_response_settled(const p4_response_owner_t *s)
+{ return !s->pending && !s->manual; }
 /* The conversational schema and execution gate share this restriction.
  * Direct USB/cloud fixture tools do not call this voice-only policy. */
 static inline bool p4_voice_tool_field_allowed(const char *tool,const char *field)

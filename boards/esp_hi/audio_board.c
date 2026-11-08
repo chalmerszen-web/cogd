@@ -12,12 +12,22 @@
 #include "realtime.h"
 #include "intent.h"
 #if AGENT_BOARD_P4
+#include "communication_mode.h"
 #include "p4_audio.h"
 #include "p4_media.h"
 #include "esp_heap_caps.h"
 static atomic_bool media_lease;
 static atomic_uint media_clock;
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+/* Local barge-in retains up to three seconds before rotating the native
+ * connection. Setup and a subsequent provider cancellation can put its
+ * mapped replay cursor more than five seconds behind the live producer.
+ * Keep that bounded recovery audio in PSRAM; the one-second overwrite
+ * reserve and discontinuity checks in rewind still apply. */
+enum { SESSION_INPUT_SAMPLES=16000*12 };
+#else
 enum { SESSION_INPUT_SAMPLES=16000*6 };
+#endif
 static int16_t *session_input;
 static atomic_uint session_read,session_write,session_lost,stream_clock;
 static atomic_bool session_ready,session_running;
@@ -145,12 +155,13 @@ unsigned esp_hi_voice_dialogue_event(void) {return atomic_exchange(&dialogue_eve
 void esp_hi_voice_continue(bool wake_cue) {atomic_store(&continue_request,wake_cue?2:1);}
 agent_err_t esp_hi_voice_dialogue_status(char *out,size_t cap)
 {
-    unsigned echo[7];p4_audio_echo_stats(echo);
+    unsigned echo[7],capture_timing[5];p4_audio_echo_stats(echo);p4_audio_capture_stats(capture_timing);
     unsigned until=atomic_load(&followup_deadline),now=(unsigned)(esp_timer_get_time()/1000);
-    int n=snprintf(out,cap,"{\"duplex\":%s,\"followup_ms\":%u,\"interrupts\":%u,\"followups\":%u,\"idle_closes\":%u,\"echo_v1\":[%u,%u,%u,%u,%u,%u,%u]}",
+    int n=snprintf(out,cap,"{\"duplex\":%s,\"followup_ms\":%u,\"interrupts\":%u,\"followups\":%u,\"idle_closes\":%u,\"echo_v1\":[%u,%u,%u,%u,%u,%u,%u],\"capture_timing\":{\"frames\":%u,\"processing_max_us\":%u,\"near_max_us\":%u,\"over_32ms\":%u,\"rx_overflows\":%u}}",
         atomic_load(&voice_duplex)?"true":"false",until && (int32_t)(until-now)>0?until-now:0,
         atomic_load(&dialogue_interrupts),atomic_load(&dialogue_followups),atomic_load(&dialogue_expired),
-        echo[0],echo[1],echo[2],echo[3],echo[4],echo[5],echo[6]);
+        echo[0],echo[1],echo[2],echo[3],echo[4],echo[5],echo[6],
+        capture_timing[0],capture_timing[1],capture_timing[2],capture_timing[3],capture_timing[4]);
     return n>0 && (size_t)n<cap?AGENT_OK:AGENT_ERR_LIMIT;
 }
 #endif
@@ -637,7 +648,12 @@ static void mic_update(void)
             for(unsigned i=0;i<samples;++i)digital_pcm[i]=followup_pcm[followup_read++%FOLLOWUP_SAMPLES];
             followup_left-=samples;error=ESP_OK;
         } else error=p4_audio_read(digital_pcm,&samples,&lost);
-        if(lost) {atomic_fetch_add(&mic_overruns,lost);atomic_fetch_add(&wake_dma_lost,lost);}
+        if(lost) {
+            atomic_fetch_add(&mic_overruns,lost);atomic_fetch_add(&wake_dma_lost,lost);
+            /* A live conversation must not compact missing microphone frames
+             * into a seemingly continuous capture/replay timestamp. */
+            if(atomic_load(&session_ready))atomic_fetch_add(&session_lost,lost);
+        }
 #else
         uint32_t bytes=0;
         error = adc_continuous_read(mic, adc_raw, sizeof(adc_raw), &bytes, 0);
@@ -1648,8 +1664,15 @@ static agent_err_t stream_open(unsigned rate,void *memory,size_t bytes,bool cue)
 #if AGENT_BOARD_P4
         /* Capacity absorbs cloud bursts; startup depends on time, not on half
          * a large receive ring. The audio owner consumes this ring directly. */
-        if(atomic_load(&session_running) && !atomic_load(&media_lease) && speech_stream.prebuffer>rate*80/1000)
-            speech_stream.prebuffer=rate*80/1000;
+        unsigned startup_ms=80;
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+        /* An 80 ms native prebuffer emptied between initial cloud bursts
+         * (68 ms measured submission gap). Retain another 80 ms of PCM;
+         * the cue and amplifier warmup still run while this accumulates. */
+        startup_ms=160;
+#endif
+        if(atomic_load(&session_running) && !atomic_load(&media_lease) && speech_stream.prebuffer>rate*startup_ms/1000)
+            speech_stream.prebuffer=rate*startup_ms/1000;
 #endif
         speech_stream.cue=cue;
         /* A plain replacement stream retains this turn's already-played cue
@@ -1767,6 +1790,15 @@ agent_err_t esp_hi_voice_session_configure(bool (*start)(void))
     atomic_store(&session_start,start);return AGENT_OK;
 }
 bool esp_hi_voice_session_ready(void){return atomic_load(&session_ready);}
+uint64_t esp_hi_voice_session_origin_us(void)
+{
+    if(!atomic_load(&session_ready))return 0;
+    const uint64_t now=now_ms();
+    /* The published cue boundary is a wrapping 32-bit millisecond counter.
+     * Lift it onto the current 64-bit clock; a new owner must read it promptly. */
+    const uint32_t age=(uint32_t)now-atomic_load(&wake_cue_end_at);
+    return age<=6000 && now>=age?(now-age)*1000:0;
+}
 agent_err_t esp_hi_voice_session_read(int16_t *out,size_t cap,size_t *count)
 {
     *count=0;if(!atomic_load(&session_ready))return AGENT_OK;

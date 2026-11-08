@@ -83,12 +83,41 @@ def tutor_case(smoke, report):
         print("Starting fixed-image question (not a camera observation)", flush=True)
         case["cancel_previous"] = tool(action="cancel")
         case["start"] = tool(action="start", test_image_url=f"http://{local_ip}:{server.server_port}/question.jpg")
-        question = smoke.wait(lambda: (value if (value := status()).get("tutor_state") == "awaiting_confirmation" else None),
-                              70, "Fixed question did not reach confirmation")
+        question = smoke.wait(lambda: (value if (value := status()).get("tutor_state")
+                                            in ("awaiting_confirmation", "needs_selection") else None),
+                              70, "Fixed question did not reach selection or confirmation")
+        case["initial_question"] = question
+        require(requests, "Board never fetched the fixed test image")
+        if question["tutor_state"] == "needs_selection":
+            require("select_first" in smoke.fixtures,
+                    "Multiple readable questions require --select-first and its audio fixture")
+        session_mark, case["ready"] = smoke.wake()
+        if question["tutor_state"] == "needs_selection":
+            first = question
+            mark = len(device.events)
+            smoke.played("select_first")
+            question = smoke.wait(lambda: (value if (value := status()).get("tutor_state")
+                                                   == "awaiting_confirmation" else None),
+                                  90, "Spoken first-question selection did not finish")
+            require(question["capture_id"] == first["capture_id"]
+                    and question["photo_sha256"] == first["photo_sha256"],
+                    "Same-photo selection acquired a different photo")
+            require("1" in question["selection_key"] or "一" in question["selection_key"],
+                    "First-question selection chose a different question")
+            result = smoke.wait(lambda: smoke.event("realtime_job_result", mark,
+                                                     lambda value: value.get("text") == "device_tutor"),
+                                25, "Selection job result was not delivered to voice")
+            answer = smoke.wait(lambda: smoke.event("realtime_answer", mark,
+                                                     lambda value: value["time_ms"] >= result["time_ms"]
+                                                     and "17" in value.get("text", "")),
+                                35, "Selected-question readback missing")
+            done = smoke.wait(lambda: smoke.event("realtime_playback_done", mark,
+                                                   lambda value: value["time_ms"] >= answer["time_ms"]),
+                              35, "Selection readback audio unfinished")
+            case["selection"] = {"state": question, "answer": answer, "playback_done": done,
+                                 "events": device.events[mark:]}
         case["question"] = question
         question_id = question["question_id"]
-        require(requests, "Board never fetched the fixed test image")
-        session_mark, case["ready"] = smoke.wake()
         # Ask what was read before confirming, so confirmation is a subsequent real user turn.
         mark = len(device.events)
         smoke.played("question_status")
@@ -145,6 +174,8 @@ def main():
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--fixtures", type=Path, default=P4 / "fixtures/integration")
     parser.add_argument("--readback", type=Path)
+    parser.add_argument("--select-first", action="store_true",
+                        help="Use select_first from the fixture manifest for a multi-question image")
     parser.add_argument("--output-device", type=int)
     parser.add_argument("--record", action="store_true")
     parser.add_argument("--record-device", default="麦克风 (Misiom-Shooter)")
@@ -176,6 +207,8 @@ def main():
             report["pretest_readback"] = {"path": str(args.readback.resolve()), "sha256": digest,
                                            "bytes": app.stat().st_size, "match": True}
         names = ["wake", "question", "question_status", "confirm", "step2", "tutor_done", "end"]
+        if args.select_first:
+            names.append("select_first")
         fixtures, report["fixtures"] = fixture_paths(args.fixtures, names)
         smoke = Smoke(args, report, fixtures, description["project_version"])
         smoke.prepare()

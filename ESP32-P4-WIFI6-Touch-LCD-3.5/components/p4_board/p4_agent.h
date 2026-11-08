@@ -26,6 +26,12 @@ int p4_visual_image(unsigned generation, const uint8_t *data, size_t size);
 unsigned p4_camera_question_begin(void);
 int p4_camera_jpeg(unsigned generation, uint8_t **data, size_t *size);
 int p4_camera_capture_status(char *out, size_t cap);
+#if defined(AGENT_P4_AOQ_CAMERA)
+unsigned p4_camera_video_begin(void);
+int p4_camera_video_frame(unsigned generation,unsigned after,uint8_t*,size_t capacity,
+                          size_t* bytes,unsigned* sequence,uint64_t* captured_us);
+void p4_camera_video_end(unsigned generation);
+#endif
 int p4_visual_document(unsigned generation, const char *text);
 int p4_visual_document_ex(unsigned generation, const char *text, unsigned question_id, unsigned revision, bool restore);
 typedef struct {
@@ -45,6 +51,9 @@ bool p4_tutor_pause_due(void);
 void p4_tutor_context(char *out, size_t cap);
 void p4_tutor_status(char *out, size_t cap);
 void p4_tutor_user_text(const char *text);
+/* Exact, current-lesson read/explain commands use the same version-checked
+ * operation as a tool. False leaves ordinary language to the model. */
+bool p4_tutor_voice_choice(const char *text,char *out,size_t cap);
 /* USB diagnostics only. JPEG byte offset/count (1..1024); each chunk carries capture_id. */
 int p4_tutor_photo_read(unsigned offset,unsigned count,char *out,size_t cap);
 bool p4_tutor_claim_notice(unsigned question_id,unsigned revision,char *out,size_t cap);

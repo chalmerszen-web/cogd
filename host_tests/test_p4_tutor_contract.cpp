@@ -216,6 +216,16 @@ static void explicit_user_cases() {
     CHECK(s.mode=="reading" && !s.choice_pending);
 }
 static void explicit_user_priority_cases() {
+    // Original physical regression: ASR was correct, but a spoken promise
+    // did not switch choice -> reading. Exact UI intent must survive polite
+    // fillers while quotations, contradictions and unrelated tasks stay out.
+    CHECK(explicit_user_intent("我先自己看一会儿，请不要讲解。 ")==UserIntent::read);
+    CHECK(explicit_user_intent("那我先看一会儿，你先别讲。")==UserIntent::read);
+    CHECK(explicit_user_intent("现在请把这道题的解题思路完整讲给我。")==UserIntent::explain);
+    for(const char *v:{"不要让我先自己看一会儿","我先自己看一会儿是什么意思？",
+        "他说我先自己看一会儿请不要讲解","我先自己看一会儿，然后给我拍照",
+        "不要把这道题的解题思路完整讲给我","把这道题的解题思路完整讲给我是什么意思"})
+        CHECK(explicit_user_intent(v)==UserIntent::none);
     LessonState s;s.reset(13);s.begin_solve();
     CHECK(s.user_text("你讲一下吧",13,0));CHECK(s.pending_user_choice);
     CHECK(!s.choose("read",13,0,0));CHECK(!s.choose("resume",13,0,0));CHECK(!s.choose("done",13,0,0));

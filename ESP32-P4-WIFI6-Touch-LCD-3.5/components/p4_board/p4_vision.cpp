@@ -1,6 +1,9 @@
 #include "bsp/esp-bsp.h"
 #include "driver/jpeg_decode.h"
 #include "driver/jpeg_encode.h"
+#if defined(AGENT_P4_AOQ_CAMERA)
+#include "p4_video_capture.h"
+#endif
 #include "esp_heap_caps.h"
 #include "esp_partition.h"
 #include "esp_rom_crc.h"
@@ -400,6 +403,9 @@ void capture_worker(void *) {
                     ++received;
                     camera_frame_generation=generation;
                     int iw = camera_width, ih = camera_height;
+#if defined(AGENT_P4_AOQ_CAMERA)
+                    p4_video_capture_push(generation,buffers[b.index],unsigned(iw),unsigned(ih),uint64_t(now));
+#endif
                     unsigned request=0;uint64_t requested_at=0;
                     if(xSemaphoreTake(state_lock,0)==pdTRUE) {
                         if(snapshot && !snapshot_ready && snapshot_generation==generation) {
@@ -699,6 +705,20 @@ extern "C" unsigned p4_camera_question_begin(void) {
     unsigned e=p4_visual_begin(1);if(!e)return 0;question_camera=true;cam_mode=1;
     p4_visual_message(e,"请把题目放在镜头前\n保持文字清晰、光线充足");return e;
 }
+#if defined(AGENT_P4_AOQ_CAMERA)
+extern "C" unsigned p4_camera_video_begin(void){
+    unsigned e=p4_visual_begin(1);if(!e)return 0;
+    if(p4_video_capture_start(e)){if(p4_visual_current(e))p4_visual_stop();return 0;}
+    cam_mode=1;p4_visual_message(e,"正在查看摄像头画面");return e;
+}
+extern "C" int p4_camera_video_frame(unsigned e,unsigned after,uint8_t* out,size_t capacity,size_t* bytes,unsigned* sequence,uint64_t* timestamp){
+    if(!p4_visual_current(e)){if(bytes)*bytes=0;return 4;}
+    return p4_video_capture_copy(e,after,out,capacity,bytes,sequence,timestamp);
+}
+extern "C" void p4_camera_video_end(unsigned e){
+    p4_video_capture_stop(e);if(p4_visual_current(e))p4_visual_stop();
+}
+#endif
 extern "C" int p4_camera_capture_status(char *out,size_t cap) {
     if(!out || !cap || !state_lock)return 1;
     xSemaphoreTake(state_lock,portMAX_DELAY);auto status=capture_status;xSemaphoreGive(state_lock);

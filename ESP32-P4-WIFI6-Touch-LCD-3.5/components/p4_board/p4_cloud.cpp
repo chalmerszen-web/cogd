@@ -1119,6 +1119,32 @@ extern "C" void p4_tutor_user_text(const char *text) {
        tutor_lesson.user_text(text,tutor_id,tutor_revision))tutor_activity=tutor_now();
     xSemaphoreGive(job_lock);
 }
+extern "C" bool p4_tutor_voice_choice(const char *text,char *out,size_t cap) {
+    if(!job_lock || !out || cap<256)return false;
+    const auto intent=p4_tutor::explicit_user_intent(text);
+    if(intent==p4_tutor::UserIntent::none)return false;
+    xSemaphoreTake(job_lock,portMAX_DELAY);
+    const unsigned id=tutor_id,revision=tutor_revision;
+    const bool current=id && ((tutor_phase=="solving" && tutor_job_id && p4_visual_current(tutor_generation)) ||
+        (tutor_phase=="complete" && !tutor_solution.empty()));
+    xSemaphoreGive(job_lock);
+    if(!current)return false;
+    const char *action=intent==p4_tutor::UserIntent::explain?"explain":"read";
+    char arguments[128];
+    snprintf(arguments,sizeof(arguments),"{\"action\":\"%s\",\"question_id\":%u,\"revision\":%u}",action,id,revision);
+    // The regular operation revalidates identity after taking its lock and
+    // verifies rendering/focus before changing the teaching state. Read does
+    // not specify step=0: returning to a document retains its visible step.
+    int error=p4_cloud_call("device_tutor",arguments,out,cap);
+    auto result=error?nullptr:cJSON_Parse(out);
+    if(result){
+        cJSON_AddStringToObject(result,"requested_action",action);
+        cJSON_AddStringToObject(result,"execution_origin","local_voice");
+        error=copy_json(result,out,cap);cJSON_Delete(result);
+    } else if(!error)error=6;
+    if(error)snprintf(out,cap,"{\"state\":\"failed\",\"error\":%d,\"requested_action\":\"%s\",\"question_id\":%u,\"revision\":%u,\"execution_origin\":\"local_voice\"}",error,action,id,revision);
+    return true;
+}
 extern "C" bool p4_tutor_claim_notice(unsigned id,unsigned revision,char *out,size_t cap) {
     if(!out || !cap)return false;
     snprintf(out,cap,"{}");

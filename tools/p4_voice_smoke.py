@@ -44,6 +44,14 @@ def check_explicit_end(events):
                 for v in events), "Explicit end reply did not finish playing")
 
 
+def check_full_input(events, required):
+    """A remembered answer or fragments from separate turns are insufficient."""
+    texts = [event.get("text", "") for event in events if event["stage"] == "realtime_user"]
+    require(any(all(word in text for word in required) for text in texts),
+            "Expected complete input in one user turn: " + repr(texts))
+    return texts
+
+
 def fixture_paths(directory, names):
     directory = directory.resolve()
     manifest = json.loads((directory / "manifest.json").read_text(encoding="utf8"))
@@ -71,6 +79,7 @@ class Smoke:
         self.deadline = time.monotonic() + args.timeout_seconds
         self.mutated = False
         self.testing = False
+        self.voice_stop_requested = False
         self.original_volume = None
 
     def fault_check(self, lines):
@@ -79,6 +88,15 @@ class Smoke:
                 raise RuntimeError("Firmware fault; inspect usb/serial.log")
             if self.testing and "ESP-ROM:" in line:
                 raise RuntimeError("Unexpected device reboot; inspect usb/serial.log")
+            if self.testing and line.startswith("@voice "):
+                try:
+                    event = json.loads(line[7:])
+                except ValueError:
+                    continue
+                if event.get("stage") == "realtime_transport_error":
+                    if self.voice_stop_requested and event.get("text") == "cancelled":
+                        continue
+                    raise RuntimeError("Native transport failed: " + event.get("text", "unknown"))
 
     def pump(self):
         require(time.monotonic() < self.deadline, "Overall test deadline exceeded")
@@ -86,6 +104,10 @@ class Smoke:
 
     def command(self, text, query=False, timeout=6):
         require(time.monotonic() < self.deadline, "Overall test deadline exceeded")
+        if text in ("agent voice off", "agent cancel"):
+            self.voice_stop_requested = True
+        elif text == "agent voice on":
+            self.voice_stop_requested = False
         result = self.device.command(text, query=query, timeout=timeout, cancelled_ok=True)
         self.fault_check(self.device.rows[-1].get("lines", []))
         return result
@@ -143,7 +165,8 @@ class Smoke:
 
     def snapshot(self):
         return {"status": self.query("agent status"), "wake": self.query("agent wake status"),
-                "realtime": self.query("agent voice realtime"), "audio": self.query("agent audio status")}
+                "realtime": self.query("agent voice realtime"), "audio": self.query("agent audio status"),
+                "dialogue": self.query("agent voice dialogue")}
 
     def prepare(self):
         self.report["before"] = self.snapshot()
@@ -169,6 +192,9 @@ class Smoke:
         self.played("wake", .35)
         ready = self.wait(lambda: (v if (v := self.query("agent voice realtime"))["ready"] else None),
                           20, "Single acoustic wake did not open realtime session")
+        require(not any(v["stage"] in ("realtime_speech_started", "realtime_local_speech_started", "realtime_user", "realtime_interrupt")
+                        for v in self.device.events[mark:]),
+                "Unscheduled input before test source; acoustic case not started")
         return mark, ready
 
     def answer(self, mark, word, seconds=40):
@@ -215,9 +241,13 @@ class Smoke:
         first = len(self.device.events)
         self.played("short")
         chat["first"] = self.answer(first, "蓝莓")
+        chat["first"]["input_transcripts"] = check_full_input(
+            self.device.events[first:], ("我们", "小猫", "叫", "蓝莓", "请", "只", "重复", "它", "名字"))
         second = len(self.device.events)
         self.played("recall")
         chat["followup"] = self.answer(second, "蓝莓")
+        chat["followup"]["input_transcripts"] = check_full_input(
+            self.device.events[second:], ("刚才", "名字"))
         chat.update(self.finish_session(mark, require_farewell=True))
         require(chat["final"]["realtime"]["interrupts"] == 0, "False interruption in ordinary chat")
         chat["passed"] = True
@@ -228,6 +258,10 @@ class Smoke:
         self.played("newstory")
         barge["speaker_start"] = self.wait(lambda: self.event("realtime_speaker_start", story),
                                             35, "Long reply did not start")
+        barge["story_inputs"] = check_full_input(
+            self.device.events[story:], ("故事", "松果", "七号"))
+        require(not self.event("realtime_interrupt", story),
+                "Story was interrupted before the deliberate barge fixture")
         self.hold(1.1)  # Respect the current firmware's 900 ms AEC startup guard.
         barge["before_interrupt"] = self.query("agent audio status")
         require(barge["before_interrupt"]["playing"], "Long reply ended before interruption source")
@@ -240,6 +274,8 @@ class Smoke:
         barge["interrupt"] = cut
         barge["source_start_to_observed_cut_ms"] = round((cut["observed"] - receipt["source_started"]) * 1000)
         barge["reply"] = self.answer(interrupt_mark, "松果", 45)
+        barge["reply"]["input_transcripts"] = check_full_input(
+            self.device.events[interrupt_mark:], ("问题", "故事", "主角", "名字"))
         end_mark = len(self.device.events)
         self.played("end")
         barge.update(self.finish_session(mark))

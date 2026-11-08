@@ -34,6 +34,8 @@ agent_err_t esp_hi_voice_dialogue_status(char *,size_t);
  * consumer/player. PCM is published without allocation or network work. */
 agent_err_t esp_hi_voice_session_configure(bool (*start)(void));
 bool esp_hi_voice_session_ready(void);
+/* Post-cue capture origin on the esp_timer clock, valid for the current owner. */
+uint64_t esp_hi_voice_session_origin_us(void);
 agent_err_t esp_hi_voice_session_read(int16_t *,size_t,size_t *);
 void esp_hi_voice_session_discard(void);
 unsigned esp_hi_voice_session_cursor(void);

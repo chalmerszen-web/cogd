@@ -4,7 +4,47 @@
 
 int main(void)
 {
+    /* Cold restored photo history must not own the new spoken story. A late
+     * history ACK, a duplicate ACK, or an ACK for a superseded audio turn
+     * cannot trigger inference for this binding. */
+    p4_input_binding_t binding={0};
+    assert(p4_input_binding_begin(&binding,"live-story","audio-story",7,100));
+    assert(!p4_input_binding_ack(&binding,"old-photo","audio-story",7));
+    assert(!p4_input_binding_ack(&binding,"live-story","audio-next",7));
+    assert(!p4_input_binding_ack(&binding,"live-story","audio-story",8));
+    assert(binding.pending && !p4_input_binding_timeout(&binding,3099));
+    assert(p4_input_binding_timeout(&binding,3100));
+    assert(!p4_input_binding_begin(&binding,"next","audio-next",8,200));
+    assert(p4_input_binding_ack(&binding,"live-story","audio-story",7));
+    assert(!p4_input_binding_ack(&binding,"live-story","audio-story",7));
+    assert(!p4_input_binding_timeout(&binding,9000));
+    assert(!p4_input_binding_begin(&binding,"","audio-next",8,200));
+    assert(p4_input_binding_begin(&binding,"next","audio-next",8,200));
+    /* Captured refine result: two committed but empty microphone turns
+     * arrived while the job ran. Its result still belongs to the last real
+     * request; a later nonempty request really does supersede that identity. */
+    p4_input_identity_t input={0};
+    assert(p4_input_identity_accept(&input,"select-third","请选择第三道题"));
+    assert(!p4_input_identity_accept(&input,"noise-1",""));
+    assert(!p4_input_identity_accept(&input,"noise-2"," \r\n\t"));
+    assert(p4_input_identity_matches(&input,"select-third"));
+    assert(!p4_input_identity_matches(&input,"noise-2"));
+    assert(!p4_input_identity_accept(&input,"","有效文字但没有条目"));
+    assert(p4_input_identity_matches(&input,"select-third"));
+    assert(p4_input_identity_accept(&input,"new-photo","重新拍照"));
+    assert(!p4_input_identity_matches(&input,"select-third"));
+    assert(p4_input_identity_matches(&input,"new-photo"));
     p4_response_owner_t s={0};
+    /* Captured tutor read at the 120 s renewal boundary: the speaker is idle
+     * between output ACK and the 250 ms fallback, but the answer is owed. */
+    assert(p4_response_settled(&s));
+    unsigned renewal_ticket=p4_response_begin(&s,false);
+    p4_response_ack(&s,renewal_ticket,120000);
+    assert(!p4_response_manual_due(&s,120249));
+    assert(!p4_response_settled(&s));
+    assert(p4_response_manual_due(&s,120250));
+    p4_response_manual(&s);assert(!p4_response_settled(&s));
+    assert(p4_response_created(&s));assert(p4_response_settled(&s));
     /* A field hidden from the voice schema is also rejected at execution,
      * regardless of its value (URL, empty string or null). Ordinary tutor
      * fields and unrelated tools retain their existing contracts. */

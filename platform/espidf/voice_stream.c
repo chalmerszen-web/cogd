@@ -3,6 +3,10 @@
 #include "runtime.h"
 #include "audio_board.h"
 #include "qianwen.h"
+#include "communication_mode.h"
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+#include "p4_speech.h"
+#endif
 #include "text_pipe.h"
 #include "esp_random.h"
 #include "freertos/FreeRTOS.h"
@@ -42,7 +46,12 @@ static void speak_task(void *ctx)
     agent_speech_t speech={.cancelled=stream.cancelled,.scratch=stream.scratch,
         .capacity=AGENT_QWEN_SCRATCH,.now_ms=clock_ms,.event=stream.event,
         .random_u32=esp_random};
-    agent_qwen_t session;agent_qwen_init(&session,&speech,&esp_agent_speech_ws);
+    agent_qwen_t session;
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+    agent_qwen_init(&session,&speech,&esp_agent_aoq_tts);
+#else
+    agent_qwen_init(&session,&speech,&esp_agent_speech_ws);
+#endif
     const agent_pcm_sink_t sink={.open=open_pcm,.write=write_pcm};
     agent_err_t error=AGENT_OK;
 #if AGENT_VOICE_SCRATCH_LOANS

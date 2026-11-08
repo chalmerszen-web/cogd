@@ -7,6 +7,9 @@ CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
 CONFIG_ESP_CONSOLE_UART_DEFAULT=y
 CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
 CONFIG_COMPILER_OPTIMIZATION_PERF=y
+# Keep the 128 KB cache to preserve internal/DMA RAM. The 128-byte line
+# improves sequential PSRAM DSP access without borrowing another 128 KB.
+CONFIG_CACHE_L2_CACHE_LINE_128B=y
 CONFIG_SPIRAM=y
 CONFIG_SPIRAM_SPEED_200M=y
 CONFIG_SPIRAM_XIP_FROM_PSRAM=y
@@ -18,6 +21,10 @@ CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
 CONFIG_FREERTOS_HZ=1000
 CONFIG_AGENT_AUDIO=y
 CONFIG_LWIP_MAX_SOCKETS=10
+# Native QUIC receives bursty PCM while the audio owner runs. Give its socket
+# more receive headroom than the lwIP six-packet default.
+# Bound the mailbox at 32 packets; this P4 configuration uses PSRAM malloc.
+CONFIG_LWIP_UDP_RECVMBOX_SIZE=32
 CONFIG_LWIP_TCP_SND_BUF_DEFAULT=16384
 CONFIG_LWIP_IPV6=n
 CONFIG_MBEDTLS_CERTIFICATE_BUNDLE=y

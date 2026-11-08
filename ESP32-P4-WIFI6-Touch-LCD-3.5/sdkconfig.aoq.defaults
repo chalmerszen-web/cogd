@@ -1,0 +1,8 @@
+# Native AOQ TTS arrives in UDP bursts. The double-buffer reader can overtake
+# its copy task and discard a whole SDIO receive buffer. The supported single
+# buffer path waits for the copy task before reading the next buffer.
+CONFIG_ESP_HOSTED_SDIO_RX_DOUBLE_BUFFERING=n
+# ESP-IDF bounds both queues to 64 in this configuration. Out-of-range values
+# silently fall back to the defaults (UDP 6, TCPIP 32) during Kconfig generation.
+CONFIG_LWIP_UDP_RECVMBOX_SIZE=64
+CONFIG_LWIP_TCPIP_RECVMBOX_SIZE=64
