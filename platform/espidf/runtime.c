@@ -10,6 +10,7 @@
 #if AGENT_BOARD_P4
 #include "p4_conversation.h"
 #include "p4_agent.h"
+#include "p4_diag.h"
 #include "audio_session.h"
 static atomic_bool voice_natural=true;
 #if defined(AGENT_P4_AOQ_PROBE)
@@ -472,6 +473,7 @@ static int console_log(const char *format,va_list args)
         line=malloc((size_t)n+1);if(!line)return 0;
         va_copy(copy,args);vsnprintf(line,(size_t)n+1,format,copy);va_end(copy);
     }
+    p4_diag_record(1,line,(size_t)n);
     esp_agent_write(line,(size_t)n);
     if(line!=local)free(line);
     return n;
@@ -505,6 +507,9 @@ void esp_agent_model_receipt(const char *json) {
 static void voice_write(const char *text,size_t size)
 {
     if(!size)return;
+#if AGENT_BOARD_P4
+    p4_diag_record(2,text,size);
+#endif
     int sent=0;
     if(output_lock && xSemaphoreTake(output_lock,0)==pdTRUE) {
         sent=usb_serial_jtag_write_bytes(text,size,0);
@@ -2686,6 +2691,13 @@ static void command(char *line)
         return;
     }
 #endif
+#if AGENT_BOARD_P4
+    if(!strncmp(line,"agent log ",10)) {
+        char output[1024]={0};int error=p4_diag_command(line,output,sizeof(output));
+        if(!error){say(output);say("\r\n");}else report((agent_err_t)error);
+        return;
+    }
+#endif
     if (!strcmp(line, "agent status") || !strcmp(line, "agent wifi status")) {
         char output[1280]; esp_agent_status(output, sizeof(output)); say(output); say("\r\n");
     } else if(!strcmp(line,"agent hardware") || !strcmp(line,"agent display status")) {
@@ -2762,6 +2774,12 @@ static void command(char *line)
 #if AGENT_BOARD_P4
 #if defined(AGENT_P4_AOQ_PROBE)
 #if COGD_COMM_MODE == COGD_COMM_AOQ
+    } else if(!strncmp(line,"agent aoq test-empty ",21)) {
+        unsigned count;char extra;agent_err_t error=AGENT_OK;
+        if(atomic_load(&voice_enabled) || atomic_load(&kernel->busy))error=AGENT_ERR_BUSY;
+        else if(sscanf(line+21,"%u %c",&count,&extra)!=1)error=AGENT_ERR_ARGUMENT;
+        else error=esp_agent_conversation_test_empty(count);
+        report(error);
     } else if(!strncmp(line,"agent aoq catchup ",18)) {
         unsigned interval;char extra;agent_err_t error=AGENT_OK;
         if(atomic_load(&voice_enabled) || atomic_load(&kernel->busy))error=AGENT_ERR_BUSY;
@@ -3048,6 +3066,9 @@ void esp_agent_run(agent_core_t *core)
         atomic_store(&voice_enabled,voice_on && voice_configured());
 #endif
     }
+#if AGENT_BOARD_P4
+    p4_diag_init();
+#endif
     context.device=settings.device_id; context.user=settings.user_id; context.session=settings.session_id;
     context.scratch=engine.buffer; context.capacity=AGENT_ENGINE_BUFFER_SIZE;
     context.cancelled=&kernel->cancelled;

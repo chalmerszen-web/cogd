@@ -1,6 +1,7 @@
 #include "p4_conversation.h"
 #include "p4_conversation_history.h"
 #include "communication_mode.h"
+#include "p4_asr_retry.h"
 #if COGD_COMM_MODE == COGD_COMM_AOQ
 #include "aoq_conversation.h"
 #include "aoq_prefetch.h"
@@ -10,8 +11,10 @@
 #include "p4_local_turn.h"
 #include "p4_input_buffer.h"
 #include "p4_input_media_clock.h"
+#include "p4_connection_quiet.h"
 #include "p4_live_input.h"
 #include "p4_quick_intent.h"
+#include "p4_status_hint.h"
 #include "p4_status_voice.h"
 #include "p4_audio_pacer.h"
 #include "p4_reply_repair.h"
@@ -164,6 +167,15 @@ static bool conversation_manual(void)
 }
 #if defined(AGENT_P4_AOQ_PROBE)
 static atomic_bool test_tools_enabled;
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+static atomic_uint test_empty_finals;
+agent_err_t esp_agent_conversation_test_empty(unsigned count)
+{
+    if(count>2)return AGENT_ERR_ARGUMENT;
+    if(atomic_load(&stat_active))return AGENT_ERR_BUSY;
+    atomic_store(&test_empty_finals,count);return AGENT_OK;
+}
+#endif
 #endif
 static bool conversation_test_tools(void)
 {
@@ -315,6 +327,8 @@ typedef struct {
     uint64_t reuse_at;
     char reused_response[129];
     p4_local_turn_t local_turn;
+    p4_asr_retry_t *asr_retry;
+    p4_status_hint_t status_hint;
     p4_input_identity_t accepted_input;
     char accepted_user[AGENT_INPUT_MAX+1];
     p4_input_binding_t input_binding;
@@ -698,6 +712,7 @@ static void local_turn_begin(conversation_t *s)
     s->input_drain_reported=false;
     s->user_item[0]=s->latest_user[0]=0;s->user_transcribed=false;
     s->commit_queued=s->commit_acked=s->commit_text_seen=s->commit_resolved=false;s->local_began=true;
+    s->status_hint=(p4_status_hint_t){0};
     s->local_previous_activity=s->last_activity;
     s->last_activity=esp_agent_now();s->closing=false;s->want_response=false;
     atomic_store(&stat_speech_start,(unsigned)s->last_activity);
@@ -849,7 +864,8 @@ static void local_turn_resolve(conversation_t *s)
 {
     p4_local_reply_t action=p4_local_reply(s->commit_acked,s->commit_text_seen,s->user_transcribed,s->commit_resolved);
     if(action==P4_LOCAL_WAIT || s->reuse_phase || s->repair[0])return;
-    bool progress=action==P4_LOCAL_RESPOND && p4_quick_progress(s->latest_user);
+    bool hint=action==P4_LOCAL_REJECT && p4_status_hint_matches(&s->status_hint,s->user_item);
+    bool progress=hint || (action==P4_LOCAL_RESPOND && p4_quick_progress(s->latest_user));
     p4_status_phrase_t phrase=P4_STATUS_IDLE;unsigned question=0,revision=0;
     if(progress){
         int e=p4_tutor_progress(&phrase,&question,&revision);
@@ -857,10 +873,24 @@ static void local_turn_resolve(conversation_t *s)
         if(e){s->error=(agent_err_t)e;return;}
     }
     s->commit_resolved=true;
+    if(hint){
+        /* Empty ASR stays empty. Answer only the read-only status intent,
+         * without fabricating a user transcript, binding provider text,
+         * changing accepted input ownership, or writing conversational history. */
+        p4_response_obsolete(&s->response_owner);
+        local_status_start(s,phrase,question,revision);
+        s->response_user[0]=s->response_user_item[0]=0;s->remembered=true;
+        strcpy(s->user_item,s->accepted_input.item);strcpy(s->latest_user,s->accepted_user);
+        p4_tutor_activity();
+        notice(s,"realtime_local_status_hint",s->status_hint.text);return;
+    }
     if(action==P4_LOCAL_REJECT){
         if(s->stream)stop_playback(s,true);
         s->endpoint_cue=false;s->preparing=false;
         agent_audio_session_speech(&s->gate,false,true);p4_response_obsolete(&s->response_owner);
+        if(p4_asr_retry_begin(s->asr_retry,s->local_turn.start,s->local_turn.last_voice,s->last_sent_cursor)){
+            notice(s,"realtime_asr_retry","empty_final retained_capture");return;
+        }
         /* Candidate IDs are temporary. Receipts and history after an empty
          * recognition still belong to the last accepted human request. */
         strcpy(s->user_item,s->accepted_input.item);strcpy(s->latest_user,s->accepted_user);
@@ -880,6 +910,7 @@ static void local_turn_resolve(conversation_t *s)
         s->error=AGENT_ERR_PROTOCOL;return;
     }
     strcpy(s->accepted_user,s->latest_user);
+    p4_asr_retry_accepted(s->asr_retry);
     s->reply_repair=(p4_reply_repair_t){0};
     s->tool_attempts=0;
     s->app_obsolete=true;p4_notice_item_retire(&s->notice_item);
@@ -1325,15 +1356,42 @@ static void process(conversation_t *s,const cJSON *e)
             notice(s,"realtime_barge_reuse_ready",NULL);
         }
     }
+    else if(!strcmp(type,"conversation.item.input_audio_transcription.delta")) {
+        if(conversation_manual() && s->local_began && !s->commit_resolved)
+            p4_status_hint_update(&s->status_hint,str(e,"item_id"),str(e,"text"),str(e,"stash"));
+        char detail[704];
+        snprintf(detail,sizeof(detail),"item=%s expected=%s queued=%u resolved=%u text=%.192s stash=%.192s",
+            str(e,"item_id"),s->user_item,(unsigned)s->commit_queued,(unsigned)s->commit_resolved,
+            str(e,"text"),str(e,"stash"));
+        notice(s,"realtime_asr_delta",detail);
+    }
+    else if(!strcmp(type,"conversation.item.input_audio_transcription.failed")) {
+        char detail[320];
+        snprintf(detail,sizeof(detail),"item=%s code=%.128s",str(e,"item_id"),str(cJSON_GetObjectItemCaseSensitive(e,"error"),"code"));
+        notice(s,"realtime_asr_failed",detail);
+    }
 #endif
     else if(!strcmp(type,"conversation.item.input_audio_transcription.completed")) {
         const char *text=str(e,"transcript"),*item=str(e,"item_id");
 #if COGD_COMM_MODE == COGD_COMM_AOQ
+        char detail[704];
+        snprintf(detail,sizeof(detail),"item=%s expected=%s queued=%u resolved=%u text=%.384s",
+            item,s->user_item,(unsigned)s->commit_queued,(unsigned)s->commit_resolved,text);
+        notice(s,"realtime_asr_final",detail);
         if(conversation_manual() && (!s->commit_queued || s->commit_resolved)){
             /* A clear after long playback can produce an unsolicited ASR
              * final (observed "I"). It has no outstanding microphone turn. */
             notice(s,"realtime_idle_transcript_ignored",NULL);return;
         }
+#if defined(AGENT_P4_AOQ_PROBE)
+        /* Explicit one/two-event fault injection only in probe builds. The
+         * real server final remains in realtime_asr_final above. Normal
+         * acoustic qualification must run with this boot-default zero. */
+        if(conversation_manual() && *text && !strcmp(item,s->user_item) && atomic_load(&test_empty_finals)){
+            atomic_fetch_sub(&test_empty_finals,1);text="";
+            notice(s,"realtime_test_empty_final",item);
+        }
+#endif
 #endif
         if(strlen(text)<=AGENT_INPUT_MAX) {
             if(*item && s->user_item[0] && !strcmp(item,s->user_item)) {
@@ -1852,7 +1910,9 @@ static void schedule(conversation_t *s)
 #if COGD_COMM_MODE == COGD_COMM_AOQ
 static bool native_can_renew(const conversation_t *s)
 {
-    if(!input_ready(s) || esp_agent_now()-s->last_activity<1000 ||
+    if(!input_ready(s) || !p4_connection_quiet(esp_agent_now(),s->last_activity,s->output_ended) ||
+       (!s->local_turn.active && s->local_turn.votes) ||
+       (s->local_turn.hint && esp_hi_voice_session_cursor()-s->local_turn.hint_last<=6400u) ||
        !agent_audio_session_idle(&s->gate) || s->stream || pending_pcm(s) || s->updating || s->waiting_item ||
        !p4_response_settled(&s->response_owner) || s->want_response || s->next_response ||
        s->receipt_read!=s->receipt_write || s->control_read!=s->control_write ||
@@ -1923,7 +1983,7 @@ static void load_history(conversation_t *s)
     cJSON_Delete(a);cJSON_Delete(all);
 }
 static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t *context,
-    const atomic_bool *cancelled,void (*event)(void *,const char *,const char *),bool resumed,bool handed,bool replayed,uint64_t *capture_origin_us,unsigned *replay_confirmed,unsigned *rotate)
+    const atomic_bool *cancelled,void (*event)(void *,const char *,const char *),bool resumed,bool handed,bool replayed,uint64_t *capture_origin_us,unsigned *replay_confirmed,unsigned *rotate,p4_asr_retry_t *asr_retry)
 {
     *rotate=false;
     unsigned prior_interrupts=handed?atomic_load(&stat_interrupts):0,prior_stale=handed?atomic_load(&stat_stale):0;
@@ -1931,7 +1991,7 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
     conversation_t *s=heap_caps_calloc(1,sizeof(*s),MALLOC_CAP_SPIRAM);if(!s)return AGENT_ERR_MEMORY;
     s->cancelled=cancelled;s->tools=tools;s->context=context;s->event=event;s->resumed=resumed;
 #if COGD_COMM_MODE != COGD_COMM_AOQ
-    (void)capture_origin_us;(void)replayed;(void)replay_confirmed;
+    (void)capture_origin_us;(void)replayed;(void)replay_confirmed;(void)asr_retry;
 #endif
     s->rx=heap_caps_malloc(RX_CAP,MALLOC_CAP_SPIRAM);s->pcm=heap_caps_malloc(PCM_CAP*sizeof(int16_t),MALLOC_CAP_SPIRAM);
     s->history=heap_caps_calloc(1,AGENT_HISTORY_MAX+1,MALLOC_CAP_SPIRAM);
@@ -1953,13 +2013,18 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
     if(!s->capture_origin_us){error=AGENT_ERR_ARGUMENT;goto finish;}
     s->frontend=p4_audio_frontend_open();
     if(!s->frontend){error=AGENT_ERR_MEMORY;goto finish;}
+    s->asr_retry=asr_retry;
     s->local_noise_floor=p4_audio_idle_noise();
     if(conversation_manual()){
         char detail[96];snprintf(detail,sizeof(detail),"quiet_level=%u onset_level=%u",s->local_noise_floor,p4_local_onset_level(s->local_noise_floor));
         notice(s,"realtime_input_noise",detail);
     }
     p4_local_turn_reset(&s->local_turn,esp_hi_voice_session_cursor());
-    if(conversation_manual() && replayed){
+    if(conversation_manual() && asr_retry->pending){
+        p4_local_turn_seed(&s->local_turn,asr_retry->start,asr_retry->voice);
+        asr_retry->pending=false;
+        notice(s,"realtime_asr_retry_ready",NULL);
+    } else if(conversation_manual() && replayed){
         unsigned cursor=esp_hi_voice_session_cursor();
         p4_local_turn_seed_replay(&s->local_turn,cursor,*replay_confirmed);
     }
@@ -2013,6 +2078,12 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
         native_reuse_tick(s);
         maintain_input_buffer(s);
         local_turn_resolve(s);
+        if(s->asr_retry->pending){
+            if(!esp_hi_voice_session_rewind(s->asr_retry->start)){
+                notice(s,"realtime_capacity","ASR retry capture expired");s->error=AGENT_ERR_LIMIT;break;
+            }
+            *rotate=4;break;
+        }
         if(conversation_manual() && input_ready(s) && s->local_turn.active && !s->local_began)local_turn_begin(s);
         if(s->native_handoff){
             if(!s->provider_handoff)*replay_confirmed=esp_hi_voice_session_cursor();
@@ -2087,7 +2158,8 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                     unsigned cursor=esp_hi_voice_session_cursor();
                     bool voiced=!own_audio && p4_audio_frontend_voiced(s->frontend) &&
                         p4_audio_frontend_level(s->frontend)>(s->local_turn.active?140u:280u) &&
-                        (s->local_turn.active || p4_audio_frontend_input_level(s->frontend)>p4_local_onset_level(s->local_noise_floor));
+                        p4_audio_frontend_input_level(s->frontend)>(s->local_turn.active?
+                            p4_local_continuation_level(s->local_noise_floor):p4_local_onset_level(s->local_noise_floor));
                     bool allow_start=!own_audio && !s->stream && !s->gate.active && !s->gate.awaiting &&
                         !s->updating && !s->waiting_item && cursor>=3584 && esp_agent_now()>=s->near_hold;
                     bool onset_hint=!own_audio && p4_audio_frontend_voiced(s->frontend) &&
@@ -2103,6 +2175,12 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                             if(!esp_hi_voice_session_rewind(s->local_turn.start)){
                                 notice(s,"realtime_capacity","local utterance onset");s->error=AGENT_ERR_LIMIT;break;
                             }
+                            /* NS/AGC/VAD have already seen the confirmation
+                             * frame. Rewinding PCM with that future state
+                             * conditions the onset twice and can suppress it.
+                             * Match the fresh conditioner used for barge replay. */
+                            p4_audio_frontend_close(s->frontend);s->frontend=p4_audio_frontend_open();
+                            if(!s->frontend){s->error=AGENT_ERR_MEMORY;break;}
                             samples=0;input_processed=false;s->next_send_at=0;break;
                         }
                         /* This onset is already in the live upstream buffer;
@@ -2298,12 +2376,13 @@ agent_err_t esp_agent_conversation_run(const agent_tool_ops_t *tools,agent_conte
     p4_tutor_pause_due();p4_tutor_activity();
     unsigned rotate=0,replay_confirmed=0;bool handed=false,resumed=false;agent_err_t e;
     uint64_t capture_origin_us=0;
+    p4_asr_retry_t asr_retry={0};
 #if COGD_COMM_MODE == COGD_COMM_AOQ
     p4_aoq_prefetch_clear();
     p4_aoq_recovery_t recovery={0};
 #endif
     for(;;) {
-        e=run_connection(tools,context,cancelled,event,resumed,handed,rotate==1 || rotate==3,&capture_origin_us,&replay_confirmed,&rotate);
+        e=run_connection(tools,context,cancelled,event,resumed,handed,rotate==1 || rotate==3,&capture_origin_us,&replay_confirmed,&rotate,&asr_retry);
         if(atomic_load(cancelled))break;
         if(rotate){
 #if COGD_COMM_MODE == COGD_COMM_AOQ

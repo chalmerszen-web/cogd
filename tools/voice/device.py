@@ -31,7 +31,15 @@ class Device:
             line,self.buffer=self.buffer.split(b'\n',1)
             text=line.decode('utf8','replace').strip();rows.append(text)
             if text.startswith('@voice '):
-                try:event=json.loads(text[7:])
+                try:
+                    event,end=json.JSONDecoder().raw_decode(text[7:])
+                    suffix=text[7+end:].strip()
+                    # The NS library writes directly to stdout. A complete
+                    # voice object can be followed by its startup diagnostic
+                    # before the queued newline arrives. Accept only that
+                    # known suffix; never reconstruct a split JSON object.
+                    if suffix and not suffix.startswith(('WebRtcNs_Create:','_WebRtcNs_Create:')):continue
+                    if not isinstance(event,dict) or 'stage' not in event:continue
                 except ValueError:continue
                 event['observed']=time.monotonic()
                 if not hasattr(self,'events'):self.events=[]

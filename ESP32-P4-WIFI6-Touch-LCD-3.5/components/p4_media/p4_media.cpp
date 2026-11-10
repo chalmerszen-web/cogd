@@ -1,5 +1,6 @@
 #include "p4_media.h"
 #include "../p4_board/p4_agent.h"
+#include "../p4_board/p4_storage_layout.h"
 #include "wels/codec_api.h"
 #include "esp_aac_dec.h"
 #include "esp_crt_bundle.h"
@@ -211,13 +212,13 @@ int prepare(Reader &r,Cache &cache,unsigned generation,unsigned fps) {
     }
     std::sort(packets.begin(),packets.end(),[](auto &a,auto &b){return a.offset<b.offset;});
     cache.partition=esp_partition_find_first(ESP_PARTITION_TYPE_DATA,ESP_PARTITION_SUBTYPE_ANY,"media");
-    if(!cache.partition)return 2;
+    if(!cache.partition || !p4_media_cache_end(cache.partition->size))return 2;
     cache.audio_bytes=unsigned(cache.duration*RATE/1000000)*2;
     cache.cursor=AUDIO_START+((cache.audio_bytes+4095)&~4095u);
     int64_t erased_at=esp_timer_get_time();
     /* A multi-megabyte erase can monopolize the shared Flash/cache path even
      * at low task priority. Bound each operation and let speech refill first. */
-    for(size_t at=FONT_END;at<cache.partition->size;at+=4096) {
+    for(size_t at=FONT_END;at<p4_media_cache_end(cache.partition->size);at+=4096) {
         if(p4_media_background_wait(generation))return 4;
         if(esp_partition_erase_range(cache.partition,at,4096)!=ESP_OK)return 16;
         vTaskDelay(1);
@@ -273,7 +274,7 @@ int prepare(Reader &r,Cache &cache,unsigned generation,unsigned fps) {
         uint32_t bytes=0;
         cache.convert_us+=esp_timer_get_time()-measured;measured=esp_timer_get_time();
         unsigned count=(cache.duration*fps+999999)/1000000;
-        unsigned budget=(cache.partition->size-AUDIO_START-((cache.audio_bytes+4095)&~4095u))/count;
+        unsigned budget=(p4_media_cache_end(cache.partition->size)-AUDIO_START-((cache.audio_bytes+4095)&~4095u))/count;
         jpg.image_quality=70;
         for(;;) {
             if(jpeg_encoder_process(codecs.jpeg,&jpg,rgb.get(),W*H*3,jpeg.get(),out_size,&bytes)!=ESP_OK)return 16;
@@ -281,7 +282,7 @@ int prepare(Reader &r,Cache &cache,unsigned generation,unsigned fps) {
             if(jpg.image_quality<=15)return 5;
             jpg.image_quality=std::max(15,int(jpg.image_quality)*3/4);
         }
-        if(!bytes || cache.cursor+bytes>cache.partition->size)return 5;
+        if(!bytes || cache.cursor+bytes>p4_media_cache_end(cache.partition->size))return 5;
         cache.jpeg_us+=esp_timer_get_time()-measured;measured=esp_timer_get_time();
         for(size_t at=0;at<bytes;at+=4096) {
             if(p4_media_background_wait(generation))return 4;
@@ -391,7 +392,7 @@ int load_cache(Cache &cache) {
     if(esp_partition_read(cache.partition,FONT_END,h.get(),sizeof(*h))!=ESP_OK)return 16;
     uint32_t check=h->header_crc;h->header_crc=0;
     if(h->magic!=0x32445643 || h->version!=1 || !h->count || h->count>225 ||
-       h->bytes<AUDIO_START || h->bytes>cache.partition->size || h->audio_bytes>RATE*2*MAX_SECONDS ||
+       h->bytes<AUDIO_START || h->bytes>p4_media_cache_end(cache.partition->size) || h->audio_bytes>RATE*2*MAX_SECONDS ||
        h->duration<=0 || h->duration>MAX_SECONDS*1000000LL ||
        h->audio_bytes!=unsigned(h->duration*RATE/1000000)*2 ||
        check!=esp_rom_crc32_le(0,reinterpret_cast<const uint8_t *>(h.get()),sizeof(*h)))return 6;

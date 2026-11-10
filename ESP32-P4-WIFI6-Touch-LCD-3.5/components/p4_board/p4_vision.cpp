@@ -683,12 +683,18 @@ extern "C" void p4_visual_init(void) {
     if (!pixels || !state_lock || !bsp_display_lock(1000))
         return;
     auto assets=esp_partition_find_first(ESP_PARTITION_TYPE_DATA,ESP_PARTITION_SUBTYPE_ANY,"media");
-    uint32_t header[4]={};const void *font=nullptr;static esp_partition_mmap_handle_t font_map;
+    uint32_t header[4]={};static void *font=nullptr;
+    /* A permanent Flash mapping forces IDF to suspend both CPUs during every
+     * journal erase/write, even with PSRAM XIP. Keep the font in PSRAM so the
+     * normal Flash mutex path can leave capture and display tasks running. */
     if(assets && esp_partition_read(assets,0,header,sizeof(header))==ESP_OK && header[0]==0x31464743 &&
-       header[1]==1 && header[2]>0 && header[2]<=0x17f000 &&
-       esp_partition_mmap(assets,4096,header[2],ESP_PARTITION_MMAP_DATA,&font,&font_map)==ESP_OK &&
-       esp_rom_crc32_le(0,static_cast<const uint8_t *>(font),header[2])==header[3])
-        cjk_font = lv_binfont_create_from_buffer(const_cast<void *>(font),header[2]);
+       header[1]==1 && header[2]>0 && header[2]<=0x17f000) {
+        font=heap_caps_malloc(header[2],MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+        if(font && esp_partition_read(assets,4096,font,header[2])==ESP_OK &&
+           esp_rom_crc32_le(0,static_cast<const uint8_t *>(font),header[2])==header[3])
+            cjk_font=lv_binfont_create_from_buffer(font,header[2]);
+        if(!cjk_font){free(font);font=nullptr;}
+    }
     ui_font = *LV_FONT_DEFAULT;
     ui_font.fallback = cjk_font;
     if(cjk_font) {

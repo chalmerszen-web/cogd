@@ -1,0 +1,1086 @@
+{
+  "firmware": {
+    "app_bytes": 6279264,
+    "app_sha256": "ff3b55b3f7c55f101e317f0f15213ebba4f176f6aac752ee3136b3e44f6311c2",
+    "media_outside_log_unchanged": true
+  },
+  "measurement": "同一电脑单调时钟：测试音频播放结束至设备扬声器开始事件的串口接收时间；未扣除串口延迟。插话停止时间从测试音频文件开始算起，文件含短静音。",
+  "normal_status_hint_count": 0,
+  "summary": {
+    "status_fault": {
+      "count": 3,
+      "min_ms": 1453,
+      "max_ms": 1516,
+      "median_ms": 1453
+    },
+    "fault1": {
+      "count": 1,
+      "min_ms": 8547,
+      "max_ms": 8547,
+      "median_ms": 8547
+    },
+    "fault2": {
+      "count": 1,
+      "min_ms": 3438,
+      "max_ms": 3438,
+      "median_ms": 3438
+    },
+    "barge": {
+      "count": 10,
+      "min_ms": 4219,
+      "max_ms": 6282,
+      "median_ms": 5164.0
+    },
+    "barge_followup": {
+      "count": 10,
+      "min_ms": 2281,
+      "max_ms": 3047,
+      "median_ms": 2469.0
+    },
+    "ordinary": {
+      "count": 5,
+      "min_ms": 2360,
+      "max_ms": 3219,
+      "median_ms": 2828
+    },
+    "long": {
+      "count": 2,
+      "min_ms": 2406,
+      "max_ms": 3265,
+      "median_ms": 2835.5
+    },
+    "photo": {
+      "count": 3,
+      "min_ms": 1609,
+      "max_ms": 1656,
+      "median_ms": 1625
+    },
+    "photo_admission": {
+      "count": 1,
+      "min_ms": 1750,
+      "max_ms": 1750,
+      "median_ms": 1750
+    },
+    "photo_complete": {
+      "count": 1,
+      "min_ms": null,
+      "max_ms": null,
+      "median_ms": null
+    },
+    "video": {
+      "count": 1,
+      "min_ms": 3797,
+      "max_ms": 3797,
+      "median_ms": 3797
+    },
+    "quick": {
+      "count": 60,
+      "min_ms": 1391,
+      "max_ms": 2062,
+      "median_ms": 1586.0
+    },
+    "quick_after_renewal": {
+      "count": 2,
+      "min_ms": 1453,
+      "max_ms": 1500,
+      "median_ms": 1476.5
+    }
+  },
+  "rows": [
+    {
+      "项目": "status_fault",
+      "轮次": "status_fault_1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1516,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "read_only_hint_after_empty_final",
+      "说明": "故障注入，单列；注入前额外重试 0 次"
+    },
+    {
+      "项目": "status_fault",
+      "轮次": "status_fault_2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1453,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "read_only_hint_after_empty_final",
+      "说明": "故障注入，单列；注入前额外重试 0 次"
+    },
+    {
+      "项目": "status_fault",
+      "轮次": "status_fault_3",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1453,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "read_only_hint_after_empty_final",
+      "说明": "故障注入，单列；注入前额外重试 0 次"
+    },
+    {
+      "项目": "fault1",
+      "轮次": "recovery",
+      "结果": "PASS",
+      "说完至开始回复_ms": 8547,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "retained_audio_retry",
+      "说明": "故障注入，单列；注入前额外重试 0 次"
+    },
+    {
+      "项目": "fault2",
+      "轮次": "recovery",
+      "结果": "PASS",
+      "说完至开始回复_ms": 3438,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "retained_audio_retry",
+      "说明": "故障注入；随后新提问的回复时间；注入前额外重试 0 次"
+    },
+    {
+      "项目": "barge",
+      "轮次": "1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5140,
+      "插话音频开始至停止旧回答_ms": 1675,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2547,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5187,
+      "插话音频开始至停止旧回答_ms": 1690,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2282,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "3",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5219,
+      "插话音频开始至停止旧回答_ms": 1488,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "3",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2578,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "4",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5000,
+      "插话音频开始至停止旧回答_ms": 1706,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "4",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2672,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "5",
+      "结果": "PASS",
+      "说完至开始回复_ms": 4219,
+      "插话音频开始至停止旧回答_ms": 1722,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "5",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2391,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "6",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5250,
+      "插话音频开始至停止旧回答_ms": 1691,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "6",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2704,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "7",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5219,
+      "插话音频开始至停止旧回答_ms": 1753,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "7",
+      "结果": "PASS",
+      "说完至开始回复_ms": 3047,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "8",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5141,
+      "插话音频开始至停止旧回答_ms": 1503,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "8",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2359,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "9",
+      "结果": "PASS",
+      "说完至开始回复_ms": 5125,
+      "插话音频开始至停止旧回答_ms": 1659,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "9",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2281,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge",
+      "轮次": "10",
+      "结果": "PASS",
+      "说完至开始回复_ms": 6282,
+      "插话音频开始至停止旧回答_ms": 1675,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "barge_followup",
+      "轮次": "10",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2297,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "ordinary",
+      "轮次": "1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2360,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "ordinary",
+      "轮次": "2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2422,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "ordinary",
+      "轮次": "3",
+      "结果": "PASS",
+      "说完至开始回复_ms": 3219,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "ordinary",
+      "轮次": "4",
+      "结果": "PASS",
+      "说完至开始回复_ms": 3079,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "ordinary",
+      "轮次": "5",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2828,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "long",
+      "轮次": "1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 3265,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": "完整长回答且无误打断"
+    },
+    {
+      "项目": "long",
+      "轮次": "2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2406,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": "完整长回答且无误打断"
+    },
+    {
+      "项目": "photo",
+      "轮次": "cancelled-1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1625,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "photo",
+      "轮次": "cancelled-2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1609,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "photo_admission",
+      "轮次": "photo",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1750,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "",
+      "说明": "真实板载拍照的本地受理回复"
+    },
+    {
+      "项目": "photo_complete",
+      "轮次": "photo",
+      "结果": "PASS",
+      "说完至开始回复_ms": null,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "",
+      "说明": "真实读图至完成通知 13688 ms，恰好一次"
+    },
+    {
+      "项目": "photo",
+      "轮次": "reading-progress",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1656,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "video",
+      "轮次": "camera",
+      "结果": "PASS",
+      "说完至开始回复_ms": 3797,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "",
+      "说明": "独立截图复核：P4 LCD 显示摄像头预览，题纸及上方黄色圆形固定物可见；仅核对场景与预览，不据此断言题目细字识别精度"
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1438,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 2062,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-3",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1516,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-4",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1719,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-5",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1515,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-6",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1422,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-7",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1734,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-8",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1828,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-9",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1766,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-10",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1500,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-11",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1563,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-12",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1828,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-13",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1484,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-14",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1641,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-15",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1719,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-16",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1625,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-17",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1609,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-18",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1531,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-19",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1438,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-20",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1578,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-21",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1563,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-22",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1718,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-23",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1828,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-24",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1672,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-25",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1469,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-26",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1546,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-27",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1531,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-28",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1610,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-29",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1516,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_1:cancelled-30",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1640,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick_after_renewal",
+      "轮次": "quick_series_1:after-idle-renewal",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1453,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-1",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1578,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-2",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1500,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-3",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1485,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-4",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1718,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-5",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1656,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-6",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1453,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-7",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1641,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-8",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1610,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-9",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1890,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-10",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1532,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-11",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1812,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-12",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1500,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-13",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1625,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-14",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1516,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-15",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1594,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-16",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1500,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-17",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1468,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-18",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1610,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-19",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1500,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-20",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1687,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-21",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1641,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-22",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1422,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-23",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1531,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-24",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1391,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-25",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1828,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-26",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1516,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-27",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1640,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-28",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1906,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-29",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1609,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick",
+      "轮次": "quick_series_2:cancelled-30",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1531,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    },
+    {
+      "项目": "quick_after_renewal",
+      "轮次": "quick_series_2:after-idle-renewal",
+      "结果": "PASS",
+      "说完至开始回复_ms": 1500,
+      "插话音频开始至停止旧回答_ms": null,
+      "识别路径": "final_transcript",
+      "说明": ""
+    }
+  ],
+  "evidence": {
+    "status_fault": {
+      "path": ".local/aoq-native-20261107/qualify140d-status_fault/report.json",
+      "sha256": "0c8a52464eb9c0d97237724a97def6b3f4ff4a470211546d883d791bbdd50698"
+    },
+    "fault1": {
+      "path": ".local/aoq-native-20261107/qualify140d-fault1/report.json",
+      "sha256": "88f63b41bf97f843eeccbd4bbfe9e5adb3a2bc6553c49830c9895e636b41ec77"
+    },
+    "fault2": {
+      "path": ".local/aoq-native-20261107/qualify140d-fault2/report.json",
+      "sha256": "9828c800b9d63b7bbdc29b7cffb5d925323397269079fdce0e77d2f8ce737bb0"
+    },
+    "barge": {
+      "path": ".local/aoq-native-20261107/qualify140-rest-barge/report.json",
+      "sha256": "0d40b78629bdcb2602b16314d81f6e0fe6b7b4d89af9ebd32c4094ff0df26b66"
+    },
+    "ordinary": {
+      "path": ".local/aoq-native-20261107/qualify140-rest-ordinary/report.json",
+      "sha256": "ff3116af4bd9a1c840e0e6dd1194b37eb3837a1c2ba101aefbdce203c668d24e"
+    },
+    "long": {
+      "path": ".local/aoq-native-20261107/qualify140-rest-long/report.json",
+      "sha256": "8a0dd6650a5c78fd1dcedce8323574e27fa3f4fa12131269958c6e471a21f422"
+    },
+    "photo": {
+      "path": ".local/aoq-native-20261107/qualify140-rest-photo/report.json",
+      "sha256": "defee0a18dd80dcf432d6f9a30639f2692b0bd29ba6e191b7c584ac9295c9001"
+    },
+    "video": {
+      "path": ".local/aoq-native-20261107/qualify140-rest-video/report.json",
+      "sha256": "3b8e621deef6639c86d6495bb76faa32ac03ca92e6acfa9a1ea162eef638e684"
+    },
+    "quick_series_1": {
+      "path": ".local/aoq-native-20261107/verify140-renew-1/report.json",
+      "sha256": "9fac499f64e916de707b3dd065ec38f7166bb115fe5a628589a93bf604cffd3b"
+    },
+    "quick_series_2": {
+      "path": ".local/aoq-native-20261107/verify140-renew-2/report.json",
+      "sha256": "5e7185c6edda5fe2c78d4d48faf3c5cece76146e544e8a8b0a17f7de802e3a90"
+    }
+  },
+  "retained_failure": {
+    "report": "qualify140d-quick/report.json",
+    "case": "after-idle-renewal",
+    "latency_ms": 4125,
+    "cause": "Unresolved command/ASR confirmation delay; a later pass does not prove this cause fixed."
+  },
+  "scope": "Same frozen candidate 140; complete phase batches, including two predetermined independent 31-query batches. Earlier failures retained, not relabeled.",
+  "usb_event_parse": {
+    "lines": 2878,
+    "malformed": 0,
+    "phases": {
+      "status_fault": {
+        "voice_json_lines": 88,
+        "malformed": 0
+      },
+      "fault1": {
+        "voice_json_lines": 56,
+        "malformed": 0
+      },
+      "fault2": {
+        "voice_json_lines": 72,
+        "malformed": 0
+      },
+      "barge": {
+        "voice_json_lines": 895,
+        "malformed": 0
+      },
+      "ordinary": {
+        "voice_json_lines": 164,
+        "malformed": 0
+      },
+      "long": {
+        "voice_json_lines": 100,
+        "malformed": 0
+      },
+      "photo": {
+        "voice_json_lines": 122,
+        "malformed": 0
+      },
+      "video": {
+        "voice_json_lines": 43,
+        "malformed": 0
+      },
+      "quick_series_1": {
+        "voice_json_lines": 670,
+        "malformed": 0
+      },
+      "quick_series_2": {
+        "voice_json_lines": 668,
+        "malformed": 0
+      }
+    }
+  }
+}

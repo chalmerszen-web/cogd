@@ -1,11 +1,16 @@
 #pragma once
 #include "driver/uart.h"
+#include "driver/uart_vfs.h"
 /* Keep the existing command framing over the board's CH343 UART bridge. */
 typedef struct {unsigned tx_buffer_size,rx_buffer_size;} usb_serial_jtag_driver_config_t;
 static inline esp_err_t usb_serial_jtag_driver_install(const usb_serial_jtag_driver_config_t *c)
 {
     esp_err_t err=uart_driver_install(UART_NUM_0,(int)c->rx_buffer_size,16384,0,NULL,0);
     if(err==ESP_OK)err=uart_flush_input(UART_NUM_0);
+    /* Binary NS startup printf bypasses esp_log_set_vprintf. Put stdout in
+     * the same UART TX ring used by the CH343 command/event interface; direct
+     * FIFO writes otherwise split already queued voice JSON mid-record. */
+    if(err==ESP_OK)uart_vfs_dev_use_driver(UART_NUM_0);
 #ifdef AGENT_KEYWORD_PCM
     /* Explicit diagnostic only: 31.25 hex PCM records/s exceed 115200 baud. */
     if(err==ESP_OK)err=uart_set_baudrate(UART_NUM_0,921600);

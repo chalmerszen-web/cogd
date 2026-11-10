@@ -48,14 +48,15 @@ static inline bool p4_quick_cancel(const char *text)
     }
     return false;
 }
-static inline bool p4_quick_progress(const char *text)
-{
-    char plain[101];if(!p4_quick_plain(text,plain))return false;
-    static const char *const phrases[]={"好了没","好了吗","好了没有","现在好了没","现在好了吗",
+static const char *const p4_progress_phrases[]={"好了没","好了吗","好了没有","现在好了没","现在好了吗",
         "做完了吗","完成了吗","弄好了吗","读好了吗","解好了吗","算好了吗",
         "题目读好了吗","题目解好了吗","解题好了没","读题好了没","进度怎么样","进度怎样",
         "现在进度怎么样","现在到哪一步了","还在处理吗","还在解题吗","还在读题吗"};
-    for(size_t i=0;i<sizeof(phrases)/sizeof(*phrases);++i)if(!strcmp(plain,phrases[i]))return true;
+static inline bool p4_quick_progress(const char *text)
+{
+    char plain[101];if(!p4_quick_plain(text,plain))return false;
+    for(size_t i=0;i<sizeof(p4_progress_phrases)/sizeof(*p4_progress_phrases);++i)
+        if(!strcmp(plain,p4_progress_phrases[i]))return true;
     return false;
 }
 #endif

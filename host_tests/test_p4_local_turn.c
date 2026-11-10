@@ -8,6 +8,24 @@ int main(void)
     assert(p4_local_onset_level(0)==280);
     assert(p4_local_onset_level(140)==280);
     assert(p4_local_onset_level(480)==960);
+    /* Captured slow progress query: idle floor 232, post-phrase input
+     * 226..296 kept refreshing the old active gate for several seconds. */
+    assert(p4_local_continuation_level(232)==348);
+    assert(p4_local_continuation_level(0)==140);
+    p4_local_turn_t noise_tail={0};p4_local_turn_seed(&noise_tail,0,16000);
+    for(unsigned i=1;i<=30;i++) {
+        unsigned input_level=226+(i%8)*10;
+        bool voiced=input_level>p4_local_continuation_level(232);
+        assert(p4_local_turn_feed(&noise_tail,16000+i*320,voiced,true,600)==
+            (i==30?P4_LOCAL_END:P4_LOCAL_NONE));
+    }
+    /* Softer sustained continuation remains above the lower active gate;
+     * it need not meet the original 464 admission level again. */
+    p4_local_turn_seed(&noise_tail,0,16000);
+    for(unsigned i=1;i<=60;i++)
+        assert(p4_local_turn_feed(&noise_tail,16000+i*320,
+            360>p4_local_continuation_level(232),true,600)==P4_LOCAL_NONE);
+    assert(noise_tail.last_voice==35200 && !noise_tail.ended);
     p4_local_turn_t s={0};unsigned cursor=0;
     /* Sparse acoustic pulses never become a user turn. */
     for(unsigned i=0;i<100;i++){

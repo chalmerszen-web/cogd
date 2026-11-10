@@ -1,11 +1,69 @@
 # P4 AOQ continuation — 2026-11-10
 
-Status: **Candidate 131 PASSES the requested finite, fixed-source physical
-qualification.** This resumes the interrupted `确认 cogd 的芯片支持` chat.
-Earlier failures remain recorded below. Human acceptance and broad noise/voice
-coverage are not claimed.
+Status: **Candidate 140 completed the latest finite physical phase batches below.**
+The earlier 4,125 ms post-maintenance reply remains a known, unresolved latency
+observation. Later passing batches do not erase it. Human acceptance and broad
+noise/voice coverage are not claimed.
 
-## Current verified result — candidate 131
+## 候选 140：日志开启下的最新有限实测
+
+实机版本 `0.10.9-p4-noise-tail`，应用 6,279,264 字节，SHA-256：
+`ff3b55b3f7c55f101e317f0f15213ebba4f176f6aac752ee3136b3e44f6311c2`。
+223 个冻结构建输入仍与当前源文件一致，安装和测试后应用读回一致。
+这是耳机播放固定音频、P4 真实麦克风采集的有限验收；C3/WSS 是构建兼容检查，
+没有本轮 C3/WSS 实机验证，也不代表全部真人音色、摆位和噪声条件通过。
+
+| 项目 | 结果 | 说完至开始回复（ms） |
+| --- | --- | --- |
+| 正常快速回复（两组各 30 轮） | 60/60 PASS | 1391–2062 |
+| 维护后快速回复（每组第 31 轮） | 2/2 PASS | 1453–1500 |
+| 播放中插话，完整前缀与算式 | 10/10 PASS | 4219–6282 |
+| 插话后追问，完整“那再加一呢” | 10/10 PASS | 2281–3047 |
+| 普通问题 | 5/5 PASS | 2360–3219 |
+| 长回答，未发生误打断 | 2/2 PASS | 2406–3265 |
+| 拍照前与读图中进度询问 | 3/3 PASS | 1609–1656 |
+| 真实拍照受理回复 | 1/1 PASS | 1750 |
+| 真实读图完成通知，恰好一次 | 1/1 PASS | 另列完成通知总耗时 |
+| 真实摄像头视频问答 | 1/1 PASS | 3797 |
+| 故障注入：空转写的只读进度补答 | 3/3 PASS | 1453–1516 |
+| 故障注入：普通问题保留录音重试 | 1/1 PASS | 8547 |
+| 故障注入：连续空转写后新问题 | 1/1 PASS | 3438 |
+
+停止旧回答为 1488–1753 ms，从测试音频文件开始计时，包含其开头短静音。
+表内回复时间从电脑音频播放结束至串口收到扬声器开始事件计时，未扣除串口延迟。
+故障注入单列；它保留实际录音，只模拟服务端最终转写为空。`fault2` 的时间是
+随后新提问的回复时间，不能当作首次被拒绝输入的恢复耗时。
+正常进度询问中有 0 次使用明确标记的只读临时结果补答；
+该路径不是成功的最终转写，不写入对话历史，不执行额外工具或推理。
+
+逐轮完整记录：[CSV](validation/p4-voice-20261110.csv)、
+[结构化结果及证据摘要](validation/p4-voice-20261110.json)。
+最新物理证据来自 `qualify140d-status_fault/fault1/fault2`、`qualify140-rest-*` 和
+两组完整的 `verify140-renew-1/2`，均使用同一冻结固件；没有摘取失败批次中的
+个别通过轮次来拼成完整通过批次。
+
+**保留的性能失败：同一候选早先在 `qualify140d-quick` 连续 30 轮通过后，
+维护后的第 31 轮耗时 4,125 ms，超过 2,500 ms 目标。** 本地结束收音约 1,296 ms，
+转写提交确认和最终结果约 4,125 ms 才到达。本地发送/接收记录没有同长度停顿，
+但现有证据不能区分服务端处理与传输等待，根因仍未确认。后续预先限定的两组
+完整 31 轮通过，只说明这两组通过，不能宣称该慢回复根因已修复或联网延迟已消除。
+原始失败报告保留；未放宽 2,500 ms 门槛，也没有修改固件后隐去旧记录。
+
+主机 118/118 通过；Python 日志解析和 USB 事件解析各 4/4 通过；P4 AOQ 调试版、
+普通版、WSS 及未受 P4 后续修改影响的 C3 构建兼容证据通过。
+本次开机最终检查记录 103,172 个采音帧，最大处理 17824 us，
+超过 32 ms 为 0，接收溢出为 0。
+关闭电脑串口 8 秒后日志继续增长；USB 导出 16 页、117 条记录
+全部通过 CRC，导出后恢复记录。最终应用读回一致，日志区外媒体逐字节不变。
+测试后设备重启，日志开启、未暂停、写入错误 0，唤醒状态 `listening`。
+
+重启前日志累计丢弃 182 条、截断 2 条，写入错误
+0。这些是本次开机累计值，包含之前失败测试；不能把有界循环日志
+当作无损全量记录。页头和导出结果公开这些计数，正常覆盖窗口约 10 分 40 秒。
+本轮 2,878 条 USB 语音事件全部完整解析，没有损坏的事件 JSON。
+最后检查完成时间：2026-11-10T21:17:09.906824+08:00。
+
+## Previous verified result — candidate 131
 
 The installed native P4 AOQ application is 6,269,120 bytes, SHA-256
 `e8ed5e6a3d87b313bcbba6cb2ac862648e65746c40238dd80ee5de929c3a67ca`.

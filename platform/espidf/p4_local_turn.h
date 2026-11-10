@@ -19,6 +19,14 @@ static inline unsigned p4_local_onset_level(unsigned quiet_level)
     unsigned level=quiet_level*2u;
     return level>280?level:280;
 }
+static inline unsigned p4_local_continuation_level(unsigned quiet_level)
+{
+    /* Keep hysteresis below admission, but never let amplified idle noise
+     * refresh last_voice indefinitely. All PCM, including quiet consonants,
+     * still uploads until the normal 600 ms endpoint after genuine speech. */
+    unsigned level=quiet_level+quiet_level/2u;
+    return level>140?level:140;
+}
 typedef enum { P4_LOCAL_WAIT, P4_LOCAL_REJECT, P4_LOCAL_RESPOND } p4_local_reply_t;
 static inline p4_local_reply_t p4_local_reply(bool committed,bool transcribed,bool has_text,bool resolved)
 {

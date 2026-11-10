@@ -17,4 +17,9 @@ agent_err_t esp_agent_conversation_catchup(unsigned frame_interval_ms);
 agent_err_t esp_agent_conversation_video(bool enabled);
 /* Probe builds only, volatile and off at boot; change with voice stopped. */
 agent_err_t esp_agent_conversation_test_tools(bool enabled);
+#if defined(AGENT_P4_AOQ_PROBE)
+/* Native AOQ probe only: replace the next 0..2 matched nonempty ASR finals
+ * with empty finals, between sessions. Volatile, disabled on boot. */
+agent_err_t esp_agent_conversation_test_empty(unsigned count);
+#endif
 #endif
