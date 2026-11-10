@@ -84,5 +84,31 @@ int main(){
         assert(s.abandoned&&s.queue.size()==2);assert(!pcm(s));assert(!created(s,"r2"));assert(!pcm(s,11));
         assert(s.queue.size()==2);std::string text;take(s);take(s,&text);assert(text.find(status)!=std::string::npos);++cases;
     }
+    {p4_aoq_conversation s;s.ready=true;assert(!created(s));assert(!pcm(s));
+     bool cancel=false;assert(!p4_aoq_conversation_interrupt(&s,"r1",&cancel)&&cancel);
+     assert(s.queue.size()==1&&s.interrupted);assert(!pcm(s,7,1));assert(!end(s));
+     assert(!json(s,"{\"type\":\"response.done\",\"response\":{\"id\":\"r1\",\"status\":\"cancelled\"}}"));
+     assert(!s.active&&!s.abandoned);assert(!created(s,"r2"));assert(!pcm(s,11));
+     assert(!pcm(s,7,2));assert(!end(s,7));assert(!done(s,true,"r2"));assert(!end(s,11));
+     unsigned audio=0;while(!s.queue.empty()){auto m=take(s);if(m.pcm){++audio;assert(!std::strcmp(m.response,"r2"));}}
+     assert(audio==1);++cases;}
+    {p4_aoq_conversation s;s.ready=true;assert(!created(s));assert(!pcm(s));assert(!done(s));
+     bool cancel=true;assert(!p4_aoq_conversation_interrupt(&s,"r1",&cancel)&&!cancel);
+     assert(!s.active&&!s.abandoned&&!s.done.data);assert(s.queue.size()==2);
+     assert(!pcm(s,7,1));assert(!created(s,"r2"));assert(!pcm(s,11));++cases;}
+    {p4_aoq_conversation s;s.ready=true;assert(!created(s));assert(!pcm(s));assert(!done(s));assert(!end(s));
+     bool cancel=true;assert(!p4_aoq_conversation_interrupt(&s,"r1",&cancel)&&!cancel);
+     assert(s.queue.size()==2);assert(!created(s,"r2"));assert(!pcm(s,11));assert(!pcm(s,7,1));++cases;}
+    {p4_aoq_conversation s;s.ready=true;assert(!created(s));bool cancel=true;
+     assert(p4_aoq_conversation_interrupt(&s,"r1",&cancel)==Busy&&!cancel);
+     assert(!pcm(s));assert(p4_aoq_conversation_interrupt(&s,"other",&cancel)==Busy);
+     assert(s.queue.size()==2&&!s.interrupted);++cases;}
+    {p4_aoq_conversation s;s.ready=true;assert(!created(s));assert(!pcm(s));bool cancel=false;
+     assert(!p4_aoq_conversation_interrupt(&s,"r1",&cancel));assert(pcm(s,11)==Protocol);++cases;}
+    {p4_aoq_conversation s;s.ready=true;assert(!created(s));assert(!pcm(s));bool cancel=false;
+     assert(!p4_aoq_conversation_interrupt(&s,"r1",&cancel));assert(done(s)==0);
+     assert(pcm(s,11)==Protocol);++cases;}
+    {p4_aoq_conversation s;s.ready=true;assert(!created(s));assert(!pcm(s));bool cancel=false;
+     assert(!p4_aoq_conversation_interrupt(&s,"r1",&cancel));assert(done(s,true,"other")==Protocol);++cases;}
     std::cout<<"AOQ conversation: "<<cases<<" cases passed\n";
 }

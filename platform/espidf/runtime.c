@@ -460,13 +460,21 @@ uint64_t esp_agent_now(void) { return (uint64_t)esp_timer_get_time() / 1000; }
 
 enum { USB_TX_BYTES = 2048 };
 #if AGENT_BOARD_P4
-/* SDK logs use a different UART path from command replies. A FILE lock alone
- * cannot keep a Wi-Fi diagnostic out of the middle of a usage JSON event. */
+/* SDK stdout can bypass bytes still queued by the USB driver. Both logs and
+ * structured events must enter the same TX queue, not merely share a lock. */
 static int console_log(const char *format,va_list args)
 {
-    if(!output_lock || xSemaphoreTake(output_lock,pdMS_TO_TICKS(2000))!=pdTRUE)return 0;
-    int n=vprintf(format,args);fflush(stdout);
-    xSemaphoreGive(output_lock);return n;
+    char local[384];va_list copy;va_copy(copy,args);
+    int n=vsnprintf(local,sizeof(local),format,copy);va_end(copy);
+    if(n<=0)return n;
+    char *line=local;
+    if((size_t)n>=sizeof(local)) {
+        line=malloc((size_t)n+1);if(!line)return 0;
+        va_copy(copy,args);vsnprintf(line,(size_t)n+1,format,copy);va_end(copy);
+    }
+    esp_agent_write(line,(size_t)n);
+    if(line!=local)free(line);
+    return n;
 }
 #endif
 void esp_agent_write(const char *data, size_t size)
@@ -2690,6 +2698,12 @@ static void command(char *line)
     } else if(!strncmp(line,"agent display set ",18)) {
         submit(line+6,false,true);
 #if AGENT_BOARD_P4
+    } else if(!strncmp(line,"agent camera photo-mode ",sizeof("agent camera photo-mode ")-1)) {
+        const char *args=line+sizeof("agent camera photo-mode ")-1;
+        unsigned mode;char extra;
+        agent_err_t error=!strchr(args,'-') && sscanf(args,"%u %c",&mode,&extra)==1?
+            (agent_err_t)p4_camera_photo_mode(mode):AGENT_ERR_ARGUMENT;
+        report(error);
     } else if(!strcmp(line,"agent camera capture status")) {
         char output[768];
         if(p4_camera_capture_status(output,sizeof(output))) say("{}\r\n");

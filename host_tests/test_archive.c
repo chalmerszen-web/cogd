@@ -50,6 +50,7 @@ int main(void)
 {
     memset(flash,255,sizeof(flash)); agent_wal_t wal; assert(!agent_wal_format(&wal,&ops)); boot();
     turn(0); uint64_t source=context.last_local;
+    assert(!agent_context_checkpoint(&context,0,0,AGENT_CONTEXT_CLOUD));
     assert(agent_context_archive(&context,context.wal.generation,context.wal.next_seq-1)==AGENT_ERR_FORBIDDEN);
     assert(!agent_context_checkpoint(&context,0,0,AGENT_CONTEXT_LOCAL));
     assert(!agent_context_emit(&context,"memory","user","{\"key\":\"color\",\"value\":\"green\"}",NULL,0));
@@ -93,10 +94,12 @@ int main(void)
     uint64_t previous=context.last_local;
     assert(!agent_context_emit(&context,"message","user","{\"text\":\"new\"}",NULL,0) && context.last_local>previous);
 
-    /* A completely full LOCAL bank remains recoverable through explicit export,
-     * without allocating space for an ACK/checkpoint in the already-full bank. */
+    /* LOCAL and HYBRID full banks need explicit durable export, without a mode
+     * switch/ACK checkpoint that would itself require space in the full bank. */
+    const agent_context_mode_t modes[]={AGENT_CONTEXT_LOCAL,AGENT_CONTEXT_HYBRID};
+    for(unsigned mode=0;mode<2;++mode){
     assert(!agent_wal_format(&wal,&ops)); boot();
-    assert(!agent_context_checkpoint(&context,0,0,AGENT_CONTEXT_LOCAL));
+    assert(!agent_context_checkpoint(&context,0,0,modes[mode]));
     turn(7);
     agent_err_t error;
     do { error=agent_context_emit(&context,"message","user","{\"text\":\"pending filler\"}",NULL,0); } while(!error);
@@ -105,5 +108,7 @@ int main(void)
     assert(context.events==1 && context.recent_count==1 && !context.acked);
     assert(!agent_context_emit(&context,"message","user","{\"text\":\"chat resumes\"}",NULL,0));
     boot(); assert(context.events==2 && context.archived_record);
+    assert(context.mode==modes[mode] && !context.acked && !context.cursor);
+    }
     puts("verified-prefix retention, recent turns, summary source, memory/tombstone, power loss and full-bank recovery passed");
 }

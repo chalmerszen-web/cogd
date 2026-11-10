@@ -25,9 +25,13 @@ static inline p4_near_correlation_t p4_near_correlate_impl(
     /* First retain the existing 193 coarse lags. Native duplex additionally
      * checks at most 84 neighbours of its strongest raw/residual peaks.
      * A real acoustic delay is not constrained to multiples of 8 samples. */
-    for(int probe=0;probe<(refine?277:193);probe++) {
+    /* The recorded /shi-er/ echo had genuine peaks at 28 and 42 samples,
+     * missed by three coarse maxima in other regions. Cover the direct
+     * acoustic path densely without changing either correlation threshold. */
+    for(int probe=0;probe<(refine?373:193);probe++) {
         int lag;
         if(probe<193)lag=probe*8;
+        else if(probe>=277){lag=probe-276;if(lag%8==0)continue;}
         else {
             int fine=probe-193,base=peak_lag[fine/42][(fine%42)/14];
             int delta=fine%14-7;if(delta>=0)++delta;

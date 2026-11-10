@@ -26,7 +26,7 @@ def u32(data, offset=0):
     return struct.unpack_from("<I", data, offset)[0]
 
 
-def partitions(table):
+def partitions(table, flash_size=FLASH_SIZE):
     result, end, md5 = {}, 0, False
     for offset in range(0, len(table) - 31, 32):
         entry = table[offset:offset + 32]
@@ -40,7 +40,7 @@ def partitions(table):
             raise ValueError("Invalid partition entry")
         _, kind, sub, at, size, name, flags = struct.unpack("<HBBII16sI", entry)
         name = name.rstrip(b"\0").decode("ascii")
-        if not name or name in result or at < end or at + size > FLASH_SIZE:
+        if not name or name in result or at < end or at + size > flash_size:
             raise ValueError("Invalid partition geometry")
         result[name] = {"type": kind, "subtype": sub, "offset": at, "size": size, "flags": flags}
         end = at + size

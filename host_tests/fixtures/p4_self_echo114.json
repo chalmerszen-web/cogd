@@ -1,0 +1,9 @@
+{
+  "source_firmware_sha256": "6f0a9b08c3637247718efa8454c33b067dca0c9c6de3eb5a18498173acd14d38",
+  "scope": "Device synthesized reply 7+5 equals 12. Two echo frames, no user speech. Format per frame: 512 mic, 512 linear, 2048 DAC reference, little endian int16.",
+  "recorded_ms": [
+    3631488,
+    3631683
+  ],
+  "sha256": "38f4a771369867770511d752ae99613198a74bf9d44615fb96f8984b20f9c18e"
+}

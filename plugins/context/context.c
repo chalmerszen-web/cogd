@@ -324,7 +324,10 @@ agent_err_t agent_context_archive(agent_context_t *c,uint64_t generation,uint64_
 {
     if(!c->wal.ready) return AGENT_ERR_STORAGE;
     if(c->prompt_locked) return AGENT_ERR_BUSY;
-    if(c->mode!=AGENT_CONTEXT_LOCAL) return AGENT_ERR_FORBIDDEN;
+    /* Explicit USB archival already requires a durable exported prefix.
+     * HYBRID also retains unsynced records locally and can fill a bank; the
+     * archive must not manufacture a cloud ACK or change the configured mode. */
+    if(c->mode==AGENT_CONTEXT_CLOUD) return AGENT_ERR_FORBIDDEN;
     if(!through || through>=c->wal.next_seq || through>AGENT_SEQ_MAX) return AGENT_ERR_ARGUMENT;
     if(through<=c->archived_record) return AGENT_OK;
     if(generation!=c->wal.generation) return AGENT_ERR_BUSY;

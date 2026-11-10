@@ -1,0 +1,19 @@
+{
+  "purpose": "Actual 1.84 kHz false cut with lower noise plus three independent real interruption controls; original123 fixture retained.",
+  "sha256": "337b4f749839c200e2196be187dbcae1d1b13b7ddd3dc4746e8e7d92a2c733ad",
+  "source": "qualify130-live-tutor/capture-explain",
+  "frames": [
+    228,
+    250
+  ],
+  "legacy_first_ms": 310962,
+  "installed130_first_ms": 310962,
+  "expected_first_ms": 0,
+  "raw_skips": 0,
+  "sent_skips": 0,
+  "source_pcm_sha256": [
+    "238e224ff28457b3fe6a7ab5c90fb48ea62410c8f2a58090b3e253127bdc72dd",
+    "ed263fa5befc36480774b2c575774aa4277d2e00597e539986c38498f2f7f2a2"
+  ],
+  "positive_controls": "p4_tonal_residue123.json records1..3 unchanged"
+}

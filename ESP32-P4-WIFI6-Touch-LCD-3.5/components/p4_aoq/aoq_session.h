@@ -28,6 +28,10 @@ struct Callbacks {
     // Optional Audio backpressure. False retains this object and its receive
     // credit; UDP ACKs, timers, Data and other streams must keep progressing.
     bool (*audio_ready)(void*, size_t payload_bytes)=nullptr;
+    // Sole owner may discard only an already identified, locally interrupted
+    // Audio stream. It cannot suppress errors on unknown or Data streams.
+    bool (*audio_discarded)(void*, uint64_t stream)=nullptr;
+    bool (*audio_urgent)(void*)=nullptr; // decoder must refill actual playback
 };
 struct Options {
     unsigned lifetime_ms=30000;       // allocation + transport + trial, <=30 s

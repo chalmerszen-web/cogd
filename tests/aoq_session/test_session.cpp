@@ -136,6 +136,18 @@ int main(){
   assert(!s.poll(0)&&!s.diagnostics().closed);++cases;
  }
  {
+  Session s;ready(s);auto& p=*s.impl_;auto* rx=p.add(7);rx->header_read=true;rx->header.track_alias=202;
+  p.callbacks.audio_discarded=[](void*,uint64_t id){return id==7;};
+  p.peer_reset(7,0x10);assert(!s.poll(0)&&!p.find(7));
+  const uint8_t late[]={1,2,3};p.incoming(7,0,late,sizeof(late),false);
+  assert(!s.poll(0)&&!p.find(7));++cases;
+ }
+ for(unsigned alias:{0u,302u,402u}){
+  Session s;ready(s);auto& p=*s.impl_;auto* rx=p.add(7);rx->header_read=alias!=0;rx->header.track_alias=alias;
+  p.callbacks.audio_discarded=[](void*,uint64_t){return true;};
+  p.peer_reset(7,0x10);assert(s.poll(0)==8);++cases;
+ }
+ {
   Session s;ready(s);auto& p=*s.impl_;p.options.conversation=true;
   test_udp_packets=16;test_udp_packet_ms=3;const auto started=test_now;
   assert(s.poll(0)==0&&test_now-started==6&&test_udp_packets==14);
@@ -158,6 +170,27 @@ int main(){
   p.incoming(3,0,bytes.data(),bytes.size(),true);
   for(unsigned count:{8u,16u,24u,25u}){assert(s.poll(0)==0);assert(p.diag.data_objects==count);}
   assert(p.diag.stream_fins==1&&p.diag.receive_drained);++cases;
+ }
+ // A cloud burst must still be drained when the audible ring is low.
+ // Under the same queued UDP load, refill eight audio frames rather than
+ // allowing the two-object network preference to starve real-time playback.
+ for(bool urgent:{false,true}){
+  Session s;ready(s);auto& p=*s.impl_;p.options.conversation=true;p.diag.pcm24k_selected=true;
+  p.receive_storage=aoq::buffer(sizeof(Session::Impl::ReceiveQueue));
+  p.receive_queue=new(p.receive_storage.get()) Session::Impl::ReceiveQueue;
+  for(unsigned i=0;i<64;++i){assert(p.receive_queue->write_slot());assert(p.receive_queue->publish(1));}
+  p.callbacks.userdata=&urgent;p.callbacks.audio_urgent=[](void* ctx){return *static_cast<bool*>(ctx);};
+  aoq_wire::SubgroupHeader h;h.track_alias=202;h.priority=10;
+  Bytes bytes,encoded,props,payload(960,0);aoq_wire::ObjectCursor cursor;aoq_wire::AudioProperties ap;
+  ap.duration_samples=480;assert(aoq_wire::encode_pcm_properties(ap,props));
+  assert(aoq_wire::encode_subgroup_header(h,bytes));
+  for(unsigned i=0;i<16;++i){
+   encoded.clear();assert(aoq_wire::encode_object(i,0,true,props,payload.data(),payload.size(),cursor,encoded));
+   bytes.insert(bytes.end(),encoded.begin(),encoded.end());
+  }
+  p.incoming(3,0,bytes.data(),bytes.size(),true);assert(!s.poll(0));
+  assert(p.diag.rx_packets==64&&p.receive_queue->pending()==0);
+  assert(p.diag.audio_objects==(urgent?8u:2u));++cases;
  }
  for(const auto kind:{P4_AOQ_AUDIO,P4_AOQ_ASR,P4_AOQ_TTS}){
   esp_http3::test_control_chunks={{0x6f,0,0,8,1,1,0x80,0xff,0x0e,0x12,1,0}};

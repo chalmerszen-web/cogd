@@ -53,6 +53,50 @@ static inline bool p4_voice_periodic(const int16_t pcm[512])
     return false;
 }
 
+/* A narrow high-frequency residual can match multiples of a vocal period.
+ * The recorded photo-answer false cut was dominated by about 2 kHz. Require
+ * a small lower component in whichever channel supplies the strong vote:
+ * eight-sample averaging retains over 5% of the centered input energy.
+ * This is evidence for a few confirmation frames, never an uplink filter.
+ * Eight independently recorded real interruptions keep their original
+ * confirmation time; the captured false chain no longer confirms. */
+static inline bool p4_voice_low_component(const int16_t pcm[512])
+{
+    int16_t low[64];int32_t sum=0,low_sum=0;
+    for(unsigned i=0;i<64;++i){
+        int32_t value=0;
+        for(unsigned j=0;j<8;++j)value+=pcm[8*i+j]>>5;
+        sum+=value;low[i]=(int16_t)(value/8);low_sum+=low[i];
+    }
+    int32_t mean=sum/512,low_mean=low_sum/64;
+    int64_t energy=0,low_energy=0;
+    for(unsigned i=0;i<512;++i){int32_t v=(pcm[i]>>5)-mean;energy+=(int64_t)v*v;}
+    for(unsigned i=0;i<64;++i){int32_t v=low[i]-low_mean;low_energy+=(int64_t)v*v;}
+    return energy>0 && low_energy*160>energy;
+}
+
+/* A narrow residual above the vocal pitch range can still contain enough
+ * low noise to pass the lower-component check. Its short period must not
+ * count as voiced evidence via a longer harmonic multiple. Inspect the
+ * original samples: lags 4..20 cover 800..4000 Hz without decimation alias.
+ * The captured 1.84 kHz failure has >85% positive correlation here. */
+static inline bool p4_voice_high_tone(const int16_t pcm[512])
+{
+    int32_t sum=0;
+    for(unsigned i=0;i<512;++i)sum+=pcm[i]>>5;
+    int32_t mean=sum/512;
+    for(unsigned lag=4;lag<=20;++lag){
+        int32_t cross=0,a=0,b=0;
+        for(unsigned i=lag;i<512;++i){
+            int32_t u=(pcm[i]>>5)-mean,v=(pcm[i-lag]>>5)-mean;
+            cross+=u*v;a+=u*u;b+=v*v;
+        }
+        if(cross>0 && a>0 && b>0 &&
+           (float)cross*(float)cross>=0.7225f*(float)a*(float)b)return true;
+    }
+    return false;
+}
+
 /* Called only after the existing VAD, linear-energy, alignment and echo
  * correlation admission. NLP gain is not a reliable near-voice amplitude:
  * two captured missed interruptions retained speech in the linear output
@@ -65,7 +109,7 @@ static inline bool p4_voice_duplex_strong(const int16_t nlp[512],
     const int16_t linear[512],bool linear_voice,unsigned nlp_level)
 {
     if(!p4_voice_above_low_band(nlp))return false;
-    if(nlp_level>200 && p4_voice_periodic(nlp))return true;
+    if(nlp_level>200 && p4_voice_periodic(nlp) && p4_voice_low_component(nlp) && !p4_voice_high_tone(nlp))return true;
     return nlp_level<=620 && linear_voice &&
-        p4_voice_above_low_band(linear) && p4_voice_periodic(linear);
+        p4_voice_above_low_band(linear) && p4_voice_periodic(linear) && p4_voice_low_component(linear) && !p4_voice_high_tone(linear);
 }

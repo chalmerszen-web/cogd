@@ -10,6 +10,9 @@
 #include "p4_local_turn.h"
 #include "p4_input_buffer.h"
 #include "p4_input_media_clock.h"
+#include "p4_live_input.h"
+#include "p4_quick_intent.h"
+#include "p4_status_voice.h"
 #include "p4_audio_pacer.h"
 #include "p4_reply_repair.h"
 #include "p4_video_clock.h"
@@ -302,12 +305,22 @@ typedef struct {
     unsigned input_first_cursor,input_start_cursor;
     bool input_origin_valid,input_start_mapped,endpoint_mapped;
     bool native_handoff,provider_handoff,endpoint_cue;
+    /* 1 waits for the exact old response, 2 schedules input clear, 3 waits
+     * for that ACK. Capture continues throughout; its onset is retained. */
+    unsigned reuse_phase,reuse_confirmed;
+    bool reuse_keep_input;
+    void *status_voice;
+    bool status_playback,input_local_reply;
+    char meaningful_user[129];
+    uint64_t reuse_at;
+    char reused_response[129];
     p4_local_turn_t local_turn;
     p4_input_identity_t accepted_input;
     char accepted_user[AGENT_INPUT_MAX+1];
     p4_input_binding_t input_binding;
     p4_input_buffer_t input_buffer;
     p4_input_media_clock_t input_media_clock;
+    p4_live_input_t live_input;
     bool input_drain_reported;
     bool control_config[CONTROL_CAP];
     unsigned config_sent,config_applied;
@@ -322,7 +335,7 @@ static void notice(conversation_t *,const char *,const char *);
 static bool input_ready(const conversation_t *s)
 {
 #if COGD_COMM_MODE == COGD_COMM_AOQ
-    return s->ready && !s->history_restore.pending && !s->input_buffer.pending && !s->input_binding.pending;
+    return s->ready && !s->history_restore.pending && !s->input_buffer.pending && !s->input_binding.pending && (!s->reuse_phase || (s->reuse_keep_input && s->reuse_phase==1));
 #else
     return s->ready;
 #endif
@@ -339,6 +352,12 @@ static agent_err_t send_control(conversation_t *s,const char *json,size_t size)
 static bool native_cancelled(void *ctx){return atomic_load(((conversation_t *)ctx)->cancelled);}
 static void native_diagnostic(void *ctx,const char *detail)
 {notice((conversation_t *)ctx,"realtime_transport_rx",detail);}
+static unsigned pending_pcm(const conversation_t *s);
+static bool native_audio_urgent(void *ctx)
+{
+    const conversation_t *s=ctx;
+    return s->stream && !s->gate.blocked && pending_pcm(s)<12000;
+}
 static bool native_can_renew(const conversation_t *s);
 static void native_video(conversation_t *s)
 {
@@ -568,17 +587,25 @@ static void invalid_answer(conversation_t *s,const char *rid)
     if(!retry){notice(s,"realtime_provider_failed","invalid_answer_not_retryable");s->error=AGENT_ERR_PROTOCOL;}
 }
 #endif
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+static void local_turn_begin(conversation_t *s);
+#endif
 static void interrupt(conversation_t *s,const char *source)
 {
     if(!(s->stream || s->gate.active || s->pcm_write>s->pcm_read) || !agent_audio_session_interrupt(&s->gate))return;
 #if COGD_COMM_MODE == COGD_COMM_AOQ
     if(!strcmp(source,"local_vad"))p4_audio_probe_trigger();
 #endif
-    if(!strcmp(source,"local_vad") && s->muted_input) {
+    if(!strcmp(source,"local_vad") && (s->muted_input
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+       || s->live_input.active
+#endif
+       )) {
 #if COGD_COMM_MODE == COGD_COMM_AOQ
         unsigned cursor=esp_hi_voice_session_cursor();
         uint32_t onset=p4_audio_confirmed_onset();
-        s->replay_cursor=p4_aoq_local_onset_replay(cursor,s->muted_from,
+        unsigned floor=s->muted_input?s->muted_from:s->live_input.first;
+        s->replay_cursor=p4_aoq_local_onset_replay(cursor,floor,
             (uint32_t)(s->capture_origin_us/1000),onset);
         char boundary[160];snprintf(boundary,sizeof(boundary),"onset_ms=%u retained_ms=%u cursor=%u replay=%u",
             (unsigned)onset,(cursor-s->replay_cursor)/16u,cursor,s->replay_cursor);
@@ -604,16 +631,47 @@ static void interrupt(conversation_t *s,const char *source)
     p4_response_obsolete(&s->response_owner);
     stop_playback(s,true);notice(s,"realtime_interrupt",source);
 #if COGD_COMM_MODE == COGD_COMM_AOQ
-    /* AOQ media has no response ID. A new connection epoch makes all old
-     * packets unreachable before replaying the confirmed near-end onset. */
+    /* Reuse is allowed only after the adapter has bound this response to
+     * a known media stream. Unknown/overlapping ownership keeps the original
+     * reconnect fallback; no old packet may become the new reply. */
     if(!s->replay_input){
         s->replay_cursor=p4_aoq_cloud_replay(esp_hi_voice_session_cursor(),s->input_first_cursor,
             s->input_start_cursor,!strcmp(source,"cloud_speech") && s->input_start_mapped,s->last_endpoint);
     }
-    s->native_handoff=true;
+    if(s->status_playback){
+        p4_status_voice_close(s->status_voice);s->status_voice=NULL;s->status_playback=false;
+        s->repair[0]=0;s->repair_sent=false;s->gate.active=false;s->gate.blocked=false;
+        s->done=false;s->preparing=false;s->received_samples=0;s->output_started=s->output_ended=0;
+        if(s->live_input.active && p4_live_input_contains(&s->live_input,s->replay_cursor))s->replay_input=false;
+        p4_local_turn_seed_replay(&s->local_turn,s->replay_cursor,esp_hi_voice_session_cursor());
+        local_turn_begin(s);notice(s,"realtime_local_reply_interrupted",NULL);return;
+    }
+    bool cancel_needed=s->gate.active || s->next_response;
+    bool reuse_cancel=false;
+    bool retain=s->live_input.active && !s->input_buffer.full &&
+        p4_live_input_contains(&s->live_input,s->replay_cursor) && esp_agent_now()-s->input_buffer.reset_at<24000;
+    bool overlap=s->live_input.active && s->replay_cursor<s->live_input.end;
+    int reuse_error=(!conversation_manual() || strcmp(source,"local_vad") || s->next_response || (overlap && !retain))?AGENT_ERR_BUSY:
+        p4_aoq_conversation_interrupt(s->aoq,s->gate.response,&reuse_cancel);
+    if(!reuse_error){
+        strcpy(s->reused_response,s->gate.response);
+        s->reuse_phase=s->gate.active?1u:2u;s->reuse_at=esp_agent_now();
+        s->reuse_confirmed=esp_hi_voice_session_cursor();s->replay_input=false;s->handoff_at=0;
+        s->reuse_keep_input=retain;
+        if(s->reuse_keep_input){
+            p4_local_turn_seed_replay(&s->local_turn,s->replay_cursor,s->reuse_confirmed);
+            s->local_began=false;s->muted_input=false;
+        }
+        cancel_needed=reuse_cancel;
+        notice(s,"realtime_barge_reuse",reuse_cancel?"cancel_active":"completed_playout");
+    }else{
+        s->native_handoff=true;notice(s,"realtime_barge_reuse_fallback","media_owner_unavailable");
+    }
+#else
+    bool cancel_needed=s->gate.active || s->next_response;
 #endif
     /* No deferred parameterless cancel may hit a subsequent response. */
-    if(s->gate.active || s->next_response) {
+    if(cancel_needed) {
         char cancel[]="{\"type\":\"response.cancel\"}";
         agent_err_t e=send_control(s,cancel,strlen(cancel));
         if(!e)s->cancel_sent=true;
@@ -636,7 +694,8 @@ static void local_speech(conversation_t *s)
 static void local_turn_begin(conversation_t *s)
 {
     s->handoff_at=0;
-    s->input_media_clock=(p4_input_media_clock_t){0};s->input_drain_reported=false;
+    if(!s->live_input.active)s->input_media_clock=(p4_input_media_clock_t){0};
+    s->input_drain_reported=false;
     s->user_item[0]=s->latest_user[0]=0;s->user_transcribed=false;
     s->commit_queued=s->commit_acked=s->commit_text_seen=s->commit_resolved=false;s->local_began=true;
     s->local_previous_activity=s->last_activity;
@@ -649,7 +708,7 @@ static void local_turn_begin(conversation_t *s)
 }
 static void local_turn_commit(conversation_t *s)
 {
-    if(!conversation_manual() || !s->local_turn.ended || s->commit_queued ||
+    if(!conversation_manual() || s->reuse_phase || !s->local_turn.ended || s->commit_queued ||
        s->last_sent_cursor<s->local_turn.analysed || s->control_read!=s->control_write)return;
     unsigned remaining=p4_input_media_clock_wait(&s->input_media_clock,esp_agent_now());
     if(remaining){
@@ -662,12 +721,62 @@ static void local_turn_commit(conversation_t *s)
     enqueue(s,event_new("input_audio_buffer.commit"));
     if(s->error)return;
     s->commit_queued=true;s->commit_at=s->last_activity=esp_agent_now();
+    /* Submission and the audible endpoint cue proceed independently. The
+     * audio owner warms/plays the cue while Data/ASR/model work continues. */
+    s->endpoint_cue=true;s->received_samples=0;s->done=false;s->preparing=true;
+    notice(s,"realtime_input_commit_queued",NULL);
     s->last_endpoint=s->last_sent_cursor;s->endpoint_mapped=true;
     agent_audio_session_speech(&s->gate,false,false);
     atomic_store(&stat_speech_stop,(unsigned)s->last_activity);
     char detail[160];snprintf(detail,sizeof(detail),"start_cursor=%u last_voice_cursor=%u end_cursor=%u silence_ms=%u",
         s->local_turn.start,s->local_turn.last_voice,s->last_sent_cursor,conversation_silence());
     notice(s,"realtime_local_speech_stopped",detail);
+}
+static bool native_tutor_capture(conversation_t *s)
+{
+    if(!p4_quick_capture(s->accepted_user))return false;
+    static const char args[]="{\"action\":\"start\"}";
+    char reason[256]={0};agent_err_t error=agent_tool_check("device_tutor",args,reason,sizeof(reason));
+    unsigned slot=JOBS;
+    for(unsigned i=0;i<JOBS;++i)if(!atomic_load(&background[i].state) ||
+        (atomic_load(&background[i].state)==3 && background[i].result_sent)){slot=i;break;}
+    if(error || slot==JOBS){s->error=error?error:AGENT_ERR_BUSY;return true;}
+    background_job_t *j=&background[slot];atomic_store(&j->state,0);atomic_store(&j->cancel,false);
+    memset(&j->id,0,sizeof(*j)-offsetof(background_job_t,id));j->id=++next_job;j->generation=s->gate.generation;
+    strcpy(j->user,s->accepted_input.item);strcpy(j->name,"device_tutor");strcpy(j->arguments,args);j->ops=*s->tools;j->ops.cancelled=NULL;
+    // Local admission has no provider function-call ID. Its eventual result
+    // uses the existing identity-checked, once-only background notification.
+    j->accepted_sent=true;j->receipt_at=esp_agent_now();atomic_store(&j->state,1);
+    if(xQueueSend(job_queue,&slot,0)!=pdTRUE){atomic_store(&j->state,0);s->error=AGENT_ERR_BUSY;return true;}
+    strcpy(s->tutor_request_user,s->accepted_input.item);
+    s->tool_attempts=1;s->response_owner.tools_authorized=false;
+    // A confirmed local admission needs no speculative model acknowledgement.
+    // Its cached reading receipt finishes promptly; only the actual job result
+    // later requests a provider response through the normal notice path.
+    s->tutor_context_dirty=true;
+    notice(s,"realtime_local_tutor_start","action=start");notice(s,"realtime_job_accepted","device_tutor");
+    return true;
+}
+static bool native_tutor_cancel(conversation_t *s)
+{
+    if(!p4_quick_cancel(s->accepted_user))return false;
+    static const char args[]="{\"action\":\"cancel\"}";
+    char result[256]={0};
+    agent_err_t error=agent_tool_check("device_tutor",args,result,sizeof(result));
+    if(!error)for(unsigned i=0;i<JOBS;++i){
+        background_job_t *j=&background[i];
+        if(atomic_load(&j->state)==1 && j->generation==s->gate.generation &&
+           !strcmp(j->name,"device_tutor"))atomic_store(&j->cancel,true);
+    }
+    if(!error)error=(agent_err_t)p4_cloud_call("device_tutor",args,result,sizeof(result));
+    cJSON *receipt=error?NULL:cJSON_Parse(result);
+    bool cancelled=receipt && !strcmp(str(receipt,"state"),"cancelled");
+    cJSON_Delete(receipt);
+    if(error || !cancelled){s->error=error?error:AGENT_ERR_PROTOCOL;return true;}
+    s->tutor_request_user[0]=0;s->tutor_context_dirty=true;s->tool_attempts=1;
+    s->response_owner.tools_authorized=false;
+    notice(s,"realtime_local_tutor_result","action=cancel state=cancelled");
+    return true;
 }
 static bool native_tutor_choice(conversation_t *s)
 {
@@ -678,7 +787,7 @@ static bool native_tutor_choice(conversation_t *s)
         /* A confirmed UI command has executed locally, even if the model
          * would only acknowledge it in prose. Keep the original user item
          * and response ticket; this metadata is not another user turn. */
-        const char *prefix="本轮用户明确的阅读/讲解操作已由设备执行，下面是本次真实回执，不是新的用户发言。read只简短确认后安静；explain用本题excerpt讲解目标、方法理由、步骤和检验，约100至180汉字。失败或not_executed必须如实说明，不声称成功；pending只确认已记录选择。不要重做工具，不朗读内部字段：";
+        const char *prefix="本轮用户明确的阅读/讲解/结束操作已由设备执行，下面是本次真实回执，不是新的用户发言。read和done只简短确认后安静；explain用本题excerpt讲解目标、方法理由、步骤和检验，约100至180汉字。失败或not_executed必须如实说明，不声称成功；pending只确认已记录选择。不要重做工具，不朗读内部字段：";
         size_t cap=strlen(prefix)+strlen(result)+1;char *message=malloc(cap);
         if(!message)s->error=AGENT_ERR_MEMORY;
         else {
@@ -697,21 +806,76 @@ static bool native_tutor_choice(conversation_t *s)
     }
     free(result);return handled;
 }
+/* A local cached answer (or empty ASR) has no model response lifecycle.
+ * Explicitly rearm only its already-resolved input, and keep new uploads
+ * behind the existing clear ACK. Retained microphone PCM is not discarded. */
+static void local_input_rearm(conversation_t *s,const char *reason)
+{
+    if(s->input_buffer.pending)return;
+    enqueue(s,event_new("input_audio_buffer.clear"));
+    if(!s->error){
+        p4_input_buffer_sent(&s->input_buffer,esp_agent_now());
+        notice(s,"realtime_input_clear_sent",reason);
+    }
+}
+static void local_status_start(conversation_t *s,p4_status_phrase_t phrase,unsigned id,unsigned revision)
+{
+    s->status_voice=p4_status_voice_open(phrase);
+    if(!s->status_voice){s->error=AGENT_ERR_MEMORY;return;}
+    s->status_playback=s->input_local_reply=true;s->response_owner.tools_authorized=false;
+    s->gate.active=s->gate.awaiting=s->gate.speaking=s->gate.blocked=false;
+    snprintf(s->gate.response,sizeof(s->gate.response),"local_status_%u_%u",s->gate.generation,s->user_ticket);
+    strcpy(s->response_user,s->accepted_user);strcpy(s->response_user_item,s->accepted_input.item);
+    snprintf(s->answer,sizeof(s->answer),"%s",p4_status_voice_text(phrase));s->item[0]=0;s->remembered=false;
+    s->pcm_read=s->pcm_write=0;s->received_samples=0;s->done=false;s->preparing=true;s->output_started=0;
+    p4_local_turn_reset(&s->local_turn,s->last_sent_cursor);s->local_began=false;
+    s->live_input=(p4_live_input_t){0};s->input_media_clock=(p4_input_media_clock_t){0};
+    local_input_rearm(s,"local_status");
+    char detail[128];snprintf(detail,sizeof(detail),"phrase=%u question=%u revision=%u",(unsigned)phrase,id,revision);
+    notice(s,"realtime_local_status",detail);notice(s,"realtime_answer",s->answer);
+}
+static void local_status_audio(conversation_t *s)
+{
+    for(unsigned batch=0;s->status_voice && batch<4 && pending_pcm(s)<12000;++batch){
+        int16_t pcm[480];int n=p4_status_voice_read(s->status_voice,pcm);
+        if(n<0){notice(s,"realtime_status_cache_error",NULL);s->error=AGENT_ERR_PROTOCOL;return;}
+        if(!n){p4_status_voice_close(s->status_voice);s->status_voice=NULL;s->done=true;return;}
+        if(!s->received_samples){atomic_store(&stat_first_audio,(unsigned)esp_agent_now());notice(s,"realtime_first_audio",NULL);}
+        for(int i=0;i<n;++i)s->pcm[s->pcm_write++%PCM_CAP]=pcm[i];
+        s->received_samples+=(unsigned)n;
+    }
+}
 static void local_turn_resolve(conversation_t *s)
 {
     p4_local_reply_t action=p4_local_reply(s->commit_acked,s->commit_text_seen,s->user_transcribed,s->commit_resolved);
-    if(action==P4_LOCAL_WAIT)return;
+    if(action==P4_LOCAL_WAIT || s->reuse_phase || s->repair[0])return;
+    bool progress=action==P4_LOCAL_RESPOND && p4_quick_progress(s->latest_user);
+    p4_status_phrase_t phrase=P4_STATUS_IDLE;unsigned question=0,revision=0;
+    if(progress){
+        int e=p4_tutor_progress(&phrase,&question,&revision);
+        if(e==AGENT_ERR_BUSY)return;
+        if(e){s->error=(agent_err_t)e;return;}
+    }
     s->commit_resolved=true;
     if(action==P4_LOCAL_REJECT){
+        if(s->stream)stop_playback(s,true);
+        s->endpoint_cue=false;s->preparing=false;
         agent_audio_session_speech(&s->gate,false,true);p4_response_obsolete(&s->response_owner);
         /* Candidate IDs are temporary. Receipts and history after an empty
          * recognition still belong to the last accepted human request. */
         strcpy(s->user_item,s->accepted_input.item);strcpy(s->latest_user,s->accepted_user);
         p4_local_turn_reset(&s->local_turn,s->last_sent_cursor);s->local_began=false;
+        s->live_input=(p4_live_input_t){0};s->input_media_clock=(p4_input_media_clock_t){0};
         s->last_activity=s->local_previous_activity;
+        local_input_rearm(s,"empty_transcript");
         notice(s,"realtime_local_empty_turn",NULL);return;
     }
-    if(!p4_response_user_pending(&s->response_owner,s->user_ticket)){s->error=AGENT_ERR_PROTOCOL;return;}
+    /* Context repair is independent of the short local status voice. */
+    if(s->repair_notice && !progress){
+        s->repair_notice=false;
+        configure(s,false,"上一条设备回复已被用户打断，未确认完整听完。结合当前新输入回答，勿声称先前内容已被听到。");
+    }
+    if(!p4_response_user_pending(&s->response_owner,s->user_ticket)){notice(s,"realtime_local_owner_error",NULL);s->error=AGENT_ERR_PROTOCOL;return;}
     if(!p4_input_identity_accept(&s->accepted_input,s->user_item,s->latest_user)){
         s->error=AGENT_ERR_PROTOCOL;return;
     }
@@ -720,13 +884,22 @@ static void local_turn_resolve(conversation_t *s)
     s->tool_attempts=0;
     s->app_obsolete=true;p4_notice_item_retire(&s->notice_item);
     p4_tutor_activity();
-    bool prior_notice=s->tutor_direct_notice;s->tutor_direct_notice=false;
-    if(!native_tutor_choice(s)) {
-        set_tool_limit(s,false);
-        if(prior_notice)configure(s,false,NULL);
+    bool local_reply=progress;
+    if(progress)local_status_start(s,phrase,question,revision);
+    else {
+        strcpy(s->meaningful_user,s->accepted_input.item);s->input_local_reply=false;
+        bool prior_notice=s->tutor_direct_notice;s->tutor_direct_notice=false;
+        if(native_tutor_cancel(s)) {
+            if(!s->error){local_reply=true;local_status_start(s,P4_STATUS_CANCELLED,0,0);}
+        } else if(native_tutor_capture(s)) {
+            if(!s->error){local_reply=true;local_status_start(s,P4_STATUS_READING,0,0);}
+        } else if(!native_tutor_choice(s)) {
+            set_tool_limit(s,false);
+            if(prior_notice)configure(s,false,NULL);
+        }
     }
     if(s->error)return;
-    if(!conversation_video()){
+    if(!conversation_video() || local_reply){
         /* Audio remains native AOQ media. Append its confirmed transcript as
          * the latest user text, without a history-relative insertion point.
          * Wait for this exact item ACK; never infer from an older text turn. */
@@ -740,14 +913,18 @@ static void local_turn_resolve(conversation_t *s)
         cJSON *content=cJSON_AddArrayToObject(item,"content"),*part=cJSON_CreateObject();cJSON_AddItemToArray(content,part);
         cJSON_AddStringToObject(part,"type","input_text");cJSON_AddStringToObject(part,"text",s->accepted_user);
         enqueue(s,e);
+        /* Both commands use the same ordered Data stream. Keep validating
+         * the exact text ACK before accepting response.created, but avoid a
+         * separate network round trip before requesting inference. */
+        if(!local_reply){p4_response_manual(&s->response_owner);enqueue(s,event_new("response.create"));}
     } else {p4_response_manual(&s->response_owner);enqueue(s,event_new("response.create"));}
-    s->pending_at=esp_agent_now();s->endpoint_cue=true;
+    s->pending_at=esp_agent_now();
     if(!s->stream && !s->gate.active && s->pcm_read==s->pcm_write){s->received_samples=0;s->done=false;s->preparing=true;}
     notice(s,"realtime_local_speech_accepted",NULL);
 }
 static void maintain_input_buffer(conversation_t *s)
 {
-    if(!conversation_manual() || !s->ready || s->history_restore.pending)return;
+    if(!conversation_manual() || !s->ready || s->history_restore.pending || s->reuse_phase)return;
     uint64_t now=esp_agent_now();
     if(p4_input_buffer_timeout(&s->input_buffer,now)){
         notice(s,"realtime_input_clear_timeout",NULL);s->error=AGENT_ERR_TIMEOUT;return;
@@ -765,6 +942,29 @@ static void maintain_input_buffer(conversation_t *s)
        p4_input_buffer_due(&s->input_buffer,now,uncommitted || output)){
         enqueue(s,event_new("input_audio_buffer.clear"));
         if(!s->error){p4_input_buffer_sent(&s->input_buffer,now);notice(s,"realtime_input_clear_sent",NULL);}
+    }
+}
+static void native_reuse_tick(conversation_t *s)
+{
+    if(!s->reuse_phase)return;
+    if(esp_agent_now()-s->reuse_at>=1500){
+        s->reuse_phase=0;s->native_handoff=true;
+        notice(s,"realtime_barge_reuse_fallback","cancel_or_clear_timeout");return;
+    }
+    if(s->reuse_phase==2 && s->reuse_keep_input){
+        /* The new near-end audio was already uploaded while confirmation and
+         * cancellation ran. Clearing or rewinding would erase/duplicate it. */
+        s->reuse_phase=0;s->gate.blocked=false;
+        s->gate.awaiting=s->gate.speaking;
+        s->done=false;s->preparing=false;s->received_samples=0;s->output_started=s->output_ended=0;
+        notice(s,"realtime_barge_reuse_ready","continuous_upload");return;
+    }
+    if(s->reuse_phase==2 && s->control_read==s->control_write){
+        enqueue(s,event_new("input_audio_buffer.clear"));
+        if(!s->error){
+            p4_input_buffer_sent(&s->input_buffer,esp_agent_now());s->reuse_phase=3;
+            notice(s,"realtime_input_clear_sent","barge_reuse");
+        }
     }
 }
 #endif
@@ -995,6 +1195,9 @@ static void process(conversation_t *s,const cJSON *e)
 {
     const char *type=str(e,"type"),*rid=str(e,"response_id");
 #if COGD_COMM_MODE == COGD_COMM_AOQ
+    /* The discarded reply can still send transcript/tool events on Data.
+     * Its exact ID remains retired even after the new microphone turn starts. */
+    if(*rid && strcmp(type,"response.done") && s->reused_response[0] && !strcmp(rid,s->reused_response))return;
     if(s->history_restore.pending && (!strcmp(type,"response.created") || !strcmp(type,"input_audio_buffer.speech_started"))){
         notice(s,"realtime_history_unexpected_input",type);s->error=AGENT_ERR_PROTOCOL;return;
     }
@@ -1111,6 +1314,16 @@ static void process(conversation_t *s,const cJSON *e)
             notice(s,"realtime_unexpected_clear",NULL);s->error=AGENT_ERR_PROTOCOL;return;
         }
         notice(s,"realtime_input_cleared",NULL);
+        s->live_input=(p4_live_input_t){0};s->input_media_clock=(p4_input_media_clock_t){0};
+        if(s->reuse_phase==3){
+            p4_local_turn_seed_replay(&s->local_turn,s->replay_cursor,s->reuse_confirmed);
+            s->local_began=false;s->replay_input=true;s->next_send_at=0;s->reuse_phase=0;
+            s->gate.blocked=false;s->gate.awaiting=false;
+            s->done=false;s->preparing=false;s->received_samples=0;s->output_started=s->output_ended=0;
+            p4_audio_frontend_close(s->frontend);s->frontend=p4_audio_frontend_open();
+            if(!s->frontend){s->error=AGENT_ERR_MEMORY;return;}
+            notice(s,"realtime_barge_reuse_ready",NULL);
+        }
     }
 #endif
     else if(!strcmp(type,"conversation.item.input_audio_transcription.completed")) {
@@ -1155,7 +1368,10 @@ static void process(conversation_t *s,const cJSON *e)
         }
         if(!agent_audio_session_response(&s->gate,s->gate.generation,id))return;
 #if COGD_COMM_MODE == COGD_COMM_AOQ
-        if(conversation_manual()){p4_local_turn_reset(&s->local_turn,s->last_sent_cursor);s->local_began=false;}
+        if(conversation_manual()){
+            p4_local_turn_reset(&s->local_turn,s->last_sent_cursor);s->local_began=false;
+            s->live_input=(p4_live_input_t){0};s->input_media_clock=(p4_input_media_clock_t){0};
+        }
         s->answer_head[0]=0;s->transcript_started=false;
 #endif
         p4_notice_item_response(&s->notice_item,s->response_owner.ticket,id);
@@ -1218,6 +1434,20 @@ static void process(conversation_t *s,const cJSON *e)
     } else if(!strcmp(type,"response.function_call_arguments.done"))tool_call(s,e);
     else if(!strcmp(type,"response.done")) {
         const cJSON *r=cJSON_GetObjectItemCaseSensitive(e,"response");agent_model_usage(conversation_model(),e,true);
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+        if(s->reused_response[0] && !strcmp(str(r,"id"),s->reused_response)){
+            if(s->reuse_phase==1){
+                if(strcmp(str(r,"status"),"cancelled") && strcmp(str(r,"status"),"completed")){
+                    notice(s,"realtime_provider_failed","interrupted_response_failed");s->error=AGENT_ERR_SERVER;return;
+                }
+                agent_audio_session_done(&s->gate,s->gate.generation,s->reused_response);
+                p4_notice_item_done(&s->notice_item,s->reused_response);
+                s->done=true;s->reuse_phase=2;
+                notice(s,"realtime_barge_reuse_done",str(r,"status"));
+            }
+            return;
+        }
+#endif
         if(s->suppressed_response[0] && !strcmp(str(r,"id"),s->suppressed_response)) {
             s->suppressed_response[0]=0;return;
         }
@@ -1254,7 +1484,14 @@ static void process(conversation_t *s,const cJSON *e)
                !p4_input_binding_ack(&s->input_binding,str(i,"id"),s->accepted_input.item,s->user_ticket)){
                 s->error=AGENT_ERR_PROTOCOL;return;
             }
-            p4_response_manual(&s->response_owner);enqueue(s,event_new("response.create"));
+            if(s->input_local_reply){
+                p4_response_obsolete(&s->response_owner);
+                cJSON *local=event_new("conversation.item.create"),*item=cJSON_AddObjectToObject(local,"item");
+                cJSON_AddStringToObject(item,"id",s->gate.response);cJSON_AddStringToObject(item,"type","message");
+                cJSON_AddStringToObject(item,"role","assistant");
+                cJSON *content=cJSON_AddArrayToObject(item,"content"),*part=cJSON_CreateObject();cJSON_AddItemToArray(content,part);
+                cJSON_AddStringToObject(part,"type","output_text");cJSON_AddStringToObject(part,"text",s->answer);enqueue(s,local);
+            }
             s->pending_at=esp_agent_now();notice(s,"realtime_input_bound",NULL);return;
         }
         int restored=p4_history_restore_index(&s->history_restore,str(i,"id"));
@@ -1284,7 +1521,12 @@ static void process(conversation_t *s,const cJSON *e)
 #endif
         bool app=p4_notice_item_deleted(&s->notice_item,id),repair=s->repair[0] && !strcmp(id,s->repair);
         if(app)notice(s,"realtime_app_notice_deleted",NULL);
-        if(repair){s->repair[0]=0;s->repair_sent=false;s->repair_notice=true;}
+        if(repair){
+            /* An empty ASR may cancel its own endpoint cue after this ACK.
+             * Do not schedule deletion of the already removed reply again. */
+            if(!strcmp(id,s->item))s->item[0]=0;
+            s->repair[0]=0;s->repair_sent=false;s->repair_notice=true;
+        }
         if(!app && !repair) {
             char detail[384];snprintf(detail,sizeof(detail),"deleted=%s expected_repair=%s expected_app=%s",id,s->repair,s->notice_item.item);
             notice(s,"realtime_item_deleted_unmatched",detail);
@@ -1296,7 +1538,7 @@ static void process(conversation_t *s,const cJSON *e)
          * Preserve that answer and clear before accepting the next utterance.
          * Never recover this way when real input/commit/ASR is outstanding. */
         if(conversation_manual() && s->commit_resolved &&
-           (!s->local_turn.active || s->local_turn.ended) && s->last_sent_cursor==s->last_endpoint &&
+           (!s->local_turn.active || s->local_turn.ended) &&
            !strcmp(message,"Input audio buffer exceeded maximum duration (30s). Please commit or clear the buffer.")) {
             if(!s->input_buffer.full)notice(s,"realtime_idle_input_limit",message);
             s->input_buffer.full=true;return;
@@ -1410,7 +1652,7 @@ static void playback(conversation_t *s)
             agent_err_t error=esp_hi_stream_finish(AGENT_OK);s->played_samples=esp_hi_stream_played();atomic_store(&stat_played,s->played_samples);s->stream=false;p4_media_voice_hold(false);
             s->muted_input=false;
 #if COGD_COMM_MODE == COGD_COMM_AOQ
-            s->output_ended=esp_agent_now();
+            s->output_ended=esp_agent_now();s->status_playback=false;
 #endif
             if(error)s->error=error;else {remember(s,false);++s->turns;atomic_store(&stat_turns,s->turns);notice(s,"realtime_playback_done",NULL);}
             s->last_activity=esp_agent_now();
@@ -1422,7 +1664,8 @@ static bool job_notice(conversation_t *s,const background_job_t *j,char *message
     bool same_user=j->generation==s->gate.generation && !strcmp(j->user,s->user_item);
 #if COGD_COMM_MODE == COGD_COMM_AOQ
     if(conversation_manual())same_user=j->generation==s->gate.generation &&
-        p4_input_identity_matches(&s->accepted_input,j->user);
+        (p4_input_identity_matches(&s->accepted_input,j->user) ||
+         (s->meaningful_user[0] && !strcmp(s->meaningful_user,j->user)));
 #endif
     if(strcmp(j->name,"device_tutor")) {
         /* Unrelated new conversation does not revoke an accepted slow task.
@@ -1442,8 +1685,12 @@ static bool job_notice(conversation_t *s,const background_job_t *j,char *message
         agent_json_uint(cJSON_GetObjectItemCaseSensitive(old,"revision"),UINT32_MAX,&old_revision) &&
         agent_json_uint(cJSON_GetObjectItemCaseSensitive(now,"revision"),UINT32_MAX,&revision) && revision==old_revision &&
         !strcmp(str(old,"tutor_state"),str(now,"tutor_state"));
+    bool stage_user=same_user;
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+    if(conversation_manual() && matches && j->generation==s->gate.generation)stage_user=true;
+#endif
     p4_tutor_stage_t stage=p4_tutor_stage(action,str(now,"tutor_state"),
-        !strcmp(str(old,"state"),"succeeded") && !strcmp(str(now,"state"),"succeeded"),same_user,matches);
+        !strcmp(str(old,"state"),"succeeded") && !strcmp(str(now,"state"),"succeeded"),stage_user,matches);
     if(stage!=P4_TUTOR_STAGE_NONE) {
         const char *summary=str(now,"summary");
         if(!*summary)summary=str(now,"question_summary");
@@ -1733,7 +1980,7 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
     atomic_store(&stat_first_audio,0);atomic_store(&stat_play_start,0);if(!handed)atomic_store(&stat_interrupt_ms,0);
     notice(s,"realtime_connecting",conversation_model());
 #if COGD_COMM_MODE == COGD_COMM_AOQ
-    p4_aoq_conversation_options_t options={.ctx=s,.cancelled=native_cancelled,.diagnostic=native_diagnostic,.video=conversation_video()};
+    p4_aoq_conversation_options_t options={.ctx=s,.cancelled=native_cancelled,.diagnostic=native_diagnostic,.video=conversation_video(),.audio_urgent=native_audio_urgent};
     error=(agent_err_t)p4_aoq_conversation_open(&s->aoq,&options);if(error)goto finish;
     configure(s,true,NULL);
 #else
@@ -1763,7 +2010,9 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
         }
         if(s->ready)local_speech(s);
 #if COGD_COMM_MODE == COGD_COMM_AOQ
+        native_reuse_tick(s);
         maintain_input_buffer(s);
+        local_turn_resolve(s);
         if(conversation_manual() && input_ready(s) && s->local_turn.active && !s->local_began)local_turn_begin(s);
         if(s->native_handoff){
             if(!s->provider_handoff)*replay_confirmed=esp_hi_voice_session_cursor();
@@ -1814,10 +2063,19 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                  * replays the near-end onset from the existing capture ring. */
 #if COGD_COMM_MODE == COGD_COMM_AOQ
                 uint64_t cue_begin=0,cue_end=0;esp_hi_stream_cue_times(&cue_begin,&cue_end);
-                bool own_audio=p4_uplink_cue_frame((uint32_t)(stamp/1000),(uint32_t)cue_begin,(uint32_t)cue_end) ||
-                    (s->stream && !s->gate.blocked && p4_uplink_reply_frame(stamp,esp_hi_stream_started_at())) ||
-                    (conversation_manual() && s->output_ended && stamp<s->output_ended*1000+224000);
-                if(own_audio) {
+                bool own_cue=p4_uplink_cue_frame((uint32_t)(stamp/1000),(uint32_t)cue_begin,(uint32_t)cue_end);
+                bool own_reply=s->stream && !s->gate.blocked && p4_uplink_reply_frame(stamp,esp_hi_stream_started_at());
+                bool own_tail=conversation_manual() && s->output_ended && stamp<s->output_ended*1000+224000;
+                bool own_audio=own_cue || own_reply || own_tail;
+                bool buffer_available=s->input_buffer.armed && !s->input_buffer.full &&
+                    esp_agent_now()-s->input_buffer.reset_at<24000;
+                /* Retain onset locally during our reply. A confirmed interruption
+                 * replays the complete retained capture; keep the remote ASR
+                 * input tied to an admitted utterance. */
+                bool duplex_upload=false;
+                /* Mask current speaker/cue input here. The original capture ring
+                 * remains available for confirmed near-end replay. */
+                if(own_audio && !duplex_upload) {
 #else
                 if(s->stream && esp_hi_stream_started_at() && !s->gate.blocked) {
 #endif
@@ -1841,15 +2099,31 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                     p4_local_event_t turn=p4_local_turn_feed(&s->local_turn,cursor,voiced,allow_start,conversation_silence());
                     if(turn==P4_LOCAL_START) {
                         local_turn_begin(s);
-                        if(!esp_hi_voice_session_rewind(s->local_turn.start)){
-                            notice(s,"realtime_capacity","local utterance onset");s->error=AGENT_ERR_LIMIT;break;
+                        if(!s->live_input.active){
+                            if(!esp_hi_voice_session_rewind(s->local_turn.start)){
+                                notice(s,"realtime_capacity","local utterance onset");s->error=AGENT_ERR_LIMIT;break;
+                            }
+                            samples=0;input_processed=false;s->next_send_at=0;break;
                         }
-                        samples=0;input_processed=false;s->next_send_at=0;break;
+                        /* This onset is already in the live upstream buffer;
+                         * keep the media clock and send only the next frame. */
+                        if(!p4_live_input_contains(&s->live_input,s->local_turn.onset)){
+                            notice(s,"realtime_capacity","live input onset gap");s->error=AGENT_ERR_LIMIT;break;
+                        }
                     }
-                    if(!s->local_turn.active || (s->local_turn.ended && s->last_sent_cursor>=s->local_turn.analysed)) {
+                    /* Start upload only after confirmed local onset. */
+                    bool warm=false;
+                    bool live_listen=(allow_start && warm) || duplex_upload ||
+                        p4_live_input_continue(&s->live_input,s->local_turn.ended,buffer_available);
+                    if((!s->local_turn.active && !live_listen) || (s->local_turn.ended && s->last_sent_cursor>=s->local_turn.analysed)) {
                         samples=0;input_processed=false;s->next_send_at=0;continue;
                     }
-                    if(cursor-s->local_turn.start>16000u*60u){notice(s,"realtime_capacity","local utterance exceeds one minute");s->error=AGENT_ERR_LIMIT;break;}
+                    if(!s->local_turn.active && !s->live_input.active){
+                        s->input_media_clock=(p4_input_media_clock_t){0};
+                        if(!s->input_buffer.armed)p4_input_buffer_committed(&s->input_buffer,esp_agent_now());
+                        notice(s,"realtime_input_warm",duplex_upload?"duplex":"quiet");
+                    }
+                    if(s->local_turn.active && cursor-s->local_turn.start>16000u*60u){notice(s,"realtime_capacity","local utterance exceeds one minute");s->error=AGENT_ERR_LIMIT;break;}
                 }
                 uint64_t sending=esp_agent_now();
                 agent_err_t e=(agent_err_t)p4_aoq_conversation_pcm(s->aoq,input,INPUT_SAMPLES,stamp);
@@ -1865,6 +2139,9 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                     p4_audio_probe_sent(input,INPUT_SAMPLES,stamp);
                     uint64_t now=esp_agent_now();
                     if(conversation_manual())p4_input_media_clock_accept(&s->input_media_clock,now,INPUT_SAMPLES);
+                    if(conversation_manual() && !p4_live_input_accept(&s->live_input,esp_hi_voice_session_cursor(),INPUT_SAMPLES)){
+                        notice(s,"realtime_capacity","noncontiguous live input");s->error=AGENT_ERR_LIMIT;break;
+                    }
                     unsigned lag=now*1000>stamp?(unsigned)((now*1000-stamp)/1000):0;
                     if(!atomic_load(&stat_upload))atomic_store(&stat_capture_initial_lag,lag);
                     atomic_store(&stat_capture_lag,lag);
@@ -1926,6 +2203,9 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
         }
         unsigned rx_ms=(unsigned)(esp_agent_now()-rx_begin);
         if(rx_ms>atomic_load(&stat_rx_ms))atomic_store(&stat_rx_ms,rx_ms);
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+        local_status_audio(s);
+#endif
         playback(s);
         if(s->next_response && !s->stream) {
             cJSON *e=s->next_response;s->next_response=NULL;
@@ -1988,6 +2268,9 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
     }
     error=s->error?s->error:atomic_load(cancelled)?AGENT_ERR_CANCELLED:AGENT_OK;
 finish:
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+    p4_status_voice_close(s->status_voice);
+#endif
     cJSON_Delete(s->next_response);
     for(unsigned i=0;i<CONTROL_CAP;++i)free(s->receipts[i]);
     p4_audio_near_monitor(false);

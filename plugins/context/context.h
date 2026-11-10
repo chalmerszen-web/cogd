@@ -57,7 +57,7 @@ typedef struct {
 
 agent_err_t agent_context_open(agent_context_t *, const agent_flash_ops_t *);
 agent_err_t agent_context_compact(agent_context_t *);
-/* USB maintenance only: caller must durably export this WAL prefix first. */
+/* USB maintenance in LOCAL/HYBRID only: durably export this WAL prefix first. */
 agent_err_t agent_context_archive(agent_context_t *, uint64_t generation, uint64_t through_record);
 agent_err_t agent_context_checkpoint(agent_context_t *, uint64_t cursor, uint64_t ack, agent_context_mode_t);
 agent_err_t agent_context_emit(agent_context_t *, const char *type, const char *actor, const char *content_json, char *event_id, size_t);

@@ -115,7 +115,7 @@ struct Session::Impl {
             window(bytes.get(),seen.get(),capacity){}
         ~Rx(){if(opus)esp_opus_dec_close(opus);}
     };
-    struct Tombstone {uint64_t id=0,final_size=0;};
+    struct Tombstone {uint64_t id=0,final_size=0;bool discarded=false;};
     struct Tx {Buffer bytes;size_t size=0,offset=0;};
     Options options;Callbacks callbacks;Diagnostics diag;
     int fd=-1;bool pumping=false,closing=false,close_requested=false;
@@ -231,6 +231,13 @@ struct Session::Impl {
         // indefinitely after its playback buffer has run dry.
         for(size_t i=0;i<retired_count;++i)if(retired[i].id==id)return;
         const auto* s=find(id);
+        if(s&&s->header_read&&s->header.track_alias==202&&callbacks.audio_discarded&&
+           callbacks.audio_discarded(callbacks.userdata,id)){
+            if(retired_count==peer_limit()){fail(Limit,"retired_stream_limit");return;}
+            retired[retired_count++]={id,0,true};
+            for(auto& entry:streams)if(entry.get()==s){entry.reset();--diag.active_streams;break;}
+            return;
+        }
         std::printf("AOQ_RESET stream=%llu code=%llu alias=%llu consumed=%llu pending=%u final=%u audio_bytes=%llu\n",
             static_cast<unsigned long long>(id),static_cast<unsigned long long>(code),static_cast<unsigned long long>(s&&s->header_read?s->header.track_alias:0),
             static_cast<unsigned long long>(s?s->window.consumed():0),s&&s->window.pending(),s&&s->window.has_final_size(),
@@ -261,6 +268,9 @@ struct Session::Impl {
         if(diag.error||closing)return;
         if(fin&&options.trace_metadata)std::printf("AOQ_FIN stream=%llu offset=%llu bytes=%u\n",static_cast<unsigned long long>(id),static_cast<unsigned long long>(offset),static_cast<unsigned>(n));
         for(size_t i=0;i<retired_count;++i)if(retired[i].id==id){
+            // QUIC still enforces its stream/flow-control records. The model
+            // owner explicitly retired this Audio stream before cancellation.
+            if(retired[i].discarded)return;
             const auto end=retired[i].final_size;
             if(offset>end||n>end-offset||(fin&&offset+n!=end))fail(Protocol,"retired_stream_final_size");
             return; // Retransmitted bytes of an already consumed stream.
@@ -395,7 +405,9 @@ struct Session::Impl {
                     audio_bytes=normalized.duration_samples*2;
                 }else if(!aoq_wire::pcm_payload_size_matches(audio,1,audio_bytes)){fail(Protocol,"pcm_object_invalid");return;}
             }
-            if(s.header.track_alias==202&&object.payload_size&&object.status!=3&&object.status!=4&&
+            const bool discarded_audio=s.header.track_alias==202&&callbacks.audio_discarded&&
+                callbacks.audio_discarded(callbacks.userdata,s.id);
+            if(!discarded_audio&&s.header.track_alias==202&&object.payload_size&&object.status!=3&&object.status!=4&&
                callbacks.audio_ready&&!callbacks.audio_ready(callbacks.userdata,audio_bytes)){
                 ++diag.audio_backpressure;return;
             }
@@ -420,6 +432,7 @@ struct Session::Impl {
                     if(options.trace_metadata)metadata_json("data",object.payload,object.payload_size);
                     if(callbacks.data)result=callbacks.data(callbacks.userdata,view);
                 }else if(s.header.track_alias==202){
+                    if(!discarded_audio){
                     std::vector<uint8_t> normalized_properties;
                     if(diag.opus48k_selected){
                         if(!decoded_pcm){decoded_pcm=buffer(5760);if(!decoded_pcm){fail(Memory,"opus_pcm_memory");return;}}
@@ -445,6 +458,7 @@ struct Session::Impl {
                     diag.audio_decoded_bytes+=view.payload.size;
                     if(options.trace_metadata&&diag.audio_objects==1){std::printf("AOQ_AUDIO userdata=%u\n",static_cast<unsigned>(view.opaque_userdata.size));metadata_json("audio-userdata",view.opaque_userdata.data,view.opaque_userdata.size);}
                     if(callbacks.audio)result=callbacks.audio(callbacks.userdata,view);
+                    }
                 }else {++diag.command_objects;if(options.trace_metadata)metadata_json("command",object.payload,object.payload_size);} // No assumed model semantics for command_out.
                 if(result){fail(result>0&&result<=24?result:Protocol,"object_callback_rejected");return;}
                 if(bounds())return;
@@ -624,7 +638,8 @@ struct Session::Impl {
             // decoding: eight buffered Opus frames can spend the entire packet
             // budget, starving ACKs and new packets on every subsequent poll.
             const bool receive_backlog=receive_queue && receive_queue->pending()>=32;
-            unsigned object_budget=options.conversation?(receive_backlog?2:8):128;
+            const bool urgent_audio=callbacks.audio_urgent&&callbacks.audio_urgent(callbacks.userdata);
+            unsigned object_budget=options.conversation?(receive_backlog&&!urgent_audio?2:8):128;
             bool udp_empty=false;diag.receive_drained=false;
             transmit();if(diag.error)break;
             // Under a burst, spend more of this pass on decrypt/ACK and less

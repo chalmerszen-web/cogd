@@ -24,8 +24,10 @@ void p4_visual_message(unsigned generation, const char *message);
 void p4_visual_brightness(int percent);
 int p4_visual_image(unsigned generation, const uint8_t *data, size_t size);
 unsigned p4_camera_question_begin(void);
+bool p4_camera_question_end(unsigned generation);
 int p4_camera_jpeg(unsigned generation, uint8_t **data, size_t *size);
 int p4_camera_capture_status(char *out, size_t cap);
+int p4_camera_photo_mode(unsigned mode);
 #if defined(AGENT_P4_AOQ_CAMERA)
 unsigned p4_camera_video_begin(void);
 int p4_camera_video_frame(unsigned generation,unsigned after,uint8_t*,size_t capacity,

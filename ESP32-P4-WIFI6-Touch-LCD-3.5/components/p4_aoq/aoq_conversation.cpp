@@ -43,12 +43,14 @@ struct p4_aoq_conversation {
     char response[129]{};
     uint64_t stream=0,group=0,subgroup=0,next_object=0;
     int64_t media_report_at=0;
-    std::array<uint64_t,256> retired{};size_t retired_count=0;
+    struct Retired { uint64_t stream=0;std::array<char,129> response{};bool discarded=false; };
+    std::array<Retired,256> retired{};size_t retired_count=0;
+    bool interrupted=false,strict_media_owner=false;
     bool active=false,has_stream=false,terminal=false,ready=false,abandoned=false;
     const char* stage="model_events";
     int error=0;
     bool audio_ready(size_t bytes)const{
-        if(abandoned)return true;
+        if(abandoned||interrupted)return true;
         // Reserve room for Data completion/control events while PCM waits
         // for playback. A false result leaves the object in Session's bounded
         // receive window and grants no new media credit.
@@ -71,13 +73,50 @@ struct p4_aoq_conversation {
         while(!early.empty()){auto& b=early.front();int e=enqueue(b.data,b.size,true);if(e)return e;early.pop_front();}
         early_bytes=0;return 0;
     }
+    int retire_stream(bool discarded){
+        for(size_t i=0;i<retired_count;++i)if(retired[i].stream==stream){
+            if(std::strcmp(retired[i].response.data(),response))return fail(Protocol,"retired_stream_owner");
+            retired[i].discarded|=discarded;return 0;
+        }
+        if(retired_count==retired.size())return fail(Limit);
+        auto& r=retired[retired_count++];r.stream=stream;r.discarded=discarded;
+        std::strcpy(r.response.data(),response);return 0;
+    }
+    void drop_pcm(const char* id){
+        for(auto it=queue.begin();it!=queue.end();){
+            if(it->pcm&&!std::strcmp(it->response.data(),id)){queued-=it->body.size;it=queue.erase(it);}
+            else ++it;
+        }
+    }
+    int interrupt(const char* id,bool& cancel_needed){
+        cancel_needed=false;
+        if(error)return error;
+        if(abandoned||!id||!*id||std::strlen(id)>=sizeof(response))return Busy;
+        if(active&&!std::strcmp(response,id)){
+            if(!has_stream||interrupted)return Busy;
+            int e=retire_stream(true);if(e)return e;
+            drop_pcm(id);early.clear();early_bytes=0;
+            interrupted=true;strict_media_owner=true;
+            if(done.data){
+                e=enqueue(done.data,done.size);if(e)return e;
+                done.clear();active=has_stream=terminal=interrupted=false;response[0]=0;
+            }else cancel_needed=true;
+            return 0;
+        }
+        if(active||has_stream||done.data)return Busy;
+        for(size_t i=0;i<retired_count;++i)if(!std::strcmp(retired[i].response.data(),id)){
+            // Playout can lag a response which has fully completed upstream.
+            retired[i].discarded=true;strict_media_owner=true;drop_pcm(id);return 0;
+        }
+        return Busy;
+    }
     int finish(){
         if(!done.data)return 0;
         if(has_stream&&!terminal)return 0;
         int e=flush_early();if(e)return e;
         e=enqueue(done.data,done.size);if(e)return e;
         done.clear();
-        if(has_stream){if(retired_count==retired.size())return fail(Limit);retired[retired_count++]=stream;}
+        if(has_stream){int retired_error=retire_stream(false);if(retired_error)return retired_error;}
         active=has_stream=terminal=false;response[0]=0;return 0;
     }
     int data(const aoq::Object& object){
@@ -101,6 +140,13 @@ struct p4_aoq_conversation {
         if(!std::strcmp(type,"response.done")){
             const auto* r=field(value.p,"response");
             if(!active||std::strcmp(response,str(r,"id")))return fail(Protocol,"completion_identity");
+            if(interrupted&&(!std::strcmp(str(r,"status"),"completed")||!std::strcmp(str(r,"status"),"cancelled"))){
+                // Only this exact locally retired response may finish without
+                // its terminator. Its known stream remains discard-only.
+                int e=enqueue(object.payload.data,object.payload.size);if(e)return e;
+                done.clear();active=has_stream=terminal=interrupted=false;response[0]=0;
+                return 0;
+            }
             if(std::strcmp(str(r,"status"),"completed")){
                 // A failed/cancelled response can have no PCM or terminator.
                 // Report its actual status immediately. This allocation is
@@ -128,7 +174,11 @@ struct p4_aoq_conversation {
     int audio(const aoq::Object& object){
         if(abandoned)return 0;
         if(!ready)return fail(Protocol);
-        for(size_t i=0;i<retired_count;++i)if(retired[i]==object.stream)return fail(Protocol);
+        for(size_t i=0;i<retired_count;++i)if(retired[i].stream==object.stream)
+            return retired[i].discarded?0:fail(Protocol);
+        // After cancellation, do not infer that an unidentified early stream
+        // belongs to a future response. A reconnect is safer than relabelling.
+        if(strict_media_owner&&!active)return fail(Protocol,"unowned_media_after_interrupt");
         if(!has_stream){has_stream=true;stream=object.stream;group=object.group;subgroup=object.subgroup;next_object=object.id;}
         if(terminal||stream!=object.stream||group!=object.group||subgroup!=object.subgroup||object.id!=next_object)return fail(Protocol,"audio_segment_identity");
         aoq_wire::AudioProperties props;
@@ -143,7 +193,7 @@ struct p4_aoq_conversation {
     int end(const aoq::End& e){
         if(abandoned)return 0;
         if(e.alias!=202)return 0;
-        for(size_t i=0;i<retired_count;++i)if(retired[i]==e.stream)return 0; // duplicate FIN following EOG
+        for(size_t i=0;i<retired_count;++i)if(retired[i].stream==e.stream)return 0; // duplicate FIN following EOG
         if(!has_stream||e.stream!=stream||e.group!=group||e.subgroup!=subgroup)return fail(Protocol);
         if(e.end_group||e.end_track){terminal=true;return finish();}
         return 0;
@@ -165,6 +215,16 @@ extern "C" int p4_aoq_conversation_open(p4_aoq_conversation_t** out,const p4_aoq
     callbacks.audio=[](void* p,const aoq::Object& o){return static_cast<p4_aoq_conversation*>(p)->audio(o);};
     callbacks.end=[](void* p,const aoq::End& e){return static_cast<p4_aoq_conversation*>(p)->end(e);};
     callbacks.audio_ready=[](void* p,size_t n){return static_cast<p4_aoq_conversation*>(p)->audio_ready(n);};
+    callbacks.audio_discarded=[](void* p,uint64_t stream){
+        auto* owner=static_cast<p4_aoq_conversation*>(p);
+        for(size_t i=0;i<owner->retired_count;++i)
+            if(owner->retired[i].stream==stream)return owner->retired[i].discarded;
+        return false;
+    };
+    callbacks.audio_urgent=[](void* p){
+        auto* owner=static_cast<p4_aoq_conversation*>(p);
+        return owner->options.audio_urgent&&owner->options.audio_urgent(owner->options.ctx);
+    };
     int e=s->session.open(options->video?P4_AOQ_OMNI:P4_AOQ_AUDIO,limits,callbacks);
     const auto timing=s->session.diagnostics();
     std::printf("AOQ_CONNECT prefetched=%u allocation_ms=%lld elapsed_ms=%lld error=%d\n",
@@ -172,6 +232,10 @@ extern "C" int p4_aoq_conversation_open(p4_aoq_conversation_t** out,const p4_aoq
         static_cast<long long>(timing.elapsed_ms),e);
     if(e){p4_aoq_conversation_close(s);return e;}
     *out=s;return 0;
+}
+extern "C" int p4_aoq_conversation_interrupt(p4_aoq_conversation_t* s,const char* response,bool* cancel_needed){
+    if(!s||!cancel_needed)return Argument;
+    return s->interrupt(response,*cancel_needed);
 }
 extern "C" int p4_aoq_conversation_send(p4_aoq_conversation_t* s,const char* text,size_t n){
     if(!s)return Argument;

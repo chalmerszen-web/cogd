@@ -34,6 +34,8 @@ $p4Args = @('--no-ccache','-B',$BuildDir)
 # retain its settings in a subsequent WSS build (or vice versa).
 $p4Config = Join-Path $p4Project "$BuildDir/sdkconfig"
 $p4TransportConfig = @{
+    CAMERA_OV5647_MIPI_RAW10_1280X960_BINNING_45FPS='y'
+    CAMERA_OV5647_MIPI_RAW10_1920X1080_30FPS='y'
     ESP_HOSTED_SDIO_RX_DOUBLE_BUFFERING=$(if ($CommunicationMode -eq 'AOQ') {'n'} else {'y'})
     LWIP_UDP_RECVMBOX_SIZE=$(if ($CommunicationMode -eq 'AOQ') {'64'} else {'32'})
     LWIP_TCPIP_RECVMBOX_SIZE=$(if ($CommunicationMode -eq 'AOQ') {'64'} else {'32'})

@@ -1,0 +1,58 @@
+{
+  "purpose": "Captured false duplex confirmation and three independent real barge-in controls. No synthesized replacement PCM.",
+  "sha256": "c4f5a2fc9e16b8eea6964be8b54a41ec66975808aa5e1b28713bea85f17c1805",
+  "records": [
+    {
+      "source": "probe123-photo/capture-explain",
+      "frames": [
+        224,
+        250
+      ],
+      "original_first_ms": 490554,
+      "expected_first_ms": 0,
+      "source_pcm_sha256": [
+        "4a6600ccf71ed95ef115e5b93304acf5a52ed521ecbfbd8c2cb64c60435f542f",
+        "b1cb387b7436a54018ac246381fbfab477b37f6440ad41c9d7b827c9cd7050fa"
+      ]
+    },
+    {
+      "source": "batch108-barge80-timed-capture/capture-1",
+      "frames": [
+        79,
+        110
+      ],
+      "original_first_ms": 449153,
+      "expected_first_ms": 449153,
+      "source_pcm_sha256": [
+        "017c412f1bbbb44902a6b3894018d2dc0b0d677bcc0b1698ddd1f08387e8531a",
+        "361a1fca1e1fb59cb0396f0669876197c04ddce33d5d683c1a066119e2d3caae"
+      ]
+    },
+    {
+      "source": "qualify112-barge/capture-1",
+      "frames": [
+        103,
+        134
+      ],
+      "original_first_ms": 99903,
+      "expected_first_ms": 99903,
+      "source_pcm_sha256": [
+        "9977ea0e7507550293bd8f063303024e468d624c529810c7addf81156e4b6dcc",
+        "f8dce6adc5ef9e377b23e6b0d3f5217d9c86f7e01df919104812c9dd958be00a"
+      ]
+    },
+    {
+      "source": "probe93-natural-barge",
+      "frames": [
+        41,
+        72
+      ],
+      "original_first_ms": 229293,
+      "expected_first_ms": 229293,
+      "source_pcm_sha256": [
+        "cf870a908e06e2ed4908c4e1c07d27c9179d55aa2d19677daf8efe0c6d4457c5",
+        "eff84f9efac136ba910cc3a47eb5659ffa9697aab36ef9df1585ffdb6a3f3994"
+      ]
+    }
+  ]
+}

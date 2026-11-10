@@ -184,6 +184,18 @@ static void lifecycle_cases() {
     CHECK(s.choose("done",10,0,0));CHECK(s.complete(10,0,false));CHECK(s.mode=="done" && !s.choice_pending);
 }
 static void explicit_user_cases() {
+    for(const char *value:{"我已经懂了，这道题讲完了。","请结束这道题的讲解","这道题讲完了"}) {
+        CHECK(explicit_user_intent(value)==UserIntent::done);
+        CHECK(std::string(intent_action(explicit_user_intent(value)))=="done");
+    }
+    for(const char *value:{"我懂了","这道题讲完了吗","不要结束这道题","如果懂了就结束这道题",
+        "他说这道题讲完了","“这道题讲完了”","结束这道题再拍一道题"})
+        CHECK(explicit_user_intent(value)==UserIntent::none);
+    LessonState finished;finished.reset(17);finished.begin_solve();
+    CHECK(finished.user_text("我已经懂了，这道题讲完了。",17,0));
+    CHECK(finished.pending_action=="done" && finished.pending_user_choice);
+    CHECK(!finished.choose("explain",17,0,0));
+    CHECK(finished.complete(17,0,false));CHECK(finished.mode=="done" && !finished.choice_pending);
     for(const char *value:{"先讲","你讲一下吧","你讲一下解题思路吧。","解题思路","请你先讲一下好吗？",
         "好的，那你先讲吧。","呃，你讲一讲呗。","你先给我讲一下吧","请给我讲讲解题思路", " 你 讲 一 下 吧 \n"})
         CHECK(explicit_user_intent(value)==UserIntent::explain);

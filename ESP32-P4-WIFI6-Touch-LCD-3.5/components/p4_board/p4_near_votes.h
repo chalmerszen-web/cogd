@@ -15,12 +15,16 @@ static inline bool p4_near_speech(bool nlp_voice,bool linear_voice,unsigned nlp_
  * Two isolated voiced echo remnants 285 ms apart caused a recorded false
  * cut. Require a pair of strong frames at most 64 ms apart within the
  * existing 512 ms history. This retains syllable gaps without treating
- * unrelated isolated periodic residues as sustained near-end speech. */
+ * unrelated isolated periodic residues as sustained near-end speech.
+ * Recorded /shi-er/ echo also produced one adjacent pair. A pair (64 ms)
+ * alone cannot supply the fast-path quorum: require three strong frames,
+ * alongside six eligible frames in the same unchanged 384 ms window.
+ * The independent four-strong-frame, 512 ms syllable-gap path is unchanged. */
 static inline bool p4_near_duplex_confirm(bool eligible,unsigned votes,unsigned strong)
 {
     strong&=0xffffu;
     bool sustained=(strong&((strong>>1)|(strong>>2)))!=0;
     return eligible && sustained &&
-        ((__builtin_popcount(votes&0xfffu)>=6 && __builtin_popcount(strong&0xfffu)>=2) ||
+        ((__builtin_popcount(votes&0xfffu)>=6 && __builtin_popcount(strong&0xfffu)>=3) ||
          (__builtin_popcount(votes&0xffffu)>=6 && __builtin_popcount(strong&0xffffu)>=4));
 }

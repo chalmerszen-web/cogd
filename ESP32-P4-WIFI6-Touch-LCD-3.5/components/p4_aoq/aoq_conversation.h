@@ -13,6 +13,7 @@ typedef struct {
      * console path; the adapter must not write into command replies. */
     void (*diagnostic)(void *,const char *);
     bool video;
+    bool (*audio_urgent)(void *); // actual playout buffer below its low-water mark
 } p4_aoq_conversation_options_t;
 typedef struct {
     bool pcm;
@@ -22,6 +23,11 @@ typedef struct {
 /* Sole network-worker owner. No audio hardware, user history or tools live in
  * this adapter. It joins media and Data completion before releasing a turn. */
 int p4_aoq_conversation_open(p4_aoq_conversation_t **,const p4_aoq_conversation_options_t *);
+/* Retire only a media stream already bound to this exact response. BUSY
+ * leaves ownership unchanged and requires the caller's reconnect fallback.
+ * A successful call drops queued/late old PCM; cancel_needed distinguishes
+ * a live model response from one already completed in the Data queue. */
+int p4_aoq_conversation_interrupt(p4_aoq_conversation_t *,const char *response,bool *cancel_needed);
 int p4_aoq_conversation_send(p4_aoq_conversation_t *,const char *,size_t);
 int p4_aoq_conversation_pcm(p4_aoq_conversation_t *,const int16_t *,size_t,uint64_t capture_us);
 int p4_aoq_conversation_jpeg(p4_aoq_conversation_t *,const uint8_t *,size_t,uint64_t capture_us);

@@ -1,0 +1,106 @@
+{
+  "format": "Little-endian uint16 packet length followed by mono Opus, 20ms; decoder 24kHz",
+  "source": "Qwen Audio, generated once per phrase for offline device cache",
+  "sha256": "fda72ef338883eb7c8de269154ed3d8ea3299083e78dffa62b9bb18eb40b86e7",
+  "phrases": [
+    {
+      "id": "reading",
+      "text": "正在读题。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 36480,
+      "pcm_sha256": "721c0a59e324706b341d836b946aa17db853e2bd5ff07ee9215ebdb9b0403fd4",
+      "offset": 0,
+      "bytes": 1986,
+      "sha256": "c5d581128318b95f5fac8cf32a2091d6187a74d8ff473092bbf981e1540a7640"
+    },
+    {
+      "id": "solving",
+      "text": "还在解题。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 49920,
+      "pcm_sha256": "43888b9c58d72de47b7e32d9874e9ae7367ca4f5e35887371fef51bc58a4d742",
+      "offset": 1986,
+      "bytes": 2592,
+      "sha256": "e6d2b60b9b32b6b10025e0677716a6aa1d61a6471c698474b3b66cbae4bb1398"
+    },
+    {
+      "id": "complete",
+      "text": "已经好了。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 26880,
+      "pcm_sha256": "7fea2f9458573022991d32a751874f3dd492d194aef565d05a28e94850812b63",
+      "offset": 4578,
+      "bytes": 1426,
+      "sha256": "b01cebc8bc3ca881fe1bfcc2b6c8cd579638272159db0a697bfda8f41404590f"
+    },
+    {
+      "id": "selection",
+      "text": "题目读好了，请选题。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 67200,
+      "pcm_sha256": "a9f49c129ed88d91132b963946e523d8637e10c86990c2ce5023d6b600688749",
+      "offset": 6004,
+      "bytes": 3523,
+      "sha256": "992c5f0ae3c259e0400e217a77b2a0fc47abd38e8b3d142dced4f14ccbefb37f"
+    },
+    {
+      "id": "confirmation",
+      "text": "题目读好了，等你确认。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 63360,
+      "pcm_sha256": "87b29f80883664f30323549dbb16cc49a4af575ab531adba3fa80d33bf5e6f63",
+      "offset": 9527,
+      "bytes": 3291,
+      "sha256": "3a5b070054846f5562933d596ce268455c988793e8bfe5afb3ba305a333d1c18"
+    },
+    {
+      "id": "failed",
+      "text": "这次没完成，请重试。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 55680,
+      "pcm_sha256": "5bf5fbf7260b626357b07cdaf745943f6f30d8e6ac329cbabd45d012a92213ec",
+      "offset": 12818,
+      "bytes": 3302,
+      "sha256": "3f5076e5c2ce384d7c536412e23afd47a3082f0c139eb50e0ce1ddfb103bec2a"
+    },
+    {
+      "id": "idle",
+      "text": "现在没有进行中的任务。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 59520,
+      "pcm_sha256": "5f62547f6f2e1805d96a355d4165fea4f23af692845bfdf726f2da8889dac98c",
+      "offset": 16120,
+      "bytes": 3766,
+      "sha256": "6b22991c117b09fa3d684ea24becbe0991055ee7ca160d21e289a97767844024"
+    },
+    {
+      "id": "paused",
+      "text": "好，先不讲。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 49920,
+      "pcm_sha256": "ba51b6e03a6d1985ceaa5ece5ac9400eee1beb81955b5f3bdae6ae8fd8d3c0a2",
+      "offset": 19886,
+      "bytes": 2229,
+      "sha256": "3d09133ca9738c3fcedd7f0e7d3261f2f0f8ad2bbc367e09cef405eb9ac9f314"
+    },
+    {
+      "id": "cancelled",
+      "text": "已取消。",
+      "model": "qwen-audio-3.1-realtime-flash",
+      "voice": "longanqian_v3.1",
+      "samples_24k": 24960,
+      "pcm_sha256": "f7ca89df4461c802b5941c086b0384dc94882fd28aef961f0dbbd997d9c9b562",
+      "offset": 22115,
+      "bytes": 1313,
+      "sha256": "9b13926501dc3f94d8524291e5f62939cf41570687751e837ad54f6914cd1582"
+    }
+  ]
+}

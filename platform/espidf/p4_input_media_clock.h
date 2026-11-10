@@ -8,17 +8,24 @@
  * Keep manual commit behind the accepted 16 kHz media duration. This is a
  * conservative local clock barrier, not proof of server receipt/consumption.
  * Only successfully accepted PCM advances it; BUSY retries never do. */
-typedef struct {uint64_t first_ms;uint32_t samples;} p4_input_media_clock_t;
+typedef struct {uint64_t first_ms,last_ms;uint32_t samples,tail_samples;} p4_input_media_clock_t;
 static inline void p4_input_media_clock_accept(p4_input_media_clock_t *s,uint64_t now,uint32_t samples)
 {
     if(!samples)return;
     if(!s->samples)s->first_ms=now;
+    s->last_ms=now;s->tail_samples=samples;
     s->samples+=samples; /* Caller limits an utterance to 60 seconds. */
 }
 static inline uint32_t p4_input_media_clock_wait(const p4_input_media_clock_t *s,uint64_t now)
 {
     uint64_t duration=((uint64_t)s->samples+15)/16;
     uint64_t elapsed=now>=s->first_ms?now-s->first_ms:0;
-    return elapsed>=duration?0:(uint32_t)(duration-elapsed);
+    uint32_t wait=elapsed>=duration?0:(uint32_t)(duration-elapsed);
+    /* Control pauses can make total elapsed time exceed total media time.
+     * They do not pay for the final datagram's still-unplayed 20 ms. */
+    uint64_t tail=((uint64_t)s->tail_samples+15)/16;
+    elapsed=now>=s->last_ms?now-s->last_ms:0;
+    uint32_t last=elapsed>=tail?0:(uint32_t)(tail-elapsed);
+    return last>wait?last:wait;
 }
 #endif

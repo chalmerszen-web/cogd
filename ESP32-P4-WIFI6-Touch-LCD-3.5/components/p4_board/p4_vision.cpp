@@ -11,6 +11,8 @@
 #include "esp_timer.h"
 #include "esp_video_device.h"
 #include "esp_video_init.h"
+#include "esp_video_ioctl.h"
+#include "ov5647_types.h"
 #include "freertos/idf_additions.h"
 #include "human_face_detect.hpp"
 #include "p4_agent.h"
@@ -46,6 +48,7 @@ std::atomic<int> owner{0}, cam_mode{0};
 std::atomic<unsigned> capture_frames{0}, inference_ms{0}, camera_errors{0};
 std::atomic<int> camera_width{0}, camera_height{0};
 std::atomic<unsigned> camera_frame_generation{0};
+std::atomic<unsigned> camera_active_generation{0};
 lv_obj_t *surface = nullptr, *canvas = nullptr, *log_label = nullptr;
 lv_obj_t *document = nullptr;
 std::atomic<unsigned> document_step{0},document_manual_until{0};
@@ -64,14 +67,22 @@ unsigned snapshot_request = 0;
 uint64_t snapshot_started_ms = 0;
 struct CaptureStatus {
     unsigned generation = 0, samples = 0, selected_elapsed_ms = 0;
+    unsigned width = 0, height = 0;
     unsigned elapsed_ms = 0, audio_skips = 0;
     unsigned last_sample_elapsed_ms = 0, last_measure_us = 0, max_measure_us = 0;
     unsigned last_copy_us = 0, max_copy_us = 0, last_frame_age_ms = 0, drain_ms = 0;
     const char *state = "idle", *reason = "no_capture";
     p4_capture::Metrics latest{}, selected{};
-    bool preview_frozen = false;
+    bool preview_frozen = false, camera_released = false;
 } capture_status; // state_lock; no image data or dynamic allocations
 std::atomic<bool> question_camera{false};
+// Photo modes: ordinary, binned, centered HD, upper-field HD for question sheets.
+// A mode is selected before a new question capture, never during streaming.
+#if defined(AGENT_P4_AOQ_DUPLEX)
+std::atomic<unsigned> question_photo_mode{3};
+#else
+std::atomic<unsigned> question_photo_mode{0};
+#endif
 std::atomic<unsigned> question_frozen_generation{0};
 lv_font_t *cjk_font = nullptr;
 lv_font_t ui_font;
@@ -299,14 +310,18 @@ void inference_worker(void *arg) {
 void capture_worker(void *) {
     static p4_capture::Window capture_window; // two small grids stay off the task stack
     for (;;) {
-        while (!cam_mode.load())
+        while (!cam_mode.load() || (question_camera.load() && question_frozen_generation.load()==epoch.load()))
             vTaskDelay(pdMS_TO_TICKS(100));
         unsigned generation = epoch.load();
+        camera_active_generation=generation;
         int fd = -1, type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
         bool initialized = false, streaming = false;
         uint16_t *buffers[2] = {};
         char failure[100] = "camera initialization failed";
         CameraInference inference;
+        // The sensor retains the selected format pointer until deinit.
+        esp_cam_sensor_format_t photo_format{};
+        std::array<ov5647_reginfo_t,128> photo_registers{};
         std::unique_ptr<uint16_t,decltype(&free)> scaled(nullptr,free), input(nullptr,free);
         esp_video_init_csi_config_t csi = {};
         csi.sccb_config.init_sccb = false;
@@ -328,6 +343,43 @@ void capture_worker(void *) {
         fd = open(ESP_VIDEO_MIPI_CSI_DEVICE_NAME, O_RDONLY);
         if (fd < 0)
             goto cleanup;
+        if (question_camera.load() && question_photo_mode.load()) {
+            const unsigned mode = question_photo_mode.load();
+            const unsigned wanted_width = mode == 1 ? 1280 : 1920;
+            const unsigned wanted_height = mode == 1 ? 960 : 1080;
+            bool selected = false;
+            for (unsigned index = 0; index < 16; ++index) {
+                struct v4l2_sensor_format_enum candidate = {};
+                candidate.index = index;
+                if (ioctl(fd, VIDIOC_ENUM_SENSOR_FMT, &candidate)) break;
+                if (candidate.format.width != wanted_width || candidate.format.height != wanted_height) continue;
+                photo_format=candidate.format;
+                if(mode==3) {
+                    // Move the same 1088-row readout from y=434 to y=0. Keep
+                    // clock, output size, blanking, sampling and Bayer phase.
+                    // Do not apply OV5647 register interpretation to another mode.
+                    if(!photo_format.name || !strstr(photo_format.name,"RAW10_1920x1080") ||
+                       !photo_format.regs || photo_format.regs_size<=0 ||
+                       size_t(photo_format.regs_size)>photo_registers.size())break;
+                    memcpy(photo_registers.data(),photo_format.regs,size_t(photo_format.regs_size)*sizeof(ov5647_reginfo_t));
+                    const ov5647_reginfo_t expected[]={{0x3802,0x01},{0x3803,0xb2},{0x3806,0x05},{0x3807,0xf1}};
+                    const uint8_t moved[]={0x00,0x00,0x04,0x3f};unsigned mask=0;
+                    for(int i=0;i<photo_format.regs_size;++i)for(unsigned j=0;j<4;++j)
+                        if(photo_registers[i].reg==expected[j].reg && photo_registers[i].val==expected[j].val){
+                            photo_registers[i].val=moved[j];mask|=1u<<j;
+                        }
+                    if(mask!=15)break;
+                    photo_format.regs=photo_registers.data();
+                    photo_format.name="OV5647_RAW10_1920x1080_upper_question";
+                }
+                selected = ioctl(fd, VIDIOC_S_SENSOR_FMT, &photo_format) == 0;
+                break;
+            }
+            if (!selected) {
+                snprintf(failure, sizeof(failure), "requested photo sensor mode unavailable");
+                goto cleanup;
+            }
+        }
         if (ioctl(fd, VIDIOC_G_FMT, &format))
             goto cleanup;
         format.fmt.pix.pixelformat = V4L2_PIX_FMT_RGB565;
@@ -385,7 +437,8 @@ void capture_worker(void *) {
             bool pending = false, facing = false, approaching = false;
             std::list<dl::detect::result_t> results, no_boxes;
             char message[450] = "摄像头启动中…";
-            while (cam_mode.load() && p4_visual_current(generation)) {
+            while (cam_mode.load() && p4_visual_current(generation) &&
+                   !(question_camera.load() && question_frozen_generation.load()==generation)) {
                 struct v4l2_buffer b = {};
                 b.type = type;
                 b.memory = V4L2_MEMORY_MMAP;
@@ -566,7 +619,9 @@ void capture_worker(void *) {
             close(fd);
         if (initialized)
             esp_video_deinit_with_flags(ESP_VIDEO_INIT_FLAGS_MIPI_CSI | ESP_VIDEO_INIT_FLAGS_ISP);
-        if (cam_mode.load() && p4_visual_current(generation)) {
+        scaled.reset();input.reset();camera_active_generation=0;
+        if (cam_mode.load() && p4_visual_current(generation) &&
+            !(question_camera.load() && question_frozen_generation.load()==generation)) {
             camera_errors++;
             cam_mode = 0;
             char state[200];
@@ -705,6 +760,24 @@ extern "C" unsigned p4_camera_question_begin(void) {
     unsigned e=p4_visual_begin(1);if(!e)return 0;question_camera=true;cam_mode=1;
     p4_visual_message(e,"请把题目放在镜头前\n保持文字清晰、光线充足");return e;
 }
+extern "C" bool p4_camera_question_end(unsigned e) {
+    if(!p4_visual_current(e) || !question_camera.load())return false;
+    question_frozen_generation=e;
+    int64_t release_until=esp_timer_get_time()+2000000;
+    while(p4_visual_current(e) && camera_active_generation.load()==e && esp_timer_get_time()<release_until)
+        vTaskDelay(pdMS_TO_TICKS(5));
+    bool released=camera_active_generation.load()!=e;
+    xSemaphoreTake(state_lock,portMAX_DELAY);
+    if(capture_status.generation==e)capture_status.camera_released=released;
+    xSemaphoreGive(state_lock);
+    return released && p4_visual_current(e);
+}
+extern "C" int p4_camera_photo_mode(unsigned mode) {
+    if (mode > 3) return 1;
+    if (cam_mode.load()) return 3;
+    question_photo_mode = mode;
+    return 0;
+}
 #if defined(AGENT_P4_AOQ_CAMERA)
 extern "C" unsigned p4_camera_video_begin(void){
     unsigned e=p4_visual_begin(1);if(!e)return 0;
@@ -730,12 +803,13 @@ extern "C" int p4_camera_capture_status(char *out,size_t cap) {
         "\"motion\":%u,\"changed_permille\":%u,\"audio_skips\":%u,\"preview_frozen\":%s,"
         "\"gradient_points\":%u,\"gradient_stride\":%u,\"last_sample_elapsed_ms\":%u,"
         "\"last_measure_us\":%u,\"max_measure_us\":%u,\"last_copy_us\":%u,\"max_copy_us\":%u,"
-        "\"last_frame_age_ms\":%u,\"drain_ms\":%u}",
+        "\"last_frame_age_ms\":%u,\"drain_ms\":%u,\"width\":%u,\"height\":%u,\"camera_released\":%s}",
         status.state,status.reason,status.generation,status.samples,status.elapsed_ms,status.selected_elapsed_ms,
         q.mean,q.range,q.sharpness,q.edge_samples,q.sharp_edges,q.sharp_fraction,q.motion,q.changed_permille,
         status.audio_skips,status.preview_frozen?"true":"false",q.gradient_points,q.stride,
         status.last_sample_elapsed_ms,status.last_measure_us,status.max_measure_us,
-        status.last_copy_us,status.max_copy_us,status.last_frame_age_ms,status.drain_ms);
+        status.last_copy_us,status.max_copy_us,status.last_frame_age_ms,status.drain_ms,status.width,status.height,
+        status.camera_released?"true":"false");
     return n<0 || size_t(n)>=cap?5:0;
 }
 extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
@@ -756,16 +830,16 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     }
     jpeg_encode_memory_alloc_cfg_t alloc={};alloc.buffer_direction=JPEG_ENC_ALLOC_INPUT_BUFFER;
     size_t capacity=0;
-    auto rgb24=(uint8_t *)jpeg_alloc_encoder_mem(size_t(w)*h*3,&alloc,&capacity);
-    auto copy=(uint16_t *)heap_caps_malloc(size_t(w)*h*2,MALLOC_CAP_SPIRAM);
-    if(!copy || !rgb24){free(copy);free(rgb24);xSemaphoreTake(state_lock,portMAX_DELAY);
+    auto copy=(uint16_t *)jpeg_alloc_encoder_mem(size_t(w)*h*2,&alloc,&capacity);
+    if(!copy){xSemaphoreTake(state_lock,portMAX_DELAY);
         capture_status.state="rejected";capture_status.reason="capture_allocation_failed";xSemaphoreGive(state_lock);return 19;}
     xSemaphoreTake(state_lock,portMAX_DELAY);
-    if(snapshot){xSemaphoreGive(state_lock);free(copy);free(rgb24);return 3;}
+    if(snapshot){xSemaphoreGive(state_lock);free(copy);return 3;}
     snapshot=copy;snapshot_ready=false;snapshot_has_candidate=false;snapshot_measuring=false;snapshot_generation=e;
     if(!++snapshot_request)++snapshot_request;
     snapshot_started_ms=uint64_t(esp_timer_get_time()/1000);
     capture_status={};capture_status.generation=e;capture_status.state="collecting";capture_status.reason="no_frames";
+    capture_status.width=w;capture_status.height=h;
     question_frozen_generation=0;
     xSemaphoreGive(state_lock);
     bool ready=false;
@@ -802,7 +876,7 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     else if(!sample_recent)capture_status.reason="sample_gap";
     else if(snapshot_has_candidate && !recent)capture_status.reason="candidate_stale";
     xSemaphoreGive(state_lock);
-    if(!ready || !p4_visual_current(e)){free(copy);free(rgb24);return p4_visual_current(e)?3:4;}
+    if(!ready || !p4_visual_current(e)){free(copy);return p4_visual_current(e)?3:4;}
     if(question_camera) {
         // The caller owns copy throughout this display operation. Never hold
         // state_lock while acquiring the display lock. Freeze the exact source
@@ -825,25 +899,42 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
         xSemaphoreGive(state_lock);
         if(!shown) {
             unsigned held=e;question_frozen_generation.compare_exchange_strong(held,0);
-            free(copy);free(rgb24);return p4_visual_current(e)?(allocated?3:19):4;
+            free(copy);return p4_visual_current(e)?(allocated?3:19):4;
         }
+        // The selected copy and LCD preview are independent of the sensor.
+        // Stop the frozen question stream and release its two large buffers
+        // before allocating JPEG output alongside an active voice session.
+        int64_t release_until=esp_timer_get_time()+2000000;
+        while(p4_visual_current(e) && camera_active_generation.load()==e && esp_timer_get_time()<release_until)
+            vTaskDelay(pdMS_TO_TICKS(5));
+        bool released=camera_active_generation.load()!=e;
+        xSemaphoreTake(state_lock,portMAX_DELAY);
+        if(capture_status.generation==e) {
+            capture_status.camera_released=released;
+            if(!released || !p4_visual_current(e)) {
+                capture_status.state="rejected";
+                capture_status.reason=p4_visual_current(e)?"camera_release_timeout":"superseded";
+            }
+        }
+        xSemaphoreGive(state_lock);
+        if(!released || !p4_visual_current(e)){free(copy);return p4_visual_current(e)?16:4;}
     }
-    for(int i=0;i<w*h;++i){unsigned c=copy[i];rgb24[3*i]=((c>>11)&31)*255/31;rgb24[3*i+1]=((c>>5)&63)*255/63;rgb24[3*i+2]=(c&31)*255/31;}
-    free(copy);alloc.buffer_direction=JPEG_ENC_ALLOC_OUTPUT_BUFFER;size_t out_size=0;
-    auto jpg=(uint8_t *)jpeg_alloc_encoder_mem(size_t(w)*h*2,&alloc,&out_size);
+    // Encode the sensor's packed RGB565 directly, avoiding a full RGB24 copy.
+    alloc.buffer_direction=JPEG_ENC_ALLOC_OUTPUT_BUFFER;size_t out_size=0;
+    auto jpg=(uint8_t *)jpeg_alloc_encoder_mem(std::min(size_t(w)*h*2,size_t(2*1024*1024)),&alloc,&out_size);
     jpeg_encoder_handle_t encoder=nullptr;jpeg_encode_engine_cfg_t cfg={};cfg.timeout_ms=1500;
     int error=jpg?0:19;uint32_t used=0;
     if(!error && jpeg_new_encoder_engine(&cfg,&encoder)!=ESP_OK)error=16;
-    jpeg_encode_cfg_t format={};format.width=w;format.height=h;format.src_type=JPEG_ENCODE_IN_FORMAT_RGB888;
+    jpeg_encode_cfg_t format={};format.width=w;format.height=h;format.src_type=JPEG_ENCODE_IN_FORMAT_RGB565;
     format.sub_sample=JPEG_DOWN_SAMPLING_YUV444;format.image_quality=90;
-    if(!error && jpeg_encoder_process(encoder,&format,rgb24,w*h*3,jpg,out_size,&used)!=ESP_OK)error=16;
+    if(!error && jpeg_encoder_process(encoder,&format,reinterpret_cast<uint8_t *>(copy),w*h*2,jpg,out_size,&used)!=ESP_OK)error=16;
     if(encoder)jpeg_del_encoder_engine(encoder);
-    free(rgb24);
+    free(copy);
     if(!error && !p4_visual_current(e))error=4;
     xSemaphoreTake(state_lock,portMAX_DELAY);
     if(capture_status.generation==e) {
         capture_status.state=error?"rejected":"ready";
-        capture_status.reason=error==4?"superseded":error?"jpeg_encode_failed":"ok";
+        capture_status.reason=error==4?"superseded":error==19?"jpeg_allocation_failed":error?"jpeg_encode_failed":"ok";
         if(error)capture_status.preview_frozen=false;
     }
     xSemaphoreGive(state_lock);

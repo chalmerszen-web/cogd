@@ -22,8 +22,10 @@ int main(void)
         assert(__builtin_popcount(votes&0xfff)<6);
         assert(p4_near_duplex_confirm(accepted[i],votes,strong)==(i==15));
     }
-    /* The original fast path remains available to suppressed near speech. */
-    assert(p4_near_duplex_confirm(true,0x3f,0x3));
+    /* A recorded echo vowel supplied one adjacent strong pair. Six weak
+     * votes must not turn that 64 ms residue into an interruption. */
+    assert(!p4_near_duplex_confirm(true,0x3f,0x3));
+    assert(p4_near_duplex_confirm(true,0x3f,0x7));
     assert(!p4_near_duplex_confirm(false,0xffff,0xffff));
     /* Sparse transients and expired evidence cannot open the longer path. */
     assert(!p4_near_duplex_confirm(true,0x101f,0x0007));
@@ -50,7 +52,8 @@ int main(void)
         votes=(votes<<1)|quiet_votes[i];strong=(strong<<1)|quiet_strong[i];
         assert(p4_near_duplex_confirm(quiet_votes[i],votes,strong)==(i==15));
     }
-    assert(p4_near_duplex_confirm(true,0x3f,0x5));
+    assert(!p4_near_duplex_confirm(true,0x3f,0x5));
+    assert(p4_near_duplex_confirm(true,0x3f,0x15));
     assert(!p4_near_duplex_confirm(true,0x3f,0x9));
     assert(!p4_near_duplex_confirm(true,0x3f,0x18009));
     puts("PASS bounded near-speech vote windows and recorded syllable gap");

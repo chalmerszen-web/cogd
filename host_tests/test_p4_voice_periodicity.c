@@ -16,6 +16,7 @@ int main(void)
         for(unsigned i=0;i<512;++i)pcm[i]=(int16_t)dc[n];
         assert(!p4_voice_periodic(pcm));
         assert(!p4_voice_above_low_band(pcm));
+        assert(!p4_voice_low_component(pcm));
     }
     /* Hum / low tonal residue is periodic, but cannot supply the strong
      * evidence that confirms a new near-end utterance during playback. */
@@ -38,6 +39,17 @@ int main(void)
             }
             assert(p4_voice_above_low_band(pcm));
             assert(p4_voice_periodic(pcm));
+            assert(p4_voice_low_component(pcm));
+        }
+    /* A high-frequency periodic residual can match multiples of a vocal
+     * period. It must not supply strong evidence without a lower component. */
+    const double high_tones[]={2000,2187.5,2250};
+    for(unsigned f=0;f<sizeof(high_tones)/sizeof(high_tones[0]);++f)
+        for(unsigned phase=0;phase<8;++phase){
+            for(unsigned i=0;i<512;++i)
+                pcm[i]=(int16_t)(8000+6000*sin(6.283185307179586*high_tones[f]*i/16000.0+phase*.7));
+            assert(!p4_voice_low_component(pcm));
+            assert(!p4_voice_duplex_strong(pcm,pcm,true,4000));
         }
     /* Broad-band residue must not become strong voiced evidence merely
      * because its amplitude exceeds the independent energy/VAD gates. */
@@ -45,6 +57,17 @@ int main(void)
         for(unsigned i=0;i<512;++i)pcm[i]=(int16_t)noise();
         assert(!p4_voice_periodic(pcm));
     }
+    /* A lower component does not turn a short-period tone into voice.
+     * Mixed tones exercise the captured failure beyond its exact frequency. */
+    const double mixed_tones[]={1600,1800,1843.75,1900,2200};
+    for(unsigned f=0;f<sizeof(mixed_tones)/sizeof(*mixed_tones);++f)
+        for(unsigned phase=0;phase<8;++phase){
+            for(unsigned i=0;i<512;++i)
+                pcm[i]=(int16_t)(6000*sin(6.283185307179586*mixed_tones[f]*i/16000.0+phase*.7)+
+                    1800*sin(6.283185307179586*125*i/16000.0));
+            assert(p4_voice_high_tone(pcm));
+            assert(!p4_voice_duplex_strong(pcm,pcm,true,4000));
+        }
     /* Independent harmonic/noise signals exercise pitches and phase across
      * the intended range, including low/high voices and nonzero DC. */
     const double pitches[]={65,80,100,120,160,200,240,300,380,450,500};

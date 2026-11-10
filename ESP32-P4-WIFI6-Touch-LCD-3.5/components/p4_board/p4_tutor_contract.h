@@ -214,7 +214,10 @@ inline bool parse_solution(const cJSON *v,const Question &q,unsigned id,unsigned
     }
     document=std::move(output);reason.clear();return true;
 }
-enum class UserIntent { none,read,explain };
+enum class UserIntent { none,read,explain,done };
+inline const char *intent_action(UserIntent intent) {
+    return intent==UserIntent::explain?"explain":intent==UserIntent::read?"read":intent==UserIntent::done?"done":nullptr;
+}
 // Deliberately narrow whole-utterance grammar. Substring matching would treat
 // negations, quotations, other topics and "先讲还是先看" as real choices.
 inline UserIntent explicit_user_intent(const char *input) {
@@ -232,6 +235,11 @@ inline UserIntent explicit_user_intent(const char *input) {
         }
         if(!removed)break;
     }
+    // Match lesson completion before optional question suffix removal:
+    // "这道题讲完了吗" asks status and must not finish the lesson.
+    for(const char *phrase:{"我已经懂了这道题讲完了","我已经明白了这道题讲完了",
+        "这道题讲完了","这题讲完了","这道题结束了","结束这道题的讲解","结束这道题"})
+        if(utterance==phrase)return UserIntent::done;
     for(unsigned i=0;i<3;++i) {
         bool removed=false;
         for(const char *suffix:{"可以吗","好吗","吧","呀","啊","呗","呢","吗"}) {
@@ -290,7 +298,7 @@ struct LessonState {
         // wording is left to this turn's normal model/tool interpretation.
         pending_user_choice=false;
         auto intent=explicit_user_intent(input);
-        bool chosen=intent!=UserIntent::none && choose(intent==UserIntent::explain?"explain":"read",id,rev,0);
+        bool chosen=intent!=UserIntent::none && choose(intent_action(intent),id,rev,0);
         if(chosen)pending_user_choice=true;
         return chosen;
     }

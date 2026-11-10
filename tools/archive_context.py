@@ -1,4 +1,4 @@
-"""Export LOCAL context before reclaiming old records; never manufacture a cloud ACK."""
+"""Export LOCAL/HYBRID context before reclaiming old records; never manufacture a cloud ACK."""
 import argparse
 import datetime
 import hashlib
@@ -48,14 +48,15 @@ def request(link, text, status=False):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port", default="COM5")
+    parser.add_argument("--chip", choices=("esp32c3", "esp32p4"), default="esp32c3")
     parser.add_argument("--archive", type=Path, help="Reuse an existing verified context archive")
     parser.add_argument("--apply", action="store_true", help="Reclaim exported old records after durable verification")
     args = parser.parse_args()
     with connect(args.port) as link:
         device = request(link, "agent status", True)
         before = request(link, "agent context stats", True)
-    if device["busy"] or not before["ready"] or before["mode"] != "LOCAL":
-        raise ValueError("Device must be idle with ready LOCAL context")
+    if device["busy"] or not before["ready"] or before["mode"] not in ("LOCAL", "HYBRID"):
+        raise ValueError("Device must be idle with ready LOCAL/HYBRID context")
     if before["partition_bytes"] != 0x200000 or "archived_record" not in before:
         raise ValueError("Requires current layout and firmware 0.6.3-context or newer")
     archive = args.archive
@@ -63,15 +64,16 @@ def main():
         stamp = datetime.datetime.now().strftime("%Y-%m-%d-%H%M%S-%f")
         archive = ROOT / "context-archives" / stamp
         archive.mkdir(parents=True, exist_ok=False)
-        command = [sys.executable, "-m", "esptool", "--chip", "esp32c3", "--port", args.port,
+        command = [sys.executable, "-m", "esptool", "--chip", args.chip, "--port", args.port,
                    "--baud", "460800", "read-flash"]
         with (archive / "read.log").open("w", encoding="utf-8") as log:
             subprocess.run(command + ["0x8000", "0x1000", str(archive / "partition-table.bin")],
                            stdout=log, stderr=subprocess.STDOUT, check=True)
-            table = partitions((archive / "partition-table.bin").read_bytes())
-            if (table["ctx"]["offset"], table["ctx"]["size"]) != (0x190000, 0x200000):
+            table = partitions((archive / "partition-table.bin").read_bytes(), 0x1000000 if args.chip=="esp32p4" else 0x400000)
+            offset=0x610000 if args.chip=="esp32p4" else 0x190000
+            if (table["ctx"]["offset"], table["ctx"]["size"]) != (offset, 0x200000):
                 raise ValueError("Unexpected device context partition")
-            subprocess.run(command + ["0x190000", "0x200000", str(archive / "context.bin")],
+            subprocess.run(command + [hex(offset), "0x200000", str(archive / "context.bin")],
                            stdout=log, stderr=subprocess.STDOUT, check=True)
     image = (archive / "context.bin").read_bytes()
     if len(image) != 0x200000:
@@ -110,13 +112,14 @@ def main():
     with connect(args.port) as link:
         current_device = request(link, "agent status", True)
         current = request(link, "agent context stats", True)
-        if current_device["device_id"] != identity or current_device["busy"] or current["mode"] != "LOCAL":
+        if current_device["device_id"] != identity or current_device["busy"] or current["mode"] != before["mode"]:
             raise ValueError("Device identity, mode or activity changed")
         command = "agent context archive " + json.dumps({"generation": scan["generation"], "through_record": through})
         reply = request(link, command)
         after = request(link, "agent context stats", True)
     result = {"archive": str(archive.resolve()), "reply": reply, "before": current, "after": after}
     result["passed"] = (after["archived_record"] >= through and after["acked"] == current["acked"] and
+                        after["mode"] == current["mode"] and after["cursor"] == current["cursor"] and
                         after["history_budget"] == current["history_budget"] and
                         after["recent_turns"] == current["recent_turns"])
     save(archive / ("result-" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S-%f") + ".json"),

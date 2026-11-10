@@ -11,6 +11,7 @@
 #include "p4_agent.h"
 #include "p4_media.h"
 #include "p4_tutor_contract.h"
+#include "p4_status_voice.h"
 #include "mbedtls/base64.h"
 #include "psa/crypto.h"
 #include "../../../plugins/model_usage.h"
@@ -786,6 +787,9 @@ void run_tutor(Job *j) {
     }
     if(!p4_visual_current(j->generation)){tutor_finish(j,"superseded",4);return;}
     if(photo.empty()) {
+        // A terminal acquisition failure must not leave the live sensor and
+        // its frame buffers resident while the user hears the failure notice.
+        if(j->fixture.empty())p4_camera_question_end(j->generation);
         if(!error)error=3;
         if(error!=3) {
             char status[768]={};
@@ -1019,6 +1023,9 @@ int launch(Job *j, char *out, size_t cap) {
         }
         // Same-photo refinement must not show a new live camera frame while
         // reading the retained JPEG. Only start acquires a new physical photo.
+        // clear() retains the megabyte-sized JPEG capacity. Release the old
+        // photo before the capture worker allocates the next full-size frames.
+        if(!solving && !same_photo)std::string().swap(tutor_image);
         j->generation=solving || same_photo || !j->fixture.empty()?p4_visual_begin(5):p4_camera_question_begin();
         if(!j->generation){xSemaphoreGive(job_lock);memset(j->auth,0,sizeof(j->auth));delete j;active=false;return 15;}
         if(!solving)p4_document_forget(0);
@@ -1058,6 +1065,24 @@ extern "C" bool p4_tutor_waiting(void) {
     bool waiting=(p4_visual_current(tutor_generation) && (tutor_phase=="reading" || tutor_phase=="needs_selection" || tutor_phase=="awaiting_confirmation" || tutor_phase=="solving")) ||
         (!tutor_solution.empty() && (tutor_mode=="choice" || tutor_mode=="reading" || tutor_mode=="explaining"));
     xSemaphoreGive(job_lock);return waiting;
+}
+extern "C" int p4_tutor_progress(p4_status_phrase_t *phrase,unsigned *id,unsigned *revision) {
+    if(!phrase || !id || !revision)return 1;
+    *phrase=P4_STATUS_IDLE;*id=*revision=0;
+    if(!job_lock)return 0;
+    if(xSemaphoreTake(job_lock,0)!=pdTRUE)return 3;
+    *id=tutor_id;*revision=tutor_revision;
+    if(tutor_phase=="reading")*phrase=P4_STATUS_READING;
+    else if(tutor_phase=="solving")*phrase=P4_STATUS_SOLVING;
+    else if(tutor_phase=="needs_selection")*phrase=P4_STATUS_SELECTION;
+    else if(tutor_phase=="awaiting_confirmation")*phrase=P4_STATUS_CONFIRMATION;
+    else if(tutor_phase=="failed" || tutor_phase=="incomplete")*phrase=P4_STATUS_FAILED;
+    else if(tutor_phase=="cancelled")*phrase=P4_STATUS_CANCELLED;
+    else if(tutor_phase=="complete" && !tutor_solution.empty())*phrase=P4_STATUS_COMPLETE;
+    if((*phrase==P4_STATUS_READING || *phrase==P4_STATUS_SOLVING || *phrase==P4_STATUS_SELECTION ||
+        *phrase==P4_STATUS_CONFIRMATION) && !p4_visual_current(tutor_generation))*phrase=P4_STATUS_IDLE;
+    // A progress read neither claims completion nor alters read/explain/scroll.
+    xSemaphoreGive(job_lock);return 0;
 }
 extern "C" void p4_tutor_activity(void) {tutor_activity=tutor_now();}
 extern "C" bool p4_tutor_pause_due(void) {
@@ -1129,7 +1154,7 @@ extern "C" bool p4_tutor_voice_choice(const char *text,char *out,size_t cap) {
         (tutor_phase=="complete" && !tutor_solution.empty()));
     xSemaphoreGive(job_lock);
     if(!current)return false;
-    const char *action=intent==p4_tutor::UserIntent::explain?"explain":"read";
+    const char *action=p4_tutor::intent_action(intent);
     char arguments[128];
     snprintf(arguments,sizeof(arguments),"{\"action\":\"%s\",\"question_id\":%u,\"revision\":%u}",action,id,revision);
     // The regular operation revalidates identity after taking its lock and
@@ -1326,7 +1351,7 @@ extern "C" int p4_cloud_call(const char *tool, const char *args, char *out, size
         }
         else if(!strcmp(a,"cancel")) {
             xSemaphoreTake(job_lock,portMAX_DELAY);bool visible=p4_visual_current(tutor_generation);tutor_phase="cancelled";tutor_job_id=0;
-            tutor_image.clear();tutor_fixture.clear();tutor_photo={};tutor_reader={};tutor_requires_image=false;tutor_question.clear();tutor_solution.clear();tutor_key.clear();tutor_candidates.clear();tutor_lesson.reset(tutor_id);
+            std::string().swap(tutor_image);tutor_fixture.clear();tutor_photo={};tutor_reader={};tutor_requires_image=false;tutor_question.clear();tutor_solution.clear();tutor_key.clear();tutor_candidates.clear();tutor_lesson.reset(tutor_id);
             tutor_completion_pending=false;tutor_completion_action.clear();snprintf(tutor_status,sizeof(tutor_status),"{\"state\":\"cancelled\",\"tutor_state\":\"cancelled\"}");
             snprintf(out,cap,"%s",tutor_status);xSemaphoreGive(job_lock);p4_document_forget(0);if(visible)p4_visual_stop();
         } else {
