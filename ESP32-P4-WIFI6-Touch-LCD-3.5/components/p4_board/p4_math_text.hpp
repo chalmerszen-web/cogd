@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <string>
 
 namespace p4_math {
@@ -55,9 +56,50 @@ inline char script(uint32_t c, bool &sub) {
     return 0;
 }
 
+/* Reader JSON may contain one or two literal backslashes before a TeX
+ * command. Convert only supported, complete commands on the display copy.
+ * Unknown or incomplete syntax stays visible; retained solver input is intact. */
+inline bool group(const char *&p,std::string &value) {
+    if(*p!='{')return false;
+    const char *start=++p;unsigned depth=1;
+    while(*p && depth) {
+        if(*p=='{')++depth;
+        else if(*p=='}')--depth;
+        if(depth)++p;
+    }
+    if(depth)return false;
+    value.assign(start,p-start);++p;return true;
+}
+inline std::string tex_display(const char *text,unsigned depth=0) {
+    std::string result;
+    while(*text) {
+        if(*text!='\\' || depth>=8){result+=*text++;continue;}
+        const char *command=text;
+        while(*command=='\\')++command;
+        const size_t slashes=static_cast<size_t>(command-text);
+        if(slashes>2){result.append(text,slashes);text=command;continue;}
+        if(*command=='%'){result+='%';text=command+1;continue;}
+        const char *end=command;
+        while((*end>='a' && *end<='z') || (*end>='A' && *end<='Z'))++end;
+        const size_t n=static_cast<size_t>(end-command);
+        if(n==5 && !std::strncmp(command,"times",n)){result+="×";text=end;continue;}
+        if(n==4 && !std::strncmp(command,"frac",n)) {
+            const char *after=end;std::string numerator,denominator;
+            if(group(after,numerator) && group(after,denominator)) {
+                result+='(';result+=tex_display(numerator.c_str(),depth+1);
+                result+=")/(";result+=tex_display(denominator.c_str(),depth+1);
+                result+=')';text=after;continue;
+            }
+        }
+        result.append(text,slashes);text=command;
+    }
+    return result;
+}
+
 /* Used only for the display copy. A missing script run keeps its grouping and
  * sign in ASCII; the retained mathematical source is never normalized. */
 template<class Available> std::string display(const char *text, Available available) {
+    const std::string formatted=tex_display(text);text=formatted.c_str();
     std::string result;
     while (*text) {
         const char *start = text;

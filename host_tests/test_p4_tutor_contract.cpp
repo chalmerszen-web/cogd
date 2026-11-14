@@ -280,7 +280,9 @@ static void acquisition_cases() {
     CHECK(acquisition("refine",r,"awaiting_confirmation",42,0,true)==Acquisition::reject);
     CHECK(acquisition("refine",r,"awaiting_confirmation",41,1,true)==Acquisition::reject);
     CHECK(acquisition("refine",r,"awaiting_confirmation",41,0,false)==Acquisition::reject);
-    for(const char *phase:{"reading","solving","complete","cancelled","needs_clearer_view"})
+    for(const char *phase:{"solving","complete","incomplete"})
+        CHECK(acquisition("refine",r,phase,41,0,true)==Acquisition::retained);
+    for(const char *phase:{"reading","cancelled","needs_clearer_view"})
         CHECK(acquisition("refine",r,phase,41,0,true)==Acquisition::reject);
     cJSON_DeleteItemFromObjectCaseSensitive(r,"revision");
     CHECK(acquisition("refine",r,"awaiting_confirmation",41,0,true)==Acquisition::reject);
@@ -318,4 +320,29 @@ static void photo_window_cases() {
         CHECK(w.skip+w.count<=w.encoded_count/4*3 && w.encoded_count<=1368);
     }
 }
-int main() {acquisition_cases();photo_window_cases();selection_cases();scope_cases();reader_failure_cases();actual_reader_shapes_cases();capture_failure_cases();lifecycle_cases();explicit_user_cases();explicit_user_priority_cases();std::cout << "PASS p4_tutor_contract " << checks << " checks\n";}
+static void worker_publication_cases() {
+    // Admission used to expose solving while launch could still be waiting
+    // for the LCD lock, before xTaskCreate had even been attempted.
+    for(const char *phase:{"reading","solving"}) {
+        CHECK(awaiting_worker(phase,41,0));   // absent marker, including failed creation
+        CHECK(awaiting_worker(phase,41,40));  // stale successful job is insufficient
+        CHECK(awaiting_worker(phase,0,0));
+        CHECK(!awaiting_worker(phase,41,41)); // exact successfully created worker
+    }
+    // Failure/fast completion must remain terminal even before the creating
+    // thread has returned and published its marker.
+    for(const char *phase:{"failed","incomplete","complete","superseded","cancelled"})
+        CHECK(!awaiting_worker(phase,41,0));
+    auto r=cJSON_Parse("{\"state\":\"pending\",\"job_id\":41}");
+    CHECK(!publish_worker_running(r,0));CHECK(!publish_worker_running(r,40));
+    CHECK(publish_worker_running(r,41));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"job_id",cJSON_CreateNumber(42));
+    CHECK(!publish_worker_running(r,41));
+    cJSON_ReplaceItemInObjectCaseSensitive(r,"job_id",cJSON_CreateNumber(41));
+    for(const char *state:{"succeeded","failed","superseded","running"}) {
+        cJSON_ReplaceItemInObjectCaseSensitive(r,"state",cJSON_CreateString(state));
+        CHECK(!publish_worker_running(r,41));
+    }
+    cJSON_Delete(r);CHECK(!publish_worker_running(nullptr,41));
+}
+int main() {worker_publication_cases();acquisition_cases();photo_window_cases();selection_cases();scope_cases();reader_failure_cases();actual_reader_shapes_cases();capture_failure_cases();lifecycle_cases();explicit_user_cases();explicit_user_priority_cases();std::cout << "PASS p4_tutor_contract " << checks << " checks\n";}

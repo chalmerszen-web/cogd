@@ -29,7 +29,9 @@ static inline unsigned p4_aoq_local_replay(unsigned cursor,unsigned muted_from)
 }
 /* A fixed three-second rewind can replay a whole old speaker phrase before
  * the actual interruption, eliciting an empty cloud turn and another cancel.
- * Use the independently confirmed near-voice chain with 500 ms pre-roll.
+ * Use the independently confirmed near-voice chain with 500 ms pre-roll
+ * plus an explicit 64 ms raw-PCM retention guard (no DSP-delay credit).
+ * The existing three-second and muting-floor caps may limit that guard.
  * Preserve the old bounded fallback for absent/stale clocks. Cursor time is
  * the audio-reader clock, not event receipt time or delayed network send time. */
 static inline unsigned p4_aoq_local_onset_replay(unsigned cursor,unsigned muted_from,
@@ -40,7 +42,8 @@ static inline unsigned p4_aoq_local_onset_replay(unsigned cursor,unsigned muted_
     uint32_t reader_ms=capture_origin_ms+cursor/16u;
     int32_t age=(int32_t)(reader_ms-onset_ms);
     if(age< -100 || age>3000)return fallback;
-    unsigned keep=(unsigned)(age>0?age:0)+500u;
+    const unsigned pre_roll_ms=500u,raw_guard_ms=64u;
+    unsigned keep=(unsigned)(age>0?age:0)+pre_roll_ms+raw_guard_ms;
     if(keep>3000u)keep=3000u;
     unsigned samples=keep*16u;
     if(samples>cursor-muted_from)samples=cursor-muted_from;

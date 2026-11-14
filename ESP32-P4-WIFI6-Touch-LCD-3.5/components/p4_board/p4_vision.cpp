@@ -17,6 +17,8 @@
 #include "human_face_detect.hpp"
 #include "p4_agent.h"
 #include "p4_document_state.h"
+#include "p4_tutor_trace.h"
+#include "p4_capture_store.h"
 #include "p4_capture_quality.hpp"
 #include "p4_math_text.hpp"
 #include "p4_media.h"
@@ -49,6 +51,14 @@ std::atomic<unsigned> capture_frames{0}, inference_ms{0}, camera_errors{0};
 std::atomic<int> camera_width{0}, camera_height{0};
 std::atomic<unsigned> camera_frame_generation{0};
 std::atomic<unsigned> camera_active_generation{0};
+std::atomic<unsigned> camera_reserved_bytes{0};
+// A stopped sensor lends one existing DMA frame to JPEG encoding. The capture
+// owner retains that memory until the consumer explicitly releases it, even
+// if the visual generation is cancelled in the meantime.
+std::atomic<unsigned> jpeg_borrow_request{0},jpeg_borrow_ready{0},jpeg_borrow_release{0};
+uint16_t *jpeg_borrow_frame=nullptr;
+uint8_t *jpeg_borrow_output=nullptr;
+size_t jpeg_borrow_bytes=0;
 lv_obj_t *surface = nullptr, *canvas = nullptr, *log_label = nullptr;
 lv_obj_t *document = nullptr;
 std::atomic<unsigned> document_step{0},document_manual_until{0};
@@ -58,7 +68,10 @@ unsigned document_question=0,document_revision=0,document_generation=0;
 bool document_ready=false,document_restored=false;
 unsigned display_render_frames=0;
 p4_document_bookmark_t document_bookmark{};
-uint16_t *snapshot = nullptr; // state_lock; copied only by capture owner
+p4_document_bookmark_t document_bookmarks[12]{};
+unsigned bookmark_slot=0;
+bool pending_camera_canvas=false;
+p4_capture::FrameStore *snapshot = nullptr; // state_lock; copied only by capture owner
 unsigned snapshot_generation = 0;
 bool snapshot_ready = false;
 bool snapshot_has_candidate = false;
@@ -71,6 +84,7 @@ struct CaptureStatus {
     unsigned elapsed_ms = 0, audio_skips = 0;
     unsigned last_sample_elapsed_ms = 0, last_measure_us = 0, max_measure_us = 0;
     unsigned last_copy_us = 0, max_copy_us = 0, last_frame_age_ms = 0, drain_ms = 0;
+    int error = 0;
     const char *state = "idle", *reason = "no_capture";
     p4_capture::Metrics latest{}, selected{};
     bool preview_frozen = false, camera_released = false;
@@ -166,8 +180,13 @@ void capture_document_position() {
         if(top<=y){paragraph=i;paragraph_y=top;}
     }
     document_step=step;
-    if(document_question && document_revision)
+    if(document_question && document_revision) {
         document_bookmark={document_question,document_revision,step,paragraph,y,y-paragraph_y,true};
+        auto *slot=&document_bookmarks[bookmark_slot%12];
+        for(auto &saved:document_bookmarks)if(saved.question_id==document_question){slot=&saved;break;}
+        if(slot==&document_bookmarks[bookmark_slot%12])++bookmark_slot;
+        *slot=document_bookmark;
+    }
 }
 bool refresh_document() {
     lv_obj_invalidate(document);
@@ -235,6 +254,10 @@ bool present_camera(const uint16_t *src, int sw, int sh, uint16_t *scaled,
         (question_camera && question_frozen_generation.load()==generation && !captured_frame)) {
         bsp_display_unlock();
         return false;
+    }
+    if(pending_camera_canvas) {
+        clear_labels();std::fill(pixels,pixels+W*H,uint16_t(0));pending_camera_canvas=false;
+        p4_tutor_trace("camera_first_frame",0,0,0,0,generation,0);
     }
     for (int y = 0; y < dh; y++)
         memcpy(pixels+(y+oy)*W+ox,scaled+y*dw,dw*sizeof(*pixels));
@@ -309,15 +332,25 @@ void inference_worker(void *arg) {
 
 void capture_worker(void *) {
     static p4_capture::Window capture_window; // two small grids stay off the task stack
+    p4_capture::FramePair photo_frames;
     for (;;) {
-        while (!cam_mode.load() || (question_camera.load() && question_frozen_generation.load()==epoch.load()))
+        while (!cam_mode.load() || (question_camera.load() && question_frozen_generation.load()==epoch.load())) {
+            // Other image/video/drawing features get the photo memory back.
+            // Idle and tutor documents retain the bounded pair for next time.
+            int visual=owner.load();
+            if(visual>=2 && visual<=4){photo_frames.clear();camera_reserved_bytes=0;}
             vTaskDelay(pdMS_TO_TICKS(100));
+        }
         unsigned generation = epoch.load();
         camera_active_generation=generation;
+        bool user_buffers=question_camera.load();
+        if(!user_buffers){photo_frames.clear();camera_reserved_bytes=0;}
         int fd = -1, type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
-        bool initialized = false, streaming = false;
+        bool initialized = false, streaming = false, paused = false;
         uint16_t *buffers[2] = {};
         char failure[100] = "camera initialization failed";
+        const char *failure_reason="camera_initialization_failed";
+        int capture_error=3;
         CameraInference inference;
         // The sensor retains the selected format pointer until deinit.
         esp_cam_sensor_format_t photo_format{};
@@ -388,7 +421,7 @@ void capture_worker(void *) {
         camera_width = format.fmt.pix.width;
         camera_height = format.fmt.pix.height;
         scaled.reset(static_cast<uint16_t *>(heap_caps_malloc(W*300*2,MALLOC_CAP_SPIRAM)));
-        if (!scaled) { snprintf(failure,sizeof(failure),"preview allocation failed"); goto cleanup; }
+        if (!scaled) { failure_reason="preview_allocation_failed";capture_error=19;snprintf(failure,sizeof(failure),"preview allocation failed"); goto cleanup; }
         inference.mode = cam_mode.load();
         if (inference.mode > 1) {
             input.reset(static_cast<uint16_t *>(heap_caps_malloc(camera_width*camera_height*2,MALLOC_CAP_SPIRAM)));
@@ -408,18 +441,41 @@ void capture_worker(void *) {
             struct v4l2_requestbuffers req = {};
             req.count = 2;
             req.type = type;
-            req.memory = V4L2_MEMORY_MMAP;
-            if (ioctl(fd, VIDIOC_REQBUFS, &req))
+            req.memory = user_buffers?V4L2_MEMORY_USERPTR:V4L2_MEMORY_MMAP;
+            if(question_camera.load())p4_tutor_trace("camera_buffer_largest",0,0,0,0,
+                heap_caps_get_largest_free_block(MALLOC_CAP_SPIRAM),0);
+            if(user_buffers && !photo_frames.allocate(std::max(size_t(format.fmt.pix.sizeimage),
+                size_t(camera_width.load())*camera_height.load()*2),[](size_t n)->void *{
+                    return heap_caps_aligned_alloc(128,n,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+                })) {
+                failure_reason="camera_buffer_allocation_failed";capture_error=19;
+                snprintf(failure,sizeof(failure),"camera frame buffer allocation failed");
+                camera_reserved_bytes=0;
+                p4_tutor_trace("camera_buffer_alloc_failed",0,0,0,0,
+                    heap_caps_get_largest_free_block(MALLOC_CAP_SPIRAM),19);
                 goto cleanup;
+            }
+            camera_reserved_bytes=photo_frames.capacity()*2;
+            if (ioctl(fd, VIDIOC_REQBUFS, &req)) {
+                failure_reason="camera_buffer_allocation_failed";capture_error=19;
+                snprintf(failure,sizeof(failure),"camera frame buffer allocation failed");
+                p4_tutor_trace("camera_buffer_alloc_failed",0,0,0,0,
+                    heap_caps_get_largest_free_block(MALLOC_CAP_SPIRAM),19);
+                goto cleanup;
+            }
         }
         for (int i = 0; i < 2; i++) {
             struct v4l2_buffer b = {};
             b.index = i;
             b.type = type;
-            b.memory = V4L2_MEMORY_MMAP;
+            b.memory = user_buffers?V4L2_MEMORY_USERPTR:V4L2_MEMORY_MMAP;
             if (ioctl(fd, VIDIOC_QUERYBUF, &b))
                 goto cleanup;
-            buffers[i] =
+            if(user_buffers) {
+                buffers[i]=static_cast<uint16_t *>(photo_frames.frame(i));
+                if(b.length>photo_frames.capacity()){failure_reason="camera_buffer_size_mismatch";goto cleanup;}
+                b.m.userptr=reinterpret_cast<unsigned long>(buffers[i]);
+            } else buffers[i] =
                 (uint16_t *)mmap(nullptr, b.length, PROT_READ | PROT_WRITE, MAP_SHARED, fd, b.m.offset);
             if (!buffers[i] || buffers[i] == MAP_FAILED || ioctl(fd, VIDIOC_QBUF, &b))
                 goto cleanup;
@@ -441,7 +497,7 @@ void capture_worker(void *) {
                    !(question_camera.load() && question_frozen_generation.load()==generation)) {
                 struct v4l2_buffer b = {};
                 b.type = type;
-                b.memory = V4L2_MEMORY_MMAP;
+                b.memory = user_buffers?V4L2_MEMORY_USERPTR:V4L2_MEMORY_MMAP;
                 if (ioctl(fd, VIDIOC_DQBUF, &b)) {
                     snprintf(failure, sizeof(failure), "capture dequeue failed");
                     break;
@@ -492,12 +548,12 @@ void capture_worker(void *) {
                                     snapshot_has_candidate=false;capture_status.selected={};
                                     capture_status.selected_elapsed_ms=0;
                                 }
-                                if(decision.replace) {
+                                if(decision.replace && p4_capture::retain_candidate_at(capture_window.selected_elapsed_ms)) {
                                     int64_t copy_at=esp_timer_get_time();
-                                    memcpy(snapshot,buffers[b.index],size_t(iw)*ih*2);
+                                    bool copied=snapshot->copy_from(buffers[b.index],size_t(iw)*ih*2);
                                     capture_status.last_copy_us=unsigned(esp_timer_get_time()-copy_at);
                                     capture_status.max_copy_us=std::max(capture_status.max_copy_us,capture_status.last_copy_us);
-                                    snapshot_has_candidate=true;
+                                    snapshot_has_candidate=copied;
                                     capture_status.selected=capture_window.best;
                                     capture_status.selected_elapsed_ms=capture_window.selected_elapsed_ms;
                                 }
@@ -602,8 +658,13 @@ void capture_worker(void *) {
                     }
 
                 }
-                if (ioctl(fd, VIDIOC_QBUF, &b))
+                // DQBUF returns index/bytesused, but does not fill USERPTR's
+                // length. Supply both fields again on every requeue.
+                if(user_buffers){b.m.userptr=reinterpret_cast<unsigned long>(buffers[b.index]);b.length=photo_frames.capacity();}
+                if (ioctl(fd, VIDIOC_QBUF, &b)) {
+                    failure_reason="camera_requeue_failed";snprintf(failure,sizeof(failure),"capture requeue failed");
                     break;
+                }
                 vTaskDelay(pdMS_TO_TICKS(1));
             }
         }
@@ -613,8 +674,18 @@ void capture_worker(void *) {
             xTaskNotifyGive(inference.task);
             while (inference.alive.load()) vTaskDelay(pdMS_TO_TICKS(10));
         }
-        if (streaming)
-            ioctl(fd, VIDIOC_STREAMOFF, &type);
+        paused=!streaming || ioctl(fd, VIDIOC_STREAMOFF, &type)==0;
+        if(jpeg_borrow_request.load()==generation) {
+            jpeg_borrow_frame=paused?buffers[0]:nullptr;
+            // Caller-owned frames are aligned PSRAM. STREAMOFF has completed,
+            // so the second frame can receive JPEG output until borrow release.
+            jpeg_borrow_output=paused && user_buffers?reinterpret_cast<uint8_t *>(buffers[1]):nullptr;
+            jpeg_borrow_bytes=size_t(format.fmt.pix.width)*format.fmt.pix.height*2;
+            jpeg_borrow_ready=generation;
+            while(jpeg_borrow_release.load()!=generation)vTaskDelay(pdMS_TO_TICKS(5));
+            jpeg_borrow_frame=nullptr;jpeg_borrow_output=nullptr;jpeg_borrow_ready=0;
+            unsigned requested=generation;jpeg_borrow_request.compare_exchange_strong(requested,0);
+        }
         if (fd >= 0)
             close(fd);
         if (initialized)
@@ -623,11 +694,17 @@ void capture_worker(void *) {
         if (cam_mode.load() && p4_visual_current(generation) &&
             !(question_camera.load() && question_frozen_generation.load()==generation)) {
             camera_errors++;
+            if(question_camera.load()) {
+                xSemaphoreTake(state_lock,portMAX_DELAY);
+                capture_status.generation=generation;capture_status.state="rejected";
+                capture_status.reason=failure_reason;capture_status.error=capture_error;
+                xSemaphoreGive(state_lock);
+            }
             cam_mode = 0;
             char state[200];
             snprintf(state, sizeof(state), "{\"state\":\"error\",\"error\":\"%s\"}", failure);
             publish(state);
-            p4_visual_message(generation, failure);
+            p4_visual_message(generation,question_camera.load()?"拍照失败，尚未取得照片\n请稍后重试":failure);
         }
         vTaskDelay(pdMS_TO_TICKS(100));
     }
@@ -727,8 +804,12 @@ extern "C" bool p4_visual_current(unsigned e) { return e && e == epoch.load(); }
 extern "C" unsigned p4_visual_begin(int mode) {
     unsigned e=p4_begin_transaction(epoch,owner,mode,[]{return surface && bsp_display_lock(1000);},[](unsigned){
         cam_mode=0;question_camera=false;question_frozen_generation=0;
-        clear_labels();
-        std::fill(pixels,pixels+W*H,uint16_t(0));
+        // Keep the last complete frame while the next lesson/camera is being
+        // prepared. The camera replaces it only on its first actual frame.
+        if(owner.load()!=5 && owner.load()!=1) {
+            clear_labels();std::fill(pixels,pixels+W*H,uint16_t(0));
+        }
+        pending_camera_canvas=owner.load()==1;
         lv_obj_remove_flag(surface,LV_OBJ_FLAG_HIDDEN);
         lv_obj_invalidate(canvas);
         bsp_display_unlock();
@@ -757,6 +838,10 @@ extern "C" void p4_visual_message(unsigned e, const char *message) {
     if(!p4_visual_current(e)){bsp_display_unlock();return;}
     auto shown=display_text(message);
     lv_label_set_text(log_label, shown.c_str());
+    lv_obj_remove_flag(log_label,LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_style_bg_color(log_label,lv_color_black(),0);
+    lv_obj_set_style_bg_opa(log_label,LV_OPA_90,0);
+    lv_obj_move_foreground(log_label);
     lv_obj_invalidate(canvas);
     bsp_display_unlock();
 }
@@ -809,19 +894,23 @@ extern "C" int p4_camera_capture_status(char *out,size_t cap) {
         "\"motion\":%u,\"changed_permille\":%u,\"audio_skips\":%u,\"preview_frozen\":%s,"
         "\"gradient_points\":%u,\"gradient_stride\":%u,\"last_sample_elapsed_ms\":%u,"
         "\"last_measure_us\":%u,\"max_measure_us\":%u,\"last_copy_us\":%u,\"max_copy_us\":%u,"
-        "\"last_frame_age_ms\":%u,\"drain_ms\":%u,\"width\":%u,\"height\":%u,\"camera_released\":%s}",
+        "\"last_frame_age_ms\":%u,\"drain_ms\":%u,\"width\":%u,\"height\":%u,\"camera_released\":%s,\"camera_reserved_bytes\":%u}",
         status.state,status.reason,status.generation,status.samples,status.elapsed_ms,status.selected_elapsed_ms,
         q.mean,q.range,q.sharpness,q.edge_samples,q.sharp_edges,q.sharp_fraction,q.motion,q.changed_permille,
         status.audio_skips,status.preview_frozen?"true":"false",q.gradient_points,q.stride,
         status.last_sample_elapsed_ms,status.last_measure_us,status.max_measure_us,
         status.last_copy_us,status.max_copy_us,status.last_frame_age_ms,status.drain_ms,status.width,status.height,
-        status.camera_released?"true":"false");
+        status.camera_released?"true":"false",camera_reserved_bytes.load());
     return n<0 || size_t(n)>=cap?5:0;
 }
 extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     *data=nullptr;*size=0;
-    if(!p4_visual_current(e) || !cam_mode)return 4;
+    if(!p4_visual_current(e))return 4;
     xSemaphoreTake(state_lock,portMAX_DELAY);
+    if(capture_status.generation==e && capture_status.error) {
+        int error=capture_status.error;xSemaphoreGive(state_lock);return error;
+    }
+    if(!cam_mode){xSemaphoreGive(state_lock);return 3;}
     if(snapshot){xSemaphoreGive(state_lock);return 3;}
     capture_status={};capture_status.generation=e;capture_status.state="collecting";
     capture_status.reason="camera_initializing";question_frozen_generation=0;xSemaphoreGive(state_lock);
@@ -831,17 +920,17 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     if(!p4_visual_current(e))return 4;
     int w=camera_width.load(),h=camera_height.load();
     if(!cam_mode || camera_frame_generation.load()!=e || w<=0 || h<=0) {
-        xSemaphoreTake(state_lock,portMAX_DELAY);capture_status.state="rejected";
-        capture_status.reason="camera_initializing_timeout";xSemaphoreGive(state_lock);return 3;
+        xSemaphoreTake(state_lock,portMAX_DELAY);
+        int error=capture_status.generation==e?capture_status.error:0;
+        if(!error){capture_status.state="rejected";capture_status.reason="camera_initializing_timeout";}
+        xSemaphoreGive(state_lock);return error?error:3;
     }
-    jpeg_encode_memory_alloc_cfg_t alloc={};alloc.buffer_direction=JPEG_ENC_ALLOC_INPUT_BUFFER;
-    size_t capacity=0;
-    auto copy=(uint16_t *)jpeg_alloc_encoder_mem(size_t(w)*h*2,&alloc,&capacity);
-    if(!copy){xSemaphoreTake(state_lock,portMAX_DELAY);
+    p4_capture::FrameStore staged;
+    if(!staged.allocate(size_t(w)*h*2,[](size_t n)->void *{return heap_caps_malloc(n,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);})){xSemaphoreTake(state_lock,portMAX_DELAY);
         capture_status.state="rejected";capture_status.reason="capture_allocation_failed";xSemaphoreGive(state_lock);return 19;}
     xSemaphoreTake(state_lock,portMAX_DELAY);
-    if(snapshot){xSemaphoreGive(state_lock);free(copy);return 3;}
-    snapshot=copy;snapshot_ready=false;snapshot_has_candidate=false;snapshot_measuring=false;snapshot_generation=e;
+    if(snapshot){xSemaphoreGive(state_lock);return 3;}
+    snapshot=&staged;snapshot_ready=false;snapshot_has_candidate=false;snapshot_measuring=false;snapshot_generation=e;
     if(!++snapshot_request)++snapshot_request;
     snapshot_started_ms=uint64_t(esp_timer_get_time()/1000);
     capture_status={};capture_status.generation=e;capture_status.state="collecting";capture_status.reason="no_frames";
@@ -882,7 +971,43 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     else if(!sample_recent)capture_status.reason="sample_gap";
     else if(snapshot_has_candidate && !recent)capture_status.reason="candidate_stale";
     xSemaphoreGive(state_lock);
-    if(!ready || !p4_visual_current(e)){free(copy);return p4_visual_current(e)?3:4;}
+    if(!ready || !p4_visual_current(e))return p4_visual_current(e)?3:4;
+    struct Input {
+        uint16_t *pixels=nullptr;unsigned borrowed=0;
+        bool release() {
+            if(!borrowed){free(pixels);pixels=nullptr;return true;}
+            unsigned generation=borrowed;borrowed=0;pixels=nullptr;jpeg_borrow_release=generation;
+            int64_t until=esp_timer_get_time()+2000000;
+            while(camera_active_generation.load()==generation && esp_timer_get_time()<until)vTaskDelay(pdMS_TO_TICKS(5));
+            return camera_active_generation.load()!=generation;
+        }
+        ~Input(){release();}
+    } input;
+    size_t capacity=0;
+    // Reuse a sensor DMA frame after STREAMOFF. Requiring another contiguous
+    // 4 MiB allocation here can still fail despite ample fragmented free RAM.
+    // The display stays on its last frame until the selected source is copied.
+    if(question_camera) {
+        input.borrowed=e;jpeg_borrow_release=0;jpeg_borrow_ready=0;jpeg_borrow_request=e;
+        question_frozen_generation=e;
+        int64_t until=esp_timer_get_time()+2000000;
+        while(jpeg_borrow_ready.load()!=e && p4_visual_current(e) && esp_timer_get_time()<until)vTaskDelay(pdMS_TO_TICKS(5));
+        if(jpeg_borrow_ready.load()!=e || !p4_visual_current(e)) {
+            xSemaphoreTake(state_lock,portMAX_DELAY);capture_status.state="rejected";capture_status.reason="camera_pause_timeout";xSemaphoreGive(state_lock);
+            return p4_visual_current(e)?16:4;
+        }
+        input.pixels=jpeg_borrow_frame;capacity=jpeg_borrow_bytes;
+        p4_tutor_trace("camera_paused",0,0,0,0,e,0);
+    } else {
+        jpeg_encode_memory_alloc_cfg_t config={};config.buffer_direction=JPEG_ENC_ALLOC_INPUT_BUFFER;
+        input.pixels=(uint16_t *)jpeg_alloc_encoder_mem(size_t(w)*h*2,&config,&capacity);
+    }
+    auto copy=input.pixels;
+    if(!copy || !staged.copy_to(copy,capacity)) {
+        xSemaphoreTake(state_lock,portMAX_DELAY);capture_status.state="rejected";
+        capture_status.reason="jpeg_input_unavailable";xSemaphoreGive(state_lock);return 19;
+    }
+    staged.clear();
     if(question_camera) {
         // The caller owns copy throughout this display operation. Never hold
         // state_lock while acquiring the display lock. Freeze the exact source
@@ -905,29 +1030,19 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
         xSemaphoreGive(state_lock);
         if(!shown) {
             unsigned held=e;question_frozen_generation.compare_exchange_strong(held,0);
-            free(copy);return p4_visual_current(e)?(allocated?3:19):4;
+            return p4_visual_current(e)?(allocated?3:19):4;
         }
-        // The selected copy and LCD preview are independent of the sensor.
-        // Stop the frozen question stream and release its two large buffers
-        // before allocating JPEG output alongside an active voice session.
-        int64_t release_until=esp_timer_get_time()+2000000;
-        while(p4_visual_current(e) && camera_active_generation.load()==e && esp_timer_get_time()<release_until)
-            vTaskDelay(pdMS_TO_TICKS(5));
-        bool released=camera_active_generation.load()!=e;
-        xSemaphoreTake(state_lock,portMAX_DELAY);
-        if(capture_status.generation==e) {
-            capture_status.camera_released=released;
-            if(!released || !p4_visual_current(e)) {
-                capture_status.state="rejected";
-                capture_status.reason=p4_visual_current(e)?"camera_release_timeout":"superseded";
-            }
-        }
-        xSemaphoreGive(state_lock);
-        if(!released || !p4_visual_current(e)){free(copy);return p4_visual_current(e)?16:4;}
     }
     // Encode the sensor's packed RGB565 directly, avoiding a full RGB24 copy.
-    alloc.buffer_direction=JPEG_ENC_ALLOC_OUTPUT_BUFFER;size_t out_size=0;
-    auto jpg=(uint8_t *)jpeg_alloc_encoder_mem(std::min(size_t(w)*h*2,size_t(2*1024*1024)),&alloc,&out_size);
+    jpeg_encode_memory_alloc_cfg_t alloc={};alloc.buffer_direction=JPEG_ENC_ALLOC_OUTPUT_BUFFER;size_t out_size=0;
+    const size_t output_limit=std::min(size_t(w)*h*2,size_t(2*1024*1024));
+    const bool borrowed_output=input.borrowed && jpeg_borrow_output;
+    auto jpg=borrowed_output?jpeg_borrow_output:
+        (uint8_t *)jpeg_alloc_encoder_mem(output_limit,&alloc,&out_size);
+    if(borrowed_output) {
+        out_size=std::min(capacity,output_limit);
+        p4_tutor_trace("jpeg_output_borrowed",0,0,0,0,unsigned(out_size),0);
+    }
     jpeg_encoder_handle_t encoder=nullptr;jpeg_encode_engine_cfg_t cfg={};cfg.timeout_ms=1500;
     int error=jpg?0:19;uint32_t used=0;
     if(!error && jpeg_new_encoder_engine(&cfg,&encoder)!=ESP_OK)error=16;
@@ -935,17 +1050,28 @@ extern "C" int p4_camera_jpeg(unsigned e,uint8_t **data,size_t *size) {
     format.sub_sample=JPEG_DOWN_SAMPLING_YUV444;format.image_quality=90;
     if(!error && jpeg_encoder_process(encoder,&format,reinterpret_cast<uint8_t *>(copy),w*h*2,jpg,out_size,&used)!=ESP_OK)error=16;
     if(encoder)jpeg_del_encoder_engine(encoder);
-    free(copy);
+    uint8_t *result=borrowed_output?nullptr:jpg;
+    if(!error && (!used || used>out_size))error=16;
+    if(!error && borrowed_output) {
+        result=static_cast<uint8_t *>(p4_capture::copy_encoded_result(jpg,used,out_size,
+            [](size_t n)->void *{return heap_caps_malloc(n,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);}));
+        if(!result)error=19;
+        else p4_tutor_trace("jpeg_result_copied",0,0,0,0,used,0);
+    }
+    bool was_borrowed=input.borrowed!=0,released=input.release();
+    if(!error && !released)error=16;
+    if(was_borrowed && released)p4_tutor_trace("camera_released",0,0,0,0,e,0);
     if(!error && !p4_visual_current(e))error=4;
     xSemaphoreTake(state_lock,portMAX_DELAY);
     if(capture_status.generation==e) {
+        capture_status.camera_released=was_borrowed && released;
         capture_status.state=error?"rejected":"ready";
         capture_status.reason=error==4?"superseded":error==19?"jpeg_allocation_failed":error?"jpeg_encode_failed":"ok";
         if(error)capture_status.preview_frozen=false;
     }
     xSemaphoreGive(state_lock);
-    if(error){unsigned held=e;question_frozen_generation.compare_exchange_strong(held,0);free(jpg);return error;}
-    *data=jpg;*size=used;return 0;
+    if(error){unsigned held=e;question_frozen_generation.compare_exchange_strong(held,0);free(result);return error;}
+    *data=result;*size=used;return 0;
 }
 extern "C" int p4_visual_document(unsigned e,const char *text) {
     return p4_visual_document_ex(e,text,0,0,false);
@@ -955,11 +1081,17 @@ extern "C" int p4_visual_document_ex(unsigned e,const char *text,unsigned questi
     if(!p4_visual_current(e))return 4;
     if(!surface || !bsp_display_lock(1500))return 15;
     if(!p4_visual_current(e) || owner.load()!=5){bsp_display_unlock();return 4;}
-    clear_labels();lv_obj_add_flag(canvas,LV_OBJ_FLAG_HIDDEN);lv_obj_add_flag(log_label,LV_OBJ_FLAG_HIDDEN);
-    // Keep the bookmark local while LVGL sends layout/scroll callbacks.
+    capture_document_position();
     auto saved=document_bookmark;
-    document=lv_obj_create(surface);
-    if(!document){bsp_display_unlock();return 19;}
+    for(const auto &bookmark:document_bookmarks)if(p4_bookmark_matches(&bookmark,question,revision)){saved=bookmark;break;}
+    auto previous=document;
+    unsigned old_question=document_question,old_revision=document_revision,old_generation=document_generation,old_step=document_step.load();
+    bool old_ready=document_ready,old_restored=document_restored;
+    auto next=lv_obj_create(surface);
+    if(!next){bsp_display_unlock();return 19;}
+    lv_obj_add_flag(next,LV_OBJ_FLAG_HIDDEN);
+    document=next;
+    document_ready=false;
     document_question=question;document_revision=revision;document_generation=e;
     lv_obj_set_size(document,W,H);lv_obj_set_pos(document,0,0);
     lv_obj_set_style_bg_color(document,lv_color_hex(0xf8f8f4),0);
@@ -986,12 +1118,20 @@ extern "C" int p4_visual_document_ex(unsigned e,const char *text,unsigned questi
             size_t k=n;while(k>n/2 && at[k-1]!='\n')--k;if(k>n/2)n=k;}
         if(auto next=strstr(at+1,"\n【"))if(size_t(next+1-at)<n)n=next+1-at;
         std::string part(at,n);auto label=lv_label_create(document);
-        if(!label){lv_obj_delete(document);document=nullptr;bsp_display_unlock();return 19;}
+        if(!label){
+            auto failed=document;document=previous;
+            document_question=old_question;document_revision=old_revision;document_generation=old_generation;
+            document_step=old_step;document_ready=old_ready;document_restored=old_restored;
+            lv_obj_delete(failed);bsp_display_unlock();return 19;
+        }
         lv_obj_set_user_data(label,reinterpret_cast<void *>(uintptr_t(step)));lv_obj_remove_flag(label,LV_OBJ_FLAG_CLICKABLE);
         lv_obj_set_width(label,W-24);lv_obj_set_style_text_font(label,&ui_font,0);
         lv_obj_set_style_text_color(label,lv_color_hex(0x151515),0);lv_obj_set_style_text_line_space(label,6,0);
         lv_label_set_text(label,part.c_str());at+=n;
     }
+    // Hidden objects do not participate in flex layout. The display lock keeps
+    // the old physical frame intact until the new layout and scroll are ready.
+    lv_obj_remove_flag(document,LV_OBJ_FLAG_HIDDEN);
     lv_obj_update_layout(document);
     int maximum=std::max(0,int(lv_obj_get_scroll_y(document)+lv_obj_get_scroll_bottom(document)));
     int paragraph_y=-1;
@@ -999,10 +1139,13 @@ extern "C" int p4_visual_document_ex(unsigned e,const char *text,unsigned questi
     int target=p4_bookmark_target(&saved,question,revision,restore,paragraph_y,maximum);
     document_restored=restore && p4_bookmark_matches(&saved,question,revision);
     lv_obj_scroll_to_y(document,target,LV_ANIM_OFF);
+    if(previous)lv_obj_delete(previous);
+    lv_obj_add_flag(canvas,LV_OBJ_FLAG_HIDDEN);lv_obj_add_flag(log_label,LV_OBJ_FLAG_HIDDEN);
     lv_obj_remove_flag(surface,LV_OBJ_FLAG_HIDDEN);
     lv_obj_remove_flag(document,LV_OBJ_FLAG_HIDDEN);
     if(!refresh_document()){int error=p4_visual_current(e)?15:4;bsp_display_unlock();return error;}
     capture_document_position();
+    p4_tutor_trace("display_committed",0,0,question,revision,display_render_frames,0);
     ESP_LOGI("p4_visual","document question=%u revision=%u generation=%u render_frame=%u restored=%d scroll_y=%d step=%u",
              question,revision,e,display_render_frames,document_restored,int(lv_obj_get_scroll_y(document)),document_step.load());
     bsp_display_unlock();bsp_display_backlight_on();return 0;
@@ -1024,6 +1167,7 @@ extern "C" bool p4_document_view(unsigned question,unsigned revision,p4_document
 extern "C" void p4_document_forget(unsigned question) {
     if(!bsp_display_lock(1000))return;
     if(!question || document_bookmark.question_id==question)document_bookmark={};
+    for(auto &saved:document_bookmarks)if(!question || saved.question_id==question)saved={};
     // Do not let destruction/scroll callbacks resurrect a discarded lesson.
     if(!question || document_question==question)document_question=document_revision=0;
     bsp_display_unlock();

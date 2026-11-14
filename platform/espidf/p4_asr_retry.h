@@ -14,6 +14,26 @@ typedef struct {
     unsigned start,voice,end,attempts;
     bool pending;
 } p4_asr_retry_t;
+typedef enum { P4_ASR_REPLAY_WAIT, P4_ASR_REPLAY_READY, P4_ASR_REPLAY_EXPIRED } p4_asr_replay_t;
+/* Do not rewind before configuration/history ACKs. The producer is still
+ * filling the ring during setup and a rewind would consume its free space.
+ * The capture owner checks the live producer cursor and reserved space at
+ * the actual rewind. On refusal it leaves the forward consumer untouched. */
+static inline p4_asr_replay_t p4_asr_retry_replay(const p4_asr_retry_t *s,
+    bool *waiting,bool input_ready,bool (*rewind)(unsigned))
+{
+    if(!*waiting || !input_ready)return P4_ASR_REPLAY_WAIT;
+    *waiting=false;
+    return rewind(s->start)?P4_ASR_REPLAY_READY:P4_ASR_REPLAY_EXPIRED;
+}
+/* Exclude acoustic pre-roll and endpoint silence from retry evidence. A
+ * 220 ms candidate with an empty final must not become a fabricated word
+ * merely because the retained buffer is nearly two seconds long. */
+static inline bool p4_asr_retry_has_voice(unsigned start,unsigned onset,unsigned voice,unsigned end)
+{
+    unsigned span=end-start;
+    return onset-start<=span && voice-onset>=6400u && voice-onset<=end-onset;
+}
 static inline bool p4_asr_retry_begin(p4_asr_retry_t *s,unsigned start,
                                     unsigned voice,unsigned end)
 {

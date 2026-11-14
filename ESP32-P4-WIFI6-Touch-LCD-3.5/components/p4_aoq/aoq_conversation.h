@@ -37,6 +37,7 @@ int p4_aoq_conversation_pump(p4_aoq_conversation_t *);
 /* Queue-only read: BUSY means no complete message. Never returns a partial object. */
 int p4_aoq_conversation_read(p4_aoq_conversation_t *,void *,size_t,p4_aoq_conversation_message_t *);
 bool p4_aoq_conversation_pending(const p4_aoq_conversation_t *);
+bool p4_aoq_conversation_renew_due(const p4_aoq_conversation_t *);
 /* Metadata only; a zero detected-loss count is not model-consumption proof. */
 void p4_aoq_conversation_input_stats(const p4_aoq_conversation_t *,char *,size_t);
 const char *p4_aoq_conversation_stage(const p4_aoq_conversation_t *);

@@ -11,6 +11,7 @@
 #include "p4_conversation.h"
 #include "p4_agent.h"
 #include "p4_diag.h"
+#include "p4_usb_events.h"
 #include "audio_session.h"
 static atomic_bool voice_natural=true;
 #if defined(AGENT_P4_AOQ_PROBE)
@@ -270,6 +271,12 @@ static SemaphoreHandle_t output_lock;
 static atomic_bool wifi_up, wifi_connecting, wifi_paused;
 static atomic_uint wifi_failures;
 static atomic_uint_fast64_t wifi_retry_at;
+/* SNTP has its own lifecycle.  Keep it separate from context sync: the
+ * sync_error field below describes WAL/context work and starts as CONFIG. */
+static atomic_uint sntp_attempts;
+static atomic_int sntp_last_error;
+static atomic_bool sntp_sync_seen;
+static atomic_uint_fast64_t sntp_retry_at;
 static QueueHandle_t jobs;
 static TaskHandle_t network_handle;
 typedef struct {
@@ -300,6 +307,41 @@ static atomic_bool sync_active,sync_cancel,sync_more;
 static atomic_int sync_error=AGENT_ERR_CONFIG;
 static SemaphoreHandle_t work_lock;
 static uint64_t sync_at;
+
+static bool sntp_time_valid(void)
+{
+    return time(NULL) >= 1735689600;
+}
+
+static void sntp_sync_cb(struct timeval *tv)
+{
+    (void)tv;
+    atomic_store(&sntp_sync_seen, true);
+}
+
+static void sntp_start_attempt(void)
+{
+    if (!atomic_load(&wifi_up)) {
+        atomic_store(&sntp_retry_at, 0);
+        return;
+    }
+    if (sntp_time_valid()) {
+        atomic_store(&sntp_sync_seen, true);
+        atomic_store(&sntp_retry_at, 0);
+        return;
+    }
+    esp_err_t error = esp_netif_sntp_start();
+    unsigned attempt = atomic_fetch_add(&sntp_attempts, 1u) + 1u;
+    atomic_store(&sntp_last_error, error);
+    /* IDF retries internally. Restart at a bounded, widening interval so a
+     * transient DNS/NTP miss cannot leave the device permanently unsynced,
+     * while avoiding a tight restart loop. */
+    if (attempt >= 4u) atomic_store(&sntp_retry_at, UINT64_MAX);
+    else {
+        uint64_t delay = attempt == 1u ? 10000u : attempt == 2u ? 20000u : 30000u;
+        atomic_store(&sntp_retry_at, esp_agent_now() + delay);
+    }
+}
 #if !AGENT_BOARD_P4
 static uint64_t wifi_deadline;
 #else
@@ -459,7 +501,48 @@ agent_err_t esp_agent_http_auth(agent_http_target_t target, char *base, size_t b
 
 uint64_t esp_agent_now(void) { return (uint64_t)esp_timer_get_time() / 1000; }
 
+#if AGENT_BOARD_P4
+/* One complete bounded event must fit the driver's atomic enqueue. */
+enum { USB_TX_BYTES = 4096 };
+_Static_assert((unsigned)USB_TX_BYTES>(unsigned)P4_USB_EVENT_BYTES,"USB TX must fit a complete event");
+static p4_usb_events_t *usb_events;
+static portMUX_TYPE usb_events_lock=portMUX_INITIALIZER_UNLOCKED;
+static bool usb_event_queue(const char *text,size_t size)
+{
+    if(!usb_events)return false;
+    uint64_t at=esp_agent_now();
+    portENTER_CRITICAL(&usb_events_lock);
+    bool ok=p4_usb_events_push(usb_events,text,size,at);
+    portEXIT_CRITICAL(&usb_events_lock);
+    return ok;
+}
+static void usb_event_writer(void *unused)
+{
+    (void)unused;
+    for(;;) {
+        portENTER_CRITICAL(&usb_events_lock);
+        const p4_usb_event_t *e=p4_usb_events_head(usb_events);
+        portEXIT_CRITICAL(&usb_events_lock);
+        if(e) {
+            bool expired=p4_usb_events_expired(e,esp_agent_now()),sent=false;
+            if(!expired && output_lock && xSemaphoreTake(output_lock,0)==pdTRUE) {
+                sent=usb_serial_jtag_write_bytes(e->text,e->size,0)==(int)e->size;
+                xSemaphoreGive(output_lock);
+            }
+            if(sent || expired) {
+                portENTER_CRITICAL(&usb_events_lock);
+                p4_usb_events_pop(usb_events,expired);
+                portEXIT_CRITICAL(&usb_events_lock);
+                continue;
+            }
+        }
+        /* No producer waits for a terminal, console mutex, or USB TX room. */
+        vTaskDelay(pdMS_TO_TICKS(5)>0?pdMS_TO_TICKS(5):1);
+    }
+}
+#else
 enum { USB_TX_BYTES = 2048 };
+#endif
 #if AGENT_BOARD_P4
 /* SDK stdout can bypass bytes still queued by the USB driver. Both logs and
  * structured events must enter the same TX queue, not merely share a lock. */
@@ -494,6 +577,12 @@ void esp_agent_write(const char *data, size_t size)
 
 static void say(const char *text) { esp_agent_write(text, strlen(text)); }
 #if AGENT_BOARD_P4
+void esp_agent_tutor_event(const char *json) {
+    char line[512];int n=snprintf(line,sizeof(line),"\r\n@tutor %s\r\n",json);
+    if(n<=0 || (size_t)n>=sizeof(line))return;
+    p4_diag_record(6,json,strlen(json));
+    usb_event_queue(line,(size_t)n);
+}
 void esp_agent_model_receipt(const char *json) {
     /* Transient event for the future uplink; no billing history is retained. */
     size_t n=strlen(json);char *event=malloc(n+14);
@@ -501,21 +590,24 @@ void esp_agent_model_receipt(const char *json) {
 }
 #endif
 #if AGENT_ENABLE_AUDIO
-/* Voice has no dependency on an open serial terminal. The IDF driver enqueues
- * each write all-or-nothing; zero timeout cannot stall speech on a full TX ring.
- * Command replies retain esp_agent_write's bounded reliable path. */
+/* P4 records enter a bounded queue, so a transient console mutex owner cannot
+ * discard an admission burst. C3 retains its original direct, zero-wait path.
+ * Neither producer depends on an open terminal. Commands keep their bounded
+ * reliable path; the P4 background writer retries only until each record expires. */
 static void voice_write(const char *text,size_t size)
 {
     if(!size)return;
 #if AGENT_BOARD_P4
     p4_diag_record(2,text,size);
-#endif
+    if(!usb_event_queue(text,size))atomic_fetch_add(&voice_usb_dropped,(unsigned)size);
+#else
     int sent=0;
     if(output_lock && xSemaphoreTake(output_lock,0)==pdTRUE) {
         sent=usb_serial_jtag_write_bytes(text,size,0);
         xSemaphoreGive(output_lock);
     }
     if(sent<=0)atomic_fetch_add(&voice_usb_dropped,(unsigned)size);
+#endif
 }
 #endif
 static void report(agent_err_t error)
@@ -543,7 +635,16 @@ void esp_agent_status(char *output, size_t capacity)
         atomic_load(&route_gateway) ? "GATEWAY" : "DIRECT",
         atomic_load(&sync_active)?"true":"false",atomic_load(&sync_more)?"true":"false",agent_err_name(atomic_load(&sync_error)));
     agent_json_quote(&w, settings.device_id);
+    agent_json_printf(&w,",\"time_sync_attempts\":%u,\"time_sync_last_error\":%d,\"time_sync_seen\":%s",
+        atomic_load(&sntp_attempts),atomic_load(&sntp_last_error),atomic_load(&sntp_sync_seen)?"true":"false");
 #if AGENT_BOARD_P4
+    unsigned usb_count=0,usb_peak=0,usb_drop=0,usb_bytes=0,usb_expired=0;
+    portENTER_CRITICAL(&usb_events_lock);
+    if(usb_events){usb_count=usb_events->count;usb_peak=usb_events->peak;
+        usb_drop=usb_events->dropped_records;usb_bytes=usb_events->dropped_bytes;usb_expired=usb_events->expired;}
+    portEXIT_CRITICAL(&usb_events_lock);
+    agent_json_printf(&w,",\"usb_events_ready\":%s,\"usb_events_queued\":%u,\"usb_events_peak\":%u,\"usb_events_dropped\":%u,\"usb_events_dropped_bytes\":%u,\"usb_events_expired\":%u",
+        usb_events?"true":"false",usb_count,usb_peak,usb_drop,usb_bytes,usb_expired);
     agent_json_printf(&w,",\"internal_heap_total\":%u,\"psram_heap_total\":%u",
         (unsigned)heap_caps_get_total_size(MALLOC_CAP_INTERNAL|MALLOC_CAP_8BIT),
         (unsigned)heap_caps_get_total_size(MALLOC_CAP_SPIRAM));
@@ -584,11 +685,19 @@ static void wifi_event(void *arg, esp_event_base_t base, int32_t id, void *data)
         atomic_store(&wifi_up, true);
         atomic_store(&wifi_connecting, false);
         atomic_store(&wifi_failures, 0);
-        esp_netif_sntp_start();
+        atomic_store(&sntp_attempts, 0);
+        atomic_store(&sntp_last_error, ESP_OK);
+        atomic_store(&sntp_sync_seen, false);
+        atomic_store(&sntp_retry_at, 0);
+        sntp_start_attempt();
         say("\r\n@wifi connected\r\n");
     } else if (base == WIFI_EVENT && id == WIFI_EVENT_STA_DISCONNECTED) {
         atomic_store(&wifi_up, false);
         atomic_store(&wifi_connecting, false);
+        atomic_store(&sntp_retry_at, 0);
+        atomic_store(&sntp_attempts, 0);
+        atomic_store(&sntp_last_error, ESP_OK);
+        atomic_store(&sntp_sync_seen, false);
         unsigned failures = atomic_fetch_add(&wifi_failures, 1);
         if (failures > 5) failures = 5;
         atomic_store(&wifi_retry_at, esp_agent_now() + (1000u << failures) + esp_random() % 1000);
@@ -3031,6 +3140,12 @@ void esp_agent_run(agent_core_t *core)
 #endif
     usb_serial_jtag_driver_config_t usb = { .tx_buffer_size = USB_TX_BYTES, .rx_buffer_size = 1024 };
     ESP_ERROR_CHECK(usb_serial_jtag_driver_install(&usb));
+#if AGENT_BOARD_P4
+    usb_events=heap_caps_calloc(1,sizeof(*usb_events),MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+    if(!usb_events || xTaskCreate(usb_event_writer,"p4_usb_events",4096,NULL,1,NULL)!=pdPASS) {
+        report(AGENT_ERR_MEMORY);return;
+    }
+#endif
     engine.context=&context;
     agent_err_t workspace_error=esp_agent_workspace_restore();
     if(workspace_error) {report(workspace_error);return;}
@@ -3109,6 +3224,7 @@ void esp_agent_run(agent_core_t *core)
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     esp_sntp_config_t sntp = ESP_NETIF_SNTP_DEFAULT_CONFIG("pool.ntp.org");
     sntp.start = false;
+    sntp.sync_cb = sntp_sync_cb;
     ESP_ERROR_CHECK(esp_netif_sntp_init(&sntp));
     ESP_ERROR_CHECK(esp_wifi_start());
 #if AGENT_ENABLE_AUDIO
@@ -3187,6 +3303,8 @@ void esp_agent_run(agent_core_t *core)
         }
         if(atomic_load(&wifi_connecting) && esp_agent_now()>wifi_deadline) esp_wifi_disconnect();
 #endif
+        if (atomic_load(&wifi_up) && !sntp_time_valid() &&
+            esp_agent_now() >= atomic_load(&sntp_retry_at)) sntp_start_attempt();
 #if AGENT_ENABLE_AUDIO
         if(music_upload.active && esp_agent_now()>=music_upload.deadline) { upload_release(); report(AGENT_ERR_TIMEOUT); }
 #if AGENT_BOARD_P4

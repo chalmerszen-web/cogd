@@ -43,5 +43,29 @@ int main(void)
     p4_near_onset_hint(&hint,UINT_MAX-99,true);
     p4_near_onset_hint(&hint,200,true);
     assert(p4_near_onset_select(&s,&hint,300)==UINT_MAX-99);
+    p4_near_residual_onset_t residual={0};
+    p4_near_residual_onset_update(&residual,34404,false);
+    p4_near_residual_onset_update(&residual,35288,true);
+    p4_near_residual_onset_update(&residual,36248,true);
+    const uint32_t later[]={36445,36473,36503,36548,36580,36608,36638,36668,36697,36727,
+                         36774,36803,36833};
+    for(unsigned i=0;i<sizeof(later)/sizeof(*later);++i)
+        p4_near_residual_onset_update(&residual,later[i],false);
+    assert(p4_near_residual_onset_select(&residual,0x1c00,36833,36548)==35288);
+    assert(p4_near_residual_onset_select(&residual,0,36833,36548)==36548);
+    assert(p4_near_residual_onset_select(&residual,0x1c00,36833,35200)==35200);
+    assert(p4_near_residual_onset_select(&residual,0x1c00,37289,36548)==36548);
+    residual.second=36188;
+    assert(p4_near_residual_onset_select(&residual,0x1c00,36833,36548)==36548);
+    residual=(p4_near_residual_onset_t){0};
+    p4_near_residual_onset_update(&residual,1000,true);
+    p4_near_residual_onset_update(&residual,1600,true);
+    assert(!residual.paired);
+    /* The physical 234 reference-gap cut needs extra conditioner lead.
+     * Leave normal and residual-continuation anchors alone. */
+    assert(p4_near_replay_anchor(34583,true)==34423);
+    assert(p4_near_replay_anchor(34583,false)==34583);
+    assert(p4_near_replay_anchor(0,true)==0);
+    assert(p4_near_replay_anchor(160,true)==160);
     return 0;
 }

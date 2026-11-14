@@ -8,6 +8,12 @@ namespace p4_capture {
 constexpr unsigned window_ms = 1800, sample_ms = 120, warmup_ms = 450;
 constexpr unsigned max_gradient_points = 16384;
 constexpr unsigned measure_drain_ms = 2*sample_ms;
+// Earlier frames cannot pass the unchanged age gate at the window boundary.
+// Score them for motion/stability, but do not spend a full-resolution copy on
+// an image that must be replaced. Keep capture cadence ahead of the final frame.
+inline bool retain_candidate_at(uint64_t elapsed_ms) {
+    return elapsed_ms>=window_ms-2*sample_ms && elapsed_ms<window_ms;
+}
 inline unsigned gradient_stride(unsigned w,unsigned h) {
     unsigned stride=2;
     if(w<10 || h<10)return stride;

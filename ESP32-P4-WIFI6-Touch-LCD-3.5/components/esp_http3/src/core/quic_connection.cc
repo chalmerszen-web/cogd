@@ -599,7 +599,7 @@ bool QuicConnection::Impl::StartHandshake() {
         (!pinned && (config_.hostname.empty() || (!config_.allow_unverified_peer && !trust_store_ready_))) ||
         config_.alpn.empty() || config_.alpn.size() > 255 || config_.initial_cid_prefix.size() > 4 ||
         !quic::ValidateExtraTransportParameters(config_.extra_transport_parameters) ||
-        !config_.max_raw_stream_records || config_.max_raw_stream_records > 512 ||
+        !config_.max_raw_stream_records || config_.max_raw_stream_records > QuicConfig::kMaxRawStreamRecords ||
         (config_.application_mode == QuicApplicationMode::kHttp3 && config_.alpn != "h3")) {
         ESP_LOGE(TAG, "Invalid TLS authentication or application protocol configuration");
         state_ = ConnectionState::kFailed;

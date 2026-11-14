@@ -56,6 +56,7 @@ void p4_tutor_user_text(const char *text);
 /* Exact, current-lesson read/explain commands use the same version-checked
  * operation as a tool. False leaves ordinary language to the model. */
 bool p4_tutor_voice_choice(const char *text,char *out,size_t cap);
+bool p4_tutor_capture_requested(const char *text);
 /* USB diagnostics only. JPEG byte offset/count (1..1024); each chunk carries capture_id. */
 int p4_tutor_photo_read(unsigned offset,unsigned count,char *out,size_t cap);
 bool p4_tutor_claim_notice(unsigned question_id,unsigned revision,char *out,size_t cap);

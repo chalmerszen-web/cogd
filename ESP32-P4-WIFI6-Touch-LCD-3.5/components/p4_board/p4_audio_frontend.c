@@ -1,12 +1,13 @@
 #include "p4_audio_frontend.h"
 #include "p4_highpass.h"
+#include "../../../platform/espidf/p4_adaptive_energy.h"
 #include "esp_agc.h"
 #include "esp_ns.h"
 #include "esp_vad.h"
 #include <stdlib.h>
 #include <stdatomic.h>
 
-struct p4_audio_frontend { ns_handle_t noise;void *gain;vad_handle_t vad;bool highpass,voiced;unsigned level,input_level;p4_highpass_t filter; };
+struct p4_audio_frontend { ns_handle_t noise;void *gain;vad_handle_t vad;bool highpass,voiced;unsigned level,input_level;uint32_t input_energy;p4_highpass_t filter; };
 static atomic_uint settings=3u|(18u<<8);
 
 bool p4_audio_frontend_configure(unsigned profile,unsigned gain_db)
@@ -46,6 +47,7 @@ bool p4_audio_frontend_process(p4_audio_frontend_t *s,int16_t *pcm,size_t sample
     unsigned input_sum=0;
     for(size_t i=0;i<320;i++)input_sum+=(unsigned)abs((int)pcm[i]);
     s->input_level=input_sum/320;
+    s->input_energy=p4_energy_mean_square(pcm,320);
     int16_t highpassed[160],filtered[320];
     for(size_t i=0;i<samples;i+=160) {
         int16_t *source=pcm+i;
@@ -67,3 +69,4 @@ bool p4_audio_frontend_process(p4_audio_frontend_t *s,int16_t *pcm,size_t sample
 bool p4_audio_frontend_voiced(const p4_audio_frontend_t *s){return s && s->voiced;}
 unsigned p4_audio_frontend_level(const p4_audio_frontend_t *s){return s?s->level:0;}
 unsigned p4_audio_frontend_input_level(const p4_audio_frontend_t *s){return s?s->input_level:0;}
+uint32_t p4_audio_frontend_input_energy(const p4_audio_frontend_t *s){return s?s->input_energy:0;}

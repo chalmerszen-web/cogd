@@ -4,6 +4,90 @@
 
 int main(void)
 {
+    /* Actual 159 failure: read result queued, 180 ms noise candidate, empty
+     * final. Resume its unheard result with a new ticket, never rerun capture. */
+    p4_notice_delivery_t delivery={0};
+    p4_notice_delivery_begin(&delivery);p4_notice_delivery_queued(&delivery,12);
+    assert(p4_notice_delivery_defer(&delivery));
+    assert(delivery.pending && !delivery.queued);
+    assert(!p4_notice_delivery_heard(&delivery,12));
+    assert(!p4_notice_delivery_defer(&delivery));
+    p4_notice_delivery_queued(&delivery,14);
+    assert(!p4_notice_delivery_heard(&delivery,12));
+    assert(p4_notice_delivery_heard(&delivery,14));
+    assert(!p4_notice_delivery_defer(&delivery)); /* never repeat heard audio */
+    assert(!p4_notice_delivery_heard(&delivery,14));
+    /* A new connection may retain only an unheard result; a real accepted
+     * input clears it, and an old lesson/revision/mode may not be replayed. */
+    p4_notice_delivery_begin(&delivery);p4_notice_delivery_queued(&delivery,21);
+    assert(p4_notice_delivery_defer(&delivery));
+    delivery=(p4_notice_delivery_t){0};
+    assert(!p4_notice_delivery_defer(&delivery));
+    p4_notice_snapshot_t saved_notice={.job=9,.question=3,.revision=1,.phase="complete",.teaching="reading"},current_notice=saved_notice;
+    assert(p4_notice_snapshot_same(&saved_notice,&current_notice));
+    current_notice.job++;assert(!p4_notice_snapshot_same(&saved_notice,&current_notice));current_notice=saved_notice;
+    current_notice.question++;assert(!p4_notice_snapshot_same(&saved_notice,&current_notice));current_notice=saved_notice;
+    current_notice.revision++;assert(!p4_notice_snapshot_same(&saved_notice,&current_notice));current_notice=saved_notice;
+    strcpy(current_notice.phase,"cancelled");assert(!p4_notice_snapshot_same(&saved_notice,&current_notice));current_notice=saved_notice;
+    strcpy(current_notice.teaching,"explaining");assert(!p4_notice_snapshot_same(&saved_notice,&current_notice));
+    /* Recorded recovery-ready -> short question race: enqueueing the notice
+     * immediately prevented local onset before its audio had even started. */
+    p4_recovery_notice_t recovered={0};
+    p4_recovery_notice_begin(&recovered,1000);
+    assert(!p4_recovery_notice_due(&recovered,2199,false,true));
+    assert(p4_recovery_notice_due(&recovered,2200,false,true));
+    assert(!p4_recovery_notice_due(&recovered,2300,false,true));
+    assert(recovered.pending && recovered.queued);
+    /* Actual 158 sequence: notice queued, noise candidate, empty final,
+     * connection replay, empty final again. None acknowledges delivery. */
+    p4_recovery_notice_begin(&recovered,2400);
+    assert(!p4_recovery_notice_due(&recovered,4000,false,false));
+    assert(recovered.pending && !recovered.queued);
+    p4_recovery_notice_begin(&recovered,5000);
+    assert(!p4_recovery_notice_due(&recovered,7000,false,false));
+    assert(p4_recovery_notice_due(&recovered,7100,false,true));
+    p4_recovery_notice_finish(&recovered);
+    assert(!p4_recovery_notice_due(&recovered,12000,false,true));
+    p4_recovery_notice_begin(&recovered,3000);
+    assert(!p4_recovery_notice_due(&recovered,3200,true,false));
+    assert(!p4_recovery_notice_due(&recovered,9000,false,true));
+    p4_recovery_notice_begin(&recovered,10000);
+    assert(!p4_recovery_notice_due(&recovered,11200,false,false));
+    assert(p4_recovery_notice_due(&recovered,11400,false,true));
+    /* Reproduced: a completed reply after outage one did not replenish the
+     * lifetime reconnect counter, so outage two closed an active conversation. */
+    p4_network_recovery_t network={0};
+    for(unsigned outage=0;outage<3;++outage) {
+        assert(p4_network_recovery_retry(&network));
+        p4_network_recovery_progress(&network,false); /* recovery notice only */
+        assert(!p4_network_recovery_retry(&network));
+        p4_network_recovery_progress(&network,true); /* actual reply completed */
+    }
+    assert(p4_network_recovery_retry(&network));
+    for(unsigned failure=0;failure<5;++failure) {
+        p4_network_recovery_progress(&network,false);
+        assert(!p4_network_recovery_retry(&network));
+    }
+    /* A failed first capture has question_id=0 but an exact current job.
+     * Preserve its failure notice, without matching another zero-ID request. */
+    assert(p4_tutor_capture_failure_current("start",true,true,7,7,"failed"));
+    assert(p4_tutor_capture_failure_current("refine",true,true,7,7,"needs_clearer_view"));
+    assert(!p4_tutor_capture_failure_current("start",true,true,0,0,"failed"));
+    assert(!p4_tutor_capture_failure_current("start",true,true,7,8,"failed"));
+    assert(!p4_tutor_capture_failure_current("start",false,true,7,7,"failed"));
+    assert(!p4_tutor_capture_failure_current("start",true,false,7,7,"failed"));
+    assert(!p4_tutor_capture_failure_current("confirm",true,true,7,7,"failed"));
+    assert(!p4_tutor_capture_failure_current("start",true,true,7,7,"cancelled"));
+    assert(p4_tutor_notice_kind("start",true,true,"failed",true,false,false)==P4_TUTOR_NOTICE_FAILURE);
+    assert(p4_tutor_notice_kind("start",false,true,"failed",true,false,false)==P4_TUTOR_NOTICE_SKIP);
+    assert(p4_tutor_local_selection("select","succeeded","awaiting_confirmation","none",true,true,true)==P4_TUTOR_LOCAL_CONFIRM);
+    assert(p4_tutor_local_selection("select","succeeded","complete","reading",true,true,true)==P4_TUTOR_LOCAL_QUIET);
+    assert(p4_tutor_local_selection("select","succeeded","complete","explaining",true,true,true)==P4_TUTOR_LOCAL_NONE);
+    assert(p4_tutor_local_selection("select","succeeded","complete","reading",false,true,true)==P4_TUTOR_LOCAL_NONE);
+    assert(p4_tutor_local_selection("select","succeeded","complete","reading",true,false,true)==P4_TUTOR_LOCAL_NONE);
+    assert(p4_tutor_local_selection("select","succeeded","complete","reading",true,true,false)==P4_TUTOR_LOCAL_NONE);
+    assert(p4_tutor_local_selection("select","running","reading","reading",true,true,true)==P4_TUTOR_LOCAL_NONE);
+    assert(p4_tutor_local_selection("select","not_executed","complete","reading",true,true,true)==P4_TUTOR_LOCAL_NONE);
     /* Cold restored photo history must not own the new spoken story. A late
      * history ACK, a duplicate ACK, or an ACK for a superseded audio turn
      * cannot trigger inference for this binding. */
@@ -20,6 +104,16 @@ int main(void)
     assert(!p4_input_binding_timeout(&binding,9000));
     assert(!p4_input_binding_begin(&binding,"","audio-next",8,200));
     assert(p4_input_binding_begin(&binding,"next","audio-next",8,200));
+    /* A locally switched question must not start inference with the previous
+     * question's instructions, even if the new user item was ACKed first. */
+    assert(!p4_response_dependencies_ready(23,22,binding.pending));
+    assert(p4_input_binding_ack(&binding,"next","audio-next",8));
+    assert(!p4_response_dependencies_ready(23,22,binding.pending));
+    assert(p4_response_dependencies_ready(23,23,binding.pending));
+    assert(p4_input_binding_begin(&binding,"next-2","audio-next-2",9,300));
+    assert(!p4_response_dependencies_ready(24,24,binding.pending));
+    assert(p4_input_binding_ack(&binding,"next-2","audio-next-2",9));
+    assert(p4_response_dependencies_ready(24,24,binding.pending));
     /* Captured refine result: two committed but empty microphone turns
      * arrived while the job ran. Its result still belongs to the last real
      * request; a later nonempty request really does supersede that identity. */
@@ -185,6 +279,66 @@ int main(void)
     assert(p4_tutor_stage("confirm","solving",true,true,true)==P4_TUTOR_STAGE_NONE);
     assert(!p4_tutor_stage_message(P4_TUTOR_STAGE_CONFIRM,"",phase_message,sizeof(phase_message)) && !*phase_message);
     assert(!p4_tutor_stage_message(P4_TUTOR_STAGE_CONFIRM,snapshot.summary,phase_message,8) && !*phase_message);
+    /* seed169b: actual solve42 completed question181, but the generated
+     * completion said the question was merely read and awaiting confirmation.
+     * A short completion now supplies only the claimed terminal speech.
+     * This verifies prompt/state construction, not model speech reliability. */
+    assert(p4_tutor_completion_message("complete","choice",true,true,true,true,phase_message,sizeof(phase_message)));
+    const char *spoken=strstr(phase_message,"仅朗读：\n");assert(spoken);spoken+=strlen("仅朗读：\n");
+    assert(!strcmp(spoken,"解题已经完成，并显示在屏幕上。你想先听讲解，还是先自己看？"));
+    assert(!strstr(spoken,"等你确认") && !strstr(spoken,"读好了") && !strstr(spoken,"是这道题吗"));
+    assert(p4_tutor_completion_message("complete","read",true,false,true,true,phase_message,sizeof(phase_message)));
+    assert(strstr(phase_message,"你先自己看，有问题再问我") && !strstr(phase_message,"还是先"));
+    assert(p4_tutor_completion_message("complete","choice",true,false,true,true,phase_message,sizeof(phase_message)));
+    assert(!strstr(phase_message,"你想先"));
+    assert(p4_tutor_completion_message("complete","choice",true,true,true,false,phase_message,sizeof(phase_message)));
+    assert(strstr(phase_message,"屏幕尚未显示解法") && !strstr(phase_message,"并显示在屏幕上") && !strstr(phase_message,"你想先"));
+    assert(!p4_tutor_completion_message("solving","choice",true,true,true,true,phase_message,sizeof(phase_message)) && !*phase_message);
+    assert(!p4_tutor_completion_message("awaiting_confirmation","choice",true,true,true,true,phase_message,sizeof(phase_message)));
+    assert(!p4_tutor_completion_message("complete","choice",false,true,true,true,phase_message,sizeof(phase_message)));
+    assert(!p4_tutor_completion_message("complete","explain",true,false,true,true,phase_message,sizeof(phase_message)));
+    assert(!p4_tutor_completion_message("complete","done",true,false,true,true,phase_message,sizeof(phase_message)));
+    assert(!p4_tutor_completion_message(NULL,"choice",true,true,true,true,phase_message,sizeof(phase_message)));
+    assert(!p4_tutor_completion_message("complete",NULL,true,true,true,true,phase_message,sizeof(phase_message)));
+    assert(!p4_tutor_completion_message("complete","choice",true,true,true,true,phase_message,8) && !*phase_message);
+    /* seed166b: photo job 42 completes with question 76 after an empty-ASR
+     * reconnect. Its once-only current-stage notice must survive renewal. */
+    bool stage_sent=false;
+    stage=p4_tutor_stage("start","awaiting_confirmation",true,
+        p4_tutor_stage_owner(false,true,42,42),true);
+    assert(stage==P4_TUTOR_STAGE_CONFIRM);
+    assert(p4_notice_claim(&stage_sent,stage!=P4_TUTOR_STAGE_NONE));
+    assert(!p4_notice_claim(&stage_sent,stage!=P4_TUTOR_STAGE_NONE));
+    assert(!p4_tutor_stage_owner(false,true,41,42));
+    assert(!p4_tutor_stage_owner(false,true,0,0));
+    assert(!p4_tutor_stage_owner(false,false,42,42));
+    assert(p4_tutor_stage_owner(true,true,42,42));
+    assert(p4_tutor_stage("start","cancelled",true,
+        p4_tutor_stage_owner(false,true,42,42),true)==P4_TUTOR_STAGE_NONE);
+    assert(p4_tutor_stage("start","superseded",true,
+        p4_tutor_stage_owner(false,true,42,42),true)==P4_TUTOR_STAGE_NONE);
+    /* A second physical reconnect reached capture-quality failure with job2
+     * still current. That failure also owes one truthful notice, even with
+     * question ID zero; it must not inherit another job or caller's reply. */
+    bool capture_owner=p4_tutor_capture_owner("start",false,2,2);
+    assert(p4_tutor_capture_failure_current("start",capture_owner,true,2,2,"needs_clearer_view"));
+    assert(p4_tutor_notice_kind("start",capture_owner,true,"needs_clearer_view",true,false,false)==P4_TUTOR_NOTICE_FAILURE);
+    assert(!p4_tutor_capture_owner("start",false,1,2));
+    assert(!p4_tutor_capture_owner("start",false,0,0));
+    assert(!p4_tutor_capture_owner("explain",false,2,2));
+    assert(!p4_tutor_capture_owner("read",false,2,2));
+    assert(p4_tutor_capture_owner("explain",true,2,2));
+    assert(!p4_tutor_capture_failure_current("start",capture_owner,true,2,2,"cancelled"));
+    assert(p4_tutor_notice_kind("start",capture_owner,false,"needs_clearer_view",true,false,false)==P4_TUTOR_NOTICE_SKIP);
+    /* p0-voice168: HTTP ended at1198511ms, idle farewell was queued at1198534
+     * and incomplete was traced at1198535, before the observer's next poll.
+     * Terminal controller state cannot bypass the outstanding result. */
+    assert(p4_tutor_notice_pending(true,2,false));
+    assert(p4_tutor_notice_pending(true,3,false));
+    assert(p4_tutor_notice_pending(true,1,false));
+    assert(!p4_tutor_notice_pending(true,0,false));
+    assert(!p4_tutor_notice_pending(true,3,true));
+    assert(!p4_tutor_notice_pending(false,2,false));
     /* A later "explain first" must not swallow this question's solve failure.
      * Cancellation, supersession and a different question remain silent. */
     const char *solves[]={"confirm","recheck"};
@@ -293,6 +447,39 @@ int main(void)
     assert(!p4_notice_item_delete_due(&temporary,false));
     p4_notice_item_created(&temporary,"app_1_3");
     assert(p4_notice_item_delete_due(&temporary,false));
+    /* The observed failure announced solving with no launched job. Neither
+     * queued admission, a stale launch nor a terminal result permits that. */
+    assert(!p4_tutor_solve_started(0,11,7,7,0,0,"solving"));
+    assert(!p4_tutor_solve_started(11,11,7,7,0,0,"awaiting_confirmation"));
+    assert(p4_tutor_solve_started(11,11,7,7,0,0,"solving"));
+    assert(!p4_tutor_solve_started(10,11,7,7,0,0,"solving"));
+    assert(!p4_tutor_solve_started(11,11,7,8,0,0,"solving"));
+    assert(!p4_tutor_solve_started(11,11,7,7,0,1,"solving"));
+    assert(!p4_tutor_solve_started(11,11,0,0,0,0,"solving"));
+    for(unsigned i=0;i<5;++i) {
+        const char *phase[]={"complete","failed","incomplete","cancelled","superseded"};
+        assert(!p4_tutor_solve_started(11,11,7,7,0,0,phase[i]));
+    }
+    /* Captured scoped-query failure: the lesson had steps [1,2,3], but the
+     * model replied with the literal marker [step_count]. Supply only a
+     * complete human reply; invalid/unavailable values must stay truthful. */
+    char scoped[512];
+    assert(p4_tutor_scope_message("step_count",true,3,NULL,scoped,sizeof(scoped))==1);
+    assert(strstr(scoped,"共有3个步骤。") && !strstr(scoped,"step_count") && !strchr(scoped,'['));
+    assert(p4_tutor_scope_message("answer_only",true,0,"x = 3。",scoped,sizeof(scoped))==1);
+    assert(strstr(scoped,"x = 3。") && !strstr(scoped,"answer_only"));
+    for(unsigned bad=0;bad<=129;bad+=129) {
+        assert(p4_tutor_scope_message("step_count",true,bad,NULL,scoped,sizeof(scoped))==1);
+        assert(strstr(scoped,"还不能确认步骤数量") && !strstr(scoped,"共有"));
+    }
+    assert(p4_tutor_scope_message("step_count",false,3,NULL,scoped,sizeof(scoped))==1);
+    assert(!strstr(scoped,"共有3"));
+    assert(p4_tutor_scope_message("answer_only",true,0,NULL,scoped,sizeof(scoped))==1);
+    assert(strstr(scoped,"还不能确认最终答案"));
+    assert(p4_tutor_scope_message("step_count",true,3,NULL,scoped,8)==-1);
+    strcpy(scoped,"unchanged");
+    assert(p4_tutor_scope_message("select",true,3,NULL,scoped,sizeof(scoped))==0);
+    assert(!strcmp(scoped,"unchanged"));
     puts("P4 response ownership: auto/manual ordering, stale receipts, silent acceptance, once-only notice and notice tool isolation PASS");
     return 0;
 }

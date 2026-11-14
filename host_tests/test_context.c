@@ -20,7 +20,7 @@ static int scenario;
 static unsigned sync_requests;
 static bool fail_pull,fail_ack;
 static bool erase_busy;
-static unsigned erases;
+static unsigned erases,reads;
 static uint64_t now_ms(void *ctx) { (void)ctx; return 1000; }
 static void pause_ms(unsigned ms) { assert(ms==25); ++pauses; }
 static agent_err_t output(void *ctx,const agent_event_t *event)
@@ -57,7 +57,7 @@ static agent_err_t mock_http(void *ctx,const agent_http_request_t *r,agent_http_
     const char *reply="{\"choices\":[{\"message\":{\"content\":\"OK\"},\"finish_reason\":\"stop\"}]}";
     return feed(feed_ctx,reply,strlen(reply));
 }
-static agent_err_t rd(void *ctx,size_t o,void *p,size_t n) { (void)ctx; assert(o+n<=sizeof(flash)); memcpy(p,flash+o,n); return AGENT_OK; }
+static agent_err_t rd(void *ctx,size_t o,void *p,size_t n) { (void)ctx; ++reads;assert(o+n<=sizeof(flash)); memcpy(p,flash+o,n); return AGENT_OK; }
 static agent_err_t wr(void *ctx,size_t o,const void *p,size_t n)
 {
     (void)ctx; const unsigned char *s=p; assert(o+n<=sizeof(flash));
@@ -111,7 +111,7 @@ int main(void)
 {
     memset(flash,255,sizeof(flash)); agent_wal_t wal; assert(!agent_wal_format(&wal,&ops)); boot();
     char first_id[64],next_id[64];
-    assert(!agent_context_emit(&context,"message","user","{\"text\":\"hello\"}",first_id,sizeof(first_id)));
+    assert(!agent_context_try_emit(&context,"message","user","{\"text\":\"hello\"}",first_id,sizeof(first_id)));
     assert(context.pending==1 && context.lamport==1);
     boot(); assert(context.pending==1);
     assert(!agent_context_emit(&context,"message","user","{\"text\":\"second\"}",next_id,sizeof(next_id)));
@@ -137,6 +137,9 @@ int main(void)
     assert(agent_context_checkpoint(&context,7,last,AGENT_CONTEXT_CLOUD)==AGENT_ERR_STORAGE);
     assert(context.cursor==old_cursor && context.pending==3); fail_write=-1; boot();
     assert(context.wal.tail_recovered && context.pending==3);
+    unsigned tail_reads=reads,tail_erases=erases;
+    assert(agent_context_try_emit(&context,"turn","assistant",turn,NULL,0)==AGENT_ERR_FULL);
+    assert(reads==tail_reads && erases==tail_erases && context.pending==3);
     assert(!agent_context_checkpoint(&context,7,last,AGENT_CONTEXT_CLOUD));
     assert(context.pending==0); assert(!agent_context_compact(&context)); boot();
     assert(context.cursor==7 && context.mode==AGENT_CONTEXT_CLOUD && context.pending==0 && context.memory[0].deleted);
@@ -221,5 +224,21 @@ int main(void)
     agent_err_t full;
     do {before=context.events;full=agent_context_emit(&context,"message","user","{\"text\":\"retained\"}",NULL,0);} while(!full);
     assert(full==AGENT_ERR_FULL);boot();assert(context.events==before);
+    /* Physical P4 continuous163c: each full-bank append scanned retention for
+     * ~12 seconds, blocking the live transport. Realtime attempts must return
+     * FULL without any bank scan/erase or changing committed history. */
+    unsigned scanned=reads;erased=erases;
+    assert(agent_context_emit(&context,"turn","assistant",turn,NULL,0)==AGENT_ERR_FULL);
+    assert(reads>scanned && erases==erased); /* original slow path reproduced */
+    scanned=reads;uint32_t crc=agent_crc32(flash,sizeof(flash));
+    generation=context.wal.generation;
+    for(unsigned i=0;i<100;++i)
+        assert(agent_context_try_emit(&context,"turn","assistant",turn,NULL,0)==AGENT_ERR_FULL);
+    assert(reads==scanned && erases==erased && context.wal.generation==generation && context.events==before);
+    assert(agent_crc32(flash,sizeof(flash))==crc);
+    context.prompt_locked=true;
+    assert(agent_context_try_emit(&context,"turn","assistant",turn,NULL,0)==AGENT_ERR_BUSY);
+    context.prompt_locked=false;
+    boot();assert(context.events==before);
     puts("durable IDs, 40-reboot local dedup, out-of-order remote dedup, LWW, tombstones and recovery passed");
 }

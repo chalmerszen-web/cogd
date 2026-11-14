@@ -1,5 +1,6 @@
 #include "p4_diag.h"
 #include "p4_diag_format.h"
+#include "p4_diag_spill.h"
 #include "p4_storage_layout.h"
 #include "p4_audio.h"
 #include "esp_app_desc.h"
@@ -24,9 +25,11 @@ static const esp_partition_t *partition;
 static size_t base;
 static uint8_t *buffers[2];
 static unsigned active;
-static uint32_t used=P4_DIAG_HEADER,dropped,truncated,boot_id;
+static uint32_t used=P4_DIAG_HEADER,dropped,truncated,boot_id,critical_dropped;
 static portMUX_TYPE buffer_lock=portMUX_INITIALIZER_UNLOCKED;
 static SemaphoreHandle_t io_lock;
+static TaskHandle_t writer_task;
+static p4_diag_critical_queue_t *critical_queue;
 static atomic_bool enabled,paused,ready;
 static atomic_uint io_errors,write_max_us;
 static uint64_t sequences[PAGES],next_sequence=1,last_uptime,first_uptime;
@@ -53,13 +56,36 @@ static int sensitive(const char *p,size_t n) {
 void p4_diag_record(unsigned kind,const char *text,size_t size) {
     if(!atomic_load(&ready) || !atomic_load(&enabled) || atomic_load(&paused) || !size || xPortInIsrContext())return;
     uint8_t flags=0;
-    if(size>P4_DIAG_TEXT){size=P4_DIAG_TEXT;flags=1;}
+    char compact[128];
     if(sensitive(text,size)){text="[credential or media payload omitted]";size=strlen(text);flags|=2;}
+    else if(size>P4_DIAG_TEXT){
+        uint32_t crc=~p4_diag_crc_step(~0u,text,size);
+        int n=snprintf(compact,sizeof(compact),"oversize kind=%u bytes=%u crc32=%08lx",
+            kind,(unsigned)size,(unsigned long)crc);
+        if(n<=0)return;
+        text=compact;size=(size_t)n;flags|=4;
+    }
     uint64_t at=now_ms();
     portENTER_CRITICAL(&buffer_lock);
+    if(!atomic_load(&enabled) || atomic_load(&paused)){portEXIT_CRITICAL(&buffer_lock);return;}
     if(flags&1)++truncated;
-    if(!p4_diag_append(buffers[active],&used,at,(uint8_t)kind,flags,text,(uint16_t)size))++dropped;
+    // Reserve space for compact tutor transitions. Verbose ASR/SDK diagnostics
+    // cannot consume the last 1 KiB before an actual completion/failure.
+    bool reserved=kind!=6 && kind!=4 && critical_queue->count;
+    bool queued=false,stored=false;
+    if(kind==6 && critical_queue->count){
+        queued=p4_diag_critical_push(critical_queue,at,flags,text,(uint16_t)size);stored=queued;
+    } else if(!reserved){
+        stored=p4_diag_append(buffers[active],&used,at,(uint8_t)kind,flags,text,(uint16_t)size);
+        if(!stored && kind==6){queued=p4_diag_critical_push(critical_queue,at,flags,text,(uint16_t)size);stored=queued;}
+    }
+    if(!stored) {
+        ++dropped;if(kind==6)++critical_dropped;
+    }
     portEXIT_CRITICAL(&buffer_lock);
+    /* A bounded RAM spill never makes the producer perform Flash I/O or wait
+     * for the writer. Preserve whole tutor records when the page is full. */
+    if(queued && writer_task)xTaskNotifyGive(writer_task);
 }
 static void boot_record(void) {
     const esp_app_desc_t *app=esp_app_get_description();char sha[65],text[224];
@@ -80,6 +106,7 @@ static int flush_page(void) {
     p4_diag_record(3,text,(size_t)n);
     unsigned staging;uint32_t bytes,drop,trim;
     portENTER_CRITICAL(&buffer_lock);
+    p4_diag_critical_drain(critical_queue,buffers[active],&used);
     staging=active;active^=1;bytes=used;used=P4_DIAG_HEADER;drop=dropped;trim=truncated;
     portEXIT_CRITICAL(&buffer_lock);
     uint8_t *page=buffers[staging];
@@ -108,13 +135,21 @@ static int flush_page(void) {
     memset(page,0xff,P4_DIAG_PAGE);
     return error?16:0;
 }
+static unsigned critical_pending(void) {
+    portENTER_CRITICAL(&buffer_lock);unsigned n=critical_queue->count;portEXIT_CRITICAL(&buffer_lock);return n;
+}
 static void writer(void *unused) {
     (void)unused;
     for(;;) {
-        vTaskDelay(pdMS_TO_TICKS(P4_DIAG_INTERVAL_MS));
+        ulTaskNotifyTake(pdTRUE,pdMS_TO_TICKS(P4_DIAG_INTERVAL_MS));
         if(xSemaphoreTake(io_lock,pdMS_TO_TICKS(100))!=pdTRUE)continue;
         if(atomic_load(&paused) && pause_until!=UINT64_MAX && now_ms()>=pause_until)atomic_store(&paused,false);
-        if(atomic_load(&enabled) && !atomic_load(&paused))flush_page();
+        if(atomic_load(&enabled) && !atomic_load(&paused)){
+            /* At most four additional pages per wake. A saturated queue is
+             * explicit; unbounded critical traffic cannot monopolize Flash. */
+            for(unsigned i=0;i<5;++i){if(flush_page() || !critical_pending())break;}
+            if(critical_pending() && !atomic_load(&paused))xTaskNotifyGive(writer_task);
+        }
         xSemaphoreGive(io_lock);
     }
 }
@@ -124,9 +159,11 @@ void p4_diag_init(void) {
     base=p4_media_cache_end(partition->size);
     buffers[0]=heap_caps_malloc(P4_DIAG_PAGE,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
     buffers[1]=heap_caps_malloc(P4_DIAG_PAGE,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+    critical_queue=heap_caps_calloc(1,sizeof(*critical_queue),MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
     io_lock=xSemaphoreCreateMutex();
-    if(!buffers[0] || !buffers[1] || !io_lock) {
+    if(!buffers[0] || !buffers[1] || !critical_queue || !io_lock) {
         free(buffers[0]);free(buffers[1]);buffers[0]=buffers[1]=NULL;
+        free(critical_queue);critical_queue=NULL;
         if(io_lock)vSemaphoreDelete(io_lock);
         return;
     }
@@ -146,21 +183,22 @@ void p4_diag_init(void) {
     if(nvs_open("p4_diag",NVS_READONLY,&nv)==ESP_OK){nvs_get_u8(nv,"enabled",&on);nvs_close(nv);}
     atomic_store(&enabled,on!=0);atomic_store(&ready,true);
     boot_record();
-    if(xTaskCreate(writer,"p4_log",4096,NULL,1,NULL)!=pdPASS){atomic_store(&ready,false);return;}
+    if(xTaskCreate(writer,"p4_log",4096,NULL,1,&writer_task)!=pdPASS){atomic_store(&ready,false);return;}
 }
 static int status(char *out,size_t cap) {
     uint64_t oldest=next_sequence;
     for(unsigned i=0;i<PAGES;i++)if(sequences[i] && sequences[i]<oldest)oldest=sequences[i];
-    uint32_t drop,trim,buffered;
-    portENTER_CRITICAL(&buffer_lock);drop=dropped;trim=truncated;buffered=used-64;portEXIT_CRITICAL(&buffer_lock);
+    uint32_t drop,trim,buffered,critical,pending,peak;
+    portENTER_CRITICAL(&buffer_lock);drop=dropped;trim=truncated;buffered=used-64;critical=critical_dropped;
+    pending=critical_queue->count;peak=critical_queue->peak;portEXIT_CRITICAL(&buffer_lock);
     int n=snprintf(out,cap,"{\"log\":1,\"ready\":true,\"enabled\":%s,\"paused\":%s,\"boot\":%lu,\"reset_reason\":%u,"
         "\"uptime_ms\":%llu,\"unix_ms\":%llu,\"first_sequence\":%llu,\"last_sequence\":%llu,\"pages\":%u,\"page_bytes\":4096,"
-        "\"capacity_bytes\":%u,\"interval_ms\":2500,\"window_seconds\":640,\"buffered_bytes\":%u,\"dropped\":%u,\"truncated\":%u,"
-        "\"io_errors\":%u,\"write_max_us\":%u,\"current_boot_first_ms\":%llu,\"current_boot_last_ms\":%llu}",
+        "\"capacity_bytes\":%u,\"interval_ms\":1000,\"window_seconds\":640,\"buffered_bytes\":%u,\"dropped\":%u,\"truncated\":%u,"
+        "\"critical_dropped\":%u,\"io_errors\":%u,\"write_max_us\":%u,\"current_boot_first_ms\":%llu,\"current_boot_last_ms\":%llu,\"critical_pending\":%u,\"critical_peak\":%u}",
         atomic_load(&enabled)?"true":"false",atomic_load(&paused)?"true":"false",(unsigned long)boot_id,(unsigned)reset_reason,
         (unsigned long long)now_ms(),(unsigned long long)unix_ms(),(unsigned long long)(valid_pages?oldest:0),
         (unsigned long long)(valid_pages?next_sequence-1:0),valid_pages,P4_DIAG_BYTES,(unsigned)buffered,(unsigned)drop,(unsigned)trim,
-        atomic_load(&io_errors),atomic_load(&write_max_us),(unsigned long long)first_uptime,(unsigned long long)last_uptime);
+        (unsigned)critical,atomic_load(&io_errors),atomic_load(&write_max_us),(unsigned long long)first_uptime,(unsigned long long)last_uptime,(unsigned)pending,(unsigned)peak);
     return n<0 || (size_t)n>=cap?5:0;
 }
 int p4_diag_command(const char *line,char *out,size_t cap) {
@@ -174,12 +212,18 @@ int p4_diag_command(const char *line,char *out,size_t cap) {
         if(!e){e=nvs_set_u8(nv,"enabled",on?1:0);if(!e)e=nvs_commit(nv);nvs_close(nv);}
         if(e)error=16;
         else {
-            if(!on && atomic_load(&enabled) && !atomic_load(&paused))error=flush_page();
+            if(!on && atomic_load(&enabled) && !atomic_load(&paused)){
+                atomic_store(&enabled,false);
+                do{error=flush_page();}while(!error && critical_pending());
+            }
             atomic_store(&enabled,on);atomic_store(&paused,false);pause_until=0;
             if(on)boot_record();
         }
     } else if(!strcmp(arg,"freeze")) {
-        if(atomic_load(&enabled) && !atomic_load(&paused))error=flush_page();
+        if(atomic_load(&enabled) && !atomic_load(&paused)){
+            atomic_store(&paused,true);
+            do{error=flush_page();}while(!error && critical_pending());
+        }
         /* Reading an already fault-frozen journal must not restart writes. */
         if(pause_until!=UINT64_MAX)pause_until=now_ms()+600000;
         atomic_store(&paused,true);

@@ -337,23 +337,24 @@ agent_err_t agent_context_archive(agent_context_t *c,uint64_t generation,uint64_
     if(e && c->wal.generation==generation) c->archived_record=previous;
     return e;
 }
-static agent_err_t prepare(agent_context_t *c,size_t needed)
+static agent_err_t prepare(agent_context_t *c,size_t needed,bool compact)
 {
     if(c->prompt_locked) return AGENT_ERR_BUSY;
     if(!c->wal.ready) return AGENT_ERR_STORAGE;
     if(c->wal.tail_recovered || c->wal.bank_size-c->wal.used<needed) {
+        if(!compact)return AGENT_ERR_FULL;
         agent_err_t e=agent_context_compact(c);if(e) return e;
     }
     return AGENT_OK;
 }
-static agent_err_t append_event(agent_context_t *c,const cJSON *root)
+static agent_err_t append_event(agent_context_t *c,const cJSON *root,bool compact)
 {
     agent_err_t e=event_apply(c,root,NULL,false,false); if(e) return e;
     if(!cJSON_PrintPreallocated((cJSON *)root,c->scratch,(int)c->capacity,false)) return AGENT_ERR_LIMIT;
     size_t n=strlen(c->scratch);uint64_t generation=c->wal.generation;
     /* Reserve the actual record, not the maximum possible request. A small
      * playback result can fit while bank erasure is unavailable during audio. */
-    e=prepare(c,32+((n+3)&~(size_t)3));if(e) return e;
+    e=prepare(c,32+((n+3)&~(size_t)3),compact);if(e) return e;
     if(c->wal.generation!=generation && !cJSON_PrintPreallocated((cJSON *)root,c->scratch,(int)c->capacity,false)) return AGENT_ERR_LIMIT;
     size_t offset=c->wal.base+c->wal.used; uint64_t seq;
     e=agent_wal_append(&c->wal,AGENT_WAL_EVENT,c->scratch,n,&seq);
@@ -365,12 +366,12 @@ agent_err_t agent_context_ingest(agent_context_t *c,const cJSON *event)
     agent_err_t e=event_apply(c,event,NULL,false,false); if(e==AGENT_ERR_DUPLICATE) return AGENT_OK; if(e) return e;
     /* A gateway may echo local events, but may not mint future local IDs. */
     if(!strcmp(agent_json_string(event,"device_id"),c->device)) return AGENT_ERR_FORBIDDEN;
-    e=prepare(c,0); return e ? e : append_event(c,event);
+    e=prepare(c,0,true); return e ? e : append_event(c,event,true);
 }
 static agent_err_t emit_content(agent_context_t *c,const char *type,const char *actor,
-                                const char *content,bool plain,char *id,size_t id_cap)
+                                const char *content,bool plain,bool compact,char *id,size_t id_cap)
 {
-    agent_err_t e=prepare(c,0); if(e) return e;
+    agent_err_t e=prepare(c,0,compact); if(e) return e;
     if(c->lamport>=AGENT_SEQ_MAX-1) return AGENT_ERR_FULL;
     if(!c->next_seq || c->next_seq>c->seq_end) { e=c->reserve(c->reserve_ctx,&c->next_seq,&c->seq_end); if(e) return e; }
     uint64_t seq=c->next_seq++;
@@ -391,12 +392,15 @@ static agent_err_t emit_content(agent_context_t *c,const char *type,const char *
     agent_json_raw(&w,",\"policy\":{\"retention\":\"bounded\"},\"parents\":[]}");
     if(w.error) return w.error;
     cJSON *root=agent_json_parse(c->scratch,w.used); if(!root) return AGENT_ERR_JSON;
-    e=append_event(c,root); cJSON_Delete(root);
+    e=append_event(c,root,compact); cJSON_Delete(root);
     if(!e && id) strcpy(id,event_id);
     return e;
 }
 agent_err_t agent_context_emit(agent_context_t *c,const char *type,const char *actor,const char *content,char *id,size_t id_cap)
-{ return emit_content(c,type,actor,content,false,id,id_cap); }
+{ return emit_content(c,type,actor,content,false,true,id,id_cap); }
+
+agent_err_t agent_context_try_emit(agent_context_t *c,const char *type,const char *actor,const char *content,char *id,size_t id_cap)
+{ return emit_content(c,type,actor,content,false,false,id,id_cap); }
 
 agent_err_t agent_context_emit_user(agent_context_t *c,const char *text,char *id,size_t id_cap)
 {
@@ -406,7 +410,7 @@ agent_err_t agent_context_emit_user(agent_context_t *c,const char *text,char *id
     uintptr_t a=(uintptr_t)text,b=(uintptr_t)c->scratch;
     if(a>UINTPTR_MAX-n-1 || b>UINTPTR_MAX-c->capacity ||
        (a<b+c->capacity && b<a+n+1))return AGENT_ERR_ARGUMENT;
-    return emit_content(c,"message","user",text,true,id,id_cap);
+    return emit_content(c,"message","user",text,true,true,id,id_cap);
 }
 typedef struct { agent_context_t *context; uint64_t ack,record; size_t pending; } ack_scan_t;
 static agent_err_t scan_ack(void *ctx,const agent_record_t *r,const char *data)
@@ -427,7 +431,7 @@ static agent_err_t scan_ack(void *ctx,const agent_record_t *r,const char *data)
 agent_err_t agent_context_checkpoint(agent_context_t *c,uint64_t cursor,uint64_t ack,agent_context_mode_t mode)
 {
     if(cursor<c->cursor || ack<c->acked || ack>c->last_local || mode>AGENT_CONTEXT_HYBRID) return AGENT_ERR_ARGUMENT;
-    agent_err_t e=prepare(c,AGENT_REQUEST_MAX+32); if(e) return e;
+    agent_err_t e=prepare(c,AGENT_REQUEST_MAX+32,true); if(e) return e;
     ack_scan_t scan={c,ack,c->acked_record,0};
     e=agent_wal_iterate(&c->wal,0,c->scratch,c->capacity,scan_ack,&scan); if(e) return e;
     uint64_t old_cursor=c->cursor,old_ack=c->acked,old_record=c->acked_record;

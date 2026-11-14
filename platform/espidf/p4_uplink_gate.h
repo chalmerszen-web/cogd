@@ -18,4 +18,11 @@ static inline bool p4_uplink_reply_frame(uint64_t captured_us,uint64_t playback_
 {
     return playback_started_ms && captured_us+20000>playback_started_ms*1000;
 }
+/* The capture owner already uses this acoustic history to hold duplex echo
+ * evidence. An unseeded idle turn must not admit the same reply tail using
+ * its less restrictive quiet-room gate. Keep the original PCM for pre-roll. */
+static inline bool p4_uplink_reply_tail_frame(uint64_t captured_us,uint64_t playback_ended_ms)
+{
+    return playback_ended_ms && captured_us<playback_ended_ms*1000+640000;
+}
 #endif

@@ -34,9 +34,9 @@ struct Callbacks {
     bool (*audio_urgent)(void*)=nullptr; // decoder must refill actual playback
 };
 struct Options {
-    unsigned lifetime_ms=30000;       // allocation + transport + trial, <=30 s
-    // Explicit bounded conversation profile. The caller renews at an idle
-    // boundary before 180 s; diagnostics retain their original 30 s limits.
+    unsigned lifetime_ms=30000;       // probes <=30 s; zero = continuous conversation
+    // Conversation resources remain bounded. Only resource pressure, actual
+    // transport failure or user inactivity may retire a production session.
     bool conversation=false;
     bool opus_downlink=false; // negotiated 48 kHz Opus, decoded locally to 24 kHz PCM
     bool use_prefetched_allocation=false; // one unused, unexpired native allocation

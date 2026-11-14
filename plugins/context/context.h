@@ -61,6 +61,11 @@ agent_err_t agent_context_compact(agent_context_t *);
 agent_err_t agent_context_archive(agent_context_t *, uint64_t generation, uint64_t through_record);
 agent_err_t agent_context_checkpoint(agent_context_t *, uint64_t cursor, uint64_t ack, agent_context_mode_t);
 agent_err_t agent_context_emit(agent_context_t *, const char *type, const char *actor, const char *content_json, char *event_id, size_t);
+/* Append only if the current bank can accept the actual record. Never scan,
+ * erase or rotate the context bank on a realtime owner. FULL leaves committed
+ * history intact; the caller must report that this turn was not persisted.
+ * Explicit maintenance/archival remains a separate operation. */
+agent_err_t agent_context_try_emit(agent_context_t *, const char *type, const char *actor, const char *content_json, char *event_id, size_t);
 /* Native user event without an intermediate content-JSON buffer. Text has the
  * same2KiB/UTF8 limit as an engine input and must not alias context scratch. */
 agent_err_t agent_context_emit_user(agent_context_t *,const char *text,char *event_id,size_t);

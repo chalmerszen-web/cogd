@@ -19,6 +19,19 @@ inline bool uint_equals(const cJSON *v,const char *key,unsigned expected) {
     const auto item=cJSON_GetObjectItemCaseSensitive(v,key);
     return cJSON_IsNumber(item) && item->valuedouble==double(expected);
 }
+// Controller admission precedes FreeRTOS task creation. Until the exact job
+// has a successful-create marker, neither its phase nor teaching mode is live.
+inline bool awaiting_worker(const std::string &phase,unsigned current_job,unsigned started_job) {
+    return (phase=="reading" || phase=="solving") &&
+        (!current_job || current_job!=started_job);
+}
+// A worker may finish before xTaskCreate returns. Publishing its successful
+// creation must not overwrite a terminal result or a newer job's status.
+inline bool publish_worker_running(const cJSON *snapshot,unsigned started_job) {
+    const char *state=text(snapshot,"state");
+    return started_job && uint_equals(snapshot,"job_id",started_job) &&
+        state && std::string(state)=="pending";
+}
 inline bool exact_fields(const cJSON *v,std::initializer_list<const char *> names) {
     if(!cJSON_IsObject(v) || cJSON_GetArraySize(v)!=int(names.size()))return false;
     for(const auto name:names) {
@@ -39,7 +52,8 @@ struct PhotoSource {
 enum class Acquisition { reject,fresh_camera,fresh_fixture,retained };
 inline bool refine_current(const std::string &phase,unsigned current_id,unsigned current_revision,
                            unsigned requested_id,unsigned requested_revision,bool has_photo) {
-    return (phase=="awaiting_confirmation" || phase=="needs_selection") && has_photo && current_id &&
+    return (phase=="awaiting_confirmation" || phase=="needs_selection" || phase=="complete" ||
+            phase=="solving" || phase=="incomplete") && has_photo && current_id &&
         requested_id==current_id && requested_revision==current_revision;
 }
 inline Acquisition acquisition(const std::string &action,const cJSON *request,const std::string &phase,
@@ -61,7 +75,7 @@ inline bool photo_window(size_t total,unsigned offset,unsigned count,PhotoWindow
     out=window;return true;
 }
 struct Question {std::string key,question;bool requires_image=false;};
-struct Selection {std::vector<Question> questions;Question selected;std::vector<std::string> incomplete_keys;};
+struct Selection {std::vector<Question> questions;Question selected;std::vector<std::string> incomplete_keys,ordered_keys;};
 inline bool parse_selection(const cJSON *v,bool has_user_hint,Selection &out,std::string &reason) {
     Selection parsed;
     if(!cJSON_IsObject(v)) {reason="invalid_reader_envelope";return false;}
@@ -84,7 +98,7 @@ inline bool parse_selection(const cJSON *v,bool has_user_hint,Selection &out,std
         const auto entry=cJSON_GetArrayItem(all,i);const char *key=text(entry,"key"),*question=text(entry,"question");
         if(!bounded(key,64)) {reason="invalid_question_key";return false;}
         for(const auto &old:keys)if(old==key) {reason="duplicate_question_key";return false;}
-        keys.push_back(key);
+        keys.push_back(key);parsed.ordered_keys.push_back(key);
         const auto complete=cJSON_GetObjectItemCaseSensitive(entry,"complete");
         if(!cJSON_IsBool(complete)) {reason="missing_question_completeness";return false;}
         if(cJSON_IsFalse(complete)){parsed.incomplete_keys.push_back(key);continue;}

@@ -134,6 +134,30 @@ static void candidate_age_cases() {
     CHECK(w.observe(moved.data(),width,height,1720).discard);
     CHECK(!w.selected && !w.fresh(1800));
 }
+static void late_retention_cases() {
+    // Physical failure: the1514ms frame took63ms to score and134ms to copy,
+    // followed by64ms preview resize. At1809ms that retained image was stale.
+    // Do not copy frames that cannot possibly survive the existing240ms gate.
+    CHECK(!final_frame_ready(true,false,1809,1514,1514));
+    CHECK(!retain_candidate_at(1514));
+    CHECK(!retain_candidate_at(1559));
+    CHECK(retain_candidate_at(1560));
+    CHECK(retain_candidate_at(1799));
+    CHECK(!retain_candidate_at(1800));
+    auto clear=simple(),moved=simple(90,80);Window w;w.begin(10,0);
+    unsigned retained_at=0;
+    for(unsigned t=0;t<=1440;t+=sample_ms) {
+        auto d=w.observe(clear.data(),width,height,t);
+        if(d.replace && retain_candidate_at(w.selected_elapsed_ms))retained_at=w.selected_elapsed_ms;
+    }
+    CHECK(w.selected && retained_at==0); // stability exists, no old pixels kept
+    auto d=w.observe(clear.data(),width,height,1660);
+    CHECK(d.replace && retain_candidate_at(w.selected_elapsed_ms));retained_at=w.selected_elapsed_ms;
+    CHECK(final_frame_ready(true,false,1857,1660,retained_at)); // score/copy drain
+    CHECK(!final_frame_ready(true,false,1901,1660,retained_at)); // no age relaxation
+    CHECK(w.observe(moved.data(),width,height,1780).discard);
+    CHECK(!w.selected); // late motion still invalidates the retained frame
+}
 int main(int argc,char **argv) {
     if(argc==5 && std::string(argv[1])=="--measure-rgb565") {
         unsigned w=unsigned(std::stoul(argv[2])),h=unsigned(std::stoul(argv[3]));
@@ -152,6 +176,6 @@ int main(int argc,char **argv) {
         return 0;
     }
     CHECK(argc==1);
-    metrics_cases();full_resolution_sparse_cases();window_cases();final_scene_cases();candidate_age_cases();
+    metrics_cases();full_resolution_sparse_cases();window_cases();final_scene_cases();candidate_age_cases();late_retention_cases();
     std::cout<<checks<<" capture-quality checks passed (synthetic host frames only)\n";
 }

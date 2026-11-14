@@ -95,6 +95,9 @@ agent_err_t esp_hi_stream_write(const int16_t *,size_t,const atomic_bool *cancel
 agent_err_t esp_hi_stream_cache_begin(const atomic_bool *cancelled,bool deferred);
 agent_err_t esp_hi_stream_cache_seal(void);
 unsigned esp_hi_stream_remaining(void);
+/* A stopped audio worker must not leave the conversation publishing to a
+ * dead stream after its bounded first-packet wait has expired. */
+agent_err_t esp_hi_stream_error(void);
 agent_err_t esp_hi_stream_finish(agent_err_t error);
 unsigned esp_hi_stream_underruns(void);
 extern const agent_audio_ops_t esp_hi_audio_ops;

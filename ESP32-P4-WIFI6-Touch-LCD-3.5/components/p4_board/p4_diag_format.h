@@ -7,7 +7,7 @@
 #define P4_DIAG_END 4092u
 #define P4_DIAG_MAGIC 0x31474c44u
 #define P4_DIAG_COMMIT 0x43474c44u
-#define P4_DIAG_INTERVAL_MS 2500u
+#define P4_DIAG_INTERVAL_MS 1000u
 #define P4_DIAG_TEXT 704u
 /* Little-endian on disk; fixed offsets keep USB exports portable. */
 typedef struct {

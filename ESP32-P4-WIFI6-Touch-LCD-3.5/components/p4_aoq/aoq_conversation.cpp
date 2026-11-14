@@ -44,7 +44,7 @@ struct p4_aoq_conversation {
     uint64_t stream=0,group=0,subgroup=0,next_object=0;
     int64_t media_report_at=0;
     struct Retired { uint64_t stream=0;std::array<char,129> response{};bool discarded=false; };
-    std::array<Retired,256> retired{};size_t retired_count=0;
+    std::array<Retired,2048> retired{};size_t retired_count=0;
     bool interrupted=false,strict_media_owner=false;
     bool active=false,has_stream=false,terminal=false,ready=false,abandoned=false;
     const char* stage="model_events";
@@ -205,7 +205,7 @@ extern "C" int p4_aoq_conversation_open(p4_aoq_conversation_t** out,const p4_aoq
     *out=nullptr;
     void* storage=heap_caps_malloc(sizeof(p4_aoq_conversation),MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);if(!storage)return Memory;
     auto* s=new(storage)p4_aoq_conversation;s->options=*options;
-    aoq::Options limits;limits.conversation=true;limits.lifetime_ms=180000;
+    aoq::Options limits;limits.conversation=true;limits.lifetime_ms=0;
     limits.opus_downlink=!options->video;
     limits.use_prefetched_allocation=true;
     limits.cancelled=options->cancelled;limits.cancel_userdata=options->ctx;
@@ -287,6 +287,13 @@ extern "C" int p4_aoq_conversation_read(p4_aoq_conversation_t* s,void* out,size_
     s->queued-=m.body.size;s->queue.pop_front();return 0;
 }
 extern "C" bool p4_aoq_conversation_pending(const p4_aoq_conversation_t* s){return s&&(s->active||s->done.data||s->has_stream);}
+extern "C" bool p4_aoq_conversation_renew_due(const p4_aoq_conversation_t* s){
+    if(!s)return false;
+    const auto d=s->session.diagnostics();
+    // Leave 512 stream records of headroom for a long active turn. Retirement
+    // is requested only at the owner's safe boundary, never on a wall timer.
+    return s->retired_count>=1536 || d.stream_fins>=1536 || d.video_frames_queued>=1536;
+}
 extern "C" void p4_aoq_conversation_input_stats(const p4_aoq_conversation_t* s,char* out,size_t cap){
     if(!out||!cap)return;
     if(!s){out[0]=0;return;}

@@ -2,8 +2,59 @@
 #include <assert.h>
 #include <limits.h>
 #include <math.h>
+static void raw_guard_boundaries(void)
+{
+    /* Recorded candidate-176 retention failure. This is a counterfactual
+     * cursor calculation, not an acoustic or cloud-recognition result. */
+    const unsigned cursor=251904,raw_offset=156672,source_start=84099;
+    unsigned replay=p4_aoq_local_onset_replay(cursor,104960,1409084,1424603);
+    assert(replay==239280);
+    assert(replay-raw_offset==82608);
+    assert(source_start-(replay-raw_offset)==1491); /* 93.1875 ms */
+    assert(240304u-replay==1024u); /* previously 29.1875 ms */
+    /* 1024 is not a multiple of the 320-sample upload frame. Recompute
+     * frame endpoints from this new phase; never reuse the old endpoint. */
+    assert(240304u%320u==304u && replay%320u==240u);
+    unsigned old_endpoint=264624,new_endpoint=replay+76u*320u;
+    assert(new_endpoint==263600 && new_endpoint!=old_endpoint);
+    for(unsigned i=1;i<76u;++i)
+        assert((replay+i*320u)-(replay+(i-1u)*320u)==320u);
+    /* This frame count is illustrative, not a prediction of the new VAD
+     * endpoint. Playback must be retested for the extra own-output prefix. */
+
+    const unsigned c=64000,origin=10000,reader=14000;
+    assert(p4_aoq_local_onset_replay(c,0,origin,reader-2436u)==16000);
+    assert(p4_aoq_local_onset_replay(c,0,origin,reader-2437u)==16000);
+    assert(p4_aoq_local_onset_replay(c,0,origin,reader-3000u)==16000);
+    assert(p4_aoq_local_onset_replay(c,0,origin,reader-3001u)==16000);
+    assert(p4_aoq_local_onset_replay(c,c,origin,reader)==c);
+    assert(p4_aoq_local_onset_replay(c,c-500u,origin,reader)==c-500u);
+    /* A short muting window cannot promise the full extra 64 ms. */
+    assert(p4_aoq_local_onset_replay(c,c-8500u,origin,reader)==c-8500u);
+    /* Valid reader time and unsigned sample distance remain safe at wrap. */
+    assert(p4_aoq_local_onset_replay(1600,UINT_MAX-15999u,10000,10100)
+        ==1600u-9024u);
+    for(unsigned available=0;available<=64000u;available+=127u){
+        for(int age=-101;age<=3001;++age){
+            unsigned now=p4_aoq_local_onset_replay(c,c-available,origin,
+                (uint32_t)((int)reader-age));
+            unsigned old_keep;
+            if(age< -100 || age>3000)old_keep=available<48000u?available:48000u;
+            else{
+                old_keep=((unsigned)(age>0?age:0)+500u)*16u;
+                if(old_keep>48000u)old_keep=48000u;
+                if(old_keep>available)old_keep=available;
+            }
+            unsigned new_keep=c-now;
+            assert(new_keep>=old_keep && new_keep-old_keep<=1024u);
+            assert(new_keep<=48000u && new_keep<=available);
+            if(age< -100 || age>3000)assert(new_keep==old_keep);
+        }
+    }
+}
 int main(void)
 {
+    raw_guard_boundaries();
     /* Recorded compound-utterance regression: by event delivery the sender
      * is 1.9 seconds beyond the cloud endpoint, already in the next clause. */
     unsigned endpoint=101760;
@@ -52,13 +103,13 @@ int main(void)
     assert(p4_aoq_local_replay(1600,UINT_MAX-1599)==UINT_MAX-1599);
     /* Recorded candidate-54 onset: old rewind began before the source and
      * carried old story echo. The new bound retains its full recorded phrase. */
-    assert(p4_aoq_local_onset_replay(320000,260000,256940,275697)==292112);
+    assert(p4_aoq_local_onset_replay(320000,260000,256940,275697)==291088);
     assert(p4_aoq_local_onset_replay(320000,315000,256940,275697)==315000);
     assert(p4_aoq_local_onset_replay(320000,260000,256940,0)==272000);
     assert(p4_aoq_local_onset_replay(320000,260000,256940,272000)==272000);
     assert(p4_aoq_local_onset_replay(320000,260000,256940,277041)==272000);
-    assert(p4_aoq_local_onset_replay(320000,260000,256940,277040)==312000);
-    assert(p4_aoq_local_onset_replay(16000,0,UINT_MAX-499,100)==1600);
+    assert(p4_aoq_local_onset_replay(320000,260000,256940,277040)==310976);
+    assert(p4_aoq_local_onset_replay(16000,0,UINT_MAX-499,100)==576);
     assert(p4_aoq_cancel_replay(48000,40000,0,false,false)==40000);
     assert(p4_aoq_cancel_replay(96000,40000,0,false,false)==60800);
     assert(p4_aoq_cancel_replay(48000,0,40000,true,false)==40000);

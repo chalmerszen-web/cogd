@@ -20,6 +20,10 @@ idf_component_register(SRCS "p4_audio.c" "p4_vision.cpp" "p4_cloud.cpp" "p4_wifi
   espressif__esp_video espressif__human_face_detect espressif__pedestrian_detect
   esp_http_client esp-tls tcp_transport esp_driver_jpeg esp_timer p4_media esp_partition nvs_flash esp_event esp_wifi
   PRIV_REQUIRES espressif__esp-sr espressif__esp_audio_codec esp_app_format)
+# The diagnostic journal is off the acoustic hot path.  Compile this one
+# translation unit for size so the bounded logger fix fits the existing app
+# partition without changing audio/VAD optimization or timing.
+set_source_files_properties(p4_diag.c PROPERTIES COMPILE_OPTIONS "-Os")
 target_compile_definitions(${COMPONENT_LIB} PRIVATE AGENT_BOARD_P4=1)
 if(p4_aec_bench_enabled)
   target_compile_definitions(${COMPONENT_LIB} PRIVATE AGENT_P4_AEC_BENCH=1)

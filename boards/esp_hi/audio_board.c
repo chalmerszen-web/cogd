@@ -561,6 +561,11 @@ static void wake_feed(int16_t value)
 #else
             bool detected=esp_hi_speech_wake(audio_work.input.wake);
 #endif
+#if AGENT_BOARD_P4
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+            if(detected && stage==WAKE_LISTENING)p4_audio_accept_wake_energy();
+#endif
+#endif
             wake_hit=wake_hit || (detected && stage==WAKE_LISTENING); wake_used=0;
 #if AGENT_BOARD_P4
             if(detected && stage==WAKE_LISTENING && atomic_load(&voice_duplex)) {
@@ -1764,6 +1769,8 @@ agent_err_t esp_hi_stream_cache_seal(void)
 }
 unsigned esp_hi_stream_remaining(void)
 { return atomic_load(&speech_stream.write)-atomic_load(&speech_stream.read); }
+agent_err_t esp_hi_stream_error(void)
+{ return atomic_load(&speech_stream.active)?AGENT_OK:atomic_load(&play_error); }
 agent_err_t esp_hi_stream_finish(agent_err_t error)
 {
     if(!atomic_load(&speech_stream.active)) return error?error:atomic_load(&play_error);

@@ -64,9 +64,10 @@ struct H3Response {
 enum class QuicApplicationMode { kHttp3, kRaw };
 
 struct QuicConfig {
+    static constexpr uint32_t kMaxRawStreamRecords = 4096;
     QuicApplicationMode application_mode = QuicApplicationMode::kHttp3;
     // Retained raw stream/flow records, including closed-stream tombstones.
-    // Caller may choose 1..512 for a bounded connection; default preserves the
+    // Caller may choose 1..4096 for a bounded connection; default preserves the
     // diagnostic budget. This is separate from peer transport stream credit.
     uint32_t max_raw_stream_records = 64;
     std::string alpn = "h3";  ///< One explicit protocol; raw mode does not imply any AOQ wire format.

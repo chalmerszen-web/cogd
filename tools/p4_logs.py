@@ -12,7 +12,7 @@ sys.path.insert(0,str(Path(__file__).resolve().parent/'voice'))
 from device import Device
 
 ROOT=Path(__file__).resolve().parents[1]
-KINDS={1:'sdk',2:'voice',3:'health',4:'boot',5:'marker'}
+KINDS={1:'sdk',2:'voice',3:'health',4:'boot',5:'marker',6:'tutor'}
 RESETS={0:'unknown',1:'power_on',2:'external',3:'software',4:'panic',5:'interrupt_watchdog',
         6:'task_watchdog',7:'watchdog',8:'deep_sleep',9:'brownout',10:'sdio',
         11:'usb',12:'jtag',13:'efuse',14:'power_glitch',15:'cpu_lockup'}

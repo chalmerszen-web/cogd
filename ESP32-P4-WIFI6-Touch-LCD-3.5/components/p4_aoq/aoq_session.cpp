@@ -137,7 +137,7 @@ struct Session::Impl {
     size_t setup_offset=0,tx_header_offset=0;
     int64_t control_id=-1,data_id=-1;
     std::array<std::unique_ptr<Rx>,StreamCount> streams;
-    std::array<Tombstone,256> retired{};
+    std::array<Tombstone,2048> retired{};
     size_t retired_count=0;
     std::array<Tx,8> queue;
     size_t queue_read=0,queue_write=0,queue_count=0,queue_bytes=0;
@@ -145,11 +145,11 @@ struct Session::Impl {
     uint64_t next_object=0,object_count=0;
     uint64_t next_audio_group=0,audio_timestamp=0;
     Tx video;int64_t video_id=-1;uint64_t video_timestamp=0;
-    size_t peer_limit()const{return options.conversation?256:PeerStreams;}
-    uint64_t receive_limit()const{return options.conversation?32*1024*1024:ReceiveMax;}
-    uint64_t packet_limit()const{return options.conversation?64*1024*1024:PacketMax;}
-    uint64_t json_total_limit()const{return options.conversation?4*1024*1024:JsonTotalMax;}
-    size_t object_limit()const{return options.conversation?32768:ObjectMax;}
+    size_t peer_limit()const{return options.conversation?2048:PeerStreams;}
+    uint64_t receive_limit()const{return options.conversation?(UINT64_C(1)<<40):ReceiveMax;}
+    uint64_t packet_limit()const{return options.conversation?(UINT64_C(1)<<40):PacketMax;}
+    uint64_t json_total_limit()const{return options.conversation?(UINT64_C(1)<<36):JsonTotalMax;}
+    uint64_t object_limit()const{return options.conversation?(UINT64_C(1)<<48):ObjectMax;}
     size_t json_limit()const{return options.conversation?JsonMax:16*1024;}
 
     Impl(const std::atomic<uint32_t>& epoch,uint32_t snapshot):cancel_epoch(epoch),cancel_snapshot(snapshot){}
@@ -364,7 +364,7 @@ struct Session::Impl {
                 return;
             }else{fail(Protocol,"unknown_control_type");return;}
             if(status!=aoq_wire::ParseStatus::Ok||!used){fail(Protocol,"control_decode_failed");return;}
-            if(++diag.control_frames>256){fail(Limit,"control_count_limit");return;}
+            if(++diag.control_frames>(options.conversation?8192u:256u)){fail(Limit,"control_count_limit");return;}
             if(!consume(s,used))return;
         }
         if(s.window.complete())fail(Protocol,s.window.size()?"truncated_control_fin":"control_stream_fin");
@@ -531,7 +531,7 @@ struct Session::Impl {
         }
     }
     int start(p4_aoq_kind_t kind){
-        started=now_ms();deadline=started+options.lifetime_ms;
+        started=now_ms();deadline=options.lifetime_ms?started+options.lifetime_ms:INT64_MAX;
         if(options.deadline_ms)deadline=std::min(deadline,options.deadline_ms);
         diag.closed=false;diag.stage="allocating";
         if(bounds())return diag.error;
@@ -587,10 +587,9 @@ struct Session::Impl {
         // compressed media needs bounded space before playback catches up.
         cfg.max_stream_data=options.conversation?ConversationWindowSize:WindowSize;
         cfg.max_data=cfg.max_stream_data*StreamCount;cfg.max_streams_bidi=1;cfg.max_streams_uni=peer_limit();
-        // 180 one-frame video streams plus Data/control and up to 256 peer
-        // streams must fit the same connection. Keep all final-size records
-        // until retirement, so a late duplicate never creates a new stream.
-        cfg.max_raw_stream_records=options.conversation?512:64;
+        // Keep final-size records until resource-based session retirement.
+        // A late duplicate must never create a new application stream.
+        cfg.max_raw_stream_records=options.conversation?esp_http3::QuicConfig::kMaxRawStreamRecords:64;
         quic.reset(new(std::nothrow) esp_http3::QuicConnection([this](const uint8_t* p,size_t n){
             if(diag.error)return -1;
             if(n>packet_limit()-diag.tx_bytes){fail(Limit,"packet_transmit_limit");return -1;}
@@ -697,7 +696,8 @@ struct Session::Impl {
         if(bounds())return diag.error;
         if(!samples||!count||count>320||timestamp>((uint64_t(1)<<62)-1)||
            (diag.audio_datagrams_sent&&timestamp<=audio_timestamp))return Argument;
-        if(diag.audio_tx_samples+count>uint64_t(16000)*(options.conversation?180:30)||next_audio_group>=object_limit())return Limit;
+        const uint64_t audio_limit=options.conversation?(UINT64_C(1)<<60):uint64_t(16000)*30;
+        if(count>audio_limit-diag.audio_tx_samples||next_audio_group>=object_limit())return Limit;
         std::vector<uint8_t> props,encoded;WipeVector erase{encoded};
         aoq_wire::AudioProperties properties;properties.timestamp_us=timestamp;
         properties.sample_cursor=diag.audio_tx_samples;properties.duration_samples=static_cast<uint32_t>(count);
@@ -716,7 +716,8 @@ struct Session::Impl {
         if(video.bytes)return Busy;
         if(!bytes||!size||size>65536||timestamp>((uint64_t(1)<<62)-1)||
            (diag.video_frames_queued&&(timestamp<=video_timestamp||timestamp-video_timestamp<1000000)))return Argument;
-        if(diag.video_frames_queued>=(options.conversation?180u:30u)||size>uint64_t(options.conversation?12:2)*1024*1024-diag.video_tx_bytes)return Limit;
+        const uint64_t video_limit=options.conversation?(UINT64_C(1)<<40):uint64_t(2)*1024*1024;
+        if(diag.video_frames_queued>=(options.conversation?2048u:30u)||size>video_limit-diag.video_tx_bytes)return Limit;
         std::vector<uint8_t> encoded;WipeVector erase{encoded};
         if(!aoq_wire::encode_jpeg_stream(bytes,size,options.video_width,options.video_height,timestamp,diag.video_frames_queued,encoded))return Protocol;
         video.bytes=buffer(encoded.size());if(!video.bytes)return Memory;
@@ -730,7 +731,9 @@ Session::~Session()=default;
 int Session::open(p4_aoq_kind_t kind,const Options& options,const Callbacks& callbacks){
     const uint32_t cancel_snapshot=cancel_epoch_.load(std::memory_order_relaxed);
     if(impl_&&!impl_->diag.closed)return Busy;
-    if(kind<P4_AOQ_AUDIO||kind>P4_AOQ_OMNI||options.lifetime_ms<1000||options.lifetime_ms>(options.conversation?180000u:30000u)||
+    if(kind<P4_AOQ_AUDIO||kind>P4_AOQ_OMNI||
+       (options.lifetime_ms && options.lifetime_ms<1000)||
+       (!options.conversation && (!options.lifetime_ms || options.lifetime_ms>30000u))||
        options.allocation_timeout_ms<1000||options.allocation_timeout_ms>10000||
        !options.setup_timeout_ms||options.setup_timeout_ms>12000||
        (options.deadline_ms&&options.deadline_ms<=now_ms()))return Argument;
