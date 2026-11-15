@@ -51,7 +51,7 @@ static unsigned echo_witness_overflows;
 #endif
 static atomic_bool near_monitor;
 static atomic_uint confirmed_onset;
-static atomic_uint confirmed_at,near_epoch;
+static atomic_uint confirmed_at,strict_quorum_at,near_epoch;
 static int16_t *echo_mic,*echo_ref,*echo_out,*echo_linear;
 static atomic_uint echo_frames,echo_max_us,echo_mic_level,echo_ref_level,echo_out_level;
 static atomic_uint capture_frames,capture_max_us,near_max_us,capture_overruns,rx_overflows;
@@ -382,12 +382,13 @@ void p4_audio_capture_stats(unsigned v[5])
 }
 void p4_audio_near_monitor(bool enable)
 {
-    atomic_store(&confirmed_at,0);atomic_store(&confirmed_onset,0);atomic_fetch_add(&near_epoch,1);atomic_store(&near_monitor,enable);
+    atomic_store(&confirmed_at,0);atomic_store(&confirmed_onset,0);atomic_store(&strict_quorum_at,0);atomic_fetch_add(&near_epoch,1);atomic_store(&near_monitor,enable);
 #if defined(AGENT_P4_AOQ_DUPLEX)
     if(!enable)atomic_store_explicit(&admission_calibrated,false,memory_order_release);
 #endif
 }
 uint32_t p4_audio_confirmed_at(void){return atomic_load(&capture_discontinuous)?0:atomic_load(&confirmed_at);}
+uint32_t p4_audio_strict_quorum_at(void){return atomic_load(&capture_discontinuous)?0:atomic_load(&strict_quorum_at);}
 uint32_t p4_audio_confirmed_onset(void){return atomic_load(&capture_discontinuous)?0:atomic_load(&confirmed_onset);}
 p4_idle_voice_evidence_t p4_audio_idle_voice_evidence(uint32_t from_ms,uint32_t through_ms)
 {
@@ -515,6 +516,7 @@ static void near_frame(unsigned mic,unsigned ref,unsigned out,unsigned scale,int
 #endif
     unsigned current=atomic_load(&near_epoch);
     if(epoch!=current){
+        atomic_store(&strict_quorum_at,0);
         votes=strong=last_mic=last_ref=0;onset=(p4_near_onset_t){0};epoch=current;
 #if defined(AGENT_P4_AOQ_DUPLEX)
         vad_stream.used=linear_vad_stream.used=0;
@@ -740,8 +742,17 @@ static void near_frame(unsigned mic,unsigned ref,unsigned out,unsigned scale,int
 #if defined(AGENT_P4_AOQ_DUPLEX)
     near_probe.wide_votes=__builtin_popcount(votes);
     near_probe.wide_strong=__builtin_popcount(strong);
+    /* Publish the unchanged strict capture quorum in both idle and duplex
+     * paths.  The conversation owner uses this as a post-playback admission
+     * witness; it is evidence only and does not alter the normal confirmed
+     * decision below. */
+    bool strict=p4_near_duplex_corroborated(near,votes,strong,structure_history);
+    if(strict)atomic_store(&strict_quorum_at,(unsigned)near_probe.at_ms);
     if(dual){
-        confirmed=p4_near_duplex_corroborated(near,votes,strong,structure_history);
+        /* Publish the original strict quorum before any fallback can recover
+         * a gap, residual burst or pitch pair. The consumer still performs
+         * its own local VAD/power and six-vote checks. */
+        confirmed=strict;
         if(!confirmed && p4_near_duplex_close_gap(votes,strong,structure_history,
                 independent_history,provisional_history)){
             near_probe.flags|=NEAR_GAP_CONFIRMED;
@@ -812,6 +823,7 @@ static bool IRAM_ATTR rx_overflow(i2s_chan_handle_t channel,i2s_event_data_t *ev
         atomic_store_explicit(&capture_discontinuous,true,memory_order_relaxed);
         atomic_store_explicit(&confirmed_at,0,memory_order_relaxed);
         atomic_store_explicit(&confirmed_onset,0,memory_order_relaxed);
+        atomic_store_explicit(&strict_quorum_at,0,memory_order_relaxed);
         atomic_fetch_add_explicit(&near_epoch,1,memory_order_relaxed);
         atomic_fetch_add_explicit(&dropped,event->size/4,memory_order_relaxed);
     }
@@ -1108,7 +1120,7 @@ esp_err_t p4_audio_output(unsigned rate)
     if(esp_codec_dev_set_out_mute(output,false)!=ESP_CODEC_DEV_OK)return ESP_FAIL;
     /* Idle speech/noise votes cannot become this reply's barge-in evidence.
      * Reset the detector epoch, not the acoustic filter or capture ring. */
-    atomic_store(&confirmed_at,0);atomic_store(&confirmed_onset,0);
+    atomic_store(&confirmed_at,0);atomic_store(&confirmed_onset,0);atomic_store(&strict_quorum_at,0);
     atomic_fetch_add(&near_epoch,1);
     atomic_store(&output_active,true);return ESP_OK;
 #else

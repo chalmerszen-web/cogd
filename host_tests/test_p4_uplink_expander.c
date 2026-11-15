@@ -82,6 +82,22 @@ int main(void)
     p4_uplink_expander_begin(&s,&e);s.onset_cursor=640;
     int16_t prefix[320];fill(prefix);p4_uplink_expander_apply(&s,prefix,320,1150000,320);
     assert(s.gain_q15<=128 && s.attenuated_frames==1);
-    puts("p4 uplink expander: scale, replay, low contrast, robust prior, bounds OK");
+    /* Recorded strong-onset candidate: vowel Q50 is not background. A
+     * quieter consonant four times above the independently measured floor
+     * retains >=75% gain after strict capture corroboration. Rescaling the
+     * recording changes neither this gain nor the noise rejection. */
+    for(unsigned scale=1;scale<=4;scale*=4){
+        e=(p4_adaptive_energy_t){.noise=27762*scale,.foreground=457903*scale,
+            .noise_median=33167*scale,.noise_mad=6536*scale,.noise_upper=52775*scale,
+            .dispersion_valid=true,.turn_count=6,.turn_quorum=true};
+        for(unsigned i=0;i<6;++i)e.turn[i]=(i<3?10322996u:11956513u)*scale;
+        p4_uplink_expander_begin(&s,&e);s.onset_cursor=640;
+        assert(s.enabled && s.preserve_speech && !s.robust_contrast && s.background==e.noise_upper);
+        fill(prefix);p4_uplink_expander_apply(&s,prefix,320,4*e.noise_upper,320);
+        assert(s.gain_q15>=24576);
+        for(unsigned i=0;i<24;++i){fill(prefix);p4_uplink_expander_apply(&s,prefix,320,e.noise_upper,640+i*320);}
+        assert(s.gain_q15<=128);
+    }
+    puts("p4 uplink expander: scale, replay, low contrast, robust prior, strict onset and noise bounds OK");
     return 0;
 }

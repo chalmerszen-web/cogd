@@ -487,8 +487,29 @@ static void dynamic_contrast_cases(void)
     s.noise=7304;s.foreground=5054847;s.noise_median=8767;s.noise_mad=1365;s.noise_upper=12862;
     assert(p4_energy_onset_foreground_den(&s)==6);
 }
+static void strict_capture_quorum(void)
+{
+    p4_adaptive_energy_t base;p4_energy_init(&base,100,10100);
+    base.candidate_pending=base.candidate_pretrigger=true;base.candidate_started=16000;
+    uint32_t threshold=p4_energy_threshold(&base,false);
+    p4_adaptive_energy_t s=base;
+    assert(!p4_energy_confirm_quorum(&s,19200,1200,1220,0,true));
+    assert(!p4_energy_confirm_quorum(&s,19200,1200,1220,999,true)); /* Older candidate. */
+    assert(!p4_energy_confirm_quorum(&s,19200,1200,1400,1200,true)); /* Stale proof. */
+    assert(!p4_energy_confirm_quorum(&s,19200,1200,1300,1290,true)); /* Future capture. */
+    assert(!p4_energy_confirm_quorum(&s,19200,1200,1220,1200,false)); /* Output/ownership blocked. */
+    assert(p4_energy_confirm_quorum(&s,19200,1200,1220,1200,true));
+    assert(s.candidate_confirmed && !s.candidate_pending && s.candidate_quorum);
+    assert(s.candidate_change_cursor==16000 && p4_energy_threshold(&s,false)==threshold);
+    assert(!p4_energy_frame(&s,19520,threshold,false,false,false,true,false,true,false));
+    assert(!p4_energy_frame(&s,19840,threshold,true,false,false,true,false,true,false));
+    assert(p4_energy_frame(&s,20160,threshold+1,true,false,false,true,false,true,false));
+    p4_energy_turn_begin(&s);assert(s.turn_quorum && !s.candidate_quorum);
+    p4_energy_turn_resolve(&s,false);assert(!s.turn_quorum && !s.candidate_quorum);
+}
 int main(void)
 {
+    strict_capture_quorum();
     provider_retry_retains_reference();
     candidate_capture_independent_of_noise_learning();
     scale_cases();prior_and_real_background_cases();background_cases();quiet_short_and_pause_cases();ownership_and_replay_cases();wake_and_capture_age_cases();

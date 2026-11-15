@@ -9,7 +9,7 @@
 typedef struct {
     uint32_t upper,background,foreground,weight_q15,gain_q15,min_gain_q15,last_cursor,onset_cursor;
     uint32_t frames,attenuated_frames;
-    bool enabled,robust_contrast,cursor_valid;
+    bool enabled,robust_contrast,cursor_valid,preserve_speech;
 } p4_uplink_expander_t;
 
 static inline void p4_uplink_expander_begin(p4_uplink_expander_t *s,
@@ -20,6 +20,7 @@ static inline void p4_uplink_expander_begin(p4_uplink_expander_t *s,
      * anchor must not stand in for its quieter current speaker. Likewise a
      * scalar prior is not a measured background distribution. Bypass safely. */
     if(!energy->dispersion_valid || energy->turn_count<6)return;
+    s->preserve_speech=energy->turn_quorum;
     s->upper=energy->noise_upper;
     s->foreground=p4_energy_quantile(energy->turn,energy->turn_count,3,4);
     s->background=p4_energy_quantile(energy->turn,energy->turn_count,1,2);
@@ -30,7 +31,7 @@ static inline void p4_uplink_expander_begin(p4_uplink_expander_t *s,
      * foreground as the reference and use a steeper dimensionless power
      * curve.  MAD/median and the foreground ratio decide this branch; no
      * absolute PCM amplitude is introduced. */
-    s->robust_contrast=p4_energy_material_background(energy) &&
+    s->robust_contrast=!s->preserve_speech && p4_energy_material_background(energy) &&
         p4_energy_onset_foreground_den(energy)<=P4_ENERGY_ONSET_FOREGROUND_DEN_MIN;
     if(s->robust_contrast && energy->foreground>s->foreground)
         s->foreground=energy->foreground;
@@ -69,7 +70,12 @@ static inline void p4_uplink_expander_apply(p4_uplink_expander_t *s,int16_t *pcm
     uint32_t ratio=energy<=floor?0:energy>=s->foreground?32768:
         (uint32_t)(((uint64_t)energy-floor)*32768/(s->foreground-floor));
     uint32_t expanded;
-    if(s->robust_contrast){
+    if(s->preserve_speech){
+        /* Independently confirmed near speech must not use its own vowel
+         * median as background. Attenuate relative to the measured idle MAD
+         * upper bound, preserving quieter consonants above that bound. */
+        expanded=energy<=floor?0:(uint32_t)(((uint64_t)energy-floor)*32768u/energy);
+    }else if(s->robust_contrast){
         uint64_t square=(uint64_t)ratio*ratio/32768u;
         expanded=(uint32_t)(square*square/32768u);
     }else expanded=(ratio*ratio)/32768;

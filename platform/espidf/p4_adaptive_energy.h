@@ -50,6 +50,7 @@ typedef struct {
     unsigned background_count,background_next,turn_count,turn_next,candidate_next;
     unsigned candidate_reference_count,candidate_reference_next,candidate_recent_count,candidate_recent_next;
     bool candidate_pending,candidate_confirmed,candidate_seen,candidate_pretrigger,candidate_rise_seen;
+    bool candidate_quorum,turn_quorum;
     uint32_t energy,threshold,decision_noise,decision_foreground;
     uint32_t observed_frames,admitted_frames,rejected_frames;
     bool cursor_valid,turn_open,prior_valid,dispersion_valid;
@@ -243,6 +244,22 @@ static inline bool p4_energy_barge_admit(uint32_t energy,uint32_t noise,uint32_t
 { return calibrated && energy>p4_energy_barge_threshold(noise,foreground,upper); }
 static inline bool p4_energy_ready(const p4_adaptive_energy_t *s)
 { return s->prior_valid || s->background_count>=8; }
+/* A capture-owner quorum has already passed the unchanged adaptive gate,
+ * echo witness and six ordinary / three-or-four strong votes. Bind it to
+ * this pending capture window; it may resolve the ambiguous second-rise
+ * hold, but cannot replace this consumer's VAD/power test or six votes. */
+static inline bool p4_energy_confirm_quorum(p4_adaptive_energy_t *s,uint32_t cursor,
+    uint32_t frame_end_ms,uint32_t now_ms,uint32_t quorum_ms,bool eligible)
+{
+    if(!eligible || !s->candidate_pending || !quorum_ms || now_ms-quorum_ms>96u ||
+       cursor<s->candidate_started || cursor-s->candidate_started>32000u)return false;
+    uint32_t start_ms=frame_end_ms-(cursor-s->candidate_started)/16u;
+    int32_t offset=(int32_t)(quorum_ms-frame_end_ms);
+    if((int32_t)(quorum_ms-start_ms)<0 || offset < -96 || offset>64)return false;
+    s->candidate_pending=false;s->candidate_confirmed=true;s->candidate_quorum=true;
+    s->candidate_change_cursor=s->candidate_started;
+    return true;
+}
 static inline void p4_energy_init(p4_adaptive_energy_t *s,uint32_t noise,uint32_t foreground)
 {
     memset(s,0,sizeof(*s));s->noise=noise;s->foreground=foreground;
@@ -302,7 +319,7 @@ static inline bool p4_energy_frame(p4_adaptive_energy_t *s,uint32_t cursor,uint3
             s->candidate_reference_count=s->candidate_reference_next=0;
             s->candidate_recent_count=s->candidate_recent_next=0;
             s->candidate_pending=s->candidate_confirmed=s->candidate_seen=false;
-            s->candidate_pretrigger=s->candidate_rise_seen=false;
+            s->candidate_pretrigger=s->candidate_rise_seen=s->candidate_quorum=false;
             s->candidate_started=s->candidate_change_cursor=s->candidate_rise_peak=0;
         }else {
             bool relative_pretrigger=s->dispersion_valid && s->noise_mad && !own_audio && vad &&
@@ -445,6 +462,7 @@ static inline bool p4_energy_hint(const p4_adaptive_energy_t *s,uint32_t energy,
 { return !own_audio && vad && energy>p4_energy_ratio(s->noise,5,4); }
 static inline void p4_energy_turn_begin(p4_adaptive_energy_t *s)
 {
+    s->turn_quorum=s->candidate_quorum;s->candidate_quorum=false;
     s->turn_count=s->turn_next=0;s->turn_foreground=0;s->turn_open=true;
     for(unsigned i=0;i<10;++i)if(s->candidate[i])p4_energy_turn_sample(s,s->candidate[i]);
     memset(s->candidate,0,sizeof(s->candidate));s->candidate_next=0;
@@ -465,7 +483,8 @@ static inline void p4_energy_turn_resolve(p4_adaptive_energy_t *s,bool accepted)
         if(value>p4_energy_ratio(s->noise,P4_ENERGY_ONSET_NOISE_NUM,P4_ENERGY_ONSET_NOISE_DEN))
             s->foreground=(uint32_t)(((uint64_t)s->foreground*3+value)/4);
     }
-    s->turn_open=false;s->turn_count=s->turn_next=0;s->turn_foreground=0;
+    s->turn_open=false;s->turn_quorum=s->candidate_quorum=false;
+    s->turn_count=s->turn_next=0;s->turn_foreground=0;
     memset(s->candidate,0,sizeof(s->candidate));s->candidate_next=0;
     memset(s->candidate_reference,0,sizeof(s->candidate_reference));
     memset(s->candidate_recent,0,sizeof(s->candidate_recent));

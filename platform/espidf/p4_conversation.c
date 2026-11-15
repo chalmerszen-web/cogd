@@ -10,6 +10,7 @@
 #include "p4_audio_frontend.h"
 #include "p4_uplink_gate.h"
 #include "p4_local_turn.h"
+#include "p4_uplink_queue.h"
 #include "p4_adaptive_energy.h"
 #include "p4_uplink_expander.h"
 #include "p4_input_buffer.h"
@@ -50,9 +51,9 @@ enum { INPUT_SAMPLES=640 };
 #endif
 enum { RX_CAP=262144, PCM_CAP=24000*45, CONTROL_CAP=8, JOBS=4, IDLE_MS=30000 };
 static const char instructions[]=
-    "你是这台设备上的小智，用自然简洁的中文和用户交谈。直接回应内容，不反复说收到、让我想一想。"
+    "你是这台设备上的小智，也是快速语音路由。用自然简洁的中文立即回应用户，简单问题直接回答。复杂请求先给一句简短且符合真实任务状态的回应，再由后台完成。"
     "通常一两句，用户要详细说明才展开。用户停顿时不要催促；用户插话后先听新的内容。"
-    "简单口算和讲故事直接回答，不为这些请求创建后台查询。"
+    "简单口算和讲故事直接回答，不为这些请求创建后台查询。多步推理、证明、复杂方案比较或用户明确要求深入思考时，必须调用device_reason交给高阶思考模型，传完整问题和必要上下文；不要用简单模型冒充深度思考结果。拍题仍走device_tutor，实时资料仍先联网搜索。"
 #if COGD_COMM_MODE == COGD_COMM_AOQ
     "用户当前明确要求讲故事或详细解释时，在本轮直接给出完整内容，按用户要求展开；不要只说我这就讲、稍后告诉你或正在生成便结束回复。"
     "日常问答、口算、讲故事和本次会话的记忆追问，直接根据对话回答，不调用历史搜索、历史摘要或后台任务查询。只有用户明确要查询后台进度才查任务；只有用户明确要查找当前对话之外的旧资料才搜索存储的历史。"
@@ -60,7 +61,7 @@ static const char instructions[]=
     "口头给出的独立算式是普通问答，即使还有待确认或未讲完的照片题，也直接回答这句算式，不启动摄像头、不改选照片题、不查询后台。只有明确要求拍摄新的题图才重新拍照。"
 #endif
     "你可以联网搜索，并通过工具操作屏幕、摄像头、音量和媒体。绘制走本机图元，生成图片或视频才调用云端生成工具。"
-    "工具返回accepted仅表示后台受理，不代表成功；不要再为accepted单独播报收到或处理中。后台期间继续回应用户的新内容，不重复创建同一个任务。"
+    "工具返回accepted仅表示后台受理，不代表完成。收到后用一句与用户问题有关的简短话告知已接到请求、正在等待处理；不要预报答案或虚报完成，不反复播报。后台期间继续回应用户的新内容，结果到达后再讲结论，不重复创建同一个任务。"
     "执行操作必须先调用工具，收到真实成功回执后才口头确认完成。"
     "用户本轮明确要求的画图、摄像头等操作，即使与历史内容相同，也必须在本轮调用工具，不能只说背景介绍就结束。"
     "查询任务用conversation_jobs；取消任务与停止当前发声不同。只有用户明确结束交流才调用end_conversation。"
@@ -361,6 +362,9 @@ typedef struct {
     uint64_t reuse_at;
     char reused_response[129];
     p4_local_turn_t local_turn;
+    p4_uplink_queue_t uplink;
+    bool endpoint_cue_issued,endpoint_cue_reported;
+    uint64_t endpoint_detected_at;
     p4_asr_retry_t *asr_retry;
     p4_status_hint_t status_hint;
     p4_input_identity_t accepted_input;
@@ -381,6 +385,7 @@ typedef struct {
     uint64_t energy_report_at;
     uint64_t commit_at,output_ended,local_previous_activity;
     uint64_t *session_playback_ended;
+    bool post_output_quorum_required;
     char cued_item[129];
 #endif
     agent_err_t error;
@@ -490,7 +495,7 @@ static cJSON *event_new(const char *type)
 static bool allowed(const char *name)
 {
     static const char *names[]={"device_status_get","device_audio_get","device_audio_volume","device_display_get","device_display_set",
-        "device_camera_test","device_display_draw","device_display_image","device_display_video","device_web_search","qianwen_skill","device_tutor",
+        "device_camera_test","device_display_draw","device_display_image","device_display_video","device_web_search","qianwen_skill","device_tutor","device_reason",
         "agent_context_search","agent_context_stats","agent_context_summary_get","agent_context_summary_set","device_hardware_get"};
     for(unsigned i=0;i<sizeof(names)/sizeof(*names);++i)if(!strcmp(name,names[i]))return true;
     return false;
@@ -801,7 +806,12 @@ static void input_energy_notice(conversation_t *s,const char *boundary)
 }
 static void local_turn_begin(conversation_t *s)
 {
+    p4_uplink_queue_reset(&s->uplink);
+    s->endpoint_cue_issued=s->endpoint_cue_reported=false;s->endpoint_detected_at=0;
     s->energy_replayed_turn=s->local_turn.votes==0;
+    /* A fresh local turn has now supplied the strict post-playback witness;
+     * require it only for admission, then let the normal turn flow proceed. */
+    s->post_output_quorum_required=false;
     uint32_t candidate_change=s->input_energy.candidate_change_cursor;
     p4_energy_turn_begin(&s->input_energy);
     p4_uplink_expander_begin(&s->input_expander,&s->input_energy);
@@ -849,6 +859,45 @@ static void local_turn_resume_idle(conversation_t *s,const char *reason)
     s->last_activity=s->local_previous_activity;
     local_input_rearm(s,reason);
 }
+static void native_uplink_tick(conversation_t *s)
+{
+    if(!input_ready(s) || s->error || s->control_read!=s->control_write || esp_agent_now()<s->next_send_at)return;
+    p4_uplink_frame_t *f=p4_uplink_queue_head(&s->uplink);if(!f)return;
+    uint64_t sending=esp_agent_now();
+    agent_err_t error=(agent_err_t)p4_aoq_conversation_pcm(s->aoq,f->pcm,INPUT_SAMPLES,f->stamp);
+    unsigned sent_ms=(unsigned)(esp_agent_now()-sending);
+    if(sent_ms>atomic_load(&stat_send_ms))atomic_store(&stat_send_ms,sent_ms);
+    if(error==AGENT_ERR_BUSY)return;
+    if(error){s->error=error;return;}
+    if(!s->input_origin_valid){s->input_first_cursor=f->end_cursor-INPUT_SAMPLES;s->input_origin_valid=true;}
+    p4_audio_probe_bound(&f->probe,f->pcm,INPUT_SAMPLES,f->end_cursor-INPUT_SAMPLES,f->stamp,true);
+    uint64_t now=esp_agent_now();
+    if(conversation_manual())p4_input_media_clock_accept(&s->input_media_clock,now,INPUT_SAMPLES);
+    if(conversation_manual() && !p4_live_input_accept(&s->live_input,f->end_cursor,INPUT_SAMPLES)){
+        notice(s,"realtime_capacity","noncontiguous live input");s->error=AGENT_ERR_LIMIT;return;
+    }
+    if(s->local_replay_pending){
+        char detail[112];snprintf(detail,sizeof(detail),"replay=%u first_cursor=%u capture_ms=%u",
+            s->replay_cursor,f->end_cursor-INPUT_SAMPLES,(unsigned)(f->stamp/1000));
+        notice(s,"realtime_local_replay_first_pcm",detail);s->local_replay_pending=false;
+    }
+    unsigned lag=now*1000>f->stamp?(unsigned)((now*1000-f->stamp)/1000):0;
+    if(!atomic_load(&stat_upload))atomic_store(&stat_capture_initial_lag,lag);
+    atomic_store(&stat_capture_lag,lag);s->last_input_us=f->stamp+20000;s->last_sent_cursor=f->end_cursor;
+    atomic_fetch_add(&stat_upload,INPUT_SAMPLES);
+    unsigned interval=now*1000>f->stamp+80000?atomic_load(&capture_catchup_ms):20;
+    s->next_send_at=p4_audio_pacer_next(s->next_send_at,now,interval);
+    p4_uplink_queue_pop(&s->uplink);
+}
+static void local_endpoint_feedback(conversation_t *s)
+{
+    if(s->endpoint_cue_issued)return;
+    s->endpoint_cue_issued=true;s->endpoint_detected_at=esp_agent_now();
+    s->endpoint_cue=true;s->received_samples=0;s->done=false;s->preparing=true;
+    char detail[128];snprintf(detail,sizeof(detail),"endpoint=%u sent=%u queued_frames=%u silence_ms=%u",
+        s->local_turn.analysed,s->last_sent_cursor,p4_uplink_queue_count(&s->uplink),local_silence(s));
+    notice(s,"realtime_local_endpoint_detected",detail);
+}
 static void local_turn_commit(conversation_t *s)
 {
     if(!conversation_manual() || s->reuse_phase || !s->local_turn.ended || s->commit_queued ||
@@ -886,7 +935,7 @@ static void local_turn_commit(conversation_t *s)
     s->commit_queued=true;s->commit_at=s->last_activity=esp_agent_now();
     /* Submission and the audible endpoint cue proceed independently. The
      * audio owner warms/plays the cue while Data/ASR/model work continues. */
-    s->endpoint_cue=true;s->received_samples=0;s->done=false;s->preparing=true;
+    local_endpoint_feedback(s);
     notice(s,"realtime_input_commit_queued",NULL);
     s->last_endpoint=s->last_sent_cursor;s->endpoint_mapped=true;
     agent_audio_session_speech(&s->gate,false,false);
@@ -1268,7 +1317,7 @@ static void tool_output_kind(conversation_t *s,const char *call,const char *outp
 static void tool_output(conversation_t *s,const char *call,const char *output)
 {
     cJSON *v=cJSON_Parse(output);
-    bool accepted=!strcmp(str(v,"status"),"accepted") || !strcmp(str(v,"status"),"already_accepted");
+    bool accepted=!strcmp(str(v,"status"),"already_accepted");
     cJSON_Delete(v);tool_output_kind(s,call,output,accepted);
 }
 static bool job_pending_choice(const background_job_t *j)
@@ -1290,8 +1339,8 @@ static void job_output(conversation_t *s,const background_job_t *j,const char *c
 }
 static void receipt(conversation_t *s,background_job_t *j)
 {
-    char text[112];snprintf(text,sizeof(text),"{\"job_id\":%u,\"status\":\"accepted\",\"completed\":false}",j->id);
-    tool_output_kind(s,j->call,text,true);if(s->receipt_write)strcpy(s->receipt_users[(s->receipt_write-1)%CONTROL_CAP],j->user);
+    char text[144];snprintf(text,sizeof(text),"{\"job_id\":%u,\"status\":\"accepted\",\"started\":%s,\"completed\":false}",j->id,atomic_load(&j->state)>=2?"true":"false");
+    tool_output_kind(s,j->call,text,false);if(s->receipt_write)strcpy(s->receipt_users[(s->receipt_write-1)%CONTROL_CAP],j->user);
     j->accepted_sent=true;notice(s,"realtime_job_accepted",j->name);
 }
 static void app_notice_emit(conversation_t *s)
@@ -2019,6 +2068,16 @@ static void playback(conversation_t *s)
 #endif
     }
     if(s->stream) {
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+        if(s->endpoint_cue_issued && !s->endpoint_cue_reported){
+            uint64_t begin=0,end=0;esp_hi_stream_cue_times(&begin,&end);
+            if(begin && begin>=s->endpoint_detected_at){
+                char detail[112];snprintf(detail,sizeof(detail),"start_ms=%u detect_to_start_ms=%u pending_frames=%u",
+                    (unsigned)begin,(unsigned)(begin-s->endpoint_detected_at),p4_uplink_queue_count(&s->uplink));
+                notice(s,"realtime_endpoint_cue_started",detail);s->endpoint_cue_reported=true;
+            }
+        }
+#endif
         playback_metrics(s);
         /* Warm the amplifier at zero while the cloud prepares its first
          * audio. Empty/cancelled assistant messages must release that lease. */
@@ -2050,6 +2109,8 @@ static void playback(conversation_t *s)
              * progress even if final ASR was empty; it grants no tool rights. */
             if(!error && s->status_playback)s->completed_user_turn=true;
             s->output_ended=esp_agent_now();s->status_playback=false;
+            if(!error && s->output_started && s->played_samples)
+                s->post_output_quorum_required=true;
             if(!error && s->output_started && s->played_samples)*s->session_playback_ended=s->output_ended;
 #endif
             if(error)s->error=error;else {
@@ -2548,22 +2609,25 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
              * barge-in, recover the onset withheld from cloud echo detection. */
             samples=0;s->replay_input=false;s->muted_input=false;
 #if COGD_COMM_MODE == COGD_COMM_AOQ
-            input_processed=false;
+            input_processed=false;p4_uplink_queue_reset(&s->uplink);
 #endif
             if(!esp_hi_voice_session_rewind(s->replay_cursor)){
                 notice(s,"realtime_capacity","microphone replay");s->error=AGENT_ERR_LIMIT;break;
             }
         }
+#if COGD_COMM_MODE == COGD_COMM_AOQ
+        native_uplink_tick(s);
+#endif
         for(unsigned batch=0;input_ready(s) && !s->error && s->control_read==s->control_write && batch<4;++batch) {
 #if COGD_COMM_MODE == COGD_COMM_AOQ
-            if(conversation_manual() && p4_local_turn_hold_capture(&s->local_turn,s->last_sent_cursor,s->commit_resolved)) {
+            if(conversation_manual() && s->local_turn.ended && !s->commit_resolved) {
                 if(!s->capture_wait_reported) {
                     char detail[96];snprintf(detail,sizeof(detail),"cursor=%u endpoint=%u",esp_hi_voice_session_cursor(),s->local_turn.analysed);
                     notice(s,"realtime_input_capture_held",detail);s->capture_wait_reported=true;
                 }
                 break;
             }
-            if(esp_agent_now()<s->next_send_at)break;
+            if(p4_uplink_queue_count(&s->uplink)>=P4_UPLINK_QUEUE_FRAMES)break;
 #endif
             size_t n=0;if(samples<INPUT_SAMPLES)s->error=esp_hi_voice_session_read(input+samples,INPUT_SAMPLES-samples,&n);samples+=n;
             if(s->error==AGENT_ERR_LIMIT)notice(s,"realtime_capacity","microphone input");
@@ -2624,6 +2688,10 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                     bool allow_start=!own_audio && !reply_tail && !s->stream && !s->gate.active && !s->gate.awaiting &&
                         !s->updating && !s->waiting_item && cursor>=3584 && esp_agent_now()>=s->near_hold;
                     uint64_t energy_now=esp_agent_now()*1000;
+                    uint32_t strict_at=p4_audio_strict_quorum_at();
+                    uint32_t capture_end_ms=(uint32_t)(stamp/1000)+20u;
+                    bool strict_recent=strict_at && capture_end_ms>=strict_at &&
+                        capture_end_ms-strict_at<=128u;
                     /* Learning excludes the full physical echo tail, even
                      * while pre-roll still preserves the original PCM. */
                     bool learning_output=own_audio || reply_tail ||
@@ -2634,8 +2702,15 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                     uint32_t energy=p4_audio_frontend_input_energy(s->frontend);
                     bool vad=p4_audio_frontend_voiced(s->frontend);
                     bool candidate_eligible=allow_start && !learning_output && !s->reuse_phase && !s->local_turn.ended &&
-                        (!s->commit_queued || s->commit_resolved);
+                        (!s->commit_queued || s->commit_resolved) &&
+                        (!s->post_output_quorum_required || strict_recent);
                     bool learn_noise=candidate_eligible && capture_fresh;
+                    if(p4_energy_confirm_quorum(&s->input_energy,cursor,(uint32_t)(stamp/1000)+20u,
+                        (uint32_t)esp_agent_now(),p4_audio_strict_quorum_at(),candidate_eligible && capture_fresh)) {
+                        char detail[96];snprintf(detail,sizeof(detail),"cursor=%u capture_ms=%u quorum_ms=%u",
+                            cursor,(unsigned)(stamp/1000)+20u,(unsigned)p4_audio_strict_quorum_at());
+                        notice(s,"realtime_input_quorum",detail);
+                    }
                     bool voiced=p4_energy_frame(&s->input_energy,cursor,energy,vad,s->local_turn.active,
                         s->local_turn.votes!=0,candidate_eligible,learn_noise,observable_energy,own_audio);
                     p4_audio_energy_reference(s->input_energy.noise,s->input_energy.foreground,s->input_energy.noise_upper,p4_energy_ready(&s->input_energy));
@@ -2659,6 +2734,7 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                     /* The first 224 ms after the wake cue cannot start a
                      * candidate. Pre-roll still retains a real early onset. */
                     p4_local_event_t turn=p4_local_turn_feed(&s->local_turn,cursor,voiced,allow_start,local_silence(s));
+                    if(turn==P4_LOCAL_END)local_endpoint_feedback(s);
                     if(turn==P4_LOCAL_START) {
                         /* Capture fresh local admission only. Retained ASR and
                          * barge replays start through their seeded path. */
@@ -2704,46 +2780,10 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                     probe_bound.expander_state=expander_applied?1:0;
                     probe_bound.stage_id|=P4_PROBE_STAGE_UPLINK;
                 }
-                uint32_t aoq_start_cursor=esp_hi_voice_session_cursor()-INPUT_SAMPLES;
-                uint64_t sending=esp_agent_now();
-                agent_err_t e=(agent_err_t)p4_aoq_conversation_pcm(s->aoq,input,INPUT_SAMPLES,stamp);
-                unsigned sent_ms=(unsigned)(esp_agent_now()-sending);
-                if(sent_ms>atomic_load(&stat_send_ms))atomic_store(&stat_send_ms,sent_ms);
-                if(e==AGENT_ERR_BUSY)break;
-                if(e)s->error=e;
-                else{
-                    if(!s->input_origin_valid){
-                        s->input_first_cursor=esp_hi_voice_session_cursor()-INPUT_SAMPLES;
-                        s->input_origin_valid=true;
-                    }
-                    p4_audio_probe_bound(&probe_bound,input,INPUT_SAMPLES,aoq_start_cursor,stamp,true);
-                    uint64_t now=esp_agent_now();
-                    if(conversation_manual())p4_input_media_clock_accept(&s->input_media_clock,now,INPUT_SAMPLES);
-                    if(conversation_manual() && !p4_live_input_accept(&s->live_input,esp_hi_voice_session_cursor(),INPUT_SAMPLES)){
-                        notice(s,"realtime_capacity","noncontiguous live input");s->error=AGENT_ERR_LIMIT;break;
-                    }
-                    if(s->local_replay_pending){
-                        unsigned frame_start=esp_hi_voice_session_cursor()-INPUT_SAMPLES;
-                        char detail[112];snprintf(detail,sizeof(detail),"replay=%u first_cursor=%u capture_ms=%u",
-                            s->replay_cursor,frame_start,(unsigned)(stamp/1000));
-                        notice(s,"realtime_local_replay_first_pcm",detail);
-                        s->local_replay_pending=false;
-                    }
-                    unsigned lag=now*1000>stamp?(unsigned)((now*1000-stamp)/1000):0;
-                    if(!atomic_load(&stat_upload))atomic_store(&stat_capture_initial_lag,lag);
-                    atomic_store(&stat_capture_lag,lag);
-                    s->last_input_us=stamp+20000;
-                    s->last_sent_cursor=esp_hi_voice_session_cursor();
-                    atomic_fetch_add(&stat_upload,INPUT_SAMPLES);samples=0;
-                    probe_bound=(p4_probe_bound_t){0};
-                    input_processed=false;
-                    /* Preserve the media cadence for initial pre-roll and
-                     * interruption replay alike. Accelerated handoff replay
-                     * lost utterance tails in the acoustic comparison; the
-                     * explicit diagnostic override remains available. */
-                    unsigned interval=now*1000>stamp+80000?atomic_load(&capture_catchup_ms):20;
-                    s->next_send_at=p4_audio_pacer_next(s->next_send_at,now,interval);
+                if(!p4_uplink_queue_push(&s->uplink,input,esp_hi_voice_session_cursor(),stamp,&probe_bound)) {
+                    notice(s,"realtime_capacity","uplink queue discontinuity");s->error=AGENT_ERR_LIMIT;break;
                 }
+                samples=0;probe_bound=(p4_probe_bound_t){0};input_processed=false;
 #else
                 char encoded[1710],packet[1800];size_t len=0;
                 if(mbedtls_base64_encode((unsigned char *)encoded,sizeof(encoded),&len,(const unsigned char *)input,sizeof(input)))s->error=AGENT_ERR_LIMIT;
@@ -2758,6 +2798,7 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
             }
         }
 #if COGD_COMM_MODE == COGD_COMM_AOQ
+        native_uplink_tick(s);
         local_turn_commit(s);
         if(conversation_manual() && s->commit_queued && !s->commit_resolved && esp_agent_now()-s->commit_at>=5000){
             notice(s,s->commit_acked?"realtime_transcript_timeout":"realtime_commit_timeout",NULL);s->error=AGENT_ERR_TIMEOUT;

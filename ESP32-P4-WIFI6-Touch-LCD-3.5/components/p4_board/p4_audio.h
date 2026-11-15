@@ -21,6 +21,7 @@ void p4_audio_capture_stats(unsigned values[5]);
 void p4_audio_near_monitor(bool enable);
 p4_idle_voice_evidence_t p4_audio_idle_voice_evidence(uint32_t from_ms,uint32_t through_ms);
 uint32_t p4_audio_confirmed_at(void);
+uint32_t p4_audio_strict_quorum_at(void);
 uint32_t p4_audio_confirmed_onset(void);
 /* Lower quartile of recent idle, DAC-quiet microphone levels after ADC gain
  * compensation. A new native conversation freezes this noise reference. */
