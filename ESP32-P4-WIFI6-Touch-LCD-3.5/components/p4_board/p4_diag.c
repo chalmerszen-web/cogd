@@ -68,6 +68,7 @@ void p4_diag_record(unsigned kind,const char *text,size_t size) {
     uint64_t at=now_ms();
     portENTER_CRITICAL(&buffer_lock);
     if(!atomic_load(&enabled) || atomic_load(&paused)){portEXIT_CRITICAL(&buffer_lock);return;}
+    bool was_near_full=used >= P4_DIAG_END-2048u;
     if(flags&1)++truncated;
     // Reserve space for compact tutor transitions. Verbose ASR/SDK diagnostics
     // cannot consume the last 1 KiB before an actual completion/failure.
@@ -82,10 +83,15 @@ void p4_diag_record(unsigned kind,const char *text,size_t size) {
     if(!stored) {
         ++dropped;if(kind==6)++critical_dropped;
     }
+    /* Wake the writer before the ordinary page reaches the hard limit.  The
+     * producer still performs no Flash I/O; this only shortens the burst
+     * window during verbose speech events.  Keep enough room for one maximum
+     * compact record so a scheduled wake can drain the page before overflow. */
+    bool wake_writer=queued || !stored || (!was_near_full && used >= P4_DIAG_END-2048u);
     portEXIT_CRITICAL(&buffer_lock);
     /* A bounded RAM spill never makes the producer perform Flash I/O or wait
      * for the writer. Preserve whole tutor records when the page is full. */
-    if(queued && writer_task)xTaskNotifyGive(writer_task);
+    if(wake_writer && writer_task)xTaskNotifyGive(writer_task);
 }
 static void boot_record(void) {
     const esp_app_desc_t *app=esp_app_get_description();char sha[65],text[224];
@@ -136,7 +142,9 @@ static int flush_page(void) {
     return error?16:0;
 }
 static unsigned critical_pending(void) {
-    portENTER_CRITICAL(&buffer_lock);unsigned n=critical_queue->count;portEXIT_CRITICAL(&buffer_lock);return n;
+    unsigned n,buffered;
+    portENTER_CRITICAL(&buffer_lock);n=critical_queue->count;buffered=used;portEXIT_CRITICAL(&buffer_lock);
+    return n || buffered >= P4_DIAG_END-2048u;
 }
 static void writer(void *unused) {
     (void)unused;
