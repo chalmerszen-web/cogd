@@ -1,0 +1,170 @@
+{
+  "package": "0.11.48-diag-watermark2-20261115",
+  "firmware_version": "0.11.48-p4-tutor-flow",
+  "board": "ESP32-P4-WIFI6-Touch-LCD-3.5",
+  "target": "esp32p4",
+  "source_commit": "29ca5d51dcddbceec8a2f508223e00df2602db7d",
+  "branch": "codex/p4-native-aoq",
+  "app": {
+    "file": "cogd_p4.bin",
+    "offset": "0x10000",
+    "bytes": 6291296,
+    "sha256": "ce5c131483ae15d51d88bb086ff8fcbed1fb89fa0a12255081a69d1b43fbed93",
+    "partition_bytes": 6291456,
+    "partition_free_bytes": 160
+  },
+  "readback": {
+    "verified": true,
+    "sha256": "ce5c131483ae15d51d88bb086ff8fcbed1fb89fa0a12255081a69d1b43fbed93",
+    "protected_ranges_verified": true,
+    "receipt_sha256": "a3c0e792a00fc76e89f049c6f09ff27cde95be9480493453f2aa5ee4a808c0c4"
+  },
+  "compatibility": {
+    "app_only": true,
+    "existing_partition_table_sha256": "7626d3676f91dc219f4ac56116edc5e747ee5ac18c26e2097fa6bfd1166cffc6",
+    "existing_assets_sha256": "275652fb54ddc6ed664fe5286c90ede050d4dcff90c23092fcaf8f3b30f06bcc"
+  },
+  "change": {
+    "ordinary_log_high_watermark_bytes": 2044,
+    "bounded_writer_drain": true,
+    "periodic_interval_ms": 1000,
+    "dynamic_filter_echo_witness_and_votes_unchanged": true
+  },
+  "validation": {
+    "status": "PASS_ONE_COMPLETE_RUN_AFTER_HARD_RESET",
+    "report_sha256": "172b23af1698c5b809f534fbc25476e43547c80a31cc69c5d33d9518fcd8dca6",
+    "duration_s": 911.953,
+    "ordinary_rounds": 68,
+    "explicit_end_rounds": 1,
+    "gain": 1.0,
+    "method": "Fixed WAV replay through host headphones into P4 microphone; automated device telemetry; no human free-conversation acceptance.",
+    "latency_ordinary_ms": {
+      "min": 3674,
+      "max": 6970,
+      "mean": 4174.897
+    },
+    "health_samples": [
+      {
+        "elapsed_s": 0.0,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 65.08,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 132.42,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 184.42,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 249.56,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 305.18,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 369.68,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 421.75,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 494.03,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 545.4,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 610.42,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 661.77,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 727.71,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 780.18,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      },
+      {
+        "elapsed_s": 846.11,
+        "dropped": 0,
+        "truncated": 0,
+        "critical_dropped": 0,
+        "io_errors": 0
+      }
+    ],
+    "wifi_recoveries": 1,
+    "interrupts": 0,
+    "stream_underruns": 0,
+    "tx_deadline_misses": 0,
+    "export": {
+      "crc_verified_pages": 32,
+      "records": 71,
+      "all_page_dropped_zero": true,
+      "all_page_truncated_zero": true,
+      "manifest_sha256": "986497f52a3ffc3c983b8cc44aaa74482154f48c9b4217f3d214041fddc8f381"
+    }
+  },
+  "limitations": [
+    "Four earlier attempts with this image ended with Missing answer; cause remains unconfirmed. The final hard-reset run passed; this is not a multi-run reliability claim.",
+    "This release does not establish new human speech, gain 0.5, photography, same-photo switching, or 60-minute acceptance.",
+    "Application partition has only 160 bytes free."
+  ]
+}
