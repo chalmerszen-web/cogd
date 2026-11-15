@@ -507,13 +507,38 @@ static void strict_capture_quorum(void)
     p4_energy_turn_begin(&s);assert(s.turn_quorum && !s.candidate_quorum);
     p4_energy_turn_resolve(&s,false);assert(!s.turn_quorum && !s.candidate_quorum);
 }
+static void dynamic_candidate_change_window(void)
+{
+    p4_adaptive_energy_t s;p4_energy_init(&s,100,10000);
+    for(unsigned i=0;i<64;++i)s.background[i]=100u+(i%4u)*50u;
+    s.background_count=s.background_next=64;p4_energy_background_stats(&s);
+    assert(s.dispersion_valid && s.noise_mad && s.candidate_change_required==false);
+    p4_local_turn_t turn;p4_local_turn_reset(&turn,0);
+    /* A sustained weak source is held behind the measured relative-change
+     * window; ordinary six-vote admission must not release it. */
+    for(unsigned i=0;i<40;++i){
+        unsigned cursor=(i+1u)*320u;
+        bool voice=p4_energy_frame(&s,cursor,1000,true,false,
+            turn.votes!=0 || s.candidate_pending,true,false,true,false);
+        assert(p4_local_turn_feed(&turn,cursor,voice,true,1200)==P4_LOCAL_NONE);
+    }
+    assert(!turn.active && !s.candidate_confirmed);
+    bool started=false;
+    for(unsigned i=0;i<8;++i){
+        unsigned cursor=(40u+i+1u)*320u;
+        bool voice=p4_energy_frame(&s,cursor,100000,true,false,
+            turn.votes!=0 || s.candidate_pending,true,false,true,false);
+        if(p4_local_turn_feed(&turn,cursor,voice,true,1200)==P4_LOCAL_START)started=true;
+    }
+    assert(started && turn.active);
+}
 int main(void)
 {
     strict_capture_quorum();
     provider_retry_retains_reference();
     candidate_capture_independent_of_noise_learning();
     scale_cases();prior_and_real_background_cases();background_cases();quiet_short_and_pause_cases();ownership_and_replay_cases();wake_and_capture_age_cases();
-    adaptive_barge_cases();
+    adaptive_barge_cases();dynamic_candidate_change_window();
     actual_strong_scaled_barge_cases();
     dispersion_cases();recorded_background_dispersion();dynamic_contrast_cases();
     puts("PASS adaptive energy, real background counts, prior readiness, MAD, recorded noise, quiet speech and replay boundaries");

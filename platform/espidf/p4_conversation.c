@@ -776,12 +776,13 @@ static void input_energy_notice(conversation_t *s,const char *boundary)
 {
     const p4_adaptive_energy_t *e=&s->input_energy;
     char detail[384];snprintf(detail,sizeof(detail),
-        "%s E=%u N=%u F=%u threshold=%u noise_now=%u foreground_now=%u frames=%u admitted=%u rejected=%u turn_frames=%u candidate_pending=%u candidate_confirmed=%u candidate_seen=%u candidate_pretrigger=%u candidate_rise=%u candidate_peak=%u candidate_ref=%u candidate_recent=%u candidate_age=%u candidate_change=%u",
+        "%s E=%u N=%u F=%u threshold=%u noise_now=%u foreground_now=%u frames=%u admitted=%u rejected=%u turn_frames=%u candidate_pending=%u candidate_confirmed=%u candidate_seen=%u candidate_pretrigger=%u candidate_change_required=%u candidate_rise=%u candidate_peak=%u candidate_ref=%u candidate_recent=%u candidate_age=%u candidate_change=%u",
         boundary,(unsigned)e->energy,(unsigned)e->decision_noise,(unsigned)e->decision_foreground,
         (unsigned)e->threshold,(unsigned)e->noise,(unsigned)e->foreground,
         (unsigned)e->observed_frames,(unsigned)e->admitted_frames,(unsigned)e->rejected_frames,e->turn_count,
         (unsigned)e->candidate_pending,(unsigned)e->candidate_confirmed,(unsigned)e->candidate_seen,
-        (unsigned)e->candidate_pretrigger,(unsigned)e->candidate_rise_seen,
+        (unsigned)e->candidate_pretrigger,(unsigned)e->candidate_change_required,
+        (unsigned)e->candidate_rise_seen,
         (unsigned)e->candidate_rise_peak,
         e->candidate_reference_count,e->candidate_recent_count,
         e->candidate_pending?(unsigned)(e->last_cursor-e->candidate_started):0u,
@@ -2712,7 +2713,7 @@ static agent_err_t run_connection(const agent_tool_ops_t *tools,agent_context_t 
                         notice(s,"realtime_input_quorum",detail);
                     }
                     bool voiced=p4_energy_frame(&s->input_energy,cursor,energy,vad,s->local_turn.active,
-                        s->local_turn.votes!=0,candidate_eligible,learn_noise,observable_energy,own_audio);
+                        (s->local_turn.votes!=0 || s->input_energy.candidate_pending),candidate_eligible,learn_noise,observable_energy,own_audio);
                     p4_audio_energy_reference(s->input_energy.noise,s->input_energy.foreground,s->input_energy.noise_upper,p4_energy_ready(&s->input_energy));
                     bool onset_hint=p4_energy_hint(&s->input_energy,energy,vad,own_audio) &&
                         !s->input_energy.candidate_pending;

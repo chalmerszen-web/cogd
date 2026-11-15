@@ -50,6 +50,11 @@ typedef struct {
     unsigned background_count,background_next,turn_count,turn_next,candidate_next;
     unsigned candidate_reference_count,candidate_reference_next,candidate_recent_count,candidate_recent_next;
     bool candidate_pending,candidate_confirmed,candidate_seen,candidate_pretrigger,candidate_rise_seen;
+    /* A non-flat measured idle distribution makes the first fresh candidate
+     * ambiguous even when it clears the scalar onset gate.  Keep it behind
+     * the same bounded relative-change observation used for a weak
+     * pre-trigger; this is a ratio/MAD decision, never an absolute level. */
+    bool candidate_change_required;
     bool candidate_quorum,turn_quorum;
     uint32_t energy,threshold,decision_noise,decision_foreground;
     uint32_t observed_frames,admitted_frames,rejected_frames;
@@ -251,7 +256,7 @@ static inline bool p4_energy_ready(const p4_adaptive_energy_t *s)
 static inline bool p4_energy_confirm_quorum(p4_adaptive_energy_t *s,uint32_t cursor,
     uint32_t frame_end_ms,uint32_t now_ms,uint32_t quorum_ms,bool eligible)
 {
-    if(!eligible || !s->candidate_pending || !quorum_ms || now_ms-quorum_ms>96u ||
+    if(!eligible || !s->candidate_pending || s->candidate_change_required || !quorum_ms || now_ms-quorum_ms>96u ||
        cursor<s->candidate_started || cursor-s->candidate_started>32000u)return false;
     uint32_t start_ms=frame_end_ms-(cursor-s->candidate_started)/16u;
     int32_t offset=(int32_t)(quorum_ms-frame_end_ms);
@@ -320,15 +325,15 @@ static inline bool p4_energy_frame(p4_adaptive_energy_t *s,uint32_t cursor,uint3
             s->candidate_recent_count=s->candidate_recent_next=0;
             s->candidate_pending=s->candidate_confirmed=s->candidate_seen=false;
             s->candidate_pretrigger=s->candidate_rise_seen=s->candidate_quorum=false;
+            s->candidate_change_required=false;
             s->candidate_started=s->candidate_change_cursor=s->candidate_rise_peak=0;
         }else {
             bool relative_pretrigger=s->dispersion_valid && s->noise_mad && !own_audio && vad &&
                 energy>s->noise_upper && energy<=s->threshold;
-            /* A remote voice can clear the ordinary six-vote gate before the
-             * near-end speaker starts.  Keep that first candidate local to a
-             * bounded, scale-free change-point check: the reference is its
-             * own median/MAD, and only a second relative rise releases input.
-             * A timeout preserves ordinary speech when no second rise exists. */
+            /* A remote voice can sit just above the measured MAD floor while
+             * still below the dynamic onset gate. Keep that weak candidate
+             * behind a bounded, scale-free change-point check. A fully
+             * admitted candidate follows the historical quorum path. */
             /* The change-point hold is only meaningful when the measured
              * idle floor has real robust dispersion.  A flat synthetic floor
              * has no relative change to estimate and keeps the ordinary gate
@@ -337,6 +342,12 @@ static inline bool p4_energy_frame(p4_adaptive_energy_t *s,uint32_t cursor,uint3
                 if(!s->candidate_pending && !s->candidate_confirmed && (admitted || relative_pretrigger)){
                     s->candidate_pending=true;s->candidate_started=cursor;
                     s->candidate_pretrigger=relative_pretrigger;
+                    /* Only a weak candidate that clears the measured MAD
+                     * floor but not the dynamic onset threshold needs an
+                     * extra change-point observation.  A fully admitted
+                     * candidate keeps the historical quorum path so a quiet
+                     * but valid near-end utterance is not suppressed. */
+                    s->candidate_change_required=relative_pretrigger;
                     s->candidate_rise_seen=false;
                     s->candidate_rise_peak=0;
                     s->candidate_change_cursor=0;
@@ -363,30 +374,16 @@ static inline bool p4_energy_frame(p4_adaptive_energy_t *s,uint32_t cursor,uint3
                     bool rise=p4_energy_candidate_rise(s,energy);
                     if(rise && s->candidate_pretrigger && !s->candidate_rise_seen &&
                        (uint32_t)(cursor-s->candidate_started)>=P4_ENERGY_CANDIDATE_CHANGE_MIN_SAMPLES){
-                        /* The first sustained rise may be the remote source
-                         * itself. Rebase the measured candidate distribution
-                         * at that change point and wait for a second relative
-                         * rise, which is the only scale-free evidence of a
-                         * later near-end onset available to one microphone. */
-                        unsigned recent_count=s->candidate_recent_count;
-                        if(recent_count>P4_ENERGY_CANDIDATE_REFERENCE)
-                            recent_count=P4_ENERGY_CANDIDATE_REFERENCE;
-                        uint32_t peak=0;
-                        for(unsigned i=0;i<recent_count;++i)
-                            if(s->candidate_recent[i]>peak)peak=s->candidate_recent[i];
-                        s->candidate_rise_peak=peak;
-                        memcpy(s->candidate_reference,s->candidate_recent,
-                            recent_count*sizeof(*s->candidate_reference));
-                        s->candidate_reference_count=s->candidate_reference_next=recent_count;
-                        s->candidate_recent_count=s->candidate_recent_next=0;
-                        s->candidate_recent[s->candidate_recent_next++]=energy;
-                        s->candidate_recent_count=1;
+                        /* A weak onset is held only until its first
+                         * sustained, scale-free rise.  That rise is enough
+                         * to promote a normal near-end utterance; no fixed
+                         * PCM cutoff or second vote path is introduced. */
                         s->candidate_rise_seen=true;
-                        /* Start the bounded second-change window at the
-                         * first suspected remote step, not at the original
-                         * pre-trigger. */
-                        s->candidate_started=cursor;
-                        admitted=false;
+                        s->candidate_change_required=false;
+                        s->candidate_pending=false;
+                        s->candidate_confirmed=true;
+                        s->candidate_change_cursor=cursor;
+                        admitted=true;
                     }else if(rise){
                         uint32_t peak=0;
                         for(unsigned i=0;i<s->candidate_recent_count;++i)
@@ -419,16 +416,18 @@ static inline bool p4_energy_frame(p4_adaptive_energy_t *s,uint32_t cursor,uint3
                             admitted=false;
                         }
                     }else if((uint32_t)(cursor-s->candidate_started)>=
-                             (s->candidate_pretrigger && s->candidate_rise_seen?
+                             ((s->candidate_pretrigger || s->candidate_change_required) && s->candidate_rise_seen?
                               P4_ENERGY_CANDIDATE_SUSPECT_HOLD_SAMPLES:
                               P4_ENERGY_CANDIDATE_HOLD_SAMPLES)){
-                        /* A pre-trigger candidate without a second measured
-                         * change is ambiguous. Fail closed instead of
-                         * uploading a sustained remote voice; ordinary local
-                         * candidates retain the historical bounded fallback. */
-                        if(s->candidate_pretrigger){
+                        /* A weak candidate without a measured change
+                         * remains ambiguous. Fail closed instead of
+                         * uploading a sustained remote voice; ordinary
+                         * candidates retain the historical bounded
+                         * fallback. */
+                        if(s->candidate_pretrigger || s->candidate_change_required){
                             s->candidate_pending=false;s->candidate_seen=false;
                             s->candidate_pretrigger=s->candidate_rise_seen=false;
+                            s->candidate_change_required=false;
                             s->candidate_started=s->candidate_change_cursor=s->candidate_rise_peak=0;
                             s->candidate_reference_count=s->candidate_reference_next=0;
                             s->candidate_recent_count=s->candidate_recent_next=0;
@@ -472,6 +471,7 @@ static inline void p4_energy_turn_begin(p4_adaptive_energy_t *s)
     s->candidate_recent_count=s->candidate_recent_next=0;
     s->candidate_pending=s->candidate_confirmed=s->candidate_seen=false;
     s->candidate_pretrigger=s->candidate_rise_seen=false;
+    s->candidate_change_required=false;
     s->candidate_started=s->candidate_change_cursor=s->candidate_rise_peak=0;
 }
 static inline void p4_energy_turn_resolve(p4_adaptive_energy_t *s,bool accepted)
@@ -492,6 +492,7 @@ static inline void p4_energy_turn_resolve(p4_adaptive_energy_t *s,bool accepted)
     s->candidate_recent_count=s->candidate_recent_next=0;
     s->candidate_pending=s->candidate_confirmed=s->candidate_seen=false;
     s->candidate_pretrigger=s->candidate_rise_seen=false;
+    s->candidate_change_required=false;
     s->candidate_started=s->candidate_change_cursor=s->candidate_rise_peak=0;
 }
 #endif
